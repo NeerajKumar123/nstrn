@@ -145,7 +145,6 @@
 				42CD1BA56CB683085937E37E /* Pods-SukhTax-SukhTaxTests.debug.xcconfig */,
 				7114508B6851FD8A0D32B04B /* Pods-SukhTax-SukhTaxTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

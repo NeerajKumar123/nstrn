@@ -3,7 +3,10 @@ import API from './BaseAPI';
 
 export const testApi = (params,callback) => {
   const path = `apipath`
-  API.makeGetRequest(params, path,callback);
+  API.makeGetRequest(path, res =>{
+    console.log('apipath',res)
+    callback(res)
+  });
 };
 
 export const sendOtp = (params,callback) => {

@@ -16,9 +16,9 @@ const Dashboard = props => {
       <TouchableOpacity
         onPress={() => {
           console.log('Login');
-          // navigation.navigate('Login');
-          testApi({},()=>{
-            console.log('I am called back.')
+          const params = {otp_type: 'mobile', username: '810029382'};
+          testApi(params,res =>{
+            console.log('I am called back.',res)
           })
         }}>
             <Text>
