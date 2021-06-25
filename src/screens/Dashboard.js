@@ -1,36 +1,165 @@
 import React from 'react';
-import {Button, View, Text, TouchableOpacity,StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  FlatList,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {testApi} from '../apihelper/Api.js';
+import DashCard from '../components/DashCard';
+import * as Colors from '../constants/ColorDefs';
+
+const acc_icon = require('../../assets/account_icon.png');
+const header_logo = require('../../assets/header_logo.png');
+const logout_icon = require('../../assets/logout_icon.png');
+
+const home = require('../../assets/home.png');
+const visit_us = require('../../assets/visit_us.png');
+const online = require('../../assets/online.png');
+const incorporation = require('../../assets/incorporation.png');
+const request = require('../../assets/request.png');
+const cra_latters = require('../../assets/cra_latters.png');
+
+const data = [
+  {
+    id: 1,
+    name: 'HOME',
+    desc: 'STATUS PROFILE MY DOCUMENTS',
+    image: home,
+    colors: [Colors.CLR_27275D, Colors.CLR_D72528],
+  },
+  {
+    id: 1,
+    name: 'VISIT US',
+    desc: 'BOOK AN APPOINTMENT',
+    image: visit_us,
+    colors: [Colors.CLR_27275D, Colors.CLR_D72528],
+  },
+  {
+    id: 1,
+    name: 'ONLINE TAX RETURN',
+    desc: 'STARTING FROM $44.99',
+    image: online,
+    colors: [Colors.CLR_EB0000, Colors.CLR_D72528],
+  },
+  {
+    id: 1,
+    name: 'INCORPORATION',
+    desc: 'OPEN A CORPORATION',
+    image: incorporation,
+    colors: [Colors.CLR_EB0000, Colors.CLR_D72528],
+  },
+  {
+    id: 1,
+    name: 'REQUEST TAX DOCS',
+    desc: 'NOA, T1,GENERAL, etc.',
+    image: request,
+    colors: [Colors.CLR_D72528, Colors.CLR_27275D],
+  },
+  {
+    id: 1,
+    name: 'CRA LATTERS',
+    desc: 'CORRESPONDENCE',
+    image: cra_latters,
+    colors: [Colors.CLR_D72528, Colors.CLR_27275D],
+  },
+];
 
 const Dashboard = props => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+
   return (
     <View
       style={{
-        backgroundColor: 'green',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         flex: 1,
+        backgroundColor: 'white',
       }}>
-      <TouchableOpacity
-        onPress={() => {
-          console.log('Login');
-          const params = {otp_type: 'mobile', username: '810029382'};
-          testApi(params,res =>{
-            console.log('I am called back.',res)
-          })
+      <Header />
+      {data && (
+        <FlatList
+          contentContainerStyle={{
+            backgroundColor: Colors.WHITE,
+            marginVertical: 10,
+            marginHorizontal: 20,
+            justifyContentL: 'center',
+            alignItems: 'center',
+          }}
+          keyExtractor={(item, index) => 'key_' + index}
+          data={data}
+          numColumns={2}
+          renderItem={({item}) => (
+            <DashCard
+              item={item}
+              onSelected={() => {
+                console.log('onSelected==>', item);
+              }}
+            />
+          )}
+        />
+      )}
+      <View
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 40,
+          marginBottom: 30,
         }}>
-            <Text>
-            Login
-                </Text>
-        
-      </TouchableOpacity>
+        <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => {}}>
+          <Image
+            resizeMode="contain"
+            style={{width: 15, height: 15, marginRight: 5}}
+            source={logout_icon}
+          />
+          <Text>Logout</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 export default Dashboard;
 
-const styles = StyleSheet.create({
-});
+const Header = props => {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        marginTop: Platform.OS == 'ios' ? 34 : 10,
+        alignItems: 'center',
+        width: '100%',
+        paddingHorizontal: 16,
+        backgroundColor: 'white',
+        paddingVertical: 5,
+        justifyContent: 'space-between',
+      }}>
+      <Image
+        resizeMode="contain"
+        style={{
+          width: 38,
+          height: 38,
+        }}
+        source={header_logo}
+      />
+      <TouchableOpacity
+        onPress={() => {
+          props.onLeftPress && props.onLeftPress();
+        }}>
+        <Image
+          resizeMode="contain"
+          style={{
+            width: 38,
+            height: 38,
+          }}
+          source={acc_icon}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({});

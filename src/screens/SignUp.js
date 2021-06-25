@@ -8,7 +8,7 @@ const back_arrow = require('../../assets/back_arrow.png');
 const user = require('../../assets/user.png');
 const header_logo = require('../../assets/header_logo.png');
 
-const Login = props => {
+const SignUp = props => {
   return (
     <View
       style={{
@@ -20,21 +20,23 @@ const Login = props => {
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 32,
-          flex: 1,
+          width:'100%'
+
         }}>
-        <Heading value="LETS LOG IN" marginTop={86} />
+        <Heading value="LETS LOG IN" marginTop={26} />
         <Heading
           fontSize={16}
-          marginTop={55}
+          marginTop={45}
           color={Colors.BLACK}
-          value="IF YOU ALREADY HAVE REGISTERED,WELCOME BACK"
+          value="LETS GET TO KNOW YOU BETTER"
         />
         <SKInput
-          marginTop={48}
+          marginTop={26}
           marginBottom={0}
           leftAccImage={user}
           borderColor={Colors.CLR_0065FF}
-          value={'808999889'}
+          value={''}
+          placeholder = 'First Name'
           onEndEditing={value => {
             console.log('onEndEditing', value);
           }}
@@ -47,21 +49,71 @@ const Login = props => {
             console.log('onRightPressed');
           }}
           borderColor={Colors.CLR_0065FF}
-          value={'808999889'}
+          value={''}
+          placeholder = 'Last Name'
           onEndEditing={value => {
             console.log('onEndEditing', value);
           }}
         />
-        <Link
-          marginTop={19}
-          title="Forgot Password ?"
-          onPress={() => {
-            console.log('link pressed');
+        <SKInput
+          leftAccImage={user}
+          marginBottom={0}
+          rightAccImage={user}
+          onRightPressed={() => {
+            console.log('onRightPressed');
+          }}
+          borderColor={Colors.CLR_0065FF}
+          value={''}
+          placeholder = 'Email Address'
+          onEndEditing={value => {
+            console.log('onEndEditing', value);
+          }}
+        />
+        <SKInput
+          leftAccImage={user}
+          marginBottom={0}
+          rightAccImage={user}
+          onRightPressed={() => {
+            console.log('onRightPressed');
+          }}
+          borderColor={Colors.CLR_0065FF}
+          value={''}
+          placeholder = 'Phone Number'
+          onEndEditing={value => {
+            console.log('onEndEditing', value);
+          }}
+        />
+        <SKInput
+          leftAccImage={user}
+          marginBottom={0}
+          rightAccImage={user}
+          onRightPressed={() => {
+            console.log('onRightPressed');
+          }}
+          borderColor={Colors.CLR_0065FF}
+          value={''}
+          placeholder = 'Password'
+          onEndEditing={value => {
+            console.log('onEndEditing', value);
+          }}
+        />
+        <SKInput
+          leftAccImage={user}
+          marginBottom={0}
+          rightAccImage={user}
+          onRightPressed={() => {
+            console.log('onRightPressed');
+          }}
+          borderColor={Colors.CLR_0065FF}
+          value={''}
+          placeholder = 'Confirm Password'
+          onEndEditing={value => {
+            console.log('onEndEditing', value);
           }}
         />
         <SKButton
           fontSize={16}
-          marginTop={15}
+          marginTop={33}
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_EB0000}
           borderColor={Colors.CLR_F58080}
@@ -70,20 +122,14 @@ const Login = props => {
             console.log('onPress');
           }}
         />
-
-        <Link
-          marginTop={69}
-          title="Dont have An Account ? Register Here"
-          disable={true}
-          alignment="center"
-        />
         <SKButton
           fontSize={16}
-          marginTop={13}
+          marginTop={10}
+          leftImage = {back_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_F58080}
           borderColor={Colors.CLR_EB0000}
-          title={'Register'}
+          title={'Go Back to Log In'}
           onPress={() => {
             console.log('onPress');
           }}
@@ -121,4 +167,4 @@ const Header = props => {
   );
 };
 
-export default Login;
+export default SignUp;
