@@ -22,7 +22,8 @@ const SKButton = props => {
     disable = false,
     borderColor,
     leftImage,
-    marginTop = 0
+    marginTop = 0,
+    width = '100%'
   } = props;
   return (
     <TouchableEffectView
@@ -40,6 +41,7 @@ const SKButton = props => {
         borderColor,
         borderWidth:2,
         marginTop,
+        width
       }}
       onPress={() => {
         console.log('TouchableEffectView')

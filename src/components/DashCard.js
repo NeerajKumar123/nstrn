@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 const {width} = Dimensions.get('window');
 import * as Colors from '../constants/ColorDefs';
+import LinearGradient from 'react-native-linear-gradient';
 const DashCard = props => {
   const {id, name, desc, image, colors} = props.item;
   return (
