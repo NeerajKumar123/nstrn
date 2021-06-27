@@ -1,14 +1,29 @@
-import React from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
+import React, {useState} from 'react';
+import {TouchableOpacity, View, Alert, ScrollView, Image} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
-const back_arrow = require('../../assets/back_arrow.png');
+import {useNavigation} from '@react-navigation/native';
 const user = require('../../assets/user.png');
 const header_logo = require('../../assets/header_logo.png');
 
 const Login = props => {
+  const navigation = useNavigation();
+  const [mobile, setMobile] = useState('')
+  const [pass, setPass] = useState('')
+
+  const checkFormValidations = () => {
+    let isValidForm = true;
+    if (mobile == undefined || mobile.length < 10) {
+      isValidForm = false;
+      Alert.alert('AppDisplayName','Please enter valid mobile number.' );
+    }else if (pass == undefined || pass.length < 6) {
+      isValidForm = false;
+      Alert.alert('AppDisplayName','Please enter valid password.' );
+    }
+    return isValidForm;
+  };
   return (
     <View
       style={{
@@ -34,9 +49,11 @@ const Login = props => {
           marginBottom={0}
           leftAccImage={user}
           borderColor={Colors.CLR_0065FF}
-          value={'808999889'}
+          value={mobile}
+          placeholder = 'Mobile Number'
           onEndEditing={value => {
             console.log('onEndEditing', value);
+            setMobile(value)
           }}
         />
         <SKInput
@@ -47,9 +64,11 @@ const Login = props => {
             console.log('onRightPressed');
           }}
           borderColor={Colors.CLR_0065FF}
-          value={'808999889'}
+          value={pass}
+          placeholder = 'Password'
           onEndEditing={value => {
             console.log('onEndEditing', value);
+            setPass(value)
           }}
         />
         <Link
@@ -57,6 +76,7 @@ const Login = props => {
           title="Forgot Password ?"
           onPress={() => {
             console.log('link pressed');
+            navigation.navigate('ForgotPassword')
           }}
         />
         <SKButton
@@ -67,10 +87,11 @@ const Login = props => {
           borderColor={Colors.CLR_F58080}
           title={'Continue'}
           onPress={() => {
-            console.log('onPress');
+            if(checkFormValidations()){
+              console.log('All Okay', mobile, pass);
+            }
           }}
         />
-
         <Link
           marginTop={69}
           title="Dont have An Account ? Register Here"
@@ -86,6 +107,7 @@ const Login = props => {
           title={'Register'}
           onPress={() => {
             console.log('onPress');
+            navigation.navigate('SignUp')
           }}
         />
       </ScrollView>

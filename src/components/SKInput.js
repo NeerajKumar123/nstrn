@@ -15,7 +15,8 @@ const SKInput = props => {
     rightAccImage,
     marginTop = 10,
     marginBottom = 10,
-    placeholder = 'Enter value'
+    placeholder = 'Enter value',
+    maxLength = 30
   } = props;
   console.log('leftAccImage', leftAccImage);
   return (
@@ -64,7 +65,7 @@ const SKInput = props => {
         value={value}
         keyboardType="phone-pad"
         placeholder={props.placeholder}
-        maxLength={15}
+        maxLength={maxLength}
         onFocus={() => {}}
         onChangeText={value => {
           setValue(value);

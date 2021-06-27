@@ -41,7 +41,7 @@ const SKButton = props => {
         borderColor,
         borderWidth:2,
         marginTop,
-        width
+        width : '100%',
       }}
       onPress={() => {
         console.log('TouchableEffectView')
@@ -51,7 +51,7 @@ const SKButton = props => {
         {leftImage && 
         <Image
         resizeMode="contain"
-        style={{width: 15, height: 15, marginRight: 5}}
+        style={{width: 15, height: 15, marginRight: 5, alignSelf:'center'}}
         source={leftImage}
       />
         }
@@ -61,7 +61,9 @@ const SKButton = props => {
             fontSize: fontSize,
             fontWeight: fontWeight,
             color: titleColor,
-            opacity: disable ? .5 : 1.0
+            opacity: disable ? .5 : 1.0,
+            width:'100%',
+            textAlign:'center'
           }}>
           {title}
         </Text>

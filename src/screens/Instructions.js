@@ -1,13 +1,13 @@
 import React from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
-import SKInput from '../components/SKInput';
-import SKButton, {Link} from '../components/SKButton';
+import {TouchableOpacity, View, Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 const right_arrow = require('../../assets/right_arrow.png');
 const header_logo = require('../../assets/header_logo.png');
 
 const Instructions = props => {
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -46,6 +46,9 @@ const Instructions = props => {
         />
       </View>
       <TouchableOpacity
+      onPress = {() =>{
+        navigation.navigate('Login')
+      }}
         style={{
           backgroundColor: Colors.CLR_D9272A,
           borderRadius: 28,

@@ -1,14 +1,37 @@
-import React from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
+import React, { useState } from 'react';
+import {TouchableOpacity, View, Alert, ScrollView, Image} from 'react-native';
 import SKInput from '../components/SKInput';
-import SKButton, {Link} from '../components/SKButton';
+import SKButton from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
-const back_arrow = require('../../assets/back_arrow.png');
+import {useNavigation} from '@react-navigation/native';
+import * as Validator from '../helpers/SKTValidator';
+import {ST_REGEX} from '../constants/StaticValues'
 const user = require('../../assets/user.png');
 const header_logo = require('../../assets/header_logo.png');
 
 const SetupNewPass = props => {
+  const navigation = useNavigation()
+  const [pass, setPass] = useState('')
+  const [cPass, setCPass] = useState('')
+
+  const checkFormValidations = () => {
+    let isValidForm = true;
+    const isPassValid =  Validator.isValidField(pass, ST_REGEX.Password)
+    const isCPassValid =  Validator.isValidField(cPass, ST_REGEX.Password)
+    if(!isPassValid){
+      isValidForm = false;
+      Alert.alert('AppDisplayName','Please enter valid Password');
+    }else if(!isCPassValid){
+      isValidForm = false;
+      Alert.alert('AppDisplayName','Please enter valid Confirm Password');
+    }else if(pass != cPass){
+      isValidForm = false;
+      Alert.alert('AppDisplayName','Passwords mismatch');
+    }
+    return isValidForm;
+  };
+
   return (
     <View
       style={{
@@ -34,26 +57,30 @@ const SetupNewPass = props => {
         <SKInput
           marginTop={48}
           marginBottom={0}
+          maxLength = {6}
           leftAccImage={user}
           borderColor={Colors.CLR_0065FF}
-          value={''}
+          value={pass}
           placeholder = 'Password'
           onEndEditing={value => {
             console.log('onEndEditing', value);
+            setPass(value)
           }}
         />
         <SKInput
           leftAccImage={user}
           marginBottom={0}
           rightAccImage={user}
+          maxLength = {6}
           onRightPressed={() => {
             console.log('onRightPressed');
           }}
           borderColor={Colors.CLR_0065FF}
-          value={''}
+          value={cPass}
           placeholder = 'Confirm Password'
           onEndEditing={value => {
             console.log('onEndEditing', value);
+            setCPass(value)
           }}
         />
         
@@ -66,6 +93,10 @@ const SetupNewPass = props => {
           title={'Submit'}
           onPress={() => {
             console.log('onPress');
+            if(checkFormValidations()){
+              console.log('All Okay', pass, cPass);
+              navigation.navigate('Login')
+            }
           }}
         />
       </ScrollView>

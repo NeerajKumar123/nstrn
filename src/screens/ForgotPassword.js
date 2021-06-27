@@ -15,7 +15,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import SKButton from '../components/SKButton';
 import Heading from '../components/Heading';
-import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 const header_logo = require('../../assets/header_logo.png');
 
@@ -31,10 +30,6 @@ const ForgotPassword = props => {
   const [otpParams, setOtpParams] = useState(params);
   const [otps, setOtps] = useState(Array(4).fill(''));
   const [_otp, set_otp] = useState('');
-  const maskedMobNumber =
-    otpParams &&
-    otpParams.mobile_no &&
-    otpParams.mobile_no.replace(/.(?=.{4})/g, 'x');
 
   const autoPopulate = finalOTP => {
     let str = finalOTP.trim();
@@ -118,13 +113,12 @@ const ForgotPassword = props => {
       }}>
       <Header />
       <ScrollView
-      contentContainerStyle = {{width:'100%', paddingHorizontal:30}}
-      >
+        contentContainerStyle={{width: '100%', paddingHorizontal: 30}}>
         <Heading value="FORGOT PASSWORD ?" marginTop={86} />
         <Heading
           fontSize={16}
           marginTop={55}
-          fontWeight ='700'
+          fontWeight="700"
           color={Colors.BLACK}
           value="WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:"
         />
@@ -134,7 +128,7 @@ const ForgotPassword = props => {
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingVertical:10,
+            paddingVertical: 10,
           }}>
           {inputs.map((i, j) => (
             <TextInput
@@ -177,7 +171,7 @@ const ForgotPassword = props => {
         <SKButton
           fontSize={16}
           marginTop={40}
-          width = {305}
+          width={305}
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_EB0000}
           borderColor={Colors.CLR_F58080}
@@ -188,11 +182,12 @@ const ForgotPassword = props => {
               Alert.alert('RPlus', 'Please enter a valid OTP');
               return;
             }
+            navigation.navigate('SetupNewPass')
           }}
         />
-         <SKButton
+        <SKButton
           fontSize={16}
-          width = {305}
+          width={305}
           marginTop={20}
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_F58080}
@@ -253,6 +248,5 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 2,
     shadowOpacity: 1.0,
-
   },
 });

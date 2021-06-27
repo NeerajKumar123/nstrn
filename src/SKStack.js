@@ -69,15 +69,11 @@ const SKStack = () => {
           component={SetupNewPass}
           options={{title: 'SetupNewPass', headerShown: false}}
         />
-
 <Stack.Screen
           name="Instructions"
           component={Instructions}
           options={{title: 'Instructions', headerShown: false}}
         />
-
-
-
       </Stack.Navigator>
     </NavigationContainer>
   );
