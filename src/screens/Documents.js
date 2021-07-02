@@ -4,10 +4,12 @@ import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
+import {useNavigation} from '@react-navigation/native';
 const profile = require('../../assets/profile.png');
 const request = require('../../assets/request.png');
 const messeges = require('../../assets/messeges.png');
 const Documents = props => {
+  const navigation = useNavigation()
   return (
     <View
       style={{
@@ -16,7 +18,11 @@ const Documents = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <AppHeader />
+      <AppHeader 
+        onLeftPress = {() =>{
+          navigation.goBack()
+        }}
+      />
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -34,6 +40,10 @@ const Documents = props => {
         <DocOptionCard
           grads={[Colors.CLR_D9272A, Colors.CLR_D72528]}
           title="TAX RETURNS"
+          onClicked = {()=>{
+            console.log('onClicked')
+            navigation.navigate('TaxReturns')
+          }}
         />
         <DocOptionCard
           grads={[Colors.CLR_29295F, Colors.CLR_29295F]}
@@ -75,7 +85,7 @@ const DocOptionCard = props => {
           alignItems: 'center',
         }}
         onPress={() => {
-          props.onLeftPress && props.onLeftPress();
+          props.onClicked && props.onClicked();
         }}>
         <Text
           style={{

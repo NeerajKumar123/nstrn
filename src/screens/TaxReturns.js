@@ -3,8 +3,10 @@ import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
+import {useNavigation} from '@react-navigation/native';
 const download = require('../../assets/download.png');
 const TaxReturns = props => {
+  const navigation = useNavigation()
   return (
     <View
       style={{
@@ -13,7 +15,11 @@ const TaxReturns = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <AppHeader />
+      <AppHeader 
+        onLeftPress = {() =>{
+          navigation.goBack()
+        }}
+      />
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{

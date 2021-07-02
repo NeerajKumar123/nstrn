@@ -10,13 +10,20 @@ import {
   StyleSheet,
   Keyboard,
   Alert,
-  DeviceEventEmitter,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import SKButton from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
+import SKInput from '../components/SKInput';
+import SKLoader from '../components/SKLoader';
+import AppHeader from '../components/AppHeader';
+import * as Validator from '../helpers/SKTValidator';
+import {ST_REGEX} from '../constants/StaticValues'
+import {forgotPassword} from '../apihelper/Api'
+import * as SKTStorage from '../helpers/SKTStorage'
 const header_logo = require('../../assets/header_logo.png');
+const user = require('../../assets/user.png');
 
 const ForgotPassword = props => {
   const navigation = useNavigation();
@@ -25,8 +32,12 @@ const ForgotPassword = props => {
   const input3 = useRef(null);
   const input4 = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [secCode, setSecCode] = useState('');
+  const [codeSentSuccessfully, setCodeSentSuccessfully] = useState(false)
   const inputs = Array(4).fill(0);
   const {params} = props?.route;
+  const {pagetitle,pagesubs} = params
   const [otpParams, setOtpParams] = useState(params);
   const [otps, setOtps] = useState(Array(4).fill(''));
   const [_otp, set_otp] = useState('');
@@ -72,7 +83,6 @@ const ForgotPassword = props => {
     if (otp.length === 4) {
       Keyboard.dismiss();
     }
-
     if (index === 3 && otp.length === 4) {
       input4.current.blur();
     }
@@ -111,16 +121,74 @@ const ForgotPassword = props => {
         backgroundColor: Colors.WHITE,
         justifyContent: 'flex-start',
       }}>
-      <Header />
+      {isLoading && <SKLoader/>}
+      <AppHeader onLeftPress = {() =>{
+        console.log('AppHeader',)
+        navigation.goBack()
+      }} />
       <ScrollView
-        contentContainerStyle={{width: '100%', paddingHorizontal: 30}}>
-        <Heading value="FORGOT PASSWORD ?" marginTop={86} />
+        contentContainerStyle={{width: '100%', paddingHorizontal: 30, alignItems:'center'}}>
+        <Heading value={pagetitle} marginTop={86} />
         <Heading
           fontSize={16}
-          marginTop={55}
+          marginTop={30}
           fontWeight="700"
           color={Colors.BLACK}
-          value="WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:"
+          value={'WE WILL SEND A CODE TO YOUR EMAIL. PLEASE PROVIDE US YOUR EMAIL'}
+        />
+        <SKInput
+          marginTop={30}
+          marginBottom={0}
+          leftAccImage={user}
+          maxLength = {30}
+          borderColor={Colors.CLR_0065FF}
+          value={email}
+          placeholder = 'Email'
+          onEndEditing={value => {
+            console.log('onEndEditing', value);
+            setEmail(value)
+          }}
+        />
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width={'100%'}
+          fontWeight={'normal'}
+          backgroundColor={Colors.CLR_EB0000}
+          borderColor={Colors.CLR_F58080}
+          title={'Submit'}
+          onPress={() => {
+            Keyboard.dismiss()
+            const isEmailValid =  Validator.isValidField(email, ST_REGEX.Email)
+            if(isEmailValid){
+              setIsLoading(true)
+                const val = Math.floor(1000 + Math.random() * 9000);
+                const params = {SecurityCode:val,Email:email}
+                forgotPassword(params,(fRes) =>{
+                  setIsLoading(false)
+                    console.log('fRes',fRes)
+                    if(fRes?.status == 1){
+                      const data = fRes.data[0]
+                      SKTStorage.storeUserData(data, (savedRes) =>{
+                        setSecCode(val)
+                        setCodeSentSuccessfully(true)
+                      });
+                    }else{
+                      const msg = fRes?.message ?? 'Something went wront, Please try again later.'
+                      Alert.alert('SukhTax',msg)    
+                    }
+                })    
+            }else{
+                Alert.alert('SukhTax', 'Please enter valid email id.')
+            }
+          }}
+        />
+        <Heading
+          fontSize={16}
+          marginTop={30}
+          fontWeight="700"
+          color={Colors.BLACK}
+          value={pagesubs}
         />
         <View
           style={{
@@ -170,31 +238,43 @@ const ForgotPassword = props => {
         </View>
         <SKButton
           fontSize={16}
-          marginTop={40}
-          width={305}
+          marginTop={30}
+          width={'100%'}
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_EB0000}
           borderColor={Colors.CLR_F58080}
           title={'Submit'}
           onPress={() => {
             const otp = _otp;
-            if (Number.isNaN(otp) || _otp.length < 4) {
-              Alert.alert('RPlus', 'Please enter a valid OTP');
-              return;
+            console.log('otp',otp, secCode)
+            if (otp == `${secCode}`) {
+                navigation.navigate(preScreen ? preScreen : 'SetupNewPass')
+            }else{
+                Alert.alert('SukhTax', 'Please enter a valid OTP sent on your mail.');
             }
-            navigation.navigate('SetupNewPass')
           }}
         />
         <SKButton
           fontSize={16}
-          width={305}
+          width={'100%'}
           marginTop={20}
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_F58080}
           borderColor={Colors.CLR_EB0000}
           title={'Resend Code'}
           onPress={() => {
-            console.log('onPress');
+            const val = Math.floor(1000 + Math.random() * 9000);
+            const params = {SecurityCode:val,Email:email}
+            setIsLoading(true)
+            forgotPassword(params,(res) =>{
+                const data = res.data[0]
+                SKTStorage.storeUserData(data, (savedRes) =>{
+                  console.log('data',data)
+                  setSecCode(val)
+                  setCodeSentSuccessfully(true)  
+                  setIsLoading(false)
+                });
+            }) 
           }}
         />
       </ScrollView>

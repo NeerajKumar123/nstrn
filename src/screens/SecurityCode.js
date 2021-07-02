@@ -15,11 +15,12 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import SKButton from '../components/SKButton';
 import Heading from '../components/Heading';
-import LinearGradient from 'react-native-linear-gradient';
+import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
+import {userCheckOtpForLogin,forgotPassword} from '../apihelper/Api'
 const header_logo = require('../../assets/header_logo.png');
 
-const VerifyOTP = props => {
+const SecurityCode = props => {
   const navigation = useNavigation();
   const input1 = useRef(null);
   const input2 = useRef(null);
@@ -28,13 +29,11 @@ const VerifyOTP = props => {
   const [isLoading, setIsLoading] = useState(false);
   const inputs = Array(4).fill(0);
   const {params} = props?.route;
+  console.log('params',params)
+  const {pagetitle,pagesubs,email} = params
   const [otpParams, setOtpParams] = useState(params);
   const [otps, setOtps] = useState(Array(4).fill(''));
   const [_otp, set_otp] = useState('');
-  const maskedMobNumber =
-    otpParams &&
-    otpParams.mobile_no &&
-    otpParams.mobile_no.replace(/.(?=.{4})/g, 'x');
 
   const autoPopulate = finalOTP => {
     let str = finalOTP.trim();
@@ -116,16 +115,17 @@ const VerifyOTP = props => {
         backgroundColor: Colors.WHITE,
         justifyContent: 'flex-start',
       }}>
+      {isLoading && <SKLoader/>}
       <Header />
       <ScrollView
-      contentContainerStyle = {{width:'100%', paddingHorizontal:30}}
-      >
-        <Heading value="LETS LOG IN" marginTop={86} />
+        contentContainerStyle={{width: '100%', paddingHorizontal: 30}}>
+        <Heading value={pagetitle} marginTop={86} />
         <Heading
           fontSize={16}
           marginTop={55}
+          fontWeight="700"
           color={Colors.BLACK}
-          value="WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:"
+          value={pagesubs}
         />
         <View
           style={{
@@ -133,7 +133,7 @@ const VerifyOTP = props => {
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingVertical:10,
+            paddingVertical: 10,
           }}>
           {inputs.map((i, j) => (
             <TextInput
@@ -176,27 +176,50 @@ const VerifyOTP = props => {
         <SKButton
           fontSize={16}
           marginTop={40}
+          width={305}
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_EB0000}
           borderColor={Colors.CLR_F58080}
           title={'Submit'}
           onPress={() => {
+            Keyboard.dismiss()
             const otp = _otp;
-            if (Number.isNaN(otp) || _otp.length < 4) {
+            if (Number.isNaN(otp) || otp.length < 4) {
               Alert.alert('SukhTax', 'Please enter a valid OTP');
-              return;
+            }else{
+              const userid = global.userInfo?.user_id
+              if(userid){
+                setIsLoading(true)
+                const params = {user_id:userid,OTP:otp}
+                userCheckOtpForLogin(params,()=>{
+                  navigation.navigate('Login')  
+                  setIsLoading(false)
+                })
+              }
             }
           }}
         />
-         <SKButton
+        <SKButton
           fontSize={16}
+          width={305}
           marginTop={20}
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_F58080}
           borderColor={Colors.CLR_EB0000}
-          title={'Register'}
+          title={'Resend Code'}
           onPress={() => {
-            console.log('onPress');
+            const val = Math.floor(1000 + Math.random() * 9000);
+            const params = {SecurityCode:val,Email:email}
+            setIsLoading(true)
+            forgotPassword(params,(res) =>{
+                const data = res.data[0]
+                SKTStorage.storeUserData(data, (savedRes) =>{
+                  console.log('data',data)
+                  setSecCode(val)
+                  setCodeSentSuccessfully(true)  
+                  setIsLoading(false)
+                });
+            }) 
           }}
         />
       </ScrollView>
@@ -204,7 +227,7 @@ const VerifyOTP = props => {
   );
 };
 
-export default VerifyOTP;
+export default SecurityCode;
 
 const Header = props => {
   return (
@@ -250,6 +273,5 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 2,
     shadowOpacity: 1.0,
-
   },
 });

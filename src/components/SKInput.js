@@ -9,16 +9,20 @@ import {
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
 const SKInput = props => {
-  const [value, setValue] = useState(props.value);
+  const {value} = props;
+  const [initialValue, setInitialValue] = useState(value);
+  useEffect(() => {
+    setInitialValue(value);
+  }, [value]);
   const {
     leftAccImage,
     rightAccImage,
     marginTop = 10,
     marginBottom = 10,
     placeholder = 'Enter value',
-    maxLength = 30
+    maxLength = 30,
+    isChatInput = false,
   } = props;
-  console.log('leftAccImage', leftAccImage);
   return (
     <View
       style={{
@@ -39,7 +43,7 @@ const SKInput = props => {
           height: 2,
         },
         shadowRadius: 3,
-        shadowOpacity: .8,
+        shadowOpacity: 0.8,
         marginTop,
         marginBottom,
       }}>
@@ -62,33 +66,35 @@ const SKInput = props => {
         }}
         textAlign={props.textAlign ? props.textAlign : 'left'}
         underlineColorAndroid="transparent"
-        value={value}
-        keyboardType="phone-pad"
+        value={initialValue}
+        keyboardType="email-address"
+        autoCapitalize="none"
         placeholder={props.placeholder}
         maxLength={maxLength}
         onFocus={() => {}}
         onChangeText={value => {
-          setValue(value);
+          setInitialValue(value);
         }}
         onEndEditing={() => {
-          props.onEndEditing && props.onEndEditing(value);
+          props.onEndEditing && props.onEndEditing(initialValue);
         }}
       />
       {rightAccImage && (
         <TouchableOpacity
           style={{
-            height: '100%',
-            width: 40,
+            height: 50,
+            width: isChatInput ? 50 :  40,
             justifyContent: 'center',
-            alignItems: 'flex-end',
+            alignItems: isChatInput ? 'center' : 'flex-end',
+            backgroundColor:isChatInput ? 'blue' : Colors.TRANS,
+            borderRadius:isChatInput ? 6 : 0
           }}
           onPress={() => {
-            console.log('TouchableOpacity');
             props.onRightPressed && props.onRightPressed();
           }}>
           <Image
             resizeMode="contain"
-            style={{width: 15, height: 15}}
+            style={{width: isChatInput ?  30 : 15, height: isChatInput ?  30 : 15}}
             source={rightAccImage}
           />
         </TouchableOpacity>

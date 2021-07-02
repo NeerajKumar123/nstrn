@@ -4,10 +4,12 @@ import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
+import {useNavigation} from '@react-navigation/native';
 const profile = require('../../assets/profile.png');
 const request = require('../../assets/request.png');
 const messeges = require('../../assets/messeges.png');
 const Home = props => {
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -16,7 +18,11 @@ const Home = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <AppHeader />
+      <AppHeader 
+      onLeftPress = {()=>{
+        navigation.goBack()
+      }}
+      />
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -63,10 +69,16 @@ const Home = props => {
             marginTop: 46,
             justifyContent: 'space-between',
           }}>
-          <ProfDoccCardView image={profile} title="PROFILE" />
-          <ProfDoccCardView image={request} title="DOCUMENTS" />
+          <ProfDoccCardView image={profile} title="PROFILE" onClicked = {() =>{
+            navigation.navigate('Profile')
+          }}/>
+          <ProfDoccCardView image={request} title="DOCUMENTS" onClicked = {() =>{
+            navigation.navigate('Documents')
+          }}/>
         </View>
-        <MessegesView />
+        <MessegesView onClicked = {()=>{
+          navigation.navigate('Messages')
+        }} />
       </ScrollView>
     </View>
   );
@@ -94,7 +106,7 @@ const ProfDoccCardView = props => {
           alignItems: 'center',
         }}
         onPress={() => {
-          props.onLeftPress && props.onLeftPress();
+          props.onClicked && props.onClicked();
         }}>
         <Image
           resizeMode="contain"
@@ -143,7 +155,7 @@ const MessegesView = props => {
           alignItems: 'center',
         }}
         onPress={() => {
-          props.onLeftPress && props.onLeftPress();
+          props.onClicked && props.onClicked();
         }}>
         <View style={{flexDirection: 'column'}}>
           <Text

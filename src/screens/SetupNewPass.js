@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import {TouchableOpacity, View, Alert, ScrollView, Image} from 'react-native';
+import {TouchableOpacity, View, Alert, ScrollView, Image, Keyboard} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
 import Heading from '../components/Heading';
+import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
+import {resetPassword} from '../apihelper/Api'
 const user = require('../../assets/user.png');
 const header_logo = require('../../assets/header_logo.png');
 
@@ -14,6 +16,7 @@ const SetupNewPass = props => {
   const navigation = useNavigation()
   const [pass, setPass] = useState('')
   const [cPass, setCPass] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -39,6 +42,7 @@ const SetupNewPass = props => {
         alignItems: 'center',
         backgroundColor: 'white',
       }}>
+      {isLoading && <SKLoader/>}
       <Header />
       <ScrollView
         contentContainerStyle={{
@@ -70,7 +74,6 @@ const SetupNewPass = props => {
         <SKInput
           leftAccImage={user}
           marginBottom={0}
-          rightAccImage={user}
           maxLength = {6}
           onRightPressed={() => {
             console.log('onRightPressed');
@@ -93,9 +96,18 @@ const SetupNewPass = props => {
           title={'Submit'}
           onPress={() => {
             console.log('onPress');
+            Keyboard.dismiss()
             if(checkFormValidations()){
-              console.log('All Okay', pass, cPass);
-              navigation.navigate('Login')
+              console.log('All Okay', pass, cPass, global.userInfo);
+              const userid = global.userInfo?.user_id
+              if(userid){
+                setIsLoading(true)
+                const params = {user_id:userid, 'New_Password':pass}
+                resetPassword(params, (res) =>{
+                  navigation.navigate('Login')
+                  setIsLoading(false)
+                })
+              }
             }
           }}
         />

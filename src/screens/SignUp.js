@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, View, Alert, ScrollView, Image} from 'react-native';
+import {TouchableOpacity, View, Alert, ScrollView, Image,Keyboard} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
+import SKLoader from '../components/SKLoader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
+import {register} from '../apihelper/Api'
 const back_arrow = require('../../assets/back_arrow.png');
 const user = require('../../assets/user.png');
 const header_logo = require('../../assets/header_logo.png');
@@ -19,6 +21,7 @@ const SignUp = props => {
   const [mobile, setMobile] = useState('')
   const [pass, setPass] = useState('')
   const [cPass, setCPass] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -61,6 +64,7 @@ const SignUp = props => {
         alignItems: 'center',
         backgroundColor: 'white',
       }}>
+      {isLoading && <SKLoader/>}
       <Header />
       <ScrollView
         contentContainerStyle={{
@@ -91,7 +95,6 @@ const SignUp = props => {
           leftAccImage={user}
           marginBottom={0}
           maxLength = {15}
-          rightAccImage={user}
           onRightPressed={() => {
             console.log('onRightPressed');
           }}
@@ -106,7 +109,6 @@ const SignUp = props => {
         <SKInput
           leftAccImage={user}
           marginBottom={0}
-          rightAccImage={user}
           maxLength = {30}
           onRightPressed={() => {
             console.log('onRightPressed');
@@ -123,7 +125,6 @@ const SignUp = props => {
           leftAccImage={user}
           marginBottom={0}
           maxLength = {10}
-          rightAccImage={user}
           onRightPressed={() => {
             console.log('onRightPressed');
           }}
@@ -177,9 +178,16 @@ const SignUp = props => {
           title={'Continue'}
           onPress={() => {
             console.log('onPress');
+            Keyboard.dismiss()
             if(checkFormValidations()){
-              console.log('All Okay', fName, lName, mobile, email, pass, cPass)
-              navigation.goBack()
+              setIsLoading(true)
+              const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:'TESTDEVICETOKEN654321', Device_OS:'iOS', Module_Type_Id:2}
+              // const params =   `{"First_Name":"neer","Last_Name":"kumar","Email_Id":"neerajkiet@gmail.comd","Mobile_No":"8010993612","Password":"999999","Device_Token":"TESTDEVICETOKEN654321","Device_OS":"iOS","Module_Type_Id":2}
+              register(params,(regisRes) =>{
+                console.log('regisRes',regisRes)
+                setIsLoading(false)
+                navigation.navigate('SecurityCode', {pagetitle:'Security Code', pagesubs:'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:', email:email})
+              })
             }
           }}
         />
@@ -194,7 +202,7 @@ const SignUp = props => {
           title={'Go Back to Log In'}
           onPress={() => {
             console.log('onPress');
-            navigation.goBack()
+            navigation.navigate('Login')
           }}
         />
       </ScrollView>

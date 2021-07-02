@@ -23,6 +23,7 @@ target 'SukhTax' do
   # you should disable the next line.
   use_flipper!()
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
   post_install do |installer|
     react_native_post_install(installer)
   end

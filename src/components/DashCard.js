@@ -14,43 +14,49 @@ import LinearGradient from 'react-native-linear-gradient';
 const DashCard = props => {
   const {id, name, desc, image, colors} = props.item;
   return (
-    <LinearGradient
-      colors={colors}
-      style={{
-        borderRadius: 6,
-        width: 163,
-        height: 185,
-        backgroundColor: 'white',
-        margin: 7,
-        alignItems: 'center',
-        paddingHorizontal: 7,
-        paddingVertical: 8,
+    <TouchableOpacity
+      onPress={() => {
+        props.onSelected && props.onSelected();
       }}>
-      <Text
+      <LinearGradient
+        colors={colors}
         style={{
-          fontWeight: '700',
-          color: Colors.WHITE,
-          fontSize: 17,
-          textAlign: 'center',
-          minHeight:48
+          borderRadius: 6,
+          width: 163,
+          height: 185,
+          backgroundColor: 'white',
+          margin: 7,
+          alignItems: 'center',
+          paddingHorizontal: 7,
+          paddingVertical: 8,
+          opacity:.6
         }}>
-        {name}
-      </Text>
-      <Image
-        resizeMode="contain"
-        style={{width: 33, height: 33, alignSelf: 'center'}}
-        source={image}
-      />
-      <Text
-        style={{
-          marginTop: 20,
-          textAlign: 'center',
-          color: Colors.WHITE,
-          fontSize: 15,
-        }}>
-        {desc}
-      </Text>
-    </LinearGradient>
+        <Text
+          style={{
+            fontWeight: '700',
+            color: Colors.WHITE,
+            fontSize: 17,
+            textAlign: 'center',
+            minHeight: 48,
+          }}>
+          {name}
+        </Text>
+        <Image
+          resizeMode="contain"
+          style={{width: 33, height: 33, alignSelf: 'center'}}
+          source={image}
+        />
+        <Text
+          style={{
+            marginTop: 20,
+            textAlign: 'center',
+            color: Colors.WHITE,
+            fontSize: 15,
+          }}>
+          {desc}
+        </Text>
+      </LinearGradient>
+    </TouchableOpacity>
   );
 };
 

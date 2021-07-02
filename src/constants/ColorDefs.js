@@ -12,6 +12,7 @@ export const LIGHTGRAY = 'lightgray';
 export const ORANGE = 'orange';
 export const CLR_EB0000 = '#EB0000'
 export const CLR_EB000080 = '#EB000080'
+export const CLR_00000090 = '#00000090'
 export const CLR_F58080 = '#F58080'
 export const CLR_27275D = '#27275D'
 export const CLR_D72528 = '#D72528'

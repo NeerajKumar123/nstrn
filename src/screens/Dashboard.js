@@ -6,13 +6,12 @@ import {
   StyleSheet,
   Image,
   FlatList,
+  DeviceEventEmitter
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import DashCard from '../components/DashCard';
+import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
-
-const acc_icon = require('../../assets/account_icon.png');
-const header_logo = require('../../assets/header_logo.png');
 const logout_icon = require('../../assets/logout_icon.png');
 
 const home = require('../../assets/home.png');
@@ -78,7 +77,10 @@ const Dashboard = props => {
         flex: 1,
         backgroundColor: 'white',
       }}>
-      <Header />
+      <DashHeader onRightClicked = {()=>{
+        console.log('onRightClicked')
+        navigation.navigate('Profile')
+      }} />
       {data && (
         <FlatList
           contentContainerStyle={{
@@ -96,6 +98,7 @@ const Dashboard = props => {
               item={item}
               onSelected={() => {
                 console.log('onSelected==>', item);
+                navigation.navigate('Home')
               }}
             />
           )}
@@ -109,7 +112,9 @@ const Dashboard = props => {
           height: 40,
           marginBottom: 30,
         }}>
-        <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => {}}>
+        <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => {
+          DeviceEventEmitter.emit('user_loggedin',false)
+        }}>
           <Image
             resizeMode="contain"
             style={{width: 15, height: 15, marginRight: 5}}
@@ -124,42 +129,5 @@ const Dashboard = props => {
 
 export default Dashboard;
 
-const Header = props => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        marginTop: Platform.OS == 'ios' ? 34 : 10,
-        alignItems: 'center',
-        width: '100%',
-        paddingHorizontal: 16,
-        backgroundColor: 'white',
-        paddingVertical: 5,
-        justifyContent: 'space-between',
-      }}>
-      <Image
-        resizeMode="contain"
-        style={{
-          width: 38,
-          height: 38,
-        }}
-        source={header_logo}
-      />
-      <TouchableOpacity
-        onPress={() => {
-          props.onLeftPress && props.onLeftPress();
-        }}>
-        <Image
-          resizeMode="contain"
-          style={{
-            width: 38,
-            height: 38,
-          }}
-          source={acc_icon}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({});

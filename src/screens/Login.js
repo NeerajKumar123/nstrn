@@ -1,23 +1,27 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, View, Alert, ScrollView, Image} from 'react-native';
+import {TouchableOpacity, View, Alert, ScrollView, Image,DeviceEventEmitter, Keyboard} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
+import {login} from '../apihelper/Api'
+import * as SKTStorage from '../helpers/SKTStorage'
+import SKLoader from '../components/SKLoader';
 const user = require('../../assets/user.png');
 const header_logo = require('../../assets/header_logo.png');
 
 const Login = props => {
   const navigation = useNavigation();
-  const [mobile, setMobile] = useState('')
-  const [pass, setPass] = useState('')
+  const [email, setemail] = useState('neerajkiet@gmail.com')
+  const [pass, setPass] = useState('990099')
+  const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    if (mobile == undefined || mobile.length < 10) {
+    if (email == undefined || email.length < 10) {
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid mobile number.' );
+      Alert.alert('AppDisplayName','Please enter valid email.' );
     }else if (pass == undefined || pass.length < 6) {
       isValidForm = false;
       Alert.alert('AppDisplayName','Please enter valid password.' );
@@ -31,6 +35,7 @@ const Login = props => {
         alignItems: 'center',
         backgroundColor: 'white',
       }}>
+      {isLoading && <SKLoader/>}
       <Header />
       <ScrollView
         contentContainerStyle={{
@@ -48,18 +53,20 @@ const Login = props => {
           marginTop={48}
           marginBottom={0}
           leftAccImage={user}
+          maxLength = {30}
           borderColor={Colors.CLR_0065FF}
-          value={mobile}
-          placeholder = 'Mobile Number'
+          value={email}
+          placeholder = 'Email'
           onEndEditing={value => {
             console.log('onEndEditing', value);
-            setMobile(value)
+            setemail(value)
           }}
         />
         <SKInput
           leftAccImage={user}
           marginBottom={0}
           rightAccImage={user}
+          maxLength = {10}
           onRightPressed={() => {
             console.log('onRightPressed');
           }}
@@ -76,7 +83,7 @@ const Login = props => {
           title="Forgot Password ?"
           onPress={() => {
             console.log('link pressed');
-            navigation.navigate('ForgotPassword')
+            navigation.navigate('ForgotPassword', {pagetitle:'FORGOT PASSWORD?', pagesubs:'WE HAVE SENT A SECURITY CODE TO YOUR PHONE. PLEASE ENTER BELOW:', preScreen:undefined})
           }}
         />
         <SKButton
@@ -87,8 +94,25 @@ const Login = props => {
           borderColor={Colors.CLR_F58080}
           title={'Continue'}
           onPress={() => {
+            Keyboard.dismiss()
             if(checkFormValidations()){
-              console.log('All Okay', mobile, pass);
+              console.log('All Okay', email, pass);
+              const params = {Email:email, Password:pass}
+              setIsLoading(true)
+              login(params, (userRes) =>{
+                console.log('userRes',userRes)
+                setIsLoading(false)
+                if(userRes?.status == 1){
+                  const user = userRes && userRes.data[0]
+                  SKTStorage.storeUserData(user, (savedRes) =>{
+                    global.userInfo = savedRes
+                    DeviceEventEmitter.emit('user_loggedin',true)
+                  });
+                }else{
+                  const msg = userRes?.message ?? 'Something went wront, Please try again later.'
+                  Alert.alert('SukhTax',msg)
+                }
+              })
             }
           }}
         />
@@ -107,7 +131,7 @@ const Login = props => {
           title={'Register'}
           onPress={() => {
             console.log('onPress');
-            navigation.navigate('SignUp')
+            navigation.navigate('Instructions')
           }}
         />
       </ScrollView>

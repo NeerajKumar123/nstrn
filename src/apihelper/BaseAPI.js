@@ -1,36 +1,71 @@
 import axios from 'axios';
+import { Alert } from 'react-native';
+const config = {
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+};
 
 const API = {
   makeGetRequest(path, callback) {
-    console.log('makeGetRequest111', path)
+    console.log('Getting ===>', path);
     axios
       .get(path)
       .then(res => {
-        console.log('makeGetRequest222', path, res.data)
-        callback(res.data);
+        const resData = res && res.data;
+        callback(resData);
       })
       .catch(error => {
-        console.log('error', error);
-        callback({status: -1});
+        extractError(error);
+        callback({status:0});
       });
   },
 
   makePostRequest(path, params, callback) {
-    console.log('makePostRequest11', path, JSON.stringify(params))
+    console.log('Posting ===>', path, JSON.stringify(params));
+    const urlEncodedParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      urlEncodedParams.append(key, params[key]);
+    });
     axios({
       method: 'post',
       url: path,
-      data: params,
+      data: urlEncodedParams,
+      config,
     })
       .then(res => {
-        console.log('makePostRequest22', path,res.data)
-        callback(res.data);
+        const resData = res && res.data;
+        callback(resData);
       })
       .catch(error => {
-        console.log('error', error);
-        callback({status: -1});
+        extractError(error);
+        callback({status:0});
       });
   },
+};
+
+const extractError = error => {
+  // Error 😨
+  if (error.response) {
+    /*
+     * The request was made and the server responded with a
+     * status code that falls out of the range of 2xx
+     */
+    console.log('error.response.data', error.response.data);
+    console.log('error.response.status',error.response.status);
+    console.log(error.response.headers);
+  } else if (error.request) {
+    /*
+     * The request was made but no response was received, `error.request`
+     * is an instance of XMLHttpRequest in the browser and an instance
+     * of http.ClientRequest in Node.js
+     */
+    console.log('error.request', error.request);
+  } else {
+    // Something happened in setting up the request and triggered an Error
+    console.log('error.message', error.message);
+  }
+  console.log('error.config', error.config);
 };
 
 export default API;

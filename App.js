@@ -7,12 +7,12 @@
  */
 
 import React from 'react';
-import SKStack from './src/SKStack';
+import AuthNavigator from './src/AuthNavigator';
 
 const App = () => {
   return (
     <>
-    <SKStack/>
+    <AuthNavigator/>
     </>
   );
 };

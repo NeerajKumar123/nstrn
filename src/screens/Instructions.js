@@ -47,7 +47,7 @@ const Instructions = props => {
       </View>
       <TouchableOpacity
       onPress = {() =>{
-        navigation.navigate('Login')
+        navigation.navigate('SignUp')
       }}
         style={{
           backgroundColor: Colors.CLR_D9272A,
