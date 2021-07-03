@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {TouchableOpacity, View, Alert, ScrollView, Image, Keyboard} from 'react-native';
+import {TouchableOpacity, View, Alert, ScrollView, Image, Keyboard,Platform} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
 import Heading from '../components/Heading';

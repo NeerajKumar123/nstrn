@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import {Platform} from 'react-native'
 const setKeyValue = async (key, value, callback) => {
     let valuestring = '';
     if (typeof value === 'object') {

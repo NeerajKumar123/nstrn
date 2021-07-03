@@ -34,10 +34,11 @@ const SKInput = props => {
         borderRadius: 30,
         flexDirection: 'row',
         alignItems: 'center',
+        elevation:2,
         backgroundColor: props.backgroundColor
           ? props.backgroundColor
           : Colors.WHITE,
-        shadowColor: Colors.LIGHTGRAY,
+        shadowColor: Colors.GRAY,
         shadowOffset: {
           width: 2,
           height: 2,

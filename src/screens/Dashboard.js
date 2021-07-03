@@ -30,35 +30,35 @@ const data = [
     colors: [Colors.CLR_27275D, Colors.CLR_D72528],
   },
   {
-    id: 1,
+    id: 2,
     name: 'VISIT US',
     desc: 'BOOK AN APPOINTMENT',
     image: visit_us,
     colors: [Colors.CLR_27275D, Colors.CLR_D72528],
   },
   {
-    id: 1,
+    id: 3,
     name: 'ONLINE TAX RETURN',
     desc: 'STARTING FROM $44.99',
     image: online,
     colors: [Colors.CLR_EB0000, Colors.CLR_D72528],
   },
   {
-    id: 1,
+    id: 4,
     name: 'INCORPORATION',
     desc: 'OPEN A CORPORATION',
     image: incorporation,
     colors: [Colors.CLR_EB0000, Colors.CLR_D72528],
   },
   {
-    id: 1,
+    id: 5,
     name: 'REQUEST TAX DOCS',
     desc: 'NOA, T1,GENERAL, etc.',
     image: request,
     colors: [Colors.CLR_D72528, Colors.CLR_27275D],
   },
   {
-    id: 1,
+    id: 6,
     name: 'CRA LATTERS',
     desc: 'CORRESPONDENCE',
     image: cra_latters,
@@ -66,8 +66,21 @@ const data = [
   },
 ];
 
+
 const Dashboard = props => {
   const navigation = useNavigation();
+const navigateToScreen = (item) =>{
+  switch (item.id) {
+    case 1:
+      navigation.navigate('Home')
+      break;
+      case 3:
+      navigation.navigate('Identification')
+      break;
+    default:
+      break;
+  }
+}
 
   return (
     <View
@@ -98,7 +111,7 @@ const Dashboard = props => {
               item={item}
               onSelected={() => {
                 console.log('onSelected==>', item);
-                navigation.navigate('Home')
+                navigateToScreen(item)
               }}
             />
           )}

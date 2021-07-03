@@ -15,6 +15,7 @@ import Instructions from './screens/Instructions';
 import ForgotPassword from './screens/ForgotPassword';
 import Profile from './screens/Profile'
 import Messages from './screens/Messages'
+import Identification from './screens/Identification'
 
 const Stack = createStackNavigator();
 
@@ -108,6 +109,11 @@ const SKStack = () => {
           name="Messages"
           component={Messages}
           options={{ title: 'Messages', headerShown: false }}
+        />
+        <Stack.Screen
+          name="Identification"
+          component={Identification}
+          options={{ title: 'Identification', headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

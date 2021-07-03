@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, View, Alert, ScrollView, Image,DeviceEventEmitter, Keyboard} from 'react-native';
+import {TouchableOpacity, View, Alert, ScrollView, Image,DeviceEventEmitter, Keyboard,Platform} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
@@ -10,6 +10,7 @@ import * as SKTStorage from '../helpers/SKTStorage'
 import SKLoader from '../components/SKLoader';
 const user = require('../../assets/user.png');
 const header_logo = require('../../assets/header_logo.png');
+import CodePush from 'react-native-code-push';
 
 const Login = props => {
   const navigation = useNavigation();
@@ -131,8 +132,12 @@ const Login = props => {
           title={'Register'}
           onPress={() => {
             console.log('onPress');
-            navigation.navigate('Instructions')
-          }}
+            // navigation.navigate('Instructions')
+            CodePush.sync({
+              updateDialog: true,
+              installMode: CodePush.InstallMode.ON_NEXT_RESTART
+          });
+            }}
         />
       </ScrollView>
     </View>

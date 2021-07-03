@@ -5,13 +5,14 @@ import {
   Image,
   TouchableNativeFeedback,
   View,
+  Platform
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
 import TouchableEffectView from '../components/TouchableEffectView';
 const SKButton = props => {
   let foreground = null;
   if (Platform.OS === 'android' && Platform.Version > 20) {
-    foreground = TouchableNativeFeedback.Ripple(colors.black_op15, true);
+    foreground = TouchableNativeFeedback.Ripple(Colors.TRANS, true);
   }
 
   const {

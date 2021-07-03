@@ -12,7 +12,7 @@ import AuthNavigator from './src/AuthNavigator';
 const App = () => {
   return (
     <>
-    <AuthNavigator/>
+    <AuthNavigator/> 
     </>
   );
 };

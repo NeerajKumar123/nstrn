@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SukhTax</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">Wk9U74Y4BQd8l_wogj0etAjFg81ssKIuSbQoC</string>
 </resources>
