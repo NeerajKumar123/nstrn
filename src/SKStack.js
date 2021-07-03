@@ -16,6 +16,7 @@ import ForgotPassword from './screens/ForgotPassword';
 import Profile from './screens/Profile'
 import Messages from './screens/Messages'
 import Identification from './screens/Identification'
+import BasicInfo from './screens/BasicInfo'
 
 const Stack = createStackNavigator();
 
@@ -115,6 +116,12 @@ const SKStack = () => {
           component={Identification}
           options={{ title: 'Identification', headerShown: false }}
         />
+         <Stack.Screen
+          name="BasicInfo"
+          component={BasicInfo}
+          options={{ title: 'BasicInfo', headerShown: false }}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

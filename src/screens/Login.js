@@ -10,7 +10,6 @@ import * as SKTStorage from '../helpers/SKTStorage'
 import SKLoader from '../components/SKLoader';
 const user = require('../../assets/user.png');
 const header_logo = require('../../assets/header_logo.png');
-import CodePush from 'react-native-code-push';
 
 const Login = props => {
   const navigation = useNavigation();
@@ -132,11 +131,7 @@ const Login = props => {
           title={'Register'}
           onPress={() => {
             console.log('onPress');
-            // navigation.navigate('Instructions')
-            CodePush.sync({
-              updateDialog: true,
-              installMode: CodePush.InstallMode.ON_NEXT_RESTART
-          });
+            navigation.navigate('Instructions')
             }}
         />
       </ScrollView>

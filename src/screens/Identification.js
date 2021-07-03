@@ -102,7 +102,6 @@ const Identification = props => {
             flexDirection: 'row',
             marginTop: 10,
             justifyContent: 'space-between',
-            backgroundColor:'green',
             position:'absolute',
             bottom:20
           }}>
@@ -128,7 +127,7 @@ const Identification = props => {
             title={'BASIC INFO'}
             onPress={() => {
                 console.log('link pressed');
-                navigation.navigate('ForgotPassword', {pagetitle:'CHANGE PASSWORD?', pagesubs:'WE HAVE SENT A SECURITY CODE TO YOUR PHONE. PLEASE ENTER BELOW:', preScreen:'Profile'})
+                navigation.navigate('BasicInfo')
                 }}
           />
         </View>

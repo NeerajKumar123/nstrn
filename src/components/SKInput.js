@@ -38,7 +38,7 @@ const SKInput = props => {
         backgroundColor: props.backgroundColor
           ? props.backgroundColor
           : Colors.WHITE,
-        shadowColor: Colors.GRAY,
+        shadowColor: Colors.LIGHTGRAY,
         shadowOffset: {
           width: 2,
           height: 2,
