@@ -8,28 +8,48 @@ import {
   FlatList,
   Dimensions,
   KeyboardAvoidingView,
+  Alert,
+  Platform,
 } from 'react-native';
-import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
-import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import SKButton from '../components/SKButton';
+import {useKeyboard} from '../components/useKeyboard';
 import SKInput from '../components/SKInput';
+import Heading from '../components/Heading';
+import SKLoader from '../components/SKLoader';
+import {getMessages, saveMessage} from '../apihelper/Api';
 const send_msg = require('../../assets/send_msg.png');
 const left_arrow = require('../../assets/left_arrow.png');
 const {width} = Dimensions.get('window');
 const Messages = props => {
   const navigation = useNavigation();
-  const [chats, setChats] = useState([
-    {msg: 'This is from sukhtax', flag: true},
-    {msg: 'This is from user', flag: false},
-    {msg: 'This is from sukhtax', flag: true},
-    {msg: 'This is from sukhtax', flag: true},
-    {msg: 'This is from user', flag: false},
-    {msg: 'This is from sukhtax', flag: true},
-  ]);
+  const [chats, setChats] = useState();
   const [chatText, setChatText] = useState('');
+  const [keyboardHeight] = useKeyboard();
+  const [isLoading, setIsLoading] = useState(false)
+  const userid = global.userInfo?.user_id
+  const taxFileID = global.userInfo?.Tax_File_Id
+
+  const getUpdatedMsgList = (isloader) =>{
+    setIsLoading(isloader)
+    const params = {User_Id: userid, Tax_File_Id: taxFileID || 83};
+    getMessages(params, msgRes => {
+      setIsLoading(false)
+      if (msgRes && msgRes.status == 1) {
+        const msgs = msgRes.data;
+        setChats(msgs);
+      } else {
+        const msg =
+          msgRes?.message ?? 'Something went wront, Please try again later.';
+        Alert.alert('SukhTax', msg);
+      }
+    });
+  }
+  useEffect(() => {
+    getUpdatedMsgList(true)
+  }, []);
+
   return (
     <View
       style={{
@@ -43,71 +63,93 @@ const Messages = props => {
           navigation.goBack();
         }}
       />
-      <KeyboardAvoidingView
+      {isLoading && <SKLoader/>}
+        <View
         style={{width: '100%', flex: 1, paddingHorizontal:20}}>
-        <Heading value="MESSAGES" marginTop={30} />
-        {chats && (
-          <FlatList
-            contentContainerStyle={{
-              backgroundColor: Colors.WHITE,
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              paddingVertical:20
-            }}
-            keyExtractor={(item, index) => 'key_' + index}
-            data={[...chats]}
-            renderItem={({item}) => <MessageCard item={item} />}
-          />
-        )}
-        
-      </KeyboardAvoidingView>
-      <View
-          style={{
-            backgroundColor: 'white',
+      <Heading value="MESSAGES" marginTop={30} />
+      {chats && (
+        <FlatList
+          contentContainerStyle={{
+            backgroundColor: Colors.WHITE,
+            justifyContent: 'center',
+            alignItems: 'center',
             width: '100%',
-          }}>
-          <SKInput
-            marginTop={50}
-            maxLength={10}
-            rightAccImage={send_msg}
-            isChatInput={true}
-            onRightPressed={() => {
-              console.log('onRightPressed');
-            }}
-            borderColor={Colors.CLR_0065FF}
-            value={chatText}
-            placeholder="Enter your query"
-            onEndEditing={value => {
-              console.log('onEndEditing', value);
-              setChatText(value);
-            }}
-          />
-        </View>
+            paddingVertical: 20,
+          }}
+          style = {{
+            flex:1,
+            marginBottom:85 + keyboardHeight
+          }}
+          keyExtractor={(item, index) => 'key_' + index}
+          data={[...chats]}
+          showsVerticalScrollIndicator = {false}
+          renderItem={({item}) => <MessageCard item={item} />}
+        />
+      )}
+      </View>
+      <View
+        style={{
+          backgroundColor: 'white',
+          width: '100%',
+          position:'absolute',
+          bottom:keyboardHeight ? keyboardHeight : Platform.OS == 'ios' ? 10 : keyboardHeight,
+        }}>
+        <SKInput
+          rightAccImage={send_msg}
+          isChatInput={true}
+          onTextChange = {(text)=>{
+            setChatText(text)
+          }}
+          onRightPressed={() => {
+            if(chatText.length < 1) return
+            setIsLoading(true)
+            const params = {User_Id: userid, Tax_File_Id: taxFileID || 83,Message:chatText};
+            saveMessage(params, saveMsgRes => {
+              setIsLoading(false)
+              if (saveMsgRes && saveMsgRes.status == 1) {
+                setChatText('')
+                getUpdatedMsgList(false)
+              } else {
+                const msg =
+                  saveMsgRes?.message ??
+                  'Something went wront, Please try again later.';
+                Alert.alert('SukhTax', msg);
+              }
+            });
+          }}
+          borderColor={Colors.CLR_0065FF}
+          value={chatText}
+          placeholder="Type a message"
+          onEndEditing={value => {
+            setChatText(value);
+          }}
+        />
+      </View>
     </View>
   );
 };
 
 const MessageCard = props => {
-  const {flag, msg} = props.item;
+  const {message, user_type} = props.item;
+  const isUser = user_type == 'User' ? true : false;
   return (
     <View
       style={{
         width: width - 40,
         marginTop: 5,
         flexDirection: 'row',
-        justifyContent: flag ? 'flex-start' : 'flex-end',
+        justifyContent: isUser ? 'flex-start' : 'flex-end',
       }}>
       <Text
         style={{
           width: '50%',
-          backgroundColor: flag ? 'gray' : 'pink',
+          backgroundColor: isUser ? 'gray' : 'pink',
           paddingHorizontal: 10,
           paddingVertical: 10,
           borderRadius: 6,
           overflow: 'hidden',
         }}>
-        {msg}
+        {message}
       </Text>
     </View>
   );

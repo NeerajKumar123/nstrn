@@ -30,7 +30,7 @@ const SecurityCode = props => {
   const inputs = Array(4).fill(0);
   const {params} = props?.route;
   console.log('params',params)
-  const {pagetitle,pagesubs,email} = params
+  const {pagetitle,pagesubs,email} = {}
   const [otpParams, setOtpParams] = useState(params);
   const [otps, setOtps] = useState(Array(4).fill(''));
   const [_otp, set_otp] = useState('');
@@ -211,15 +211,21 @@ const SecurityCode = props => {
             const val = Math.floor(1000 + Math.random() * 9000);
             const params = {SecurityCode:val,Email:email}
             setIsLoading(true)
-            forgotPassword(params,(res) =>{
-                const data = res.data[0]
-                SKTStorage.storeUserData(data, (savedRes) =>{
-                  console.log('data',data)
-                  setSecCode(val)
-                  setCodeSentSuccessfully(true)  
-                  setIsLoading(false)
+            forgotPassword(params, fRes => {
+              setIsLoading(false);
+              if (fRes?.status == 1) {
+                const data = fRes.data[0];
+                SKTStorage.storeUserData(data, savedRes => {
+                  setSecCode(val);
+                  setCodeSentSuccessfully(true);
                 });
-            }) 
+              } else {
+                const msg =
+                  fRes?.message ??
+                  'Something went wront, Please try again later.';
+                Alert.alert('SukhTax', msg);
+              }
+            }); 
           }}
         />
       </ScrollView>

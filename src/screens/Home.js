@@ -178,7 +178,7 @@ const MessegesView = props => {
               fontWeight: '700',
               marginTop: 5,
             }}>
-            2 NEW MESSAGES
+            0 NEW MESSAGES
           </Text>
         </View>
         <Image

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
 const SKInput = props => {
-  const {value} = props;
+  const {value,onFocused} = props;
   const [initialValue, setInitialValue] = useState(value);
   useEffect(() => {
     setInitialValue(value);
@@ -70,11 +70,16 @@ const SKInput = props => {
         value={initialValue}
         keyboardType="email-address"
         autoCapitalize="none"
+        autoCompleteType="off"
+        autoCorrect={false}
         placeholder={props.placeholder}
         maxLength={maxLength}
-        onFocus={() => {}}
+        onFocus={() => {
+          onFocused && onFocused()
+        }}
         onChangeText={value => {
           setInitialValue(value);
+          props.onTextChange && props.onTextChange(value)
         }}
         onEndEditing={() => {
           props.onEndEditing && props.onEndEditing(initialValue);
@@ -83,8 +88,8 @@ const SKInput = props => {
       {rightAccImage && (
         <TouchableOpacity
           style={{
-            height: 50,
-            width: isChatInput ? 50 :  40,
+            height: 40,
+            width: isChatInput ? 40 :  40,
             justifyContent: 'center',
             alignItems: isChatInput ? 'center' : 'flex-end',
             backgroundColor:isChatInput ? 'blue' : Colors.TRANS,
@@ -95,7 +100,7 @@ const SKInput = props => {
           }}>
           <Image
             resizeMode="contain"
-            style={{width: isChatInput ?  30 : 15, height: isChatInput ?  30 : 15}}
+            style={{width: isChatInput ?  20 : 15, height: isChatInput ?  20 : 15}}
             source={rightAccImage}
           />
         </TouchableOpacity>

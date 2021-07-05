@@ -50,6 +50,16 @@ export const getUserProfileDetails = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const getMessages = (params,callback) => {
+  const path = `${BaseURL}/Message_Get_Messages`
+  API.makePostRequest(path , params, callback);
+};
+
+export const saveMessage = (params,callback) => {
+  const path = `${BaseURL}/Message_Save_Message`
+  API.makePostRequest(path , params, callback);
+};
+
 
 
 

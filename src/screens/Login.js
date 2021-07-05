@@ -8,9 +8,9 @@ import {useNavigation} from '@react-navigation/native';
 import {login} from '../apihelper/Api'
 import * as SKTStorage from '../helpers/SKTStorage'
 import SKLoader from '../components/SKLoader';
-const user = require('../../assets/user.png');
+const  emailicon = require('../../assets/email.png');
 const header_logo = require('../../assets/header_logo.png');
-
+const passicon = require('../../assets/pass.png');
 const Login = props => {
   const navigation = useNavigation();
   const [email, setemail] = useState('neerajkiet@gmail.com')
@@ -52,29 +52,23 @@ const Login = props => {
         <SKInput
           marginTop={48}
           marginBottom={0}
-          leftAccImage={user}
+          leftAccImage={emailicon}
           maxLength = {30}
           borderColor={Colors.CLR_0065FF}
           value={email}
           placeholder = 'Email'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setemail(value)
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={passicon}
           marginBottom={0}
-          rightAccImage={user}
           maxLength = {10}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
           borderColor={Colors.CLR_0065FF}
           value={pass}
           placeholder = 'Password'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setPass(value)
           }}
         />
@@ -96,11 +90,9 @@ const Login = props => {
           onPress={() => {
             Keyboard.dismiss()
             if(checkFormValidations()){
-              console.log('All Okay', email, pass);
               const params = {Email:email, Password:pass}
               setIsLoading(true)
               login(params, (userRes) =>{
-                console.log('userRes',userRes)
                 setIsLoading(false)
                 if(userRes?.status == 1){
                   const user = userRes && userRes.data[0]

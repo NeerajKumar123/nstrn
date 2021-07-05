@@ -1,17 +1,21 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, View, Alert, ScrollView, Image,Keyboard,Platform} from 'react-native';
+import {TouchableOpacity, View, Alert, ScrollView, Image,Keyboard,Platform, KeyboardAvoidingView} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
+import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api'
 const back_arrow = require('../../assets/back_arrow.png');
-const user = require('../../assets/user.png');
-const header_logo = require('../../assets/header_logo.png');
+const usericon = require('../../assets/username.png');
+const  emailicon = require('../../assets/email.png');
+const phoneicon = require('../../assets/phone.png');
+const passicon = require('../../assets/pass.png');
+const hideicon = require('../../assets/hide.png');
 
 const SignUp = props => {
   const navigation = useNavigation()
@@ -63,9 +67,20 @@ const SignUp = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
+        flex:1
       }}>
       {isLoading && <SKLoader/>}
-      <Header />
+      <AppHeader
+        onLeftPress={() => {
+          console.log('AppHeader');
+          navigation.goBack();
+        }}
+      />
+      <KeyboardAvoidingView
+        behavior={'position'}
+        enabled={true}
+        style={{backgroundColor: Colors.WHITE, flex: 1}}
+        keyboardVerticalOffset={-200}>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 32,
@@ -82,7 +97,7 @@ const SignUp = props => {
           marginTop={26}
           marginBottom={0}
           maxLength = {15}
-          leftAccImage={user}
+          leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
           value={''}
           placeholder = 'First Name'
@@ -92,74 +107,54 @@ const SignUp = props => {
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={usericon}
           marginBottom={0}
           maxLength = {15}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
           borderColor={Colors.CLR_0065FF}
-          value={''}
+          value={lName}
           placeholder = 'Last Name'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setLName(value)
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={emailicon}
           marginBottom={0}
           maxLength = {30}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
           borderColor={Colors.CLR_0065FF}
-          value={''}
+          value={email}
           placeholder = 'Email Address'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setEmail(value)
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={phoneicon}
           marginBottom={0}
           maxLength = {10}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
           borderColor={Colors.CLR_0065FF}
-          value={''}
+          value={mobile}
           placeholder = 'Phone Number'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setMobile(value)
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={passicon}
           marginBottom={0}
-          rightAccImage={user}
           maxLength = {6}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
           borderColor={Colors.CLR_0065FF}
-          value={''}
+          value={pass}
           placeholder = 'Password'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setPass(value)
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={passicon}
           marginBottom={0}
-          rightAccImage={user}
+          rightAccImage={hideicon}
           maxLength = {6}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
           borderColor={Colors.CLR_0065FF}
           value={''}
           placeholder = 'Confirm Password'
@@ -182,11 +177,16 @@ const SignUp = props => {
             if(checkFormValidations()){
               setIsLoading(true)
               const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:'TESTDEVICETOKEN654321', Device_OS:'iOS', Module_Type_Id:2}
-              // const params =   `{"First_Name":"neer","Last_Name":"kumar","Email_Id":"neerajkiet@gmail.comd","Mobile_No":"8010993612","Password":"999999","Device_Token":"TESTDEVICETOKEN654321","Device_OS":"iOS","Module_Type_Id":2}
               register(params,(regisRes) =>{
-                console.log('regisRes',regisRes)
                 setIsLoading(false)
-                navigation.navigate('SecurityCode', {pagetitle:'Security Code', pagesubs:'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:', email:email})
+                if(regisRes?.status == 1){
+                  const data = regisRes && regisRes.data[0]
+                  console.log('data',data)
+                  navigation.navigate('SecurityCode', {pagetitle:'Security Code', pagesubs:'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:', email:email})
+                }else{
+                  const msg = userRes?.message ?? 'Something went wront, Please try again later.'
+                  Alert.alert('SukhTax',msg)
+                }
               })
             }
           }}
@@ -206,36 +206,11 @@ const SignUp = props => {
           }}
         />
       </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
 
-const Header = props => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        marginTop: Platform.OS == 'ios' ? 44 : 10,
-        width: '100%',
-        paddingHorizontal: 16,
-        backgroundColor: 'white',
-        justifyContent: 'flex-end',
-      }}>
-      <TouchableOpacity
-        onPress={() => {
-          props.onLeftPress && props.onLeftPress();
-        }}>
-        <Image
-          resizeMode="contain"
-          style={{
-            width: 38,
-            height: 38,
-          }}
-          source={header_logo}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-};
+
 
 export default SignUp;

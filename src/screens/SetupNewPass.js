@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import {resetPassword} from '../apihelper/Api'
-const user = require('../../assets/user.png');
+const passicon = require('../../assets/pass.png');
 const header_logo = require('../../assets/header_logo.png');
 
 const SetupNewPass = props => {
@@ -62,31 +62,25 @@ const SetupNewPass = props => {
           marginTop={48}
           marginBottom={0}
           maxLength = {6}
-          leftAccImage={user}
+          leftAccImage={passicon}
           borderColor={Colors.CLR_0065FF}
           value={pass}
           placeholder = 'Password'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setPass(value)
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={passicon}
           marginBottom={0}
           maxLength = {6}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
           borderColor={Colors.CLR_0065FF}
           value={cPass}
           placeholder = 'Confirm Password'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setCPass(value)
           }}
         />
-        
         <SKButton
           fontSize={16}
           marginTop={31}
@@ -95,17 +89,20 @@ const SetupNewPass = props => {
           borderColor={Colors.CLR_F58080}
           title={'Submit'}
           onPress={() => {
-            console.log('onPress');
             Keyboard.dismiss()
             if(checkFormValidations()){
-              console.log('All Okay', pass, cPass, global.userInfo);
               const userid = global.userInfo?.user_id
               if(userid){
                 setIsLoading(true)
                 const params = {user_id:userid, 'New_Password':pass}
                 resetPassword(params, (res) =>{
+                setIsLoading(false)
+                if(res?.status == 1){
                   navigation.navigate('Login')
-                  setIsLoading(false)
+                }else{
+                  const msg = res?.message ?? 'Something went wront, Please try again later.'
+                  Alert.alert('SukhTax',msg)
+                }
                 })
               }
             }
