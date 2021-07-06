@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs'
 const SKInput = props => {
   const {value,onFocused} = props;
   const [initialValue, setInitialValue] = useState(value);
@@ -58,6 +59,7 @@ const SKInput = props => {
       <TextInput
         style={{
           fontSize: 18,
+          fontFamily:CustomFonts.OpenSansRegular,
           fontWeight: props.fontSize ? props.fontSize : '400',
           height: 56,
           flex: 1,

@@ -19,7 +19,9 @@ import * as Colors from '../constants/ColorDefs';
 import {getUserProfileDetails, updateUserProfile} from '../apihelper/Api';
 const left_arrow = require('../../assets/left_arrow.png');
 const right_arrow = require('../../assets/right_arrow.png');
-const user = require('../../assets/user.png');
+const usericon = require('../../assets/username.png');
+const  emailicon = require('../../assets/email.png');
+const phoneicon = require('../../assets/phone.png');
 
 const Profile = props => {
   const navigation = useNavigation();
@@ -38,16 +40,16 @@ const Profile = props => {
 
     if (!isFNameValid) {
       isValidForm = false;
-      Alert.alert('AppDisplayName', 'Please enter valid First Name');
+      Alert.alert('SukhTax', 'Please enter valid First Name');
     } else if (!isLNameValid) {
       isValidForm = false;
-      Alert.alert('AppDisplayName', 'Please enter valid Last Name');
+      Alert.alert('SukhTax', 'Please enter valid Last Name');
     } else if (!isEmailValid) {
       isValidForm = false;
-      Alert.alert('AppDisplayName', 'Please enter valid Email Address');
+      Alert.alert('SukhTax', 'Please enter valid Email Address');
     } else if (!isMobileValid) {
       isValidForm = false;
-      Alert.alert('AppDisplayName', 'Please enter valid Phone Number');
+      Alert.alert('SukhTax', 'Please enter valid Phone Number');
     }
     return isValidForm;
   };
@@ -89,7 +91,7 @@ const Profile = props => {
           marginTop={26}
           marginBottom={0}
           maxLength={15}
-          leftAccImage={user}
+          leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
           value={fName}
           placeholder="First Name"
@@ -99,7 +101,7 @@ const Profile = props => {
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={usericon}
           marginBottom={0}
           maxLength={15}
           onRightPressed={() => {
@@ -114,7 +116,7 @@ const Profile = props => {
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={emailicon}
           marginBottom={0}
           maxLength={30}
           onRightPressed={() => {
@@ -129,7 +131,7 @@ const Profile = props => {
           }}
         />
         <SKInput
-          leftAccImage={user}
+          leftAccImage={phoneicon}
           marginBottom={0}
           maxLength={10}
           onRightPressed={() => {
@@ -173,7 +175,7 @@ const Profile = props => {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: 10,
+            marginTop: 18,
             justifyContent: 'space-between',
           }}>
           <SKButton

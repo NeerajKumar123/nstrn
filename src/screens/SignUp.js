@@ -38,25 +38,25 @@ const SignUp = props => {
 
     if (!isFNameValid) {
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid First Name');
+      Alert.alert('SukhTax','Please enter valid First Name');
     }else if(!isLNameValid){
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid Last Name');
+      Alert.alert('SukhTax','Please enter valid Last Name');
     }else if(!isEmailValid){
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid Email Address');
+      Alert.alert('SukhTax','Please enter valid Email Address');
     }else if(!isMobileValid){
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid Phone Number');
+      Alert.alert('SukhTax','Please enter valid Phone Number');
     }else if(!isPassValid){
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid Password');
+      Alert.alert('SukhTax','Please enter valid Password');
     }else if(!isCPassValid){
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid Confirm Password');
+      Alert.alert('SukhTax','Please enter valid Confirm Password');
     }else if(pass != cPass){
       isValidForm = false;
-      Alert.alert('AppDisplayName','Passwords mismatch');
+      Alert.alert('SukhTax','Passwords mismatch');
     }
 
     return isValidForm;
@@ -73,7 +73,7 @@ const SignUp = props => {
       <AppHeader
         onLeftPress={() => {
           console.log('AppHeader');
-          navigation.goBack();
+          navigation.navigate('Login')
         }}
       />
       <KeyboardAvoidingView
@@ -95,7 +95,7 @@ const SignUp = props => {
         />
         <SKInput
           marginTop={26}
-          marginBottom={0}
+          marginBottom={2}
           maxLength = {15}
           leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
@@ -108,7 +108,7 @@ const SignUp = props => {
         />
         <SKInput
           leftAccImage={usericon}
-          marginBottom={0}
+          marginBottom={2}
           maxLength = {15}
           borderColor={Colors.CLR_0065FF}
           value={lName}
@@ -119,7 +119,7 @@ const SignUp = props => {
         />
         <SKInput
           leftAccImage={emailicon}
-          marginBottom={0}
+          marginBottom={2}
           maxLength = {30}
           borderColor={Colors.CLR_0065FF}
           value={email}
@@ -130,7 +130,7 @@ const SignUp = props => {
         />
         <SKInput
           leftAccImage={phoneicon}
-          marginBottom={0}
+          marginBottom={2}
           maxLength = {10}
           borderColor={Colors.CLR_0065FF}
           value={mobile}
@@ -141,7 +141,7 @@ const SignUp = props => {
         />
         <SKInput
           leftAccImage={passicon}
-          marginBottom={0}
+          marginBottom={2}
           maxLength = {6}
           borderColor={Colors.CLR_0065FF}
           value={pass}
@@ -152,7 +152,7 @@ const SignUp = props => {
         />
         <SKInput
           leftAccImage={passicon}
-          marginBottom={0}
+          marginBottom={2}
           rightAccImage={hideicon}
           maxLength = {6}
           borderColor={Colors.CLR_0065FF}
@@ -172,7 +172,6 @@ const SignUp = props => {
           borderColor={Colors.CLR_F58080}
           title={'Continue'}
           onPress={() => {
-            console.log('onPress');
             Keyboard.dismiss()
             if(checkFormValidations()){
               setIsLoading(true)
@@ -193,7 +192,7 @@ const SignUp = props => {
         />
         <SKButton
           fontSize={16}
-          marginTop={10}
+          marginTop={19}
           leftImage = {back_arrow}
           fontWeight={'normal'}
           width = '100%'
@@ -201,7 +200,6 @@ const SignUp = props => {
           borderColor={Colors.CLR_EB0000}
           title={'Go Back to Log In'}
           onPress={() => {
-            console.log('onPress');
             navigation.navigate('Login')
           }}
         />

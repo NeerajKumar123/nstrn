@@ -34,10 +34,10 @@ const BasicInfo = props => {
     let isValidForm = true;
     if (sin == undefined || sin.length < 10) {
       isValidForm = false;
-      Alert.alert('AppDisplayName', 'Please enter valid sin.');
+      Alert.alert('SukhTax', 'Please enter valid sin.');
     } else if (gender == undefined || gender.length < 6) {
       isValidForm = false;
-      Alert.alert('AppDisplayName', 'Please enter valid genderword.');
+      Alert.alert('SukhTax', 'Please enter valid genderword.');
     }
     return isValidForm;
   };

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs'
 import {useNavigation} from '@react-navigation/native';
 import {useKeyboard} from '../components/useKeyboard';
 import SKInput from '../components/SKInput';
@@ -148,6 +149,7 @@ const MessageCard = props => {
           paddingVertical: 10,
           borderRadius: 6,
           overflow: 'hidden',
+          fontFamily:CustomFonts.OpenSansRegular
         }}>
         {message}
       </Text>

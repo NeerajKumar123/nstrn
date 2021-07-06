@@ -11,38 +11,39 @@ const Instructions = props => {
   return (
     <View
       style={{
+        flex: 1,
+        flexDirection:'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
         alignItems: 'center',
-        flex: 1,
         width: '100%',
       }}>
-      <View style={{marginTop: 81}}>
+      <View style={{marginTop: 110}}>
         <Image
           resizeMode="contain"
           style={{width: 136, height: 150}}
           source={header_logo}
         />
       </View>
-      <View style={{marginTop: 47}}>
+      <View style={{marginTop: 47, width:'100%', alignItems:'center', paddingHorizontal:20}}>
         <Heading
-          fontWeight="700"
           fontSize={25}
-          value="NEW PASSWORD"
+          value="FIRST TIME ?"
           marginTop={0}
+          textAlign = 'center'
         />
         <Heading
-          fontWeight="700"
-          fontSize={22}
-          value="DONT WORRY WE HAVE GOT YOU COVERED."
           marginTop={30}
+          fontSize={22.31}
+          textAlign = 'center'
+          value="DONT WORRY WE HAVE GOT YOU COVERED."
         />
         <Heading
-          fontWeight="700"
-          fontSize={22}
-          value="PLEASE HIT THE NEXT BUTTON TO START WITH SOME BASICINFORMATION"
           marginTop={38}
+          fontSize={22}
+          textAlign = 'center'
+          value="PLEASE HIT THE NEXT BUTTON TO START WITH SOME BASIC INFORMATION"
         />
       </View>
       <TouchableOpacity

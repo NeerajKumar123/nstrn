@@ -147,10 +147,10 @@ const VerifyOTP = props => {
               style={[
                 styles.otpInput,
                 {
-                  color: Colors.GREEN,
+                  color: Colors.BLACK,
                   borderColor: getRef(j).current?.isFocused()
                     ? Colors.CLR_F58080
-                    : Colors.LIGHTGRAY,
+                    : Colors.CLR_00000020,
                 },
               ]}
               clearTextOnFocus={false}

@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import SKButton from '../components/SKButton';
+import AppHeader from '../components/AppHeader';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
@@ -30,7 +31,7 @@ const SecurityCode = props => {
   const inputs = Array(4).fill(0);
   const {params} = props?.route;
   console.log('params',params)
-  const {pagetitle,pagesubs,email} = {}
+  const {pagetitle,pagesubs,email} = params
   const [otpParams, setOtpParams] = useState(params);
   const [otps, setOtps] = useState(Array(4).fill(''));
   const [_otp, set_otp] = useState('');
@@ -116,7 +117,11 @@ const SecurityCode = props => {
         justifyContent: 'flex-start',
       }}>
       {isLoading && <SKLoader/>}
-      <Header />
+      <AppHeader
+        onLeftPress={() => {
+          navigation.goBack()
+        }}
+      />
       <ScrollView
         contentContainerStyle={{width: '100%', paddingHorizontal: 30}}>
         <Heading value={pagetitle} marginTop={86} />
@@ -147,10 +152,10 @@ const SecurityCode = props => {
               style={[
                 styles.otpInput,
                 {
-                  color: Colors.GREEN,
+                  color: Colors.BLACK,
                   borderColor: getRef(j).current?.isFocused()
                     ? Colors.CLR_F58080
-                    : Colors.LIGHTGRAY,
+                    : Colors.CLR_00000020,
                 },
               ]}
               clearTextOnFocus={false}
@@ -234,34 +239,6 @@ const SecurityCode = props => {
 };
 
 export default SecurityCode;
-
-const Header = props => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        marginTop: Platform.OS == 'ios' ? 44 : 10,
-        width: '100%',
-        paddingHorizontal: 16,
-        backgroundColor: 'white',
-        justifyContent: 'flex-end',
-      }}>
-      <TouchableOpacity
-        onPress={() => {
-          props.onLeftPress && props.onLeftPress();
-        }}>
-        <Image
-          resizeMode="contain"
-          style={{
-            width: 38,
-            height: 38,
-          }}
-          source={header_logo}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   otpInput: {

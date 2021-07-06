@@ -4,12 +4,14 @@ import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs'
 import {useNavigation} from '@react-navigation/native';
 const profile = require('../../assets/profile.png');
 const request = require('../../assets/request.png');
 const messeges = require('../../assets/messeges.png');
 const Home = props => {
   const navigation = useNavigation();
+  const userFullName = global.userInfo ? `${global.userInfo.firstname} ${global.userInfo.lastname}` : ''
   return (
     <View
       style={{
@@ -34,7 +36,7 @@ const Home = props => {
           fontSize={16}
           marginTop={5}
           color={Colors.CLR_D9272A}
-          value="Welcome, JAPJOT"
+          value={`Welcome, ${userFullName}`}
         />
         <Heading
           fontSize={16}
@@ -46,21 +48,21 @@ const Home = props => {
           fontSize={16}
           status={2}
           marginTop={15}
-          color={Colors.CLR_29295F}
+          color={Colors.CLR_D9272A}
           value="TAX FILING"
         />
         <Heading
           fontSize={16}
           status={1}
           marginTop={5}
-          color={Colors.CLR_29295F}
+          color={Colors.CLR_D9272A}
           value="INCORPORATION"
         />
         <Heading
           fontSize={16}
           status={2}
           marginTop={5}
-          color={Colors.CLR_29295F}
+          color={Colors.CLR_D9272A}
           value="CRA LETTERS"
         />
         <View
@@ -124,6 +126,7 @@ const ProfDoccCardView = props => {
             fontSize: 17,
             fontWeight: '800',
             marginTop: 5,
+            fontFamily:CustomFonts.OpenSansRegular
           }}>
           {props.title}
         </Text>
@@ -166,6 +169,7 @@ const MessegesView = props => {
               fontSize: 20,
               fontWeight: '700',
               marginTop: 5,
+              fontFamily:CustomFonts.OpenSansRegular
             }}>
             MESSAGES :
           </Text>
@@ -177,6 +181,7 @@ const MessegesView = props => {
               fontSize: 20,
               fontWeight: '700',
               marginTop: 5,
+              fontFamily:CustomFonts.OpenSansRegular
             }}>
             0 NEW MESSAGES
           </Text>

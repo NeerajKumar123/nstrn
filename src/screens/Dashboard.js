@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import DashCard from '../components/DashCard';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs'
 const logout_icon = require('../../assets/logout_icon.png');
 
 const home = require('../../assets/home.png');
@@ -75,7 +76,7 @@ const navigateToScreen = (item) =>{
       navigation.navigate('Home')
       break;
       case 3:
-      navigation.navigate('Identification')
+      // navigation.navigate('Identification')
       break;
     default:
       break;
@@ -125,15 +126,15 @@ const navigateToScreen = (item) =>{
           height: 40,
           marginBottom: 30,
         }}>
-        <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => {
+        <TouchableOpacity style={{flexDirection: 'row',justifyContent:'center', alignItems:'center'}} onPress={() => {
           DeviceEventEmitter.emit('user_loggedin',false)
         }}>
           <Image
             resizeMode="contain"
-            style={{width: 15, height: 15, marginRight: 5}}
+            style={{width: 20, height: 18, marginRight: 5}}
             source={logout_icon}
           />
-          <Text>Logout</Text>
+          <Text style = {{fontWeight:'700', fontSize:16, fontFamily:CustomFonts.OpenSansRegular}}>Logout</Text>
         </TouchableOpacity>
       </View>
     </View>

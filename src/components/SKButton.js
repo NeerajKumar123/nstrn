@@ -8,6 +8,7 @@ import {
   Platform
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs'
 import TouchableEffectView from '../components/TouchableEffectView';
 const SKButton = props => {
   let foreground = null;
@@ -32,6 +33,7 @@ const SKButton = props => {
     rightImage,
     marginTop = 0,
     width = '100%',
+    fontFamily = CustomFonts.OpenSansRegular
   } = props;
   return (
     <TouchableEffectView
@@ -47,7 +49,7 @@ const SKButton = props => {
         borderRadius: 20,
         height,
         borderColor,
-        borderWidth: 2,
+        borderWidth: 4,
         marginTop,
         width: width,
       }}
@@ -58,7 +60,7 @@ const SKButton = props => {
       {leftImage && (
           <Image
             resizeMode="contain"
-            style={{width: 15, height: 15, position:'absolute', left:10}}
+            style={{width: 15, height: 15}}
             source={leftImage}
           />
         )}
@@ -70,8 +72,9 @@ const SKButton = props => {
               color: titleColor,
               opacity: disable ? 0.5 : 1.0,
               textAlign: 'center',
-              marginLeft:leftImage ? 20 : 0,
-              marginRight : rightImage ? 20 : 0
+              marginLeft:leftImage ? 10 : 0,
+              marginRight : rightImage ? 10 : 0,
+              fontFamily,
             }}>
             {title}
           </Text>
@@ -79,7 +82,7 @@ const SKButton = props => {
         {rightImage && (
           <Image
             resizeMode="contain"
-            style={{width: 15, height: 15, position:'absolute', right:10}}
+            style={{width: 15, height: 15}}
             source={rightImage}
           />
         )}
@@ -98,6 +101,7 @@ export const Link = props => {
     disable = false,
     alignment = 'right',
     marginTop = 0,
+    fontFamily = CustomFonts.OpenSansRegular
   } = props;
   return (
     <TouchableOpacity
@@ -119,6 +123,7 @@ export const Link = props => {
             fontSize: fontSize,
             fontWeight: fontWeight,
             color: titleColor,
+            fontFamily
           }}>
           {title}
         </Text>

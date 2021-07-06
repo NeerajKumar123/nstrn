@@ -103,7 +103,7 @@ const Identification = props => {
             marginTop: 10,
             justifyContent: 'space-between',
             position:'absolute',
-            bottom:20
+            bottom:50
           }}>
           <SKButton
             fontSize={16}

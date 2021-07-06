@@ -4,6 +4,7 @@ import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
+import AppHeader from '../components/AppHeader'
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import * as Validator from '../helpers/SKTValidator';
@@ -24,13 +25,13 @@ const SetupNewPass = props => {
     const isCPassValid =  Validator.isValidField(cPass, ST_REGEX.Password)
     if(!isPassValid){
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid Password');
+      Alert.alert('SukhTax','Please enter valid Password');
     }else if(!isCPassValid){
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid Confirm Password');
+      Alert.alert('SukhTax','Please enter valid Confirm Password');
     }else if(pass != cPass){
       isValidForm = false;
-      Alert.alert('AppDisplayName','Passwords mismatch');
+      Alert.alert('SukhTax','Passwords mismatch');
     }
     return isValidForm;
   };
@@ -43,7 +44,12 @@ const SetupNewPass = props => {
         backgroundColor: 'white',
       }}>
       {isLoading && <SKLoader/>}
-      <Header />
+      <AppHeader
+        onLeftPress={() => {
+          console.log('AppHeader');
+          navigation.goBack();
+        }}
+      />
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 32,
@@ -52,14 +58,14 @@ const SetupNewPass = props => {
         <Heading value="NEW PASSWORD" marginTop={86} />
         <Heading
           fontSize={16}
-          marginTop={55}
+          marginTop={35}
           fontWeight = '700'
           color={Colors.BLACK}
           value="ENTER A NEW PASSWORD ONE THAT
           YOU CAN REMEMBER"
         />
         <SKInput
-          marginTop={48}
+          marginTop={17}
           marginBottom={0}
           maxLength = {6}
           leftAccImage={passicon}
@@ -74,6 +80,7 @@ const SetupNewPass = props => {
           leftAccImage={passicon}
           marginBottom={0}
           maxLength = {6}
+          marginTop={10}
           borderColor={Colors.CLR_0065FF}
           value={cPass}
           placeholder = 'Confirm Password'
@@ -113,32 +120,5 @@ const SetupNewPass = props => {
   );
 };
 
-const Header = props => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        marginTop: Platform.OS == 'ios' ? 44 : 10,
-        width: '100%',
-        paddingHorizontal: 16,
-        backgroundColor: 'white',
-        justifyContent: 'flex-end',
-      }}>
-      <TouchableOpacity
-        onPress={() => {
-          props.onLeftPress && props.onLeftPress();
-        }}>
-        <Image
-          resizeMode="contain"
-          style={{
-            width: 38,
-            height: 38,
-          }}
-          source={header_logo}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-};
 
 export default SetupNewPass;

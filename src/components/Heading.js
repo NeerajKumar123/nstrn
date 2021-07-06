@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity, Image, View} from 'react-native';
 import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs'
 const green_tick = require('../../assets/green_tick.png');
 const status_gray = require('../../assets/status_gray.png');
 
@@ -14,6 +15,8 @@ const Heading = props => {
     marginHorizontal = 0,
     marginBottom = 0,
     status = 0,
+    fontFamily = CustomFonts.OpenSansRegular,
+    textAlign = 'left'
   } = props;
   return (
     <View
@@ -21,11 +24,11 @@ const Heading = props => {
         marginHorizontal,
         marginBottom,
         marginTop,
-        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        padding:2
       }}>
-      <Text style={{color, fontSize, fontWeight}}>{value}</Text>
+      <Text style={{color, fontSize, fontWeight,fontFamily,textAlign}}>{value}</Text>
       {status ? (
         <Image
           resizeMode="contain"

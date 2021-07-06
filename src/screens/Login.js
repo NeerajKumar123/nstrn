@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {login} from '../apihelper/Api'
 import * as SKTStorage from '../helpers/SKTStorage'
 import SKLoader from '../components/SKLoader';
+import * as CustomFonts from '../constants/FontsDefs'
 const  emailicon = require('../../assets/email.png');
 const header_logo = require('../../assets/header_logo.png');
 const passicon = require('../../assets/pass.png');
@@ -21,10 +22,10 @@ const Login = props => {
     let isValidForm = true;
     if (email == undefined || email.length < 10) {
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid email.' );
+      Alert.alert('SukhTax','Please enter valid email.' );
     }else if (pass == undefined || pass.length < 6) {
       isValidForm = false;
-      Alert.alert('AppDisplayName','Please enter valid password.' );
+      Alert.alert('SukhTax','Please enter valid password.' );
     }
     return isValidForm;
   };
@@ -86,7 +87,7 @@ const Login = props => {
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_EB0000}
           borderColor={Colors.CLR_F58080}
-          title={'Continue'}
+          title={'Submit'}
           onPress={() => {
             Keyboard.dismiss()
             if(checkFormValidations()){

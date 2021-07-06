@@ -11,6 +11,7 @@ import {
 const {width} = Dimensions.get('window');
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
+import * as CustomFonts from '../constants/FontsDefs'
 const DashCard = props => {
   const {id, name, desc, image, colors} = props.item;
   return (
@@ -37,6 +38,8 @@ const DashCard = props => {
             color: Colors.WHITE,
             fontSize: 17,
             textAlign: 'center',
+            fontFamily:CustomFonts.OpenSansRegular,
+            fontWeight:'800',
             minHeight: 48,
           }}>
           {name}
@@ -51,7 +54,9 @@ const DashCard = props => {
             marginTop: 20,
             textAlign: 'center',
             color: Colors.WHITE,
+            fontWeight:'700',
             fontSize: 15,
+            fontFamily:CustomFonts.OpenSansRegular
           }}>
           {desc}
         </Text>
