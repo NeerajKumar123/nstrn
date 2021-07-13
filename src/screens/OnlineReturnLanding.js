@@ -111,7 +111,7 @@ const DocCard = props => {
             marginTop: 20,
             backgroundColor: 'white',
             alignItems:'center',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             width: '100%',
             height: 48,
             borderRadius:6,
@@ -123,8 +123,8 @@ const DocCard = props => {
           <Text
             style={{
               width: '100%',
-              textAlign: 'left',
-              color: Colors.CLR_29295F,
+              textAlign: 'center',
+              color: Colors.WHITE,
               fontSize: 17,
               fontWeight: '700',
             }}>

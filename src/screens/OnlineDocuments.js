@@ -1,5 +1,12 @@
 import React from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image, FlatList} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  FlatList,
+} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import SKButton from '../components/SKButton';
@@ -10,9 +17,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const left_arrow = require('../../assets/left_arrow.png');
 const right_arrow = require('../../assets/right_arrow.png');
 const OnlineDocuments = props => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
-  const data = [{year:'2018'},{year:'2018'},{year:'2018'}]
+  const data = [{year: '2018'}, {year: '2018'}, {year: '2018'}];
   return (
     <View
       style={{
@@ -20,9 +27,9 @@ const OnlineDocuments = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         width: '100%',
-        height:'100%'
+        height: '100%',
       }}>
-      <AppHeader navigation = {navigation}/>
+      <AppHeader navigation={navigation} />
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -36,28 +43,26 @@ const OnlineDocuments = props => {
           value="THIS IS WHERE YOU CAN MANAGE ALL DOCUMENTS UPLOADED TO SUKHTAX:"
         />
         {data &&
-        data.map((item, index) => {
-          return (
-            <DocCard
-              item={item}
-              onSelected={() => {
-                  console.log('data',item)
-              }}
-            />
-          );
-        })}
-        <UploadedFilesStatus
-        count = {3}
-        />
+          data.map((item, index) => {
+            return (
+              <DocCard
+                item={item}
+                onSelected={() => {
+                  console.log('data', item);
+                }}
+              />
+            );
+          })}
+        <UploadedFilesStatus count={3} />
         <ManageDocButton
-        grads={[Colors.CLR_29295F, Colors.CLR_29295F]}
-        title="MANAGE DOCUMENTS"        
-        onClicked = { () =>{
-          navigation.navigate('ManageDocuments')
-        }}
+          grads={[Colors.CLR_29295F, Colors.CLR_29295F]}
+          title="MANAGE DOCUMENTS"
+          onClicked={() => {
+            navigation.navigate('ManageDocuments');
+          }}
         />
         <SKButton
-          marginTop = {30}
+          marginTop={30}
           fontSize={16}
           rightImage={right_arrow}
           fontWeight={'normal'}
@@ -114,74 +119,72 @@ const ManageDocButton = props => {
   );
 };
 
-
 const DocCard = props => {
-    const {item} = props
-    return (
-        <TouchableOpacity
-           style={{
-            flexDirection: 'row',
-            paddingHorizontal: 16,
-            marginTop: 8,
-            backgroundColor: 'white',
-            alignItems:'center',
-            justifyContent: 'space-between',
-            width: '100%',
-            height: 40,
-          }}
-          onPress={() => {
-            props.onClicked && props.onClicked();
-          }}>
-          <Text
-            style={{
-              width: '100%',
-              textAlign: 'left',
-              color: Colors.CLR_29295F,
-              fontSize: 17,
-              fontWeight: '700',
-            }}>
-            {`${item.year} DOCUMENTS`}
-          </Text>
-          <Icon
+  const {item} = props;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        marginTop: 8,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        height: 40,
+      }}
+      onPress={() => {
+        props.onClicked && props.onClicked();
+      }}>
+      <Text
+        style={{
+          width: '100%',
+          textAlign: 'left',
+          color: Colors.CLR_29295F,
+          fontSize: 17,
+          fontWeight: '700',
+        }}>
+        {`${item.year} DOCUMENTS`}
+      </Text>
+      <Icon
         style={{position: 'absolute', right: 20}}
         name="plus-circle-outline"
         size={30}
         color={Colors.CLR_D9272A}
       />
-        </TouchableOpacity>
-    );
-  };
+    </TouchableOpacity>
+  );
+};
 
-  const UploadedFilesStatus = props => {
-    const {count} = props
-    return (
-        <TouchableOpacity
-           style={{
-            flexDirection: 'row',
-            paddingHorizontal: 16,
-            marginTop: 8,
-            backgroundColor: 'white',
-            alignItems:'center',
-            justifyContent: 'space-between',
-            width: '100%',
-            height: 40,
-          }}
-          onPress={() => {
-            props.onClicked && props.onClicked();
-          }}>
-          <Text
-            style={{
-              width: '100%',
-              textAlign: 'left',
-              color: Colors.CLR_D9272A,
-              fontSize: 17,
-              fontWeight: '700',
-            }}>
-            {` DOC UPLOADED :${count} FILE${count > 1 ? 'S' : ''}`}
-          </Text>
-        </TouchableOpacity>
-    );
-  };
-  
-  
+const UploadedFilesStatus = props => {
+  const {count} = props;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        marginTop: 8,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        height: 40,
+      }}
+      onPress={() => {
+        props.onClicked && props.onClicked();
+      }}>
+      <Text
+        style={{
+          width: '100%',
+          textAlign: 'left',
+          color: Colors.CLR_D9272A,
+          fontSize: 17,
+          fontWeight: '700',
+        }}>
+        {` DOC UPLOADED :${count} FILE${count > 1 ? 'S' : ''}`}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
 export default OnlineDocuments;

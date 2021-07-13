@@ -11,6 +11,7 @@ import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 import TouchableEffectView from '../components/TouchableEffectView';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+const upload = require('../../assets/upload.png');
 const SKButton = props => {
   let foreground = null;
   if (Platform.OS === 'android' && Platform.Version > 20) {
@@ -34,7 +35,8 @@ const SKButton = props => {
     rightImage,
     marginTop = 0,
     width = '100%',
-    fontFamily = CustomFonts.OpenSansRegular
+    fontFamily = CustomFonts.OpenSansRegular,
+    rightIconName = undefined
   } = props;
   return (
     <TouchableEffectView
@@ -91,6 +93,9 @@ const SKButton = props => {
             source={rightImage}
           />
         )}
+        {rightIconName &&
+        <Icon style = {{marginRight:20, backgroundColor:'yellow'}} name= {iconName} size={iconsize} color = {iconcolor} />
+        }
         </View>
         
     </TouchableEffectView>
@@ -137,4 +142,34 @@ export const Link = props => {
   );
 };
 
+
+export const UploadDocButton = props =>{
+  const {marginTop = 30, title = 'UPLOAD', height = 46} = props
+  return(
+    <TouchableOpacity
+          onPress={() => {
+            props.onClick();
+          }}
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            paddingHorizontal: 16,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderColor: Colors.CLR_29295F,
+            borderStyle: 'dashed',
+            borderWidth: 2,
+            borderRadius: 6,
+            height,
+            marginTop: marginTop,
+          }}>
+          <Text style = {{fontFamily:CustomFonts.OpenSansRegular, fontSize:15}}>{title}</Text>
+          <Image
+            resizeMode="contain"
+            style={{width: 24, height: 24}}
+            source={upload}
+          />
+        </TouchableOpacity>
+  )
+}
 export default SKButton;

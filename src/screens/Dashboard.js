@@ -77,12 +77,12 @@ const navigateToScreen = (item) =>{
     case 1:
       navigation.navigate('Home')
       break;
-      // case 1:
-      //   navigation.navigate('Home')
-      //   break;
       case 3:
       navigation.navigate('OnlineReturnLanding')
       break;
+      case 4:
+        navigation.navigate('IncorporationLanding')
+        break;
     default:
       break;
   }
