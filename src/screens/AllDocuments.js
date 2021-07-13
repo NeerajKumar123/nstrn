@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 const profile = require('../../assets/profile.png');
 const request = require('../../assets/request.png');
 const messeges = require('../../assets/messeges.png');
-const Documents = props => {
+const AllDocuments = props => {
   const navigation = useNavigation()
   return (
     <View
@@ -18,11 +18,7 @@ const Documents = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <AppHeader 
-        onLeftPress = {() =>{
-          navigation.goBack()
-        }}
-      />
+      <AppHeader navigation = {navigation}/>
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -103,4 +99,4 @@ const DocOptionCard = props => {
   );
 };
 
-export default Documents;
+export default AllDocuments;

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const SKInput = props => {
   const {value,onFocused} = props;
   const [initialValue, setInitialValue] = useState(value);
@@ -23,6 +24,7 @@ const SKInput = props => {
     placeholder = 'Enter value',
     maxLength = 30,
     isChatInput = false,
+    multiline
   } = props;
   return (
     <View
@@ -71,6 +73,7 @@ const SKInput = props => {
         underlineColorAndroid="transparent"
         value={initialValue}
         keyboardType="email-address"
+        multiline = {multiline}
         autoCapitalize="none"
         autoCompleteType="off"
         autoCorrect={false}

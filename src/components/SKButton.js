@@ -10,6 +10,7 @@ import {
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 import TouchableEffectView from '../components/TouchableEffectView';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const SKButton = props => {
   let foreground = null;
   if (Platform.OS === 'android' && Platform.Version > 20) {
@@ -46,7 +47,7 @@ const SKButton = props => {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        borderRadius: 20,
+        borderRadius: height/2,
         height,
         borderColor,
         borderWidth: 4,
@@ -64,6 +65,10 @@ const SKButton = props => {
             source={leftImage}
           />
         )}
+
+        {iconName &&
+        <Icon style = {{marginRight:20}} name= {iconName} size={iconsize} color = {iconcolor} />
+        }
         {title && (
           <Text
             style={{

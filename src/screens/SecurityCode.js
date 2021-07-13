@@ -117,11 +117,7 @@ const SecurityCode = props => {
         justifyContent: 'flex-start',
       }}>
       {isLoading && <SKLoader/>}
-      <AppHeader
-        onLeftPress={() => {
-          navigation.goBack()
-        }}
-      />
+      <AppHeader navigation = {navigation}/>
       <ScrollView
         contentContainerStyle={{width: '100%', paddingHorizontal: 30}}>
         <Heading value={pagetitle} marginTop={86} />
@@ -183,8 +179,8 @@ const SecurityCode = props => {
           marginTop={40}
           width={305}
           fontWeight={'normal'}
-          backgroundColor={Colors.CLR_EB0000}
-          borderColor={Colors.CLR_F58080}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
           title={'Submit'}
           onPress={() => {
             Keyboard.dismiss()

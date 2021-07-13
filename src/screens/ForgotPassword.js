@@ -122,12 +122,7 @@ const ForgotPassword = props => {
         justifyContent: 'flex-start',
       }}>
       {isLoading && <SKLoader />}
-      <AppHeader
-        onLeftPress={() => {
-          console.log('AppHeader');
-          navigation.goBack();
-        }}
-      />
+      <AppHeader navigation = {navigation}/>
       <KeyboardAvoidingView
         behavior={'position'}
         enabled={true}
@@ -169,8 +164,8 @@ const ForgotPassword = props => {
             marginTop={36}
             width={'100%'}
             fontWeight={'normal'}
-            backgroundColor={Colors.CLR_EB0000}
-            borderColor={Colors.CLR_F58080}
+            backgroundColor={Colors.PRIMARY_FILL}
+            borderColor={Colors.PRIMARY_BORDER}
             title={'Submit'}
             onPress={() => {
               Keyboard.dismiss();
@@ -260,8 +255,8 @@ const ForgotPassword = props => {
             marginTop={45}
             width={'100%'}
             fontWeight={'normal'}
-            backgroundColor={Colors.CLR_EB0000}
-            borderColor={Colors.CLR_F58080}
+            backgroundColor={Colors.PRIMARY_FILL}
+            borderColor={Colors.PRIMARY_BORDER}
             title={'Submit'}
             onPress={() => {
               navigation.navigate('SetupNewPass');
@@ -284,8 +279,8 @@ const ForgotPassword = props => {
             width={'100%'}
             marginTop={19}
             fontWeight={'normal'}
-            backgroundColor={Colors.CLR_F58080}
-            borderColor={Colors.CLR_EB0000}
+            backgroundColor={Colors.SECONDARY_FILL}
+            borderColor={Colors.PRIMARY_BORDER}
             title={'Resend Code'}
             onPress={() => {
               const val = Math.floor(1000 + Math.random() * 9000);

@@ -16,17 +16,23 @@ const Heading = props => {
     marginBottom = 0,
     status = 0,
     fontFamily = CustomFonts.OpenSansRegular,
-    textAlign = 'left'
+    textAlign = 'left',
+    onClicked = undefined
   } = props;
   return (
-    <View
+    <TouchableOpacity
+      disabled = {!onClicked}
       style={{
         marginHorizontal,
         marginBottom,
         marginTop,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding:2
+        padding:2,
+        width:'100%'
+      }}
+      onPress = {()=>{
+        onClicked && onClicked()
       }}>
       <Text style={{color, fontSize, fontWeight,fontFamily,textAlign}}>{value}</Text>
       {status ? (
@@ -36,7 +42,7 @@ const Heading = props => {
           source={status == 2 ? green_tick : status_gray}
         />
       ) : null}
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -177,8 +177,8 @@ const VerifyOTP = props => {
           fontSize={16}
           marginTop={40}
           fontWeight={'normal'}
-          backgroundColor={Colors.CLR_EB0000}
-          borderColor={Colors.CLR_F58080}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
           title={'Submit'}
           onPress={() => {
             const otp = _otp;

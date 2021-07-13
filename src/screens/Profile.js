@@ -80,7 +80,7 @@ const Profile = props => {
         flex: 1,
       }}>
       {isLoading && <SKLoader />}
-      <AppHeader isLeftEnabled={false} />
+      <AppHeader navigation = {navigation}/>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 32,
@@ -150,8 +150,8 @@ const Profile = props => {
           marginTop={33}
           width="100%"
           fontWeight={'normal'}
-          backgroundColor={Colors.CLR_EB0000}
-          borderColor={Colors.CLR_F58080}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
           title={'Submit'}
           onPress={() => {
             console.log('onPress');
@@ -176,27 +176,14 @@ const Profile = props => {
           style={{
             flexDirection: 'row',
             marginTop: 18,
-            justifyContent: 'space-between',
+            justifyContent: 'center',
           }}>
-          <SKButton
-            fontSize={16}
-            leftImage={left_arrow}
-            fontWeight={'normal'}
-            width="30%"
-            backgroundColor={Colors.CLR_F58080}
-            borderColor={Colors.CLR_EB0000}
-            title={'BACK'}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
           <SKButton
             fontSize={16}
             rightImage={right_arrow}
             fontWeight={'normal'}
-            width="60%"
-            backgroundColor={Colors.CLR_F58080}
-            borderColor={Colors.CLR_EB0000}
+            backgroundColor={Colors.SECONDARY_FILL}
+            borderColor={Colors.PRIMARY_BORDER}
             title={'CHANGE PASSWORD'}
             onPress={() => {
                 console.log('link pressed');

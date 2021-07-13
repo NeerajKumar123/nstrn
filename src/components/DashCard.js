@@ -30,7 +30,6 @@ const DashCard = props => {
           alignItems: 'center',
           paddingHorizontal: 7,
           paddingVertical: 8,
-          opacity:.6
         }}>
         <Text
           style={{
@@ -38,7 +37,7 @@ const DashCard = props => {
             color: Colors.WHITE,
             fontSize: 17,
             textAlign: 'center',
-            fontFamily:CustomFonts.OpenSansRegular,
+            fontFamily:Platform.OS == 'android' ?  CustomFonts.OpenSansBold : CustomFonts.OpenSansRegular,
             fontWeight:'800',
             minHeight: 48,
           }}>
@@ -54,9 +53,9 @@ const DashCard = props => {
             marginTop: 20,
             textAlign: 'center',
             color: Colors.WHITE,
-            fontWeight:'700',
+            fontWeight:Platform.OS == 'android' ? 'normal' : '700',
             fontSize: 15,
-            fontFamily:CustomFonts.OpenSansRegular
+            fontFamily:Platform.OS == 'android' ?  CustomFonts.OpenSansBold : CustomFonts.OpenSansRegular,
           }}>
           {desc}
         </Text>

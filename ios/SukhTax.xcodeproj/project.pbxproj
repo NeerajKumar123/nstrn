@@ -19,6 +19,7 @@
 		071766D32694CD0A002D2719 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 071766C82694CD0A002D2719 /* OpenSans-Light.ttf */; };
 		071766D42694CD0A002D2719 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 071766C92694CD0A002D2719 /* OpenSans-SemiBold.ttf */; };
 		071766D52694CD0A002D2719 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 071766CA2694CD0A002D2719 /* OpenSans-Regular.ttf */; };
+		076CB2A4269AE7F5007C2602 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 076CB2A3269AE7F5007C2602 /* MaterialCommunityIcons.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -52,6 +53,7 @@
 		071766C82694CD0A002D2719 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		071766C92694CD0A002D2719 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		071766CA2694CD0A002D2719 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		076CB2A3269AE7F5007C2602 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* SukhTax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SukhTax.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SukhTax/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SukhTax/AppDelegate.m; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				071766C32694CD0A002D2719 /* LICENSE.txt */,
 				071766C72694CD0A002D2719 /* OpenSans-Bold.ttf */,
 				071766C02694CD09002D2719 /* OpenSans-BoldItalic.ttf */,
+				076CB2A3269AE7F5007C2602 /* MaterialCommunityIcons.ttf */,
 				071766C12694CD09002D2719 /* OpenSans-ExtraBold.ttf */,
 				071766C52694CD0A002D2719 /* OpenSans-ExtraBoldItalic.ttf */,
 				071766C42694CD0A002D2719 /* OpenSans-Italic.ttf */,
@@ -291,6 +294,7 @@
 				071766CC2694CD0A002D2719 /* OpenSans-ExtraBold.ttf in Resources */,
 				071766CD2694CD0A002D2719 /* OpenSans-SemiBoldItalic.ttf in Resources */,
 				071766CF2694CD0A002D2719 /* OpenSans-Italic.ttf in Resources */,
+				076CB2A4269AE7F5007C2602 /* MaterialCommunityIcons.ttf in Resources */,
 				071766D02694CD0A002D2719 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
 				071766D22694CD0A002D2719 /* OpenSans-Bold.ttf in Resources */,
 				071766D32694CD0A002D2719 /* OpenSans-Light.ttf in Resources */,

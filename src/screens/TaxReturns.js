@@ -15,11 +15,7 @@ const TaxReturns = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <AppHeader 
-        onLeftPress = {() =>{
-          navigation.goBack()
-        }}
-      />
+      <AppHeader navigation = {navigation}/>
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{

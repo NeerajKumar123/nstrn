@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Platform
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import DashCard from '../components/DashCard';
@@ -28,42 +29,42 @@ const data = [
     name: 'HOME',
     desc: 'STATUS PROFILE MY DOCUMENTS',
     image: home,
-    colors: [Colors.CLR_27275D, Colors.CLR_D72528],
+    colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
   },
   {
     id: 2,
     name: 'VISIT US',
     desc: 'BOOK AN APPOINTMENT',
     image: visit_us,
-    colors: [Colors.CLR_27275D, Colors.CLR_D72528],
+    colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
   },
   {
     id: 3,
     name: 'ONLINE TAX RETURN',
     desc: 'STARTING FROM $44.99',
     image: online,
-    colors: [Colors.CLR_EB0000, Colors.CLR_D72528],
+    colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
   },
   {
     id: 4,
     name: 'INCORPORATION',
     desc: 'OPEN A CORPORATION',
     image: incorporation,
-    colors: [Colors.CLR_EB0000, Colors.CLR_D72528],
+    colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
   },
   {
     id: 5,
     name: 'REQUEST TAX DOCS',
     desc: 'NOA, T1,GENERAL, etc.',
     image: request,
-    colors: [Colors.CLR_D72528, Colors.CLR_27275D],
+    colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
   },
   {
     id: 6,
     name: 'CRA LATTERS',
     desc: 'CORRESPONDENCE',
     image: cra_latters,
-    colors: [Colors.CLR_D72528, Colors.CLR_27275D],
+    colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
   },
 ];
 
@@ -71,12 +72,16 @@ const data = [
 const Dashboard = props => {
   const navigation = useNavigation();
 const navigateToScreen = (item) =>{
+  console.log('item',item)
   switch (item.id) {
     case 1:
       navigation.navigate('Home')
       break;
+      // case 1:
+      //   navigation.navigate('Home')
+      //   break;
       case 3:
-      // navigation.navigate('Identification')
+      navigation.navigate('OnlineReturnLanding')
       break;
     default:
       break;
@@ -91,7 +96,8 @@ const navigateToScreen = (item) =>{
         flex: 1,
         backgroundColor: 'white',
       }}>
-      <DashHeader onRightClicked = {()=>{
+      <DashHeader 
+      onRightClicked = {()=>{
         console.log('onRightClicked')
         navigation.navigate('Profile')
       }} />
@@ -99,11 +105,13 @@ const navigateToScreen = (item) =>{
         <FlatList
           contentContainerStyle={{
             backgroundColor: Colors.WHITE,
-            marginVertical: 10,
-            marginHorizontal: 20,
-            justifyContentL: 'center',
+            marginTop: 10,
+            marginBottom:100,
+            justifyContent: 'center',
             alignItems: 'center',
+            paddingBottom:50,
           }}
+          alwaysBounceVertical= {false}
           keyExtractor={(item, index) => 'key_' + index}
           data={data}
           numColumns={2}
@@ -121,10 +129,11 @@ const navigateToScreen = (item) =>{
       <View
         style={{
           width: '100%',
+          position:'absolute',
+          bottom: Platform.OS == 'ios' ?  20 : 0,
           justifyContent: 'center',
           alignItems: 'center',
           height: 40,
-          marginBottom: 30,
         }}>
         <TouchableOpacity style={{flexDirection: 'row',justifyContent:'center', alignItems:'center'}} onPress={() => {
           DeviceEventEmitter.emit('user_loggedin',false)

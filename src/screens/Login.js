@@ -85,8 +85,8 @@ const Login = props => {
           fontSize={16}
           marginTop={15}
           fontWeight={'normal'}
-          backgroundColor={Colors.CLR_EB0000}
-          borderColor={Colors.CLR_F58080}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
           title={'Submit'}
           onPress={() => {
             Keyboard.dismiss()
@@ -119,8 +119,8 @@ const Login = props => {
           fontSize={16}
           marginTop={13}
           fontWeight={'normal'}
-          backgroundColor={Colors.CLR_F58080}
-          borderColor={Colors.CLR_EB0000}
+          backgroundColor={Colors.SECONDARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
           title={'Register'}
           onPress={() => {
             console.log('onPress');

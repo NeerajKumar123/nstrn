@@ -12,12 +12,12 @@ const left_arrow = require('../../assets/left_arrow.png');
 const right_arrow = require('../../assets/right_arrow.png');
 
 const Identification = props => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const options = {
     quality: 1,
     maxWidth: 500,
     maxHeight: 500,
-  };  
+  };
   return (
     <View
       style={{
@@ -25,20 +25,20 @@ const Identification = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         width: '100%',
-        flex:1,
+        flex: 1,
       }}>
-      <AppHeader 
-        onLeftPress = {() =>{
-          navigation.goBack()
-        }}
-      />
+      <AppHeader navigation={navigation} />
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
           paddingHorizontal: 20,
           height: '100%',
         }}>
-        <Heading  fontSize={23} value="UPLOAD YOUR IDENTIFICATION" marginTop={30} />
+        <Heading
+          fontSize={23}
+          value="UPLOAD YOUR IDENTIFICATION"
+          marginTop={30}
+        />
         <Heading
           fontSize={16}
           marginTop={20}
@@ -84,53 +84,32 @@ const Identification = props => {
         <UploadView
           grads={[Colors.CLR_D9272A, Colors.CLR_D72528]}
           title="UPLOAD"
-          onClicked = {()=>{
-            console.log('onClicked')
-            launchImageLibrary(options, (res) => {
-                if (res?.didCancel) {
-                  console.log('didCancel')
-                }
-                if (res?.error) {
-                  console.log('error',res?.error ?? ERROR_MSG)
-                }
-              });
-            }}
+          onClicked={() => {
+            console.log('onClicked');
+            launchImageLibrary(options, res => {
+              if (res?.didCancel) {
+                console.log('didCancel');
+              }
+              if (res?.error) {
+                console.log('error', res?.error ?? ERROR_MSG);
+              }
+            });
+          }}
+        />
+        <SKButton
+          marginTop={30}
+          fontSize={16}
+          rightImage={right_arrow}
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'BASIC INFO'}
+          onPress={() => {
+            console.log('link pressed');
+            navigation.navigate('BasicInfo');
+          }}
         />
       </ScrollView>
-      <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 10,
-            justifyContent: 'space-between',
-            position:'absolute',
-            bottom:50
-          }}>
-          <SKButton
-            fontSize={16}
-            leftImage={left_arrow}
-            fontWeight={'normal'}
-            width="30%"
-            backgroundColor={Colors.CLR_F58080}
-            borderColor={Colors.CLR_EB0000}
-            title={'BACK'}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-          <SKButton
-            fontSize={16}
-            rightImage={right_arrow}
-            fontWeight={'normal'}
-            width="60%"
-            backgroundColor={Colors.CLR_F58080}
-            borderColor={Colors.CLR_EB0000}
-            title={'BASIC INFO'}
-            onPress={() => {
-                console.log('link pressed');
-                navigation.navigate('BasicInfo')
-                }}
-          />
-        </View>
     </View>
   );
 };
@@ -159,12 +138,11 @@ const UploadView = props => {
         onPress={() => {
           props.onClicked && props.onClicked();
         }}>
-            <Image
-            resizeMode = 'contain'
-            style = {{ width:20, height:20}}
-            source = {messeges}
-            />
-
+        <Image
+          resizeMode="contain"
+          style={{width: 20, height: 20}}
+          source={messeges}
+        />
         <Text
           style={{
             width: '100%',

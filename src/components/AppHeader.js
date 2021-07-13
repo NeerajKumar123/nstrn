@@ -15,7 +15,7 @@ const header_logo = require('../../assets/header_logo.png');
 const acc_icon = require('../../assets/account_icon.png');
 
 const AppHeader = props => {
-  const {isLeftEnabled = true} = props;
+  const {onLeftClicked  = undefined, onRightClicked = undefined, navigation = undefined} = props;
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -28,12 +28,11 @@ const AppHeader = props => {
           paddingHorizontal: 16,
           backgroundColor: 'white',
           paddingVertical: 5,
-          justifyContent: isLeftEnabled ? 'space-between' : 'flex-end',
+          justifyContent: 'space-between',
         }}>
-        {isLeftEnabled && (
           <TouchableOpacity
             onPress={() => {
-              props.onLeftPress && props.onLeftPress();
+              onLeftClicked ? onLeftClicked() : navigation.goBack()
             }}>
             <Image
               resizeMode="contain"
@@ -44,10 +43,9 @@ const AppHeader = props => {
               source={back}
             />
           </TouchableOpacity>
-        )}
-        <TouchableOpacity
+          <TouchableOpacity
           onPress={() => {
-            props.onLeftPress && props.onLeftPress();
+            onRightClicked ? onRightClicked() :navigation.popToTop && navigation.popToTop()
           }}>
           <Image
             resizeMode="contain"
@@ -58,7 +56,7 @@ const AppHeader = props => {
             source={header_logo}
           />
         </TouchableOpacity>
-      </View>
+        </View>
     </>
   );
 };
@@ -73,8 +71,9 @@ export const DashHeader = props => {
         width: '100%',
         paddingHorizontal: 16,
         backgroundColor: 'white',
-        paddingVertical: 5,
+        // paddingVertical: 5,
         justifyContent: 'space-between',
+        height:50
       }}>
       <Image
         resizeMode="contain"

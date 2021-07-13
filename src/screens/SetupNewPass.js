@@ -44,12 +44,7 @@ const SetupNewPass = props => {
         backgroundColor: 'white',
       }}>
       {isLoading && <SKLoader/>}
-      <AppHeader
-        onLeftPress={() => {
-          console.log('AppHeader');
-          navigation.goBack();
-        }}
-      />
+      <AppHeader navigation = {navigation}/>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 32,
@@ -92,8 +87,8 @@ const SetupNewPass = props => {
           fontSize={16}
           marginTop={31}
           fontWeight={'normal'}
-          backgroundColor={Colors.CLR_EB0000}
-          borderColor={Colors.CLR_F58080}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
           title={'Submit'}
           onPress={() => {
             Keyboard.dismiss()

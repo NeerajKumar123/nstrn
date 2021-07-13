@@ -10,7 +10,7 @@ import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api'
-const back_arrow = require('../../assets/back_arrow.png');
+const left_arrow = require('../../assets/left_arrow.png');
 const usericon = require('../../assets/username.png');
 const  emailicon = require('../../assets/email.png');
 const phoneicon = require('../../assets/phone.png');
@@ -70,12 +70,7 @@ const SignUp = props => {
         flex:1
       }}>
       {isLoading && <SKLoader/>}
-      <AppHeader
-        onLeftPress={() => {
-          console.log('AppHeader');
-          navigation.navigate('Login')
-        }}
-      />
+      <AppHeader navigation = {navigation}/>
       <KeyboardAvoidingView
         behavior={'position'}
         enabled={true}
@@ -168,8 +163,8 @@ const SignUp = props => {
           marginTop={33}
           width = '100%'
           fontWeight={'normal'}
-          backgroundColor={Colors.CLR_EB0000}
-          borderColor={Colors.CLR_F58080}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
           title={'Continue'}
           onPress={() => {
             Keyboard.dismiss()
@@ -193,11 +188,11 @@ const SignUp = props => {
         <SKButton
           fontSize={16}
           marginTop={19}
-          leftImage = {back_arrow}
+          leftImage = {left_arrow}
           fontWeight={'normal'}
           width = '100%'
-          backgroundColor={Colors.CLR_F58080}
-          borderColor={Colors.CLR_EB0000}
+          backgroundColor={Colors.SECONDARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
           title={'Go Back to Log In'}
           onPress={() => {
             navigation.navigate('Login')

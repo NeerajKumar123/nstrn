@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
-import * as CustomFonts from '../constants/FontsDefs'
+import * as CustomFonts from '../constants/FontsDefs';
 import {useNavigation} from '@react-navigation/native';
 import {useKeyboard} from '../components/useKeyboard';
 import SKInput from '../components/SKInput';
@@ -28,15 +28,15 @@ const Messages = props => {
   const [chats, setChats] = useState();
   const [chatText, setChatText] = useState('');
   const [keyboardHeight] = useKeyboard();
-  const [isLoading, setIsLoading] = useState(false)
-  const userid = global.userInfo?.user_id
-  const taxFileID = global.userInfo?.Tax_File_Id
+  const [isLoading, setIsLoading] = useState(false);
+  const userid = global.userInfo?.user_id;
+  const taxFileID = global.userInfo?.Tax_File_Id;
 
-  const getUpdatedMsgList = (isloader) =>{
-    setIsLoading(isloader)
+  const getUpdatedMsgList = isloader => {
+    setIsLoading(isloader);
     const params = {User_Id: userid, Tax_File_Id: taxFileID || 83};
     getMessages(params, msgRes => {
-      setIsLoading(false)
+      setIsLoading(false);
       if (msgRes && msgRes.status == 1) {
         const msgs = msgRes.data;
         setChats(msgs);
@@ -46,9 +46,9 @@ const Messages = props => {
         Alert.alert('SukhTax', msg);
       }
     });
-  }
+  };
   useEffect(() => {
-    getUpdatedMsgList(true)
+    getUpdatedMsgList(true);
   }, []);
 
   return (
@@ -59,57 +59,60 @@ const Messages = props => {
         backgroundColor: 'white',
         flex: 1,
       }}>
-      <AppHeader
-        onLeftPress={() => {
-          navigation.goBack();
-        }}
-      />
-      {isLoading && <SKLoader/>}
-        <View
-        style={{width: '100%', flex: 1, paddingHorizontal:20}}>
-      <Heading value="MESSAGES" marginTop={30} />
-      {chats && (
-        <FlatList
-          contentContainerStyle={{
-            backgroundColor: Colors.WHITE,
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            paddingVertical: 20,
-          }}
-          style = {{
-            flex:1,
-            marginBottom:85 + keyboardHeight
-          }}
-          keyExtractor={(item, index) => 'key_' + index}
-          data={[...chats]}
-          showsVerticalScrollIndicator = {false}
-          renderItem={({item}) => <MessageCard item={item} />}
-        />
-      )}
+      <AppHeader navigation = {navigation}/>
+      {isLoading && <SKLoader />}
+      <View style={{width: '100%', flex: 1, paddingHorizontal: 20}}>
+        <Heading value="MESSAGES" marginTop={30} />
+        {chats && (
+          <FlatList
+            contentContainerStyle={{
+              backgroundColor: Colors.WHITE,
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              paddingVertical: 20,
+            }}
+            style={{
+              flex: 1,
+              marginBottom: 85 + keyboardHeight,
+            }}
+            keyExtractor={(item, index) => 'key_' + index}
+            data={[...chats]}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => <MessageCard item={item} />}
+          />
+        )}
       </View>
       <View
         style={{
           backgroundColor: 'white',
           width: '100%',
-          position:'absolute',
-          bottom:keyboardHeight ? keyboardHeight : Platform.OS == 'ios' ? 10 : keyboardHeight,
+          position: 'absolute',
+          bottom: keyboardHeight
+            ? keyboardHeight
+            : Platform.OS == 'ios'
+            ? 10
+            : keyboardHeight,
         }}>
         <SKInput
           rightAccImage={send_msg}
           isChatInput={true}
-          onTextChange = {(text)=>{
-            setChatText(text)
+          onTextChange={text => {
+            setChatText(text);
           }}
           onRightPressed={() => {
-            if(chatText.length < 1) return
-            setIsLoading(true)
-            const params = {User_Id: userid, Tax_File_Id: taxFileID || 83,Message:chatText};
+            if (chatText.length < 1) return;
+            setIsLoading(true);
+            const params = {
+              User_Id: userid,
+              Tax_File_Id: taxFileID || 83,
+              Message: chatText,
+            };
             saveMessage(params, saveMsgRes => {
-              setIsLoading(false)
+              setIsLoading(false);
               if (saveMsgRes && saveMsgRes.status == 1) {
-                setChatText('')
-                getUpdatedMsgList(false)
+                setChatText('');
+                getUpdatedMsgList(false);
               } else {
                 const msg =
                   saveMsgRes?.message ??
@@ -149,7 +152,7 @@ const MessageCard = props => {
           paddingVertical: 10,
           borderRadius: 6,
           overflow: 'hidden',
-          fontFamily:CustomFonts.OpenSansRegular
+          fontFamily: CustomFonts.OpenSansRegular,
         }}>
         {message}
       </Text>

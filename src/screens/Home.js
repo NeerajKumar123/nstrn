@@ -20,11 +20,7 @@ const Home = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <AppHeader 
-      onLeftPress = {()=>{
-        navigation.goBack()
-      }}
-      />
+      <AppHeader navigation = {navigation}/>
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -50,6 +46,10 @@ const Home = props => {
           marginTop={15}
           color={Colors.CLR_D9272A}
           value="TAX FILING"
+          onClicked = {()=>{
+            console.log('OnlineTaxFiling')
+            navigation.navigate('OnlineTaxFiling')
+          }}
         />
         <Heading
           fontSize={16}
@@ -57,6 +57,10 @@ const Home = props => {
           marginTop={5}
           color={Colors.CLR_D9272A}
           value="INCORPORATION"
+          onClicked = {()=>{
+            console.log('OnlineTaxFiling')
+            navigation.navigate('OnlineTaxFiling')
+          }}
         />
         <Heading
           fontSize={16}
@@ -64,6 +68,10 @@ const Home = props => {
           marginTop={5}
           color={Colors.CLR_D9272A}
           value="CRA LETTERS"
+          onClicked = {()=>{
+            console.log('OnlineTaxFiling')
+            navigation.navigate('OnlineTaxFiling')
+          }}
         />
         <View
           style={{
@@ -75,7 +83,7 @@ const Home = props => {
             navigation.navigate('Profile')
           }}/>
           <ProfDoccCardView image={request} title="DOCUMENTS" onClicked = {() =>{
-            navigation.navigate('Documents')
+            navigation.navigate('AllDocuments')
           }}/>
         </View>
         <MessegesView onClicked = {()=>{
