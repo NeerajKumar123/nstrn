@@ -7,3 +7,5 @@ export const ST_REGEX = {
   Mobile: '^[6789]{1}[0-9]{9}$',
   Password: '^[a-zA-Z0-9]{6}$'
 };
+
+export const GENDER_OPTIONS = ['Male', 'Female'];

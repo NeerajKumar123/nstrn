@@ -17,7 +17,9 @@ import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {login} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
+import {GENDER_OPTIONS} from '../constants/StaticValues';
 import SKLoader from '../components/SKLoader';
+import SKModel from '../components/SKModel';
 const user = require('../../assets/user.png');
 const left_arrow = require('../../assets/left_arrow.png');
 const right_arrow = require('../../assets/right_arrow.png');
@@ -29,6 +31,8 @@ const BasicInfo = props => {
   const [dob, setDOB] = useState('');
   const [lastTime, setLastTime] = useState('FIRST');
   const [isLoading, setIsLoading] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isGenderVisible, setIsGenderVisible] = useState(false);
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -47,10 +51,10 @@ const BasicInfo = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        flex:1
+        flex: 1,
       }}>
       {isLoading && <SKLoader />}
-      <AppHeader navigation = {navigation}/>
+      <AppHeader navigation={navigation} />
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 20,
@@ -128,7 +132,7 @@ const BasicInfo = props => {
           }}
         />
         <SKButton
-          marginTop ={30}
+          marginTop={30}
           fontSize={16}
           rightImage={right_arrow}
           fontWeight={'normal'}
@@ -136,12 +140,28 @@ const BasicInfo = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'ADDRESS'}
           onPress={() => {
+            // setShowDatePicker(true)
+            // return
+            setIsGenderVisible(true);
+            return;
             console.log('link pressed');
             navigation.navigate('Address');
           }}
         />
+        {isGenderVisible && (
+          <SKModel
+            title="Select Gender"
+            data={GENDER_OPTIONS}
+            onClose={() => {
+              setIsGenderVisible(false);
+            }}
+            onSelect={value => {
+              console.log('value', value);
+              setIsGenderVisible(false);
+            }}
+          />
+        )}
       </ScrollView>
-      
     </View>
   );
 };
