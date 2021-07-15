@@ -8,4 +8,8 @@ export const ST_REGEX = {
   Password: '^[a-zA-Z0-9]{6}$'
 };
 
-export const GENDER_OPTIONS = ['Male', 'Female'];
+export const GENDER_OPTIONS = ['Male', 'Female', 'Other'];
+export const TIME_OPTIONS = ['FIRST TIME', '2020', '2019', '2018', '2017'];
+export const MARITAL_STATUS = ['Married', 'Unmarried'];
+export const YES_NO = ['Yes', 'No'];
+export const RELATIONS = ['Father', 'Mother', 'Wife', 'Son', 'Daughter'];

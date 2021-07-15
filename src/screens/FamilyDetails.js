@@ -10,12 +10,13 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import SKDropdown from '../components/SKDropdown';
+import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
-import SKInput from '../components/SKInput';
+import {MARITAL_STATUS, YES_NO} from '../constants/StaticValues';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
+import SKModel from '../components/SKModel';
 import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
@@ -28,21 +29,18 @@ const right_arrow = require('../../assets/right_arrow.png');
 
 const FamilyDetails = props => {
   const navigation = useNavigation();
-  const [bank, setBank] = useState('');
-  const [accountNo, setAccountNo] = useState('');
-  const [branchNo, setBranhcNo] = useState('')
-  const [residency, setResidency] = useState('')
-  const [enrtyDate, setEntryDate] = useState('')
+  const [maritalStatus, setMaritalStatus] = useState()
+  const [mChangeOpton, setMChangeOpton] = useState()
+  const [dependentOption, setDependentOption] = useState()
   const [isLoading, setIsLoading] = useState(false);
+  const [isMVisible, setIsMVisible] = useState()
+  const [isMChangeVisible, setIsMChangeVisible] = useState()
+  const [isDepOptionVisible, setIsDepOptionVisible] = useState()
 
   const checkFormValidations = () => {
     let isValidForm = true;
     const isBankValid = Validator.isValidField(bank,ST_REGEX.FName);
     const isAccValid = Validator.isValidField(accountNo,ST_REGEX.FName);
-    const isBranchValid = Validator.isValidField(branchNo,ST_REGEX.FName);
-    const isResidencyValid = Validator.isValidField(residency,ST_REGEX.FName);
-    const isEnrtyDateValid = Validator.isValidField(enrtyDate,ST_REGEX.FName);
-
     if (!isBankValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Mailing address');
@@ -75,45 +73,45 @@ const FamilyDetails = props => {
             color={Colors.CLR_D9272A}
             value="MARITAL STATUS ON DECEMBER 31, 2018"
           />
-           <SKDropdown
-            marginBottom={2}
-            maxLength={15}
-            borderColor={Colors.CLR_0065FF}
-            value={bank}
-            placeholder="Select Marital Status"
-            onEndEditing={value => {
-            }}
-          />
+           <TouchableInput
+          rightAccImage = {CustomFonts.ArrowDown}
+          placeholder="Select Marital Status"
+          value = {maritalStatus}
+          onClicked={() => {
+            console.log('sdsd');
+            setIsMVisible(true);
+          }}
+        />
           <Heading
             fontSize={20}
             marginTop={45}
             color={Colors.CLR_D9272A}
             value="DID YOUR MARITAL STATUS CHANGED IN 2018?"
           />
-          <SKDropdown
-            marginBottom={2}
-            maxLength={15}
-            borderColor={Colors.CLR_0065FF}
-            value={residency}
-            placeholder="Select"
-            onEndEditing={value => {
-            }}
-          />
+          <TouchableInput
+          rightAccImage = {CustomFonts.ArrowDown}
+          placeholder="Select"
+          value = {mChangeOpton}
+          onClicked={() => {
+            console.log('sdsd');
+            setIsMChangeVisible(true);
+          }}
+        />
            <Heading
             fontSize={20}
             marginTop={45}
             color={Colors.CLR_D9272A}
             value="ANY DEPENDENTS IN 2018?"
           />
-          <SKDropdown
-            marginBottom={2}
-            maxLength={15}
-            borderColor={Colors.CLR_0065FF}
-            value={residency}
-            placeholder="Select"
-            onEndEditing={value => {
-            }}
-          />
+           <TouchableInput
+          rightAccImage = {CustomFonts.ArrowDown}
+          placeholder="Select"
+          value = {dependentOption}
+          onClicked={() => {
+            console.log('sdsd');
+            setIsDepOptionVisible(true);
+          }}
+        />
           <SKButton
           marginTop ={30}
           fontSize={16}
@@ -127,6 +125,48 @@ const FamilyDetails = props => {
             navigation.navigate('Dependents');
           }}
         />
+        {isMVisible && (
+          <SKModel
+            title="Select Gender"
+            data={MARITAL_STATUS}
+            onClose={() => {
+              setIsMVisible(false);
+            }}
+            onSelect={value => {
+              console.log('value', value);
+              setMaritalStatus(value)
+              setIsMVisible(false);
+            }}
+          />
+        )}
+        {isMChangeVisible && (
+          <SKModel
+            title="Select"
+            data={YES_NO}
+            onClose={() => {
+              setIsMChangeVisible(false);
+            }}
+            onSelect={value => {
+              console.log('value', value);
+              setMChangeOpton(value)
+              setIsMChangeVisible(false);
+            }}
+          />
+        )}
+        {isDepOptionVisible && (
+          <SKModel
+            title="Select Gender"
+            data={YES_NO}
+            onClose={() => {
+              setIsDepOptionVisible(false);
+            }}
+            onSelect={value => {
+              console.log('value', value);
+              setDependentOption(value)
+              setIsDepOptionVisible(false);
+            }}
+          />
+        )}
       </ScrollView>
     </View>
   );

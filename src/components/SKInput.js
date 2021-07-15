@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
-import * as CustomFonts from '../constants/FontsDefs'
+import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const SKInput = props => {
-  const {value,onFocused} = props;
+  const {value, onFocused} = props;
   const [initialValue, setInitialValue] = useState(value);
   useEffect(() => {
     setInitialValue(value);
@@ -24,7 +24,8 @@ const SKInput = props => {
     placeholder = 'Enter value',
     maxLength = 30,
     isChatInput = false,
-    multiline
+    multiline,
+    keyboardType = 'default'
   } = props;
   return (
     <View
@@ -32,12 +33,12 @@ const SKInput = props => {
         width: '100%',
         height: 57,
         padding: 3,
-        paddingHorizontal: 33,
+        paddingHorizontal: 20,
         borderColor: props.borderColor ? props.borderColor : Colors.GRAY,
         borderRadius: 30,
         flexDirection: 'row',
         alignItems: 'center',
-        elevation:2,
+        elevation: 2,
         backgroundColor: props.backgroundColor
           ? props.backgroundColor
           : Colors.WHITE,
@@ -52,16 +53,17 @@ const SKInput = props => {
         marginBottom,
       }}>
       {leftAccImage && (
-        <Image
-          resizeMode="contain"
-          style={{width: 15, height: 15, marginRight: 21}}
-          source={leftAccImage}
+        <Icon
+          style={{marginRight: 21}}
+          name={leftAccImage}
+          size={25}
+          color={Colors.LIGHTGRAY}
         />
       )}
       <TextInput
         style={{
           fontSize: 18,
-          fontFamily:CustomFonts.OpenSansRegular,
+          fontFamily: CustomFonts.OpenSansRegular,
           fontWeight: props.fontSize ? props.fontSize : '400',
           height: 56,
           flex: 1,
@@ -72,19 +74,19 @@ const SKInput = props => {
         textAlign={props.textAlign ? props.textAlign : 'left'}
         underlineColorAndroid="transparent"
         value={initialValue}
-        keyboardType="email-address"
-        multiline = {multiline}
+        keyboardType= {keyboardType}
+        multiline={multiline}
         autoCapitalize="none"
         autoCompleteType="off"
         autoCorrect={false}
         placeholder={props.placeholder}
         maxLength={maxLength}
         onFocus={() => {
-          onFocused && onFocused()
+          onFocused && onFocused();
         }}
         onChangeText={value => {
           setInitialValue(value);
-          props.onTextChange && props.onTextChange(value)
+          props.onTextChange && props.onTextChange(value);
         }}
         onEndEditing={() => {
           props.onEndEditing && props.onEndEditing(initialValue);
@@ -94,20 +96,16 @@ const SKInput = props => {
         <TouchableOpacity
           style={{
             height: 40,
-            width: isChatInput ? 40 :  40,
+            width: isChatInput ? 40 : 40,
             justifyContent: 'center',
             alignItems: isChatInput ? 'center' : 'flex-end',
-            backgroundColor:isChatInput ? 'blue' : Colors.TRANS,
-            borderRadius:isChatInput ? 6 : 0
+            backgroundColor: isChatInput ? 'blue' : Colors.TRANS,
+            borderRadius: isChatInput ? 6 : 0,
           }}
           onPress={() => {
             props.onRightPressed && props.onRightPressed();
           }}>
-          <Image
-            resizeMode="contain"
-            style={{width: isChatInput ?  20 : 15, height: isChatInput ?  20 : 15}}
-            source={rightAccImage}
-          />
+          <Icon name={rightAccImage} size={25} color={Colors.LIGHTGRAY} />
         </TouchableOpacity>
       )}
     </View>

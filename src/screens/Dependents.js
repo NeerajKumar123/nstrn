@@ -9,14 +9,17 @@ import {
   Keyboard,
   Platform,
   KeyboardAvoidingView,
+  Dimensions
 } from 'react-native';
-import SKDropdown from '../components/SKDropdown';
+import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
 import SKInput from '../components/SKInput';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
+import SKModel from '../components/SKModel';
 import AppHeader from '../components/AppHeader';
+import {GENDER_OPTIONS,RELATIONS} from '../constants/StaticValues';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
@@ -25,6 +28,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 const left_arrow = require('../../assets/left_arrow.png');
 const right_arrow = require('../../assets/right_arrow.png');
+const {width} = Dimensions.get('window');
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {format } from 'date-fns'
 
 const Dependents = props => {
   const navigation = useNavigation();
@@ -35,6 +41,9 @@ const Dependents = props => {
   const [sinNo, setSinNo] = useState('');
   const [relation, setRelation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isGenderVisible, setIsGenderVisible] = useState()
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState()
+  const [isRelationVisible, setIsRelationVisible] = useState()
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -78,6 +87,7 @@ const Dependents = props => {
           value="DEPENDENT 1"
         />
         <SKInput
+          leftAccImage={CustomFonts.UserIcon}
           marginTop={20}
           marginBottom={0}
           maxLength={30}
@@ -87,6 +97,7 @@ const Dependents = props => {
           onEndEditing={value => {}}
         />
         <SKInput
+          leftAccImage={CustomFonts.UserIcon}
           marginTop={20}
           marginBottom={0}
           maxLength={30}
@@ -95,24 +106,26 @@ const Dependents = props => {
           placeholder="Enter Last Name"
           onEndEditing={value => {}}
         />
-        <SKInput
-          marginTop={20}
-          marginBottom={0}
-          maxLength={30}
-          borderColor={Colors.CLR_0065FF}
-          value={dob}
-          placeholder="Enter Date"
-          onEndEditing={value => {}}
+         <TouchableInput
+          leftAccImage={CustomFonts.Calender}
+          value = {dob && format(dob, 'dd/MM/yyyy')}
+          placeholder="Date of Birth (DD/MM/YYYY)"
+          onClicked={() => {
+            setIsDatePickerVisible(true);
+          }}
         />
-        <SKDropdown
-          marginBottom={2}
-          maxLength={15}
-          borderColor={Colors.CLR_0065FF}
-          value={gender}
-          placeholder="Select Gender"
-          onEndEditing={value => {}}
+         <TouchableInput
+          leftAccImage={CustomFonts.Gender}
+          rightAccImage = {CustomFonts.ArrowDown}
+          value = {gender}
+          placeholder = 'Select Gender'
+          onClicked={() => {
+            console.log('sdsd');
+            setIsGenderVisible(true);
+          }}
         />
         <SKInput
+          leftAccImage={CustomFonts.Number}
           marginTop={20}
           marginBottom={0}
           maxLength={30}
@@ -121,13 +134,15 @@ const Dependents = props => {
           placeholder="Enter SIN"
           onEndEditing={value => {}}
         />
-        <SKDropdown
-          marginBottom={2}
-          maxLength={15}
-          borderColor={Colors.CLR_0065FF}
-          value={relation}
+         <TouchableInput
+         leftAccImage={CustomFonts.Handshake}
+          rightAccImage = {CustomFonts.ArrowDown}
+          value = {relation}
           placeholder="Select relation"
-          onEndEditing={value => {}}
+          onClicked={() => {
+            console.log('sdsd');
+            setIsRelationVisible(true);
+          }}
         />
         <SKButton
           marginTop={30}
@@ -160,6 +175,59 @@ const Dependents = props => {
           }}
         />
       </ScrollView>
+      {isDatePickerVisible && (
+        <View
+          style={{
+            backgroundColor: Colors.LIGHTGRAY,
+            position: 'absolute',
+            bottom: 0,
+            height: Platform.OS == 'ios' ? 400 : 0,
+            width: width,
+          }}>
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={new Date()}
+            mode="date"
+            display="inline"
+            onChange={(event, selectedDate) => {
+              console.log(event.type, Date.parse(selectedDate));
+              setDOB(selectedDate)
+              console.log('====>',format(selectedDate, 'dd/MM/yyyy'))
+              setIsDatePickerVisible(false);
+            }}
+          />
+        </View>
+      )}
+
+      {isGenderVisible && (
+          <SKModel
+            title="Select"
+            data={GENDER_OPTIONS}
+            onClose={() => {
+              setIsGenderVisible(false);
+            }}
+            onSelect={value => {
+              console.log('value', value);
+              setGender(value)
+              setIsGenderVisible(false);
+            }}
+          />
+        )}
+        {isRelationVisible && (
+          <SKModel
+            title="Select"
+            data={RELATIONS}
+            onClose={() => {
+              setIsRelationVisible(false);
+            }}
+            onSelect={value => {
+              console.log('value', value);
+              setRelation(value)
+              setIsRelationVisible(false);
+            }}
+          />
+        )}
+      
     </View>
   );
 };

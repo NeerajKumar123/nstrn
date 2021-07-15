@@ -8,18 +8,25 @@ import {
   DeviceEventEmitter,
   Keyboard,
   Platform,
+  Dimensions,
 } from 'react-native';
 import SKInput from '../components/SKInput';
+import TouchableInput from '../components/TouchableInput';
 import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {login} from '../apihelper/Api';
+import * as CustomFonts from '../constants/FontsDefs'
 import * as SKTStorage from '../helpers/SKTStorage';
-import {GENDER_OPTIONS} from '../constants/StaticValues';
+import {GENDER_OPTIONS, TIME_OPTIONS} from '../constants/StaticValues';
 import SKLoader from '../components/SKLoader';
 import SKModel from '../components/SKModel';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {format } from 'date-fns'
+const {width} = Dimensions.get('window');
+
 const user = require('../../assets/user.png');
 const left_arrow = require('../../assets/left_arrow.png');
 const right_arrow = require('../../assets/right_arrow.png');
@@ -27,12 +34,13 @@ const right_arrow = require('../../assets/right_arrow.png');
 const BasicInfo = props => {
   const navigation = useNavigation();
   const [sin, setsin] = useState('');
-  const [gender, setgender] = useState('MALE');
-  const [dob, setDOB] = useState('');
-  const [lastTime, setLastTime] = useState('FIRST');
+  const [gender, setgender] = useState('');
+  const [dob, setDOB] = useState();
+  const [lastTime, setLastTime] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isGenderVisible, setIsGenderVisible] = useState(false);
+  const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -70,44 +78,32 @@ const BasicInfo = props => {
         <SKInput
           marginTop={48}
           marginBottom={0}
-          leftAccImage={user}
+          leftAccImage={CustomFonts.Number}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={sin}
+          keyboardType = 'number-pad'
           placeholder="SIN Number"
           onEndEditing={value => {
             console.log('onEndEditing', value);
             setsin(value);
           }}
         />
-        <SKInput
-          leftAccImage={user}
-          marginBottom={0}
-          maxLength={10}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
-          borderColor={Colors.CLR_0065FF}
-          value={gender}
-          placeholder="Gender"
-          onEndEditing={value => {
-            console.log('onEndEditing', value);
-            setgender(value);
+        <TouchableInput
+          leftAccImage={CustomFonts.Gender}
+          rightAccImage={CustomFonts.ArrowDown}
+          value = {gender}
+          placeholder="Select Gender"
+          onClicked={() => {
+            setIsGenderVisible(true);
           }}
         />
-        <SKInput
-          leftAccImage={user}
-          marginBottom={0}
-          maxLength={10}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
-          borderColor={Colors.CLR_0065FF}
-          value={dob}
+        <TouchableInput
+          leftAccImage={CustomFonts.Calender}
+          value = {dob && format(dob, 'dd/MM/yyyy')}
           placeholder="Date of Birth (DD/MM/YYYY)"
-          onEndEditing={value => {
-            console.log('onEndEditing', value);
-            setgender(value);
+          onClicked={() => {
+            setShowDatePicker(true);
           }}
         />
         <Heading
@@ -116,19 +112,14 @@ const BasicInfo = props => {
           color={Colors.RED}
           value="WHEN THE LAST TIME YOU FILED WITH US?"
         />
-        <SKInput
-          leftAccImage={user}
-          marginBottom={0}
-          maxLength={10}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
-          borderColor={Colors.CLR_0065FF}
+        <TouchableInput
+          leftAccImage={CustomFonts.Clock}
+          rightAccImage={CustomFonts.ArrowDown}
           value={lastTime}
-          placeholder="Date of Birth (DD/MM/YYYY)"
-          onEndEditing={value => {
-            console.log('onEndEditing', value);
-            setgender(value);
+          placeholder="Select"
+          onClicked={() => {
+            console.log('sdsd');
+            setIsLastTimeVisible(true);
           }}
         />
         <SKButton
@@ -140,10 +131,6 @@ const BasicInfo = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'ADDRESS'}
           onPress={() => {
-            // setShowDatePicker(true)
-            // return
-            setIsGenderVisible(true);
-            return;
             console.log('link pressed');
             navigation.navigate('Address');
           }}
@@ -157,11 +144,50 @@ const BasicInfo = props => {
             }}
             onSelect={value => {
               console.log('value', value);
+              setgender(value)
               setIsGenderVisible(false);
             }}
           />
         )}
+         {isLastTimeVisible && (
+          <SKModel
+            title="Select"
+            data={TIME_OPTIONS}
+            onClose={() => {
+              setIsLastTimeVisible(false);
+            }}
+            onSelect={value => {
+              console.log('value', value);
+              setLastTime(value)
+              setIsLastTimeVisible(false);
+            }}
+          />
+        )}
       </ScrollView>
+      {showDatePicker && (
+        <View
+          style={{
+            backgroundColor: Colors.LIGHTGRAY,
+            position: 'absolute',
+            bottom: 0,
+            height: Platform.OS == 'ios' ? 400 : 0,
+            width: width,
+          }}>
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={new Date()}
+            mode="date"
+            display="inline"
+            onChange={(event, selectedDate) => {
+              console.log(event.type, Date.parse(selectedDate));
+              setDOB(selectedDate)
+              console.log('====>',format(selectedDate, 'dd/MM/yyyy'))
+              // setDisplayDOB()
+              setShowDatePicker(false);
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };

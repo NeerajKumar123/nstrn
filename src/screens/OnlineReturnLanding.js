@@ -117,6 +117,7 @@ const DocCard = props => {
             borderRadius:6,
             backgroundColor:Colors.CLR_7F7F9F
           }}
+          key = {`${Math.random()}`}
           onPress={() => {
             props.onClicked && props.onClicked();
           }}>

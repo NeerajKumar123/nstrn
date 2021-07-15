@@ -18,14 +18,16 @@ const SKModel = props => {
     onSelect,
     onClose,
     title = 'Select',
-    key
+    keyLabel
   } = props;
+  console.log('keyLabel',keyLabel, data)
   return (
     <Modal
       animationType='fade'
       transparent={true}
       visible={true}>
       <View
+      onStartShouldSetResponder={() => onClose()}
         style={{
           justifyContent: 'center',
           alignItems: 'center',
@@ -85,10 +87,11 @@ const SKModel = props => {
           <FlatList
             style={{width: '100%', marginTop:20}}
             data={data}
+            keyExtractor={(item, index) => 'key_' + index}
             renderItem={({item}) => (
               <Row
                 item={item}
-                key={key}
+                keyLabel={keyLabel}
                 onRowSelect={() => {
                   console.log('item===>', item);
                   onSelect(item);
@@ -103,8 +106,9 @@ const SKModel = props => {
 };
 
 const Row = props => {
-  const {item,key,onRowSelect} = props;
-  const displayValue = (key && item[key]) || item;
+  const {item,keyLabel,onRowSelect} = props;
+  const displayValue = (keyLabel && item[keyLabel]) || item;
+  console.log('displayValue', keyLabel, item[item])
   return (
     <TouchableOpacity
     style = {{marginVertical:10}}

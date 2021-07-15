@@ -10,7 +10,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import SKDropdown from '../components/SKDropdown';
+import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
 import SKInput from '../components/SKInput';
 import {useNavigation} from '@react-navigation/native';
@@ -21,15 +21,19 @@ import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api';
+import SKModel from '../components/SKModel'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 const right_arrow = require('../../assets/right_arrow.png');
+const user = require('../../assets/user.png');
 
 const Address = props => {
   const navigation = useNavigation();
   const [mailingAddress, setMailingAddress] = useState('');
   const [province, setProvince] = useState('');
+  const [provinces, setProvinces] = useState([{name:'Province 1'},{name:'Province 2'},{name:'Province 3'},{name:'Province 4'},{name:'Province 5'},{name:'Province 6'}])
   const [isLoading, setIsLoading] = useState(false);
+  const [isProvinceVisible, setIsProvinceVisible] = useState(false);
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -93,16 +97,17 @@ const Address = props => {
             color={Colors.CLR_D9272A}
             value="WHICH PROVOINCE DID YOU LINE IN ON DECEMBER 31, 2020?"
           />
-          <SKDropdown
+          <TouchableInput
+            rightAccImage={CustomFonts.ArrowDown}
             marginBottom={2}
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
-            value={province}
+            value={province?.name}
             placeholder="Select Province"
-            onEndEditing={value => {
-              setLName(value);
-            }}
-          />
+            onClicked={() => {
+              console.log('sdsd');
+              setIsProvinceVisible(true);
+            }}          />
         </KeyboardAvoidingView>
         <SKButton
         marginTop = {30}
@@ -117,8 +122,23 @@ const Address = props => {
             navigation.navigate('BankingAndMore');
           }}
         />
+        {isProvinceVisible && (
+          <SKModel
+            title="Select"
+            data={provinces}
+            keyLabel = 'name'
+            onClose={() => {
+              setIsProvinceVisible(false);
+            }}
+            onSelect={value => {
+              console.log('isProvinceVisible', value);
+              setProvince(value)
+              setIsProvinceVisible(false);
+            }}
+          />
+        )}
       </View>
-     
+      
     </View>
   );
 };

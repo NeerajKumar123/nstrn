@@ -10,6 +10,7 @@ import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api'
+import * as CustomFonts from '../constants/FontsDefs'
 const left_arrow = require('../../assets/left_arrow.png');
 const usericon = require('../../assets/username.png');
 const  emailicon = require('../../assets/email.png');
@@ -89,10 +90,10 @@ const IncorpDetails = props => {
           value="INCORPORATORS' DETAILS :"
         />
         <SKInput
+          leftAccImage={CustomFonts.UserIcon}
           marginTop={26}
           marginBottom={2}
           maxLength = {15}
-          leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
           value={''}
           placeholder = 'First Name'
@@ -102,9 +103,9 @@ const IncorpDetails = props => {
           }}
         />
         <SKInput
+          leftAccImage={CustomFonts.UserIcon}
           marginBottom={2}
           maxLength = {15}
-          leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
           value={''}
           placeholder = 'Middle Name'
@@ -114,7 +115,7 @@ const IncorpDetails = props => {
           }}
         />
         <SKInput
-          leftAccImage={usericon}
+          leftAccImage={CustomFonts.UserIcon}
           marginBottom={2}
           maxLength = {15}
           borderColor={Colors.CLR_0065FF}
@@ -125,7 +126,7 @@ const IncorpDetails = props => {
           }}
         />
         <SKInput
-          leftAccImage={emailicon}
+          leftAccImage={CustomFonts.Email}
           marginBottom={2}
           maxLength = {30}
           borderColor={Colors.CLR_0065FF}
@@ -136,7 +137,7 @@ const IncorpDetails = props => {
           }}
         />
         <SKInput
-          leftAccImage={phoneicon}
+          leftAccImage={CustomFonts.Phone}
           marginBottom={2}
           maxLength = {10}
           borderColor={Colors.CLR_0065FF}
@@ -147,7 +148,7 @@ const IncorpDetails = props => {
           }}
         />
         <SKInput
-          leftAccImage={phoneicon}
+          leftAccImage={CustomFonts.Phone}
           marginBottom={2}
           maxLength = {10}
           borderColor={Colors.CLR_0065FF}
@@ -158,7 +159,7 @@ const IncorpDetails = props => {
           }}
         />
         <SKInput
-          leftAccImage={passicon}
+          leftAccImage={CustomFonts.Number}
           marginBottom={2}
           maxLength = {10}
           borderColor={Colors.CLR_0065FF}

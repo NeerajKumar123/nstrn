@@ -10,13 +10,14 @@ import {
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const SKDropdown = props => {
-  const {value, onFocused} = props;
+const TouchableInput = props => {
+  const {value, onFocused, onClicked = undefined} = props;
   const [initialValue, setInitialValue] = useState(value);
   useEffect(() => {
     setInitialValue(value);
   }, [value]);
   const {
+    leftAccImage,
     rightAccImage,
     marginTop = 10,
     marginBottom = 10,
@@ -24,11 +25,14 @@ const SKDropdown = props => {
   } = props;
   return (
     <TouchableOpacity
+      onPress={() => {
+        onClicked && onClicked();
+      }}
       style={{
         width: '100%',
         height: 60,
         padding: 3,
-        paddingHorizontal: 33,
+        paddingHorizontal: 20,
         borderColor: Colors.GRAY,
         borderRadius: 30,
         flexDirection: 'row',
@@ -45,18 +49,36 @@ const SKDropdown = props => {
         marginTop,
         marginBottom,
       }}>
-      <Text>{value || placeholder}</Text>
-      <Icon
-        style={{position: 'absolute', right: 20}}
-        name="chevron-down"
-        size={30}
+      {leftAccImage && (
+        <Icon
+        style={{marginRight: 21}}
+        name={leftAccImage}
+        size={25}
         color={Colors.DARKGRAY}
       />
+      )}
+      <Text
+        style={{
+          flex: 1,
+          fontFamily: CustomFonts.OpenSansRegular,
+          fontSize: 18,
+          color: value ? Colors.BLACK : Colors.LIGHTGRAY,
+        }}>
+        {value || placeholder}
+      </Text>
+      {rightAccImage && (
+        <Icon
+          style={{marginLeft: 21}}
+          name={rightAccImage}
+          size={25}
+          color={Colors.DARKGRAY}
+        />
+      )}
     </TouchableOpacity>
   );
 };
 
-export default SKDropdown;
+export default TouchableInput;
 
 const styles = StyleSheet.create({
   textInputUnderLined: {

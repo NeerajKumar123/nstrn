@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
   Text,
 } from 'react-native';
-import SKDropdown from '../components/SKDropdown';
+import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
 import SKInput from '../components/SKInput';
 import {useNavigation} from '@react-navigation/native';

@@ -16,6 +16,7 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs'
 import {getUserProfileDetails, updateUserProfile} from '../apihelper/Api';
 const left_arrow = require('../../assets/left_arrow.png');
 const right_arrow = require('../../assets/right_arrow.png');
@@ -88,10 +89,10 @@ const Profile = props => {
         }}>
         <Heading value="PROFILE" marginTop={26} />
         <SKInput
+          leftAccImage={CustomFonts.UserIcon}
           marginTop={26}
           marginBottom={0}
           maxLength={15}
-          leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
           value={fName}
           placeholder="First Name"
@@ -101,7 +102,7 @@ const Profile = props => {
           }}
         />
         <SKInput
-          leftAccImage={usericon}
+          leftAccImage={CustomFonts.UserIcon}
           marginBottom={0}
           maxLength={15}
           onRightPressed={() => {
@@ -116,7 +117,7 @@ const Profile = props => {
           }}
         />
         <SKInput
-          leftAccImage={emailicon}
+          leftAccImage={CustomFonts.Email}
           marginBottom={0}
           maxLength={30}
           onRightPressed={() => {
@@ -131,7 +132,7 @@ const Profile = props => {
           }}
         />
         <SKInput
-          leftAccImage={phoneicon}
+          leftAccImage={CustomFonts.Phone}
           marginBottom={0}
           maxLength={10}
           onRightPressed={() => {
