@@ -39,7 +39,7 @@ const AuthorizerList = props => {
             <Card
               item={item}
               onSelected={() => {
-                  console.log('data',item)
+                  navigation.navigate('SignaturePage')
               }}
             />
           );
@@ -63,9 +63,12 @@ const AuthorizerList = props => {
 };
 
 const Card = props => {
-    const {item, height = 44, fontSize=15} = props
+    const {item, height = 44, fontSize=15,onSelected} = props
   return (
-      <View
+      <TouchableOpacity
+      onPress = {() =>{
+        onSelected && onSelected()
+      }}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -89,7 +92,7 @@ const Card = props => {
           }}>
           {item.title}
         </Text>
-      </View>
+      </TouchableOpacity>
   );
 };
 

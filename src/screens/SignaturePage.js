@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -24,6 +24,7 @@ import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
+import SignatureCapture from 'react-native-signature-capture';
 
 const SignaturePage = props => {
   const navigation = useNavigation();
@@ -34,6 +35,8 @@ const SignaturePage = props => {
   const [sinNo, setSinNo] = useState('');
   const [relation, setRelation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const signPad = useRef(null);
+
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -63,12 +66,13 @@ const SignaturePage = props => {
         height: '100%',
       }}>
       {isLoading && <SKLoader />}
-      <AppHeader navigation = {navigation}/>
+      <AppHeader navigation={navigation} />
       <ScrollView
+        contentContainerStyle={{paddingBottom: 10}}
         style={{
           width: '100%',
           paddingHorizontal: 20,
-          marginBottom: 100,
+          marginBottom: 80,
         }}>
         <Heading
           fontSize={20}
@@ -82,15 +86,17 @@ const SignaturePage = props => {
           value="TAX PAYER INFORMATION"
         />
         <SKInput
+          leftAccImage={CustomFonts.Number}
           marginTop={20}
           marginBottom={0}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={fName}
-          placeholder="#Enter SIN Number"
+          placeholder="Enter SIN Number"
           onEndEditing={value => {}}
         />
         <SKInput
+          leftAccImage={CustomFonts.UserIcon}
           marginTop={20}
           marginBottom={0}
           maxLength={30}
@@ -100,6 +106,7 @@ const SignaturePage = props => {
           onEndEditing={value => {}}
         />
         <SKInput
+          leftAccImage={CustomFonts.UserIcon}
           marginTop={20}
           marginBottom={0}
           maxLength={30}
@@ -120,8 +127,24 @@ const SignaturePage = props => {
           value="SIGNATURE OF TAXPAYER OR LEGAL REPRESENTATIVE"
           marginTop={26}
         />
-        <SignatureBlock/>
-
+        <SignatureCapture
+          style={{width: '100%', height: 200, marginTop: 20}}
+          ref = {signPad}
+          onSaveEvent={result => {
+            console.log('onSaveEvent', result, result.pathName);
+          }}
+          onDragEvent={() => {
+            console.log('onDragEvent');
+          }}
+          saveImageFileInExtStorage={false}
+          showNativeButtons={false}
+          showTitleLabel={false}
+          backgroundColor={Colors.WHITE}
+          strokeColor={Colors.BLACK}
+          minStrokeWidth={4}
+          maxStrokeWidth={4}
+          viewMode={'portrait'}
+        />
       </ScrollView>
       <View
         style={{
@@ -138,10 +161,10 @@ const SignaturePage = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'Submit'}
           onPress={() => {
-            navigation.goBack();
+            signPad.current.saveImage()
+            navigation.navigate('AnyThingElse');
           }}
         />
-       
       </View>
     </View>
   );
@@ -167,27 +190,5 @@ const SKCheckbox = props => {
     </TouchableOpacity>
   );
 };
-
-const SignatureBlock = props => {
-    return (
-      <View
-        style={{
-          width: '100%',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent:'center',
-          marginTop: 20,
-          height:200,
-          borderColor:Colors.LIGHTGRAY,
-          borderRadius:6,
-           borderWidth:.5
-        }}
-        >
-        <Text style={{color: Colors.CLR_29295F, marginLeft: 10, flex: 1}}>
-          This is SignatureBlock
-        </Text>
-      </View>
-    );
-  };
 
 export default SignaturePage;

@@ -43,7 +43,6 @@ import HSTRegistration from './screens/HSTRegistration';
 import IncorpPayment from './screens/IncorpPayment';
 import IncorpInProcess from './screens/IncorpInProcess';
 
-
 const Stack = createStackNavigator();
 
 export const AuthStack = () => {
@@ -96,7 +95,7 @@ const SKStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName="Dashboard">
+        initialRouteName="SignaturePage">
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}
@@ -221,67 +220,62 @@ const SKStack = () => {
           name="CarryForward"
           component={CarryForward}
           options={{title: 'CarryForward', headerShown: false}}
-        /> 
-         <Stack.Screen
+        />
+        <Stack.Screen
           name="OnlineReturnLanding"
           component={OnlineReturnLanding}
           options={{title: 'OnlineReturnLanding', headerShown: false}}
-        /> 
-
-<Stack.Screen
+        />
+        <Stack.Screen
           name="IncorporationLanding"
           component={IncorporationLanding}
           options={{title: 'IncorporationLanding', headerShown: false}}
-        /> 
-
-<Stack.Screen
+        />
+        <Stack.Screen
           name="NumberNameCorp"
           component={NumberNameCorp}
           options={{title: 'NumberNameCorp', headerShown: false}}
-        /> 
-<Stack.Screen
+        />
+        <Stack.Screen
           name="UploadCorp"
           component={UploadCorp}
           options={{title: 'UploadCorp', headerShown: false}}
-        /> 
+        />
         <Stack.Screen
           name="Incorporators"
           component={Incorporators}
           options={{title: 'Incorporators', headerShown: false}}
-        /> 
+        />
         <Stack.Screen
           name="IncorpDetails"
           component={IncorpDetails}
           options={{title: 'IncorpDetails', headerShown: false}}
-        /> 
-         <Stack.Screen
+        />
+        <Stack.Screen
           name="AboutCorp"
           component={AboutCorp}
           options={{title: 'AboutCorp', headerShown: false}}
-        /> 
+        />
         <Stack.Screen
           name="IncorpFinalStep"
           component={IncorpFinalStep}
           options={{title: 'IncorpFinalStep', headerShown: false}}
-        /> 
-         <Stack.Screen
+        />
+        <Stack.Screen
           name="HSTRegistration"
           component={HSTRegistration}
           options={{title: 'HSTRegistration', headerShown: false}}
-        /> 
+        />
         <Stack.Screen
           name="IncorpPayment"
           component={IncorpPayment}
           options={{title: 'IncorpPayment', headerShown: false}}
-        /> 
-
-<Stack.Screen
+        />
+        <Stack.Screen
           name="IncorpInProcess"
           component={IncorpInProcess}
           options={{title: 'IncorpInProcess', headerShown: false}}
-        /> 
-
-
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
