@@ -23,7 +23,7 @@ import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import {forgotPassword} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
-const emailicon = require('../../assets/email.png');
+import * as CustomFonts from '../constants/FontsDefs'
 
 const ForgotPassword = props => {
   const navigation = useNavigation();
@@ -149,7 +149,7 @@ const ForgotPassword = props => {
           <SKInput
             marginTop={36}
             marginBottom={0}
-            leftAccImage={emailicon}
+            leftAccImage={CustomFonts.Email}
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={email}

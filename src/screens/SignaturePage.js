@@ -24,8 +24,6 @@ import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
 
 const SignaturePage = props => {
   const navigation = useNavigation();

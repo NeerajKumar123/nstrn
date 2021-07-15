@@ -6,9 +6,7 @@ import SKButton from '../components/SKButton';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
-
+import * as CustomFonts from '../constants/FontsDefs'
 const MyTaxYear = props => {
   const navigation = useNavigation()
   const data = [{title:'I WAS EMPLOYED'},{title:'I DROVE UBER/LYFT ETC.'},{title:'I OWNED A RENTAL PROPERTY'},{title:'I HAD OTHER SELF EMPLOYMENT INCOME'},{title:'I PAID RENT AND HAVE RENT RECEIPTS'}]
@@ -61,7 +59,7 @@ const MyTaxYear = props => {
         <SKButton
           marginTop = {30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}

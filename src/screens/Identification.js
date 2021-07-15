@@ -2,14 +2,12 @@ import React from 'react';
 import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
-import SKButton from '../components/SKButton';
+import SKButton, {UploadDocButton} from '../components/SKButton';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-const messeges = require('../../assets/messeges.png');
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
+import * as CustomFonts from '../constants/FontsDefs'
 
 const Identification = props => {
   const navigation = useNavigation();
@@ -81,25 +79,23 @@ const Identification = props => {
           color={Colors.CLR_D9272A}
           value="- PR CARD"
         />
-        <UploadView
-          grads={[Colors.CLR_D9272A, Colors.CLR_D72528]}
-          title="UPLOAD"
-          onClicked={() => {
-            console.log('onClicked');
-            launchImageLibrary(options, res => {
-              if (res?.didCancel) {
-                console.log('didCancel');
-              }
-              if (res?.error) {
-                console.log('error', res?.error ?? ERROR_MSG);
-              }
-            });
-          }}
+        <UploadDocButton  marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}
+        onClick={() => {
+          console.log('onClicked');
+          launchImageLibrary(options, res => {
+            if (res?.didCancel) {
+              console.log('didCancel');
+            }
+            if (res?.error) {
+              console.log('error', res?.error ?? ERROR_MSG);
+            }
+          });
+        }}
         />
         <SKButton
           marginTop={30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
@@ -141,7 +137,7 @@ const UploadView = props => {
         <Image
           resizeMode="contain"
           style={{width: 20, height: 20}}
-          source={messeges}
+          source={CustomFonts.upload}
         />
         <Text
           style={{

@@ -27,10 +27,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {format } from 'date-fns'
 const {width} = Dimensions.get('window');
 
-const user = require('../../assets/user.png');
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
-
 const BasicInfo = props => {
   const navigation = useNavigation();
   const [sin, setsin] = useState('');
@@ -41,7 +37,11 @@ const BasicInfo = props => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isGenderVisible, setIsGenderVisible] = useState(false);
   const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
-
+  const iosVersion = parseInt(Platform.Version);  
+  let pickerHeight = 0
+  if(Platform.OS == 'ios'){
+    pickerHeight = iosVersion >= 14 ? 400 : 216
+  }
   const checkFormValidations = () => {
     let isValidForm = true;
     if (sin == undefined || sin.length < 10) {
@@ -91,7 +91,7 @@ const BasicInfo = props => {
         />
         <TouchableInput
           leftAccImage={CustomFonts.Gender}
-          rightAccImage={CustomFonts.ArrowDown}
+          rightAccImage={CustomFonts.ChevronDown}
           value = {gender}
           placeholder="Select Gender"
           onClicked={() => {
@@ -114,7 +114,7 @@ const BasicInfo = props => {
         />
         <TouchableInput
           leftAccImage={CustomFonts.Clock}
-          rightAccImage={CustomFonts.ArrowDown}
+          rightAccImage={CustomFonts.ChevronDown}
           value={lastTime}
           placeholder="Select"
           onClicked={() => {
@@ -125,7 +125,7 @@ const BasicInfo = props => {
         <SKButton
           marginTop={30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
@@ -167,22 +167,21 @@ const BasicInfo = props => {
       {showDatePicker && (
         <View
           style={{
-            backgroundColor: Colors.LIGHTGRAY,
+            backgroundColor:'#FFE6E6',
             position: 'absolute',
             bottom: 0,
-            height: Platform.OS == 'ios' ? 400 : 0,
+            height: pickerHeight,
             width: width,
           }}>
           <DateTimePicker
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display="inline"
+            display="spinner"
             onChange={(event, selectedDate) => {
               console.log(event.type, Date.parse(selectedDate));
               setDOB(selectedDate)
               console.log('====>',format(selectedDate, 'dd/MM/yyyy'))
-              // setDisplayDOB()
               setShowDatePicker(false);
             }}
           />

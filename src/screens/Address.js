@@ -22,11 +22,7 @@ import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api';
 import SKModel from '../components/SKModel'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
-const right_arrow = require('../../assets/right_arrow.png');
-const user = require('../../assets/user.png');
-
 const Address = props => {
   const navigation = useNavigation();
   const [mailingAddress, setMailingAddress] = useState('');
@@ -98,21 +94,20 @@ const Address = props => {
             value="WHICH PROVOINCE DID YOU LINE IN ON DECEMBER 31, 2020?"
           />
           <TouchableInput
-            rightAccImage={CustomFonts.ArrowDown}
+            rightAccImage={CustomFonts.ChevronDown}
             marginBottom={2}
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={province?.name}
             placeholder="Select Province"
             onClicked={() => {
-              console.log('sdsd');
               setIsProvinceVisible(true);
             }}          />
         </KeyboardAvoidingView>
         <SKButton
         marginTop = {30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}

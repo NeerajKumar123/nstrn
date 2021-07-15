@@ -11,22 +11,28 @@ import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const SKInput = props => {
-  const {value, onFocused} = props;
+  const {value, onFocused,isSecurePass,onRightPressed} = props;
   const [initialValue, setInitialValue] = useState(value);
+  const [isSecure, setIsSecure] = useState(isSecurePass)
   useEffect(() => {
     setInitialValue(value);
   }, [value]);
+  useEffect(() => {
+    setIsSecure(isSecurePass);
+  }, [isSecurePass]);
   const {
-    leftAccImage,
-    rightAccImage,
+    leftAccImage ,
+    rightAccImage ,
     marginTop = 10,
     marginBottom = 10,
     placeholder = 'Enter value',
     maxLength = 30,
     isChatInput = false,
     multiline,
-    keyboardType = 'default'
+    keyboardType = 'default',
   } = props;
+  const isLeftLocalPNG = leftAccImage && typeof leftAccImage == 'number';
+  const isRightLocalPNG = rightAccImage && typeof rightAccImage == 'number';
   return (
     <View
       style={{
@@ -52,7 +58,18 @@ const SKInput = props => {
         marginTop,
         marginBottom,
       }}>
-      {leftAccImage && (
+      {leftAccImage && isLeftLocalPNG && (
+        <Image
+          source={leftAccImage}
+          resizeMode="contain"
+          style={{
+            width: 20,
+            height: 20,
+            marginRight: 21,
+          }}
+        />
+      )}
+      {leftAccImage && !isLeftLocalPNG && (
         <Icon
           style={{marginRight: 21}}
           name={leftAccImage}
@@ -74,12 +91,13 @@ const SKInput = props => {
         textAlign={props.textAlign ? props.textAlign : 'left'}
         underlineColorAndroid="transparent"
         value={initialValue}
-        keyboardType= {keyboardType}
+        keyboardType={keyboardType}
         multiline={multiline}
+        secureTextEntry = {isSecure}
         autoCapitalize="none"
         autoCompleteType="off"
         autoCorrect={false}
-        placeholder={props.placeholder}
+        placeholder={placeholder}
         maxLength={maxLength}
         onFocus={() => {
           onFocused && onFocused();
@@ -103,9 +121,21 @@ const SKInput = props => {
             borderRadius: isChatInput ? 6 : 0,
           }}
           onPress={() => {
-            props.onRightPressed && props.onRightPressed();
+            onRightPressed && onRightPressed();
           }}>
-          <Icon name={rightAccImage} size={25} color={Colors.LIGHTGRAY} />
+          {isRightLocalPNG && (
+            <Image
+              source={rightAccImage}
+              resizeMode="contain"
+              style={{
+                width: 20,
+                height: 20,
+              }}
+            />
+          )}
+          {!isRightLocalPNG && (
+            <Icon name={rightAccImage} size={25} color={Colors.LIGHTGRAY} />
+          )}
         </TouchableOpacity>
       )}
     </View>

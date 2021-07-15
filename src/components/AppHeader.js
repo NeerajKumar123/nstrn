@@ -1,19 +1,12 @@
 import React from 'react';
 import {
   Platform,
-  Text,
   View,
   TouchableOpacity,
   StatusBar,
-  Dimensions,
   Image,
 } from 'react-native';
-const {width} = Dimensions.get('window');
-import * as Colors from '../constants/ColorDefs';
-const back = require('../../assets/back.png');
-const header_logo = require('../../assets/header_logo.png');
-const acc_icon = require('../../assets/account_icon.png');
-
+import * as CustomFonts from '../constants/FontsDefs'
 const AppHeader = props => {
   const {onLeftClicked  = undefined, onRightClicked = undefined, navigation = undefined} = props;
   return (
@@ -35,12 +28,12 @@ const AppHeader = props => {
               onLeftClicked ? onLeftClicked() : navigation.goBack()
             }}>
             <Image
+              source={CustomFonts.back}
               resizeMode="contain"
               style={{
                 width: 19,
                 height: 25,
               }}
-              source={back}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -48,12 +41,12 @@ const AppHeader = props => {
             onRightClicked ? onRightClicked() :navigation.popToTop && navigation.popToTop()
           }}>
           <Image
+            source={CustomFonts.header_logo}
             resizeMode="contain"
             style={{
               width: 40,
               height: 40,
             }}
-            source={header_logo}
           />
         </TouchableOpacity>
         </View>
@@ -76,24 +69,24 @@ export const DashHeader = props => {
         height:50
       }}>
       <Image
+        source={CustomFonts.header_logo}
         resizeMode="contain"
         style={{
           width: 38,
           height: 38,
         }}
-        source={header_logo}
       />
       <TouchableOpacity
         onPress={() => {
           props.onRightClicked && props.onRightClicked();
         }}>
         <Image
+          source={CustomFonts.acc_icon}
           resizeMode="contain"
           style={{
             width: 38,
             height: 38,
           }}
-          source={acc_icon}
         />
       </TouchableOpacity>
     </View>

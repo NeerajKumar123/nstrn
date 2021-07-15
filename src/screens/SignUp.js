@@ -9,13 +9,8 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs'
 import {register} from '../apihelper/Api'
-const left_arrow = require('../../assets/left_arrow.png');
-const usericon = require('../../assets/username.png');
-const  emailicon = require('../../assets/email.png');
-const phoneicon = require('../../assets/phone.png');
-const passicon = require('../../assets/pass.png');
-const hideicon = require('../../assets/hide.png');
 
 const SignUp = props => {
   const navigation = useNavigation()
@@ -25,6 +20,7 @@ const SignUp = props => {
   const [mobile, setMobile] = useState('')
   const [pass, setPass] = useState('')
   const [cPass, setCPass] = useState('')
+  const [isSecurePass, setIsSecurePass] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
@@ -89,10 +85,10 @@ const SignUp = props => {
           value="LETS GET TO KNOW YOU BETTER"
         />
         <SKInput
+          leftAccImage={CustomFonts.UserIcon}
           marginTop={26}
           marginBottom={2}
           maxLength = {15}
-          leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
           value={''}
           placeholder = 'First Name'
@@ -102,7 +98,7 @@ const SignUp = props => {
           }}
         />
         <SKInput
-          leftAccImage={usericon}
+          leftAccImage={CustomFonts.UserIcon}
           marginBottom={2}
           maxLength = {15}
           borderColor={Colors.CLR_0065FF}
@@ -113,7 +109,7 @@ const SignUp = props => {
           }}
         />
         <SKInput
-          leftAccImage={emailicon}
+          leftAccImage={CustomFonts.Email}
           marginBottom={2}
           maxLength = {30}
           borderColor={Colors.CLR_0065FF}
@@ -124,7 +120,7 @@ const SignUp = props => {
           }}
         />
         <SKInput
-          leftAccImage={phoneicon}
+          leftAccImage={CustomFonts.Phone}
           marginBottom={2}
           maxLength = {10}
           borderColor={Colors.CLR_0065FF}
@@ -135,7 +131,7 @@ const SignUp = props => {
           }}
         />
         <SKInput
-          leftAccImage={passicon}
+          leftAccImage={CustomFonts.Lock}
           marginBottom={2}
           maxLength = {6}
           borderColor={Colors.CLR_0065FF}
@@ -146,13 +142,18 @@ const SignUp = props => {
           }}
         />
         <SKInput
-          leftAccImage={passicon}
+          leftAccImage={CustomFonts.Lock}
           marginBottom={2}
-          rightAccImage={hideicon}
+          rightAccImage={isSecurePass ? CustomFonts.EyeOutlineOff : CustomFonts.EyeOutlineOn}
           maxLength = {6}
           borderColor={Colors.CLR_0065FF}
           value={''}
+          isSecurePass = {isSecurePass}
           placeholder = 'Confirm Password'
+          onRightPressed = {()=>{
+            console.log('isSecurePass',isSecurePass)
+            setIsSecurePass(!isSecurePass)
+          }}
           onEndEditing={value => {
             console.log('onEndEditing', value);
             setCPass(value)
@@ -185,10 +186,10 @@ const SignUp = props => {
             }
           }}
         />
-        <SKButton
+        {/* <SKButton
           fontSize={16}
           marginTop={19}
-          leftImage = {left_arrow}
+          leftImage = {CustomFonts.ChevronLeft}
           fontWeight={'normal'}
           width = '100%'
           backgroundColor={Colors.SECONDARY_FILL}
@@ -197,7 +198,7 @@ const SignUp = props => {
           onPress={() => {
             navigation.navigate('Login')
           }}
-        />
+        /> */}
       </ScrollView>
       </KeyboardAvoidingView>
     </View>

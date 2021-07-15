@@ -19,7 +19,6 @@ import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
 import {userCheckOtpForLogin,forgotPassword} from '../apihelper/Api'
-const header_logo = require('../../assets/header_logo.png');
 
 const SecurityCode = props => {
   const navigation = useNavigation();

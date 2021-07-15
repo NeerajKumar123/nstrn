@@ -21,9 +21,6 @@ import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
-const emailicon = require('../../assets/email.png');
-const header_logo = require('../../assets/header_logo.png');
-const passicon = require('../../assets/pass.png');
 const NumberNameCorp = props => {
   const data = [
     {corpType: 'NUMBERED', cost: 'CORPORATION'},

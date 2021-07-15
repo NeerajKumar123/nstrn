@@ -24,8 +24,6 @@ import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
 
 const FamilyDetails = props => {
   const navigation = useNavigation();
@@ -74,7 +72,7 @@ const FamilyDetails = props => {
             value="MARITAL STATUS ON DECEMBER 31, 2018"
           />
            <TouchableInput
-          rightAccImage = {CustomFonts.ArrowDown}
+          rightAccImage = {CustomFonts.ChevronDown}
           placeholder="Select Marital Status"
           value = {maritalStatus}
           onClicked={() => {
@@ -89,7 +87,7 @@ const FamilyDetails = props => {
             value="DID YOUR MARITAL STATUS CHANGED IN 2018?"
           />
           <TouchableInput
-          rightAccImage = {CustomFonts.ArrowDown}
+          rightAccImage = {CustomFonts.ChevronDown}
           placeholder="Select"
           value = {mChangeOpton}
           onClicked={() => {
@@ -104,7 +102,7 @@ const FamilyDetails = props => {
             value="ANY DEPENDENTS IN 2018?"
           />
            <TouchableInput
-          rightAccImage = {CustomFonts.ArrowDown}
+          rightAccImage = {CustomFonts.ChevronDown}
           placeholder="Select"
           value = {dependentOption}
           onClicked={() => {
@@ -115,7 +113,7 @@ const FamilyDetails = props => {
           <SKButton
           marginTop ={30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}

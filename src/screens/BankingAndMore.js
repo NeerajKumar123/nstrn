@@ -25,13 +25,9 @@ import * as Colors from '../constants/ColorDefs';
 import { register } from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
-const left_arrow = require('../../assets/left_arrow.png');
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format } from 'date-fns'
 const {width} = Dimensions.get('window');
-
-const right_arrow = require('../../assets/right_arrow.png');
-
 const BankingAndMore = props => {
   const navigation = useNavigation();
   const [bank, setBank] = useState('');
@@ -90,11 +86,10 @@ const BankingAndMore = props => {
         />
         <TouchableInput
           leftAccImage={CustomFonts.Bank}
-          rightAccImage={CustomFonts.ArrowDown}
+          rightAccImage={CustomFonts.ChevronDown}
           placeholder="Select Bank"
           value = {bank?.name}
           onClicked={() => {
-            console.log('sdsd');
             setIsBankVisible(true);
           }}
         />
@@ -125,7 +120,7 @@ const BankingAndMore = props => {
         />
         <TouchableInput
           leftAccImage={CustomFonts.Home}
-          rightAccImage={CustomFonts.ArrowDown}
+          rightAccImage={CustomFonts.ChevronDown}
           placeholder="Select Residency"
           value = {residency?.name}
           onClicked={() => {
@@ -150,7 +145,7 @@ const BankingAndMore = props => {
         <SKButton
           marginTop={30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}

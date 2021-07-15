@@ -21,9 +21,7 @@ import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
-const emailicon = require('../../assets/email.png');
-const header_logo = require('../../assets/header_logo.png');
-const passicon = require('../../assets/pass.png');
+
 const OnlineReturnLanding = props => {
   const data = [{year:'2018'},{year:'2018'},{year:'2018'}]
   const navigation = useNavigation();

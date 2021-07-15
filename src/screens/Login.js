@@ -9,9 +9,6 @@ import {login} from '../apihelper/Api'
 import * as SKTStorage from '../helpers/SKTStorage'
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs'
-const  emailicon = require('../../assets/email.png');
-const header_logo = require('../../assets/header_logo.png');
-const passicon = require('../../assets/pass.png');
 const Login = props => {
   const navigation = useNavigation();
   const [email, setemail] = useState('neerajkiet@gmail.com')
@@ -53,7 +50,7 @@ const Login = props => {
         <SKInput
           marginTop={48}
           marginBottom={0}
-          leftAccImage={emailicon}
+          leftAccImage={CustomFonts.Email}
           maxLength = {30}
           borderColor={Colors.CLR_0065FF}
           value={email}
@@ -63,7 +60,7 @@ const Login = props => {
           }}
         />
         <SKInput
-          leftAccImage={passicon}
+          leftAccImage={CustomFonts.Lock}
           marginBottom={0}
           maxLength = {10}
           borderColor={Colors.CLR_0065FF}
@@ -153,7 +150,7 @@ const Header = props => {
             width: 38,
             height: 38,
           }}
-          source={header_logo}
+          source={CustomFonts.header_logo}
         />
       </TouchableOpacity>
     </View>

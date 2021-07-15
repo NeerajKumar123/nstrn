@@ -14,56 +14,48 @@ import DashCard from '../components/DashCard';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
-const logout_icon = require('../../assets/logout_icon.png');
-
-const home = require('../../assets/home.png');
-const visit_us = require('../../assets/visit_us.png');
-const online = require('../../assets/online.png');
-const incorporation = require('../../assets/incorporation.png');
-const request = require('../../assets/request.png');
-const cra_latters = require('../../assets/cra_latters.png');
 
 const data = [
   {
     id: 1,
     name: 'HOME',
     desc: 'STATUS PROFILE MY DOCUMENTS',
-    image: home,
+    image: CustomFonts.home,
     colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
   },
   {
     id: 2,
     name: 'VISIT US',
     desc: 'BOOK AN APPOINTMENT',
-    image: visit_us,
+    image: CustomFonts.visit_us,
     colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
   },
   {
     id: 3,
     name: 'ONLINE TAX RETURN',
     desc: 'STARTING FROM $44.99',
-    image: online,
+    image: CustomFonts.online,
     colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
   },
   {
     id: 4,
     name: 'INCORPORATION',
     desc: 'OPEN A CORPORATION',
-    image: incorporation,
+    image: CustomFonts.incorporation,
     colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
   },
   {
     id: 5,
     name: 'REQUEST TAX DOCS',
     desc: 'NOA, T1,GENERAL, etc.',
-    image: request,
+    image: CustomFonts.request,
     colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
   },
   {
     id: 6,
     name: 'CRA LATTERS',
     desc: 'CORRESPONDENCE',
-    image: cra_latters,
+    image: CustomFonts.cra_latters,
     colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
   },
 ];
@@ -119,7 +111,6 @@ const navigateToScreen = (item) =>{
             <DashCard
               item={item}
               onSelected={() => {
-                console.log('onSelected==>', item);
                 navigateToScreen(item)
               }}
             />
@@ -141,7 +132,7 @@ const navigateToScreen = (item) =>{
           <Image
             resizeMode="contain"
             style={{width: 20, height: 18, marginRight: 5}}
-            source={logout_icon}
+            source={CustomFonts.logout_icon}
           />
           <Text style = {{fontWeight:'700', fontSize:16, fontFamily:CustomFonts.OpenSansRegular}}>Logout</Text>
         </TouchableOpacity>

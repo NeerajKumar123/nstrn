@@ -18,11 +18,6 @@ import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 import {getUserProfileDetails, updateUserProfile} from '../apihelper/Api';
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
-const usericon = require('../../assets/username.png');
-const  emailicon = require('../../assets/email.png');
-const phoneicon = require('../../assets/phone.png');
 
 const Profile = props => {
   const navigation = useNavigation();
@@ -181,7 +176,7 @@ const Profile = props => {
           }}>
           <SKButton
             fontSize={16}
-            rightImage={right_arrow}
+            rightImage={CustomFonts.ChevronRight}
             fontWeight={'normal'}
             backgroundColor={Colors.SECONDARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}

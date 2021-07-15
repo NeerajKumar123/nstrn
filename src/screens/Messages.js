@@ -20,8 +20,6 @@ import SKInput from '../components/SKInput';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import {getMessages, saveMessage} from '../apihelper/Api';
-const send_msg = require('../../assets/send_msg.png');
-const left_arrow = require('../../assets/left_arrow.png');
 const {width} = Dimensions.get('window');
 const Messages = props => {
   const navigation = useNavigation();
@@ -95,7 +93,7 @@ const Messages = props => {
             : keyboardHeight,
         }}>
         <SKInput
-          rightAccImage={send_msg}
+          rightAccImage={CustomFonts.send_msg}
           isChatInput={true}
           onTextChange={text => {
             setChatText(text);

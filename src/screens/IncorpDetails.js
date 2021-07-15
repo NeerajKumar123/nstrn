@@ -11,12 +11,6 @@ import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api'
 import * as CustomFonts from '../constants/FontsDefs'
-const left_arrow = require('../../assets/left_arrow.png');
-const usericon = require('../../assets/username.png');
-const  emailicon = require('../../assets/email.png');
-const phoneicon = require('../../assets/phone.png');
-const passicon = require('../../assets/pass.png');
-const hideicon = require('../../assets/hide.png');
 
 const IncorpDetails = props => {
   const navigation = useNavigation()

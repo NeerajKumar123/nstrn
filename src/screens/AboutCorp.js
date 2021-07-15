@@ -10,13 +10,7 @@ import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api'
-const left_arrow = require('../../assets/left_arrow.png');
-const usericon = require('../../assets/username.png');
-const  emailicon = require('../../assets/email.png');
-const phoneicon = require('../../assets/phone.png');
-const passicon = require('../../assets/pass.png');
-const hideicon = require('../../assets/hide.png');
-
+import * as CustomFonts from '../constants/FontsDefs'
 const AboutCorp = props => {
   const navigation = useNavigation()
   const [fName, setFName] = useState('')
@@ -90,7 +84,6 @@ const AboutCorp = props => {
           marginTop={26}
           marginBottom={2}
           maxLength = {15}
-          leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
           value={''}
           placeholder = 'NATURE OF BUSINESS'
@@ -102,7 +95,6 @@ const AboutCorp = props => {
         <SKInput
           marginBottom={2}
           maxLength = {15}
-          leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
           value={''}
           placeholder = 'IF OTHER, PLEASE SPECIFY'
@@ -113,7 +105,6 @@ const AboutCorp = props => {
         <SKInput
           marginBottom={2}
           maxLength = {15}
-          leftAccImage={usericon}
           borderColor={Colors.CLR_0065FF}
           value={''}
           placeholder = 'BUSINESS ADDRESS (IF SAME AS INCORPORATOR, PLEASE ENTER SAME ADDRESS)'

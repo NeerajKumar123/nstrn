@@ -3,10 +3,11 @@ import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
+import * as CustomFonts from '../constants/FontsDefs'
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
 import SKButton, {UploadDocButton} from '../components/SKButton'; 
-const messeges = require('../../assets/messeges.png');
+
 const OnlineTaxFiling = props => {
   const [status, setStatus] = useState(1);
   const navigation = useNavigation();
@@ -183,7 +184,7 @@ const MessegesView = props => {
             width: 42,
             height: 38,
           }}
-          source={messeges}
+          source={CustomFonts.messeges}
         />
       </TouchableOpacity>
     </LinearGradient>

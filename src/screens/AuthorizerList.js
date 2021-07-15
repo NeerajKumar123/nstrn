@@ -6,9 +6,6 @@ import SKButton from '../components/SKButton';
 import * as CustomFonts from '../constants/FontsDefs'
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
 
 const AuthorizerList = props => {
   const navigation = useNavigation()
@@ -50,7 +47,7 @@ const AuthorizerList = props => {
         <SKButton
         marginTop = {30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}

@@ -2,9 +2,6 @@ import React from 'react';
 import {Text, TouchableOpacity, Image, View} from 'react-native';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
-const green_tick = require('../../assets/green_tick.png');
-const status_gray = require('../../assets/status_gray.png');
-
 const Heading = props => {
   const {
     color = Colors.CLR_29295F,
@@ -39,7 +36,7 @@ const Heading = props => {
         <Image
           resizeMode="contain"
           style={{width: 20, height: 20}}
-          source={status == 2 ? green_tick : status_gray}
+          source={status == 2 ? CustomFonts.green_tick : CustomFonts.status_gray}
         />
       ) : null}
     </TouchableOpacity>

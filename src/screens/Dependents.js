@@ -26,8 +26,6 @@ import * as Colors from '../constants/ColorDefs';
 import {register} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
 const {width} = Dimensions.get('window');
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format } from 'date-fns'
@@ -116,7 +114,7 @@ const Dependents = props => {
         />
          <TouchableInput
           leftAccImage={CustomFonts.Gender}
-          rightAccImage = {CustomFonts.ArrowDown}
+          rightAccImage = {CustomFonts.ChevronDown}
           value = {gender}
           placeholder = 'Select Gender'
           onClicked={() => {
@@ -136,7 +134,7 @@ const Dependents = props => {
         />
          <TouchableInput
          leftAccImage={CustomFonts.Handshake}
-          rightAccImage = {CustomFonts.ArrowDown}
+          rightAccImage = {CustomFonts.ChevronDown}
           value = {relation}
           placeholder="Select relation"
           onClicked={() => {
@@ -164,7 +162,7 @@ const Dependents = props => {
          <SKButton
           marginTop ={30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
