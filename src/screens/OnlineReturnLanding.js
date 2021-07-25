@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -23,23 +23,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 
 const OnlineReturnLanding = props => {
-  const data = [{year:'2018'},{year:'2018'},{year:'2018'}]
+  const selectedYears = []
   const navigation = useNavigation();
-  const [email, setemail] = useState('neerajkiet@gmail.com');
-  const [pass, setPass] = useState('990099');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const checkFormValidations = () => {
-    let isValidForm = true;
-    if (email == undefined || email.length < 10) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid email.');
-    } else if (pass == undefined || pass.length < 6) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid password.');
-    }
-    return isValidForm;
-  };
+  const [isFSelected, setIsFSelected] = useState(false);
+  const [isSSelected, setIsSSelected] = useState(false);
+  const [isTSelected, setIsTSelected] = useState(false);
+  
   return (
     <View
       style={{
@@ -64,17 +53,27 @@ const OnlineReturnLanding = props => {
           TO APPLY FOR? SELECT ALL
           THAT APPLY:"          
         />
-        {data &&
-        data.map((item, index) => {
-          return (
-            <DocCard
-              item={item}
+         <DocCard
+              title={'2021'}
+              isSelected = {isFSelected}
               onSelected={() => {
-                  console.log('data',item)
+                setIsFSelected(!isFSelected)
               }}
             />
-          );
-        })}
+            <DocCard
+              title={'2020'}
+              isSelected = {isSSelected}
+              onSelected={() => {
+                setIsSSelected(!isSSelected)
+              }}
+            />
+            <DocCard
+              title={'2019'}
+              isSelected = {isTSelected}
+              onSelected={() => {
+                setIsTSelected(!isTSelected)
+              }}
+            />
         <View
           style={{
             width: '100%',
@@ -89,8 +88,12 @@ const OnlineReturnLanding = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'IDENTIFICATION'}
             onPress={() => {
-              console.log('onPress');
-              navigation.navigate('Identification');
+              if(isFSelected) selectedYears.push('2021')
+              if(isSSelected) selectedYears.push('2020')
+              if(isTSelected) selectedYears.push('2019')
+              console.log('onPress,',selectedYears);
+              global.selectedYears = selectedYears
+              navigation.navigate('CarryForward');
             }}
           />
         </View>
@@ -100,7 +103,7 @@ const OnlineReturnLanding = props => {
 };
 
 const DocCard = props => {
-    const {item} = props
+    const {title, isSelected = false, onSelected} = props
     return (
         <TouchableOpacity
            style={{
@@ -113,11 +116,11 @@ const DocCard = props => {
             width: '100%',
             height: 48,
             borderRadius:6,
-            backgroundColor:Colors.CLR_7F7F9F
+            backgroundColor: isSelected ? Colors.RED :  Colors.CLR_7F7F9F
           }}
           key = {`${Math.random()}`}
           onPress={() => {
-            props.onClicked && props.onClicked();
+            props.onSelected && props.onSelected();
           }}>
           <Text
             style={{
@@ -127,7 +130,7 @@ const DocCard = props => {
               fontSize: 17,
               fontWeight: '700',
             }}>
-            {item.year}
+            {title}
           </Text>
         </TouchableOpacity>
     );

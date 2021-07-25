@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -20,24 +20,32 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import {register} from '../apihelper/Api';
-import SKModel from '../components/SKModel'
+import {getCanadaProvinceList, saveAboutInfo} from '../apihelper/Api';
+import SKModel from '../components/SKModel';
 import * as CustomFonts from '../constants/FontsDefs';
+import {format } from 'date-fns'
 const Address = props => {
   const navigation = useNavigation();
-  const [mailingAddress, setMailingAddress] = useState('');
+  const pageParams = props.route.params;
+  const [mailingAddress, setMailingAddress] = useState('This is my mailing address.');
   const [province, setProvince] = useState('');
-  const [provinces, setProvinces] = useState([{name:'Province 1'},{name:'Province 2'},{name:'Province 3'},{name:'Province 4'},{name:'Province 5'},{name:'Province 6'}])
+  const [provinces, setProvinces] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isProvinceVisible, setIsProvinceVisible] = useState(false);
 
+  useEffect(() => {
+    setIsLoading(true);
+    const params = {};
+    getCanadaProvinceList(params, provinceRes => {
+      setIsLoading(false);
+      setProvinces(provinceRes?.data);
+    });
+  }, []);
+
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isMailingAddValid = Validator.isValidField(
-      mailingAddress,
-      ST_REGEX.FName,
-    );
-    const isProvinceValid = Validator.isValidField(province, ST_REGEX.LName);
+    const isMailingAddValid = mailingAddress.length > 0
+    const isProvinceValid = province?.state_id
 
     if (!isMailingAddValid) {
       isValidForm = false;
@@ -48,6 +56,25 @@ const Address = props => {
     }
     return isValidForm;
   };
+
+  const prepareParams = () => {
+    const userid = global.userInfo?.user_id;
+    const commaSepYrs = global.selectedYears.join();
+    const dob = pageParams.dob && format(pageParams.dob, 'yyyy-MM-dd')
+    const params = {
+      User_Id: userid,
+      SIN_Number: pageParams.sin,
+      Gender: pageParams.gender,
+      DOB: dob,
+      Last_Year_Tax_Filed: pageParams.lastTime,
+      Mailing_Address: mailingAddress,
+      Year: 2020,
+      Module_Type_Id: 2,
+      Years_Selected: commaSepYrs,
+    };
+    return params;
+  };
+
   return (
     <View
       style={{
@@ -58,7 +85,7 @@ const Address = props => {
         height: '100%',
       }}>
       {isLoading && <SKLoader />}
-      <AppHeader navigation = {navigation}/>
+      <AppHeader navigation={navigation} />
       <View
         style={{
           width: '100%',
@@ -98,14 +125,15 @@ const Address = props => {
             marginBottom={2}
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
-            value={province?.name}
+            value={province?.state_name}
             placeholder="Select Province"
             onClicked={() => {
               setIsProvinceVisible(true);
-            }}          />
+            }}
+          />
         </KeyboardAvoidingView>
         <SKButton
-        marginTop = {30}
+          marginTop={30}
           fontSize={16}
           rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
@@ -113,27 +141,36 @@ const Address = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'BANKING'}
           onPress={() => {
-            console.log('link pressed');
-            navigation.navigate('BankingAndMore');
+            if(checkFormValidations()){
+              setIsLoading(true)
+              const params = prepareParams();
+            saveAboutInfo(params, saveRes => {
+              setIsLoading(false)
+              if (saveRes?.status == -1){
+                Alert.alert('SukhTax','Something went wrong')
+                return
+              }
+              global.userInfo = {...global.userInfo,...saveRes?.data[0]}
+              navigation.navigate('BankingAndMore', {province:province});
+            });
+            }            
           }}
         />
         {isProvinceVisible && (
           <SKModel
             title="Select"
             data={provinces}
-            keyLabel = 'name'
+            keyLabel="state_name"
             onClose={() => {
               setIsProvinceVisible(false);
             }}
             onSelect={value => {
-              console.log('isProvinceVisible', value);
-              setProvince(value)
+              setProvince(value);
               setIsProvinceVisible(false);
             }}
           />
         )}
       </View>
-      
     </View>
   );
 };

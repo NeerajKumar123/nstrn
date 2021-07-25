@@ -63,19 +63,21 @@ const SignUp = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        flex:1
+        width: '100%',
+        height: '100%',
       }}>
       {isLoading && <SKLoader/>}
       <AppHeader navigation = {navigation}/>
       <KeyboardAvoidingView
         behavior={'position'}
         enabled={true}
-        style={{backgroundColor: Colors.WHITE, flex: 1}}
+        style={{flex: 1, width:'100%', paddingHorizontal:20, paddingBottom:10}}
         keyboardVerticalOffset={-200}>
       <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: 32,
-          flex: 1,
+      showsVerticalScrollIndicator = {false}
+        style={{
+          width: '100%',
+          marginBottom: Platform.OS == 'ios' ?  100 : 0,
         }}>
         <Heading value="LETS LOG IN" marginTop={26} />
         <Heading
@@ -159,9 +161,11 @@ const SignUp = props => {
             setCPass(value)
           }}
         />
-        <SKButton
+      </ScrollView>
+      </KeyboardAvoidingView>
+      <View style = {{paddingHorizontal:20}}>
+      <SKButton
           fontSize={16}
-          marginTop={33}
           width = '100%'
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
@@ -186,21 +190,8 @@ const SignUp = props => {
             }
           }}
         />
-        {/* <SKButton
-          fontSize={16}
-          marginTop={19}
-          leftImage = {CustomFonts.ChevronLeft}
-          fontWeight={'normal'}
-          width = '100%'
-          backgroundColor={Colors.SECONDARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'Go Back to Log In'}
-          onPress={() => {
-            navigation.navigate('Login')
-          }}
-        /> */}
-      </ScrollView>
-      </KeyboardAvoidingView>
+      </View>
+      
     </View>
   );
 };

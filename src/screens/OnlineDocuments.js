@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const OnlineDocuments = props => {
   const navigation = useNavigation();
 
-  const data = [{year: '2018'}, {year: '2018'}, {year: '2018'}];
+  const data = [{year: '2019'}, {year: '2020'}, {year: '2021'}];
   return (
     <View
       style={{
@@ -46,8 +46,9 @@ const OnlineDocuments = props => {
           data.map((item, index) => {
             return (
               <DocCard
+              key = {item.year}
                 item={item}
-                onSelected={() => {
+                onClicked={() => {
                   console.log('data', item);
                 }}
               />
@@ -146,11 +147,10 @@ const DocCard = props => {
         }}>
         {`${item.year} DOCUMENTS`}
       </Text>
-      <Icon
-        style={{position: 'absolute', right: 20}}
-        name="plus-circle-outline"
-        size={30}
-        color={Colors.CLR_D9272A}
+      <Image
+        resizeMode="contain"
+        style={{width: 24, height: 24}}
+        source={CustomFonts.upload}
       />
     </TouchableOpacity>
   );

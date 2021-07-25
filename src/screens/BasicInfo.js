@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -17,7 +17,7 @@ import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {login} from '../apihelper/Api';
+import {getAboutInfo} from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs'
 import * as SKTStorage from '../helpers/SKTStorage';
 import {GENDER_OPTIONS, TIME_OPTIONS} from '../constants/StaticValues';
@@ -29,14 +29,14 @@ const {width} = Dimensions.get('window');
 
 const BasicInfo = props => {
   const navigation = useNavigation();
-  const [sin, setsin] = useState('');
-  const [gender, setgender] = useState('');
-  const [dob, setDOB] = useState();
-  const [lastTime, setLastTime] = useState('');
+  const [sin, setsin] = useState('123456782');
+  const [gender, setgender] = useState('Male');
+  const [dob, setDOB] = useState(new Date());
+  const [lastTime, setLastTime] = useState('2020');
+  const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isGenderVisible, setIsGenderVisible] = useState(false);
-  const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
   const iosVersion = parseInt(Platform.Version);  
   let pickerHeight = 0
   if(Platform.OS == 'ios'){
@@ -53,6 +53,18 @@ const BasicInfo = props => {
     }
     return isValidForm;
   };
+
+  useEffect(() => {
+  setIsLoading(true)
+  const userid = global.userInfo?.user_id;
+  const taxFileID = global.userInfo?.Tax_File_Id;
+    const params = {User_Id:userid, Tax_File_Id:taxFileID || 83,Year:2020 }
+    getAboutInfo(params,(aboutRes) =>{
+      console.log('about res',aboutRes)
+      setIsLoading(false)
+    })
+  }, [])
+  
   return (
     <View
       style={{
@@ -131,8 +143,8 @@ const BasicInfo = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'ADDRESS'}
           onPress={() => {
-            console.log('link pressed');
-            navigation.navigate('Address');
+            const nextPageParams = {sin:sin,gender:gender, dob:dob,lastTime:lastTime }
+            navigation.navigate('Address',{...nextPageParams});
           }}
         />
         {isGenderVisible && (
@@ -177,7 +189,7 @@ const BasicInfo = props => {
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display="spinner"
+            display='inline'
             onChange={(event, selectedDate) => {
               console.log(event.type, Date.parse(selectedDate));
               setDOB(selectedDate)

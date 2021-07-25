@@ -33,7 +33,6 @@ const setKeyValue = async (key, value, callback) => {
   const getUserData = async (callback) => {
     try {
       const userInfo = await AsyncStorage.getItem('USER_DATA');
-      console.log('userInfo',userInfo)
       global.userInfo = userInfo && JSON.parse(userInfo)
       callback && callback(userInfo && JSON.parse(userInfo))
         } catch (error) {

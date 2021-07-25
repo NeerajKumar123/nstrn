@@ -55,3 +55,5 @@ export const upload = require('../../assets/upload.png');
 export const user = require('../../assets/user.png');
 export const username = require('../../assets/username.png');
 export const visit_us = require('../../assets/visit_us.png');
+export const toggle_on = require('../../assets/toggle_on.png');
+export const toggle_off = require('../../assets/toggle_off.png');

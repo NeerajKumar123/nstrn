@@ -42,6 +42,7 @@ import IncorpFinalStep from './screens/IncorpFinalStep';
 import HSTRegistration from './screens/HSTRegistration';
 import IncorpPayment from './screens/IncorpPayment';
 import IncorpInProcess from './screens/IncorpInProcess';
+import Spouse from './screens/Spouse';
 
 const Stack = createStackNavigator();
 
@@ -95,7 +96,7 @@ const SKStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName="SignaturePage">
+        initialRouteName="MyTaxYear">
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}
@@ -275,6 +276,11 @@ const SKStack = () => {
           name="IncorpInProcess"
           component={IncorpInProcess}
           options={{title: 'IncorpInProcess', headerShown: false}}
+        />
+         <Stack.Screen
+          name="Spouse"
+          component={Spouse}
+          options={{title: 'Spouse', headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>

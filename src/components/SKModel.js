@@ -23,7 +23,7 @@ const SKModel = props => {
   return (
     <Modal
       animationType='fade'
-      transparent={true}
+      transparent={false}
       visible={true}>
       <View
       onStartShouldSetResponder={() => onClose()}
@@ -32,6 +32,7 @@ const SKModel = props => {
           alignItems: 'center',
           width: '100%',
           height: '100%',
+          alignSelf:'center',
           flexDirection: 'column',
           backgroundColor: '#00000080',
         }}>
@@ -92,7 +93,6 @@ const SKModel = props => {
                 item={item}
                 keyLabel={keyLabel}
                 onRowSelect={() => {
-                  console.log('item===>', item);
                   onSelect(item);
                 }}
               />
@@ -107,7 +107,6 @@ const SKModel = props => {
 const Row = props => {
   const {item,keyLabel,onRowSelect} = props;
   const displayValue = (keyLabel && item[keyLabel]) || item;
-  console.log('displayValue', keyLabel, item[item])
   return (
     <TouchableOpacity
     style = {{marginVertical:10}}

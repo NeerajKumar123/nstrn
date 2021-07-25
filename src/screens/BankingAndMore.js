@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -9,57 +9,106 @@ import {
   Keyboard,
   Platform,
   KeyboardAvoidingView,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
 import SKModel from '../components/SKModel';
 import SKInput from '../components/SKInput';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
-import { ST_REGEX } from '../constants/StaticValues';
+import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import { register } from '../apihelper/Api';
+import {
+  getInstitutionList,
+  getBankingAndFamilyInfo,
+  getResidencyList,
+} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {format } from 'date-fns'
+import {format} from 'date-fns';
 const {width} = Dimensions.get('window');
 const BankingAndMore = props => {
   const navigation = useNavigation();
+  const pageParams = props.route.params;
+  console.log('BankingAndMore pageParams', pageParams);
   const [bank, setBank] = useState('');
-  const [banks, setBanks] = useState([{ name: 'Bank 1' }, { name: 'Bank 2' }, { name: 'Bank 3' }, { name: 'Bank 4' }, { name: 'Bank 5' }, { name: 'Bank 6' }])
-  const [accountNo, setAccountNo] = useState('');
-  const [branchNo, setBranhcNo] = useState('')
-  const [residency, setResidency] = useState('')
-  const [residencies, setResidencies] = useState([{ name: 'Residency 1' }, { name: 'Residency 2' }, { name: 'Residency 3' }, { name: 'Residency 4' }, { name: 'Residency 5' }, { name: 'Residency 6' }])
-  const [enrtyDate, setEntryDate] = useState('')
+  const [banks, setBanks] = useState();
+  const [accountNo, setAccountNo] = useState('7654321');
+  const [branchNo, setBranhcNo] = useState('12345');
+  const [residency, setResidency] = useState('');
+  const [residencies, setResidencies] = useState();
+  const [familyInfo, setFamilyInfo] = useState();
+  const [enrtyDate, setEntryDate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isBankVisible, setIsBankVisible] = useState(false)
-  const [isResidenceVisible, setIsResidenceVisible] = useState(false)
-  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false)
+  const [isBankVisible, setIsBankVisible] = useState(false);
+  const [isResidenceVisible, setIsResidenceVisible] = useState(false);
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
 
+  useEffect(() => {
+    setIsLoading(true);
+    getInstitutionList({}, instRes => {
+      console.log('instRes', instRes);
+      setBanks(instRes?.data);
+      setBank(instRes?.data?.[0])
+      const userid = global.userInfo?.user_id;
+      const taxFileID = global.userInfo?.Tax_File_Id;
+      const params = {
+        User_Id: userid,
+        Tax_File_Id: taxFileID || 83,
+        Year: 2020,
+      };
+      getBankingAndFamilyInfo(params, bankingAndFamilyRes => {
+        console.log('bankingAndFamilyRes', bankingAndFamilyRes);
+        setFamilyInfo(bankingAndFamilyRes?.data)
+        getResidencyList({}, resdencyRes => {
+          console.log('resdencyRes', resdencyRes);
+          setResidencies(resdencyRes?.data);
+          setResidency(resdencyRes?.data?.[0])
+          setIsLoading(false);
+        });
+      });
+    });
+  }, []);
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isBankValid = Validator.isValidField(bank, ST_REGEX.FName);
-    const isAccValid = Validator.isValidField(accountNo, ST_REGEX.FName);
-    const isBranchValid = Validator.isValidField(branchNo, ST_REGEX.FName);
-    const isResidencyValid = Validator.isValidField(residency, ST_REGEX.FName);
-    const isEnrtyDateValid = Validator.isValidField(enrtyDate, ST_REGEX.FName);
+    const isBankValid = bank?.institution_id > 0
+    const isAccValid = accountNo.length > 0
+    const isBranchValid = branchNo.length > 0
+    const isResidencyValid = residency?.residency_id > 0
+    const isEnrtyDateValid = enrtyDate ? true : false
 
     if (!isBankValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid Mailing address');
+      Alert.alert('SukhTax', 'Please select valid Institution.');
     } else if (!isAccValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid province');
+      Alert.alert('SukhTax', 'Please enter valid account number.');
+    } else if (!isBranchValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please enter valid branch code.');
+    }
+    else if (!isResidencyValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select valid residency type.');
+    }
+    else if (!isEnrtyDateValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select valid date of immigration.');
     }
     return isValidForm;
   };
+
+  const prepareParams = () =>{
+    const params = {bank:bank, accountNo:accountNo, branchNo:branchNo, residency:residency,enrtyDate:enrtyDate, province:pageParams.province}
+    return params
+  }
+
   return (
     <View
       style={{
@@ -75,7 +124,7 @@ const BankingAndMore = props => {
         style={{
           width: '100%',
           paddingHorizontal: 20,
-          marginBottom: 100
+          marginBottom: 30,
         }}>
         <Heading value="BANKING AND MORE" marginTop={26} />
         <Heading
@@ -88,7 +137,7 @@ const BankingAndMore = props => {
           leftAccImage={CustomFonts.Bank}
           rightAccImage={CustomFonts.ChevronDown}
           placeholder="Select Bank"
-          value = {bank?.name}
+          value={bank?.institution_name}
           onClicked={() => {
             setIsBankVisible(true);
           }}
@@ -100,8 +149,7 @@ const BankingAndMore = props => {
           borderColor={Colors.CLR_0065FF}
           value={accountNo}
           placeholder="#Enter Account Number"
-          onEndEditing={value => {
-          }}
+          onEndEditing={value => {}}
         />
         <SKInput
           marginTop={20}
@@ -110,19 +158,14 @@ const BankingAndMore = props => {
           borderColor={Colors.CLR_0065FF}
           value={branchNo}
           placeholder="#Enter Branch Number"
-          onEndEditing={value => {
-          }}
+          onEndEditing={value => {}}
         />
-        <Heading
-          fontSize={20}
-          marginTop={45}
-          value="WHAT IS YOUR RESIDENCY:"
-        />
+        <Heading fontSize={20} marginTop={45} value="WHAT IS YOUR RESIDENCY:" />
         <TouchableInput
           leftAccImage={CustomFonts.Home}
           rightAccImage={CustomFonts.ChevronDown}
           placeholder="Select Residency"
-          value = {residency?.name}
+          value={residency?.residency_name}
           onClicked={() => {
             console.log('sdsd');
             setIsResidenceVisible(true);
@@ -136,14 +179,14 @@ const BankingAndMore = props => {
         />
         <TouchableInput
           leftAccImage={CustomFonts.Calender}
-          value = {enrtyDate && format(enrtyDate, 'dd/MM/yyyy')}
-          placeholder="Date of Birth (DD/MM/YYYY)"
+          value={enrtyDate && format(enrtyDate, 'dd/MM/yyyy')}
+          placeholder="Date of Immigration (DD/MM/YYYY)"
           onClicked={() => {
             setIsDatePickerVisible(true);
           }}
         />
         <SKButton
-          marginTop={30}
+          marginTop={20}
           fontSize={16}
           rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
@@ -152,7 +195,10 @@ const BankingAndMore = props => {
           title={'FAMILY'}
           onPress={() => {
             console.log('link pressed');
-            navigation.navigate('FamilyDetails');
+            if(checkFormValidations()){
+              const nextPageParams = prepareParams()
+              navigation.navigate('FamilyDetails',{...nextPageParams});
+            }
           }}
         />
       </ScrollView>
@@ -160,13 +206,13 @@ const BankingAndMore = props => {
         <SKModel
           title="Select"
           data={banks}
-          keyLabel='name'
+          keyLabel="institution_name"
           onClose={() => {
             setIsBankVisible(false);
           }}
           onSelect={value => {
             console.log('setIsBankVisible', value);
-            setBank(value)
+            setBank(value);
             setIsBankVisible(false);
           }}
         />
@@ -175,13 +221,12 @@ const BankingAndMore = props => {
         <SKModel
           title="Select"
           data={residencies}
-          keyLabel='name'
+          keyLabel="residency_name"
           onClose={() => {
             setIsResidenceVisible(false);
           }}
           onSelect={value => {
-            console.log('setIsBankVisible', value);
-            setResidency(value)
+            setResidency(value);
             setIsResidenceVisible(false);
           }}
         />
@@ -202,8 +247,8 @@ const BankingAndMore = props => {
             display="inline"
             onChange={(event, selectedDate) => {
               console.log(event.type, Date.parse(selectedDate));
-              setEntryDate(selectedDate)
-              console.log('====>',format(selectedDate, 'dd/MM/yyyy'))
+              setEntryDate(selectedDate);
+              console.log('====>', format(selectedDate, 'dd/MM/yyyy'));
               setIsDatePickerVisible(false);
             }}
           />

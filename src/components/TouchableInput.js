@@ -22,6 +22,7 @@ const TouchableInput = props => {
     marginTop = 10,
     marginBottom = 10,
     placeholder = 'Select value',
+    fontSize = 15
   } = props;
   return (
     <TouchableOpacity
@@ -61,7 +62,7 @@ const TouchableInput = props => {
         style={{
           flex: 1,
           fontFamily: CustomFonts.OpenSansRegular,
-          fontSize: 18,
+          fontSize: fontSize,
           color: value ? Colors.BLACK : Colors.LIGHTGRAY,
         }}>
         {value || placeholder}

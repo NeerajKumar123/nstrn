@@ -59,7 +59,7 @@ const SKButton = props => {
         width: width,
       }}
       onPress={() => {
-        props.onPress && props.onPress();
+        !disable  && props.onPress && props.onPress();
       }}>
       <View
         style={{
@@ -102,7 +102,7 @@ const SKButton = props => {
         {rightImage && isRightLocalPNG && (
           <Image
             resizeMode="contain"
-            style={{width: 15, height: 15}}
+            style={{width: 15, height: 15,opacity: disable ? 0.5 : 1.0}}
             source={rightImage}
           />
         )}
@@ -111,6 +111,7 @@ const SKButton = props => {
             name={rightImage}
             size={iconsize}
             color={iconcolor}
+            opacity = {disable ? 0.5 : 1.0}
           />
         )}
       </View>
