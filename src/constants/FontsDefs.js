@@ -30,6 +30,8 @@ export const Number = 'numeric';
 export const Handshake = 'handshake';
 export const EyeOutlineOn = 'eye-outline';
 export const EyeOutlineOff = 'eye-off-outline';
+export const CheckRight = 'checkbox-marked-circle-outline';
+
 
 //Locally added Images Names
 export const account_icon = require('../../assets/account_icon.png');

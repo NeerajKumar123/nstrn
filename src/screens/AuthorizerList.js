@@ -6,10 +6,12 @@ import SKButton from '../components/SKButton';
 import * as CustomFonts from '../constants/FontsDefs'
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const AuthorizerList = props => {
   const navigation = useNavigation()
   const data = [{title:'TAXPAYER 1'},{title:'TAXPAYER 2'},{title:'TAXPAYER 3'}]
+  
   return (
     <View
       style={{
@@ -33,19 +35,23 @@ const AuthorizerList = props => {
           color={Colors.CLR_D9272A}
           value="WE WILL NEED YOU TO AUTHORIZE US IN ORDER FOR US TO PULL YOUR INFORMATION FROM CRA!"
         />
-       {data &&
-        data.map((item, index) => {
-          return (
-            <Card
-              item={item}
+       <Card
+              title={'TAX PAYER 1'}
+              isAuthorized = {true}
               onSelected={() => {
                   navigation.navigate('SignaturePage')
               }}
             />
-          );
-        })}
+            <Card
+              title={'TAX PAYER 2'}
+              isAuthorized = {true}
+              onSelected={() => {
+                  navigation.navigate('SignaturePage')
+              }}
+            />
         <SKButton
         marginTop = {30}
+          disable = {!global.isAuthorized}
           fontSize={16}
           rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
@@ -63,7 +69,7 @@ const AuthorizerList = props => {
 };
 
 const Card = props => {
-    const {item, height = 44, fontSize=15,onSelected} = props
+    const {title, height = 44, fontSize=15,onSelected, isAuthorized = true} = props
   return (
       <TouchableOpacity
       onPress = {() =>{
@@ -90,8 +96,14 @@ const Card = props => {
             fontWeight: 'bold',
             fontFamily:CustomFonts.OpenSansRegular,
           }}>
-          {item.title}
+          {title}
         </Text>
+        <Icon
+          style={{right:20, position:'absolute'}}
+          name={isAuthorized ? CustomFonts.CheckRight : CustomFonts.ChevronRight}
+          size={30}
+          color={Colors.WHITE}
+        />
       </TouchableOpacity>
   );
 };

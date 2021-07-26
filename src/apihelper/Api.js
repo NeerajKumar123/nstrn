@@ -115,6 +115,29 @@ export const onlineSaveMyYearInfo = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const uploadDocumentBS64 = (params,callback) => {
+  const path = `${BaseURL}/Upload_Document_Base64`
+  API.makePostRequest(path , params, callback);
+};
+
+export const getUserDocuments = (params,callback) => {
+  const path = `${BaseURL}/Get_User_Documents`
+  API.makePostRequest(path , params, callback);
+};
+
+export const finalizeOnlineProcess = (params,callback) => {
+  const path = `${BaseURL}/Finalize_Online_Process`
+  API.makePostRequest(path , params, callback);
+};
+export const deleteDocument = (params,callback) => {
+  const path = `${BaseURL}/Delete_Document`
+  API.makePostRequest(path , params, callback);
+};
+
+export const onlineUploadAuthrizationDocumentBS64 = (params,callback) => {
+  const path = `${BaseURL}/Online_Upload_Authorization_Document_Base64`
+  API.makePostRequest(path , params, callback);
+};
 
 
 
