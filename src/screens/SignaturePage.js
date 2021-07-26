@@ -211,6 +211,7 @@ const SignaturePage = props => {
                 onPress={() => {
                   console.log('sdsd');
                   signPad.current.resetImage();
+                  setIsSignSaved(false);
                 }}>
                 <Icon name={'refresh'} size={30} color={Colors.PRIMARY_FILL} />
               </TouchableOpacity>
@@ -256,9 +257,12 @@ const SignaturePage = props => {
           onPress={() => {
             if (checkFormValidations()) {
               viewShotRef.current.capture().then(bs64Image => {
+                setIsLoading(true)
                 const params = prepareParams(bs64Image, 1);
                 onlineUploadAuthrizationDocumentBS64(params, signUploadRes => {
                   console.log('signUploadRes', signUploadRes);
+                  setIsLoading(false)
+                  navigation.goBack()
                 });
               });
             }
