@@ -88,7 +88,7 @@ const Dashboard = props => {
         navigation.navigate('OnlineReturnLanding');
         break;
       case 4:
-        navigation.navigate('IncorporationLanding');
+        navigation.navigate('IncorportionLandiing');
         break;
       default:
         break;

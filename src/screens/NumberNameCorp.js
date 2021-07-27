@@ -29,6 +29,10 @@ const NumberNameCorp = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCorp, setSelectedCorp] = useState();
+  useEffect(() => {
+    setIsLoading(8282)
+  }, [isLoading])
+
 
   return (
     <View

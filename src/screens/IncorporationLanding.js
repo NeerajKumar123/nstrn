@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   TouchableOpacity,
   View,
@@ -30,6 +30,10 @@ const IncorporationLanding = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCorp, setSelectedCorp] = useState();
+
+  useEffect(() => {
+    setSelectedCorp(3)
+  }, [selectedCorp])
 
   return (
     <View
