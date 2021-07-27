@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image, Alert} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Alert,
+} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import SKButton from '../components/SKButton';
@@ -12,6 +19,15 @@ import SKLoader from '../components/SKLoader';
 const MyTaxYear = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
+  const [currentYearIndex, setCurrentYearIndex] = useState(0);
+  const [currentYear, setCurrentYear] = useState();
+
+  useEffect(() => {
+    setCurrentYear(global.selectedYears[currentYearIndex]);
+    console.log(
+      global.selectedYears[currentYearIndex],
+    );
+  }, [currentYearIndex]);
 
   const [data, setData] = useState([
     {title: 'I WAS EMPLOYED', value: 'I_was_employed', isSelected: false},
@@ -46,40 +62,30 @@ const MyTaxYear = props => {
     });
   }
 
-//   User_Id:	
-// Tax_File_Id:	
-// Year:	
-// Details_For:	
-// I_was_employed:	
-// I_drove_uber_lyft_etc:	
-// I_owned_a_rental_property:	
-// I_had_other_self_employment_income:	
-// I_paid_rent_and_have_rent_receipts:
-const prepareParams = () => {
-  const {
-    user_id,
-    tax_file_id = 83,
-    Tax_File_Id,
-    tax_file_year_id,
-  } = global.userInfo;
-  let params = {
-    User_id: user_id,
-    Tax_File_Id: tax_file_id || Tax_File_Id,
-    Year:2020,
-    Details_For: 0,
-  };
-  data.map((item) => {
-    console.log('item',item)
-    if(item.isSelected){
-      params[item.value] = 1
-    }else{
-      params[item.value] = 0
-    }
-  })
-  console.log('params',params)
+  const prepareParams = () => {
+    const {
+      user_id,
+      tax_file_id = 83,
+      Tax_File_Id,
+      tax_file_year_id,
+    } = global.userInfo;
+    let params = {
+      User_id: user_id,
+      Tax_File_Id: tax_file_id || Tax_File_Id,
+      Year: 2020,
+      Details_For: 0,
+    };
+    data.map(item => {
+      console.log('item', item);
+      if (item.isSelected) {
+        params[item.value] = 1;
+      } else {
+        params[item.value] = 0;
+      }
+    });
+    console.log('params', params);
     return params;
-};
-
+  };
 
   return (
     <View
@@ -98,12 +104,12 @@ const prepareParams = () => {
           paddingHorizontal: 20,
           marginBottom: 50,
         }}>
-        <Heading value="MY TAX YEAR" marginTop={60} />
+        <Heading value={`MY TAX YEAR ${currentYear}`} marginTop={60} />
         <Heading
           fontSize={20}
           marginTop={5}
           color={Colors.CLR_D9272A}
-          value="LETS HAVE A LOOK AT HOW YOUR TAX YEAR 2018 WENT!"
+          value={`LETS HAVE A LOOK AT HOW YOUR TAX YEAR ${currentYear} WENT!`}
         />
         <Heading
           fontSize={20}
@@ -111,11 +117,16 @@ const prepareParams = () => {
           color={Colors.CLR_D9272A}
           value="PLEASE SELECT ALL THAT APPLY"
         />
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 20,
+          }}>
           <User
             height={50}
             marginTop={0}
-            width="48%"
+            width={global.isFromSpouseFlow ? '48%' : '100%' } 
             bgColor={Colors.CLR_29295F}
             item={{title: 'MY SELF'}}
             isSelected={mySelf}
@@ -124,20 +135,23 @@ const prepareParams = () => {
               setMySelf(!mySelf);
             }}
           />
+          {global.isFromSpouseFlow && 
           <User
-            height={50}
-            marginTop={0}
-            width="48%"
-            bgColor={Colors.CLR_29295F}
-            item={{title: 'SPOUSE'}}
-            isSelected={spouse}
-            onSelected={() => {
-              console.log('data');
-              setSpouse(!spouse);
-            }}
-          />
+          height={50}
+          marginTop={0}
+          width="48%"
+          bgColor={Colors.CLR_29295F}
+          item={{title: 'SPOUSE'}}
+          isSelected={spouse}
+          onSelected={() => {
+            console.log('data');
+            setSpouse(!spouse);
+          }}
+        />
+
+          }
+          
         </View>
-        {console.log('sdsds', data)}
         {data &&
           data.map((item, index) => {
             return (
@@ -163,6 +177,11 @@ const prepareParams = () => {
               />
             );
           })}
+        {console.log(
+          'currentYearIndex+1 > global.selectedYears.length',
+          currentYearIndex + 1,
+          global.selectedYears.length,
+        )}
         <SKButton
           marginTop={30}
           fontSize={16}
@@ -170,19 +189,27 @@ const prepareParams = () => {
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'DOCUMENTS'}
+          title={
+            currentYearIndex + 1 < global.selectedYears.length
+              ? global.selectedYears[currentYearIndex + 1]
+              : 'DOCUMENTS'
+          }
           onPress={() => {
-            // console.log('link pressed', mySelfOptions, spouseOptions, data);
-            setIsLoading(true)
-          const params = prepareParams()
-            onlineSaveMyYearInfo(params, (saveYrRes) =>{
-              setIsLoading(false)
-              if(saveYrRes?.status == 1){
-                navigation.navigate('OnlineDocuments');
-              }else{
-                Alert.alert('SukhTax', 'Something wrong')
+            setIsLoading(true);
+            const params = prepareParams();
+            onlineSaveMyYearInfo(params, saveYrRes => {
+              if (saveYrRes?.status == 1) {
+                if (currentYearIndex + 1 < global.selectedYears.length) {
+                  console.log('saveYrRes',saveYrRes)
+                  setCurrentYearIndex(currentYearIndex + 1);
+                } else {
+                  navigation.navigate('OnlineDocuments');
+                }
+                setIsLoading(false);
+              } else {
+                Alert.alert('SukhTax', 'Something wrong');
               }
-            })
+            });
           }}
         />
       </ScrollView>
@@ -212,7 +239,7 @@ const User = props => {
         alignItems: 'center',
         width: width,
         height: height,
-        backgroundColor: isSelected ? 'red' : Colors.CLR_29295F,
+        backgroundColor: isSelected ? Colors.PRIMARY_FILL : Colors.CLR_7F7F9F,
       }}
       onPress={() => {
         props.onSelected && props.onSelected();
@@ -254,7 +281,7 @@ const DocOptionCard = props => {
         alignItems: 'center',
         width: width,
         height: height,
-        backgroundColor: item.isSelected ? 'red' : Colors.CLR_29295F,
+        backgroundColor: item.isSelected ? Colors.PRIMARY_FILL : Colors.CLR_7F7F9F,
       }}
       onPress={() => {
         onSelected && onSelected(item);

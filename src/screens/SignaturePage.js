@@ -29,11 +29,13 @@ import ViewShot from 'react-native-view-shot';
 
 const SignaturePage = props => {
   const navigation = useNavigation();
-  const [fName, setFName] = useState('');
-  const [lName, setLName] = useState('');
-  const [sinNo, setSinNo] = useState('');
+  const pageParams = props.route.params;
+  console.log('pageParams',pageParams)
+  const [fName, setFName] = useState('name');
+  const [lName, setLName] = useState('name');
+  const [sinNo, setSinNo] = useState('12345632');
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(true);
   const [isSignStart, setIsSignStart] = useState(false);
   const [isSignSaved, setIsSignSaved] = useState(false);
   const signPad = useRef(null);
@@ -88,6 +90,7 @@ const SignaturePage = props => {
       {isLoading && <SKLoader />}
       <AppHeader navigation={navigation} />
       <ScrollView
+      alwaysBounceVertical ={false}
         contentContainerStyle={{paddingBottom: 10}}
         style={{
           width: '100%',
@@ -220,7 +223,7 @@ const SignaturePage = props => {
                   style={{
                     width: 40,
                     height: 40,
-                    justifyContent: 'flex-start',
+                    justifyContent: 'flex-end',
                     alignItems: 'flex-end',
                   }}
                   onPress={() => {
@@ -231,7 +234,7 @@ const SignaturePage = props => {
                   <Icon
                     name={'content-save-outline'}
                     size={30}
-                    color={Colors.BLUE}
+                    color={Colors.CLR_29295F}
                   />
                 </TouchableOpacity>
               )}
@@ -262,6 +265,18 @@ const SignaturePage = props => {
                 onlineUploadAuthrizationDocumentBS64(params, signUploadRes => {
                   console.log('signUploadRes', signUploadRes);
                   setIsLoading(false)
+                  if(pageParams.authIndex == 0){
+                    global.isFAuthorized = true
+                  }else if(pageParams.authIndex == 1){
+                    global.isSAuthorized = true
+                  }else if(pageParams.authIndex == 2){
+                    global.isTAuthorized = true
+                  }
+                  if(global.isFromSpouseFlow){
+                    global.isAuthorized = global.isFAuthorized && global.isSAuthorized
+                  }else{
+                    global.isAuthorized = global.isFAuthorized
+                  }
                   navigation.goBack()
                 });
               });

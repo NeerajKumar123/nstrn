@@ -37,7 +37,6 @@ const FamilyDetails = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const dependents = []
-  console.log('FamilyDetails pageParams', pageParams);
   const [maritalStatus, setMaritalStatus] = useState();
   const [maritalStatuses, setMaritalStatuses] = useState();
   const [mChangeOpton, setMChangeOpton] = useState(YES_NO[1]);
@@ -48,6 +47,7 @@ const FamilyDetails = props => {
   const [isMVisible, setIsMVisible] = useState();
   const [isMChangeVisible, setIsMChangeVisible] = useState();
   const [isDepOptionVisible, setIsDepOptionVisible] = useState();
+  const [nextButtonTitle, setNextButtonTitle] = useState('MY TAX YEAR')
 
   useEffect(() => {
     getMaritalStatusList({}, maritalRes => {
@@ -115,7 +115,7 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.CLR_D9272A}
-          value="MARITAL STATUS ON DECEMBER 31, 2018"
+          value="MARITAL STATUS ON DECEMBER 31, 2020"
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}
@@ -130,7 +130,7 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.CLR_D9272A}
-          value="DID YOUR MARITAL STATUS CHANGED IN 2018?"
+          value="DID YOUR MARITAL STATUS CHANGED IN 2020?"
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}
@@ -157,14 +157,13 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.CLR_D9272A}
-          value="ANY DEPENDENTS IN 2018?"
+          value="ANY DEPENDENTS IN 2020?"
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}
           placeholder="Select"
           value={dependentOption?.value}
           onClicked={() => {
-            console.log('sdsd');
             setIsDepOptionVisible(true);
           }}
         />
@@ -175,7 +174,7 @@ const FamilyDetails = props => {
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'NEXT'}
+          title={nextButtonTitle}
           onPress={() => {
             if(checkFormValidations()){
               setIsLoading(true)
@@ -184,9 +183,10 @@ const FamilyDetails = props => {
                 setIsLoading(false)
                 if(saveBankingRes?.status == 1){
                   console.log('saveBankingRes', maritalStatus,dependents)
+                  global.isFromSpouseFlow = false
                   if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
-                    navigation.navigate('Spouse');
-                  }else if (dependents.count > 0){
+                    navigation.navigate('Spouse',{dependentOption:dependentOption.id});
+                  }else if (dependentOption.id  == 1){
                     navigation.navigate('Dependents');
                   }else {
                     navigation.navigate('MyTaxYear');
@@ -212,6 +212,14 @@ const FamilyDetails = props => {
             console.log('value', value);
             setMaritalStatus(value);
             setIsMVisible(false);
+            console.log('dependentOption.id',dependentOption)
+            if(value.marital_status_id == 2 || value.marital_status_id == 3){
+              setNextButtonTitle('SPOUSE')
+            }else if(dependentOption.id == 1){
+              setNextButtonTitle('DEPENDENTS')
+            }else{
+              setNextButtonTitle('MY TAX YEAR')
+            }
           }}
         />
       )}
@@ -242,6 +250,13 @@ const FamilyDetails = props => {
             console.log('value', value);
             setDependentOption(value);
             setIsDepOptionVisible(false);
+            if(value.marital_status_id == 2 || value.marital_status_id == 3){
+              setNextButtonTitle('SPOUSE')
+            }else if(value.id == 1){
+              setNextButtonTitle('DEPENDENTS')
+            }else{
+              setNextButtonTitle('MY TAX YEAR')
+            }
           }}
         />
       )}

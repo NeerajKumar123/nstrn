@@ -23,7 +23,7 @@ import {GENDER_OPTIONS,RELATIONS} from '../constants/StaticValues';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import {register} from '../apihelper/Api';
+import {onlineSaveDependentInfo,onlineUpdateDependentInfo} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 const {width} = Dimensions.get('window');
@@ -47,20 +47,50 @@ const Dependents = props => {
     let isValidForm = true;
     const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
-    const isDOBValid = Validator.isValidField(dob, ST_REGEX.FName);
-    const isGenderValid = Validator.isValidField(gender, ST_REGEX.FName);
-    const isSinValid = Validator.isValidField(sinNo, ST_REGEX.FName);
-    const isRelationValid = Validator.isValidField(relation, ST_REGEX.FName);
-
+    const isDOBValid = dob
+    const isGenderValid = gender
+    const isSinValid = sinNo.length > 5
+    const isRelationValid = relation
+    console.log('fName',isFNameValid,isLNameValid,fName,lName)
     if (!isFNameValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid Mailing address');
+      Alert.alert('SukhTax', 'Please enter valid First Name.');
     } else if (!isLNameValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid province');
+      Alert.alert('SukhTax', 'Please enter Last Name.');
+    }else if (!isDOBValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please enter DOB.');
+    }else if (!isGenderValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select gender.');
+    }else if (!isSinValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please enter SIN');
+    }else if (!isRelationValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select gender');
     }
     return isValidForm;
   };
+
+  const prepareParams = (depID) =>{
+    const userid = global.userInfo?.user_id;
+    const taxFileID = global.userInfo?.Tax_File_Id;
+    const params = {
+      User_id:userid,
+      Tax_File_Id:taxFileID || 83,
+      First_Name:fName,
+      Last_Name:lName,
+      DOB:dob && format(dob, 'yyyy-MM-dd'),
+      Gender:gender,
+      SIN_Number:sinNo,
+      Relationship:relation
+    }
+    params.Tax_File_Dependent_Id = depID
+    return params
+  }
+
   return (
     <View
       style={{
@@ -69,18 +99,24 @@ const Dependents = props => {
         backgroundColor: 'white',
         width: '100%',
         height: '100%',
+        paddingBottom:Platform.OS == 'ios' ? 30 : 0
       }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation = {navigation}/>
       <ScrollView
         style={{
           width: '100%',
-          paddingHorizontal: 20
+          paddingHorizontal: 20,
         }}>
-        <Heading value="WHO IS IN YOUR FAMILY" marginTop={26} />
+        <Heading 
+        value="THIS IS SOMEONE WHO RELIES ON YOU FOR FINANCIAL SUPPORT"
+        marginTop={20}
+        fontSize={20}
+        color={Colors.CLR_D9272A}
+        />
         <Heading
           fontSize={20}
-          marginTop={45}
+          marginTop={20}
           color={Colors.CLR_D9272A}
           value="DEPENDENT 1"
         />
@@ -92,7 +128,9 @@ const Dependents = props => {
           borderColor={Colors.CLR_0065FF}
           value={fName}
           placeholder="Enter First Name"
-          onEndEditing={value => {}}
+          onEndEditing={value => {
+            setFName(value)
+          }}
         />
         <SKInput
           leftAccImage={CustomFonts.UserIcon}
@@ -102,7 +140,9 @@ const Dependents = props => {
           borderColor={Colors.CLR_0065FF}
           value={lName}
           placeholder="Enter Last Name"
-          onEndEditing={value => {}}
+          onEndEditing={value => {
+            setLName(value)
+          }}
         />
          <TouchableInput
           leftAccImage={CustomFonts.Calender}
@@ -118,7 +158,6 @@ const Dependents = props => {
           value = {gender}
           placeholder = 'Select Gender'
           onClicked={() => {
-            console.log('sdsd');
             setIsGenderVisible(true);
           }}
         />
@@ -130,7 +169,9 @@ const Dependents = props => {
           borderColor={Colors.CLR_0065FF}
           value={sinNo}
           placeholder="Enter SIN"
-          onEndEditing={value => {}}
+          onEndEditing={value => {
+            setSinNo(value)
+          }}
         />
          <TouchableInput
          leftAccImage={CustomFonts.Handshake}
@@ -138,7 +179,6 @@ const Dependents = props => {
           value = {relation}
           placeholder="Select relation"
           onClicked={() => {
-            console.log('sdsd');
             setIsRelationVisible(true);
           }}
         />
@@ -169,7 +209,18 @@ const Dependents = props => {
           title={'MY TAX YEAR'}
           onPress={() => {
             console.log('link pressed');
-            navigation.navigate('MyTaxYear');
+            if(checkFormValidations()){
+              // onlineUpdateDependentInfo(params, (updateRes)=>{
+              //   console.log('updateRes', updateRes)
+              // })
+              setIsLoading(true)
+              const params = prepareParams()
+              onlineSaveDependentInfo(params, (depRes) =>{
+                console.log('depRes', depRes)
+                setIsLoading(false)
+                navigation.navigate('MyTaxYear');
+              })
+            }
           }}
         />
       </ScrollView>
@@ -190,13 +241,11 @@ const Dependents = props => {
             onChange={(event, selectedDate) => {
               console.log(event.type, Date.parse(selectedDate));
               setDOB(selectedDate)
-              console.log('====>',format(selectedDate, 'dd/MM/yyyy'))
               setIsDatePickerVisible(false);
             }}
           />
         </View>
       )}
-
       {isGenderVisible && (
           <SKModel
             title="Select"
@@ -225,7 +274,6 @@ const Dependents = props => {
             }}
           />
         )}
-      
     </View>
   );
 };

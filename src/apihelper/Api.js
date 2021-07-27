@@ -65,6 +65,11 @@ export const uploadImage = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const getActiveFileStatusOnLogin = (params,callback) => {
+  const path = `${BaseURL}/GetActiveFileStatusOnLogin`
+  API.makePostRequest(path , params, callback);
+};
+
 export const getAboutInfo = (params,callback) => {
   const path = `${BaseURL}/Get_About_Info`
   API.makePostRequest(path , params, callback);
@@ -139,6 +144,14 @@ export const onlineUploadAuthrizationDocumentBS64 = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const onlineSaveDependentInfo = (params,callback) => {
+  const path = `${BaseURL}/Online_Save_Dependent_Info`
+  API.makePostRequest(path , params, callback);
+};
+export const onlineUpdateDependentInfo = (params,callback) => {
+  const path = `${BaseURL}/Online_Update_Dependent_Info`
+  API.makePostRequest(path , params, callback);
+};
 
 
 

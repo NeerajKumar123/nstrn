@@ -75,6 +75,7 @@ const ManageDocuments = props => {
             return (
               <ManageDocCard
                 item={item}
+                key = {`${item.tax_file_document_id}`}
                 onOpen={() => {
                   console.log('opening', item);
                   setSelectedItem(item);
@@ -185,6 +186,7 @@ const ManageDocCard = props => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
+      style = {{width:40, height:'100%',alignItems:'flex-end'}}
         onPress={() => {
           onDelete && onDelete();
         }}>

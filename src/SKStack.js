@@ -96,7 +96,7 @@ const SKStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName="MyTaxYear">
+        initialRouteName="Dashboard">
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}

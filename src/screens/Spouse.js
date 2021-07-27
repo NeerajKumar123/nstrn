@@ -312,9 +312,12 @@ const Spouse = props => {
           onPress={() => {
             console.log('link pressed');
             if (checkFormValidations()) {
+              setIsLoading(true)
               const params = prepareParams();
               saveSpouseInfo(params, spouseRes => {
+                setIsLoading(false)
                 if (spouseRes?.status == 1) {
+                  global.isFromSpouseFlow = true
                   navigation.navigate('Dependents');
                 } else {
                   Alert.alert('SukhTax', 'Something wrong!');
