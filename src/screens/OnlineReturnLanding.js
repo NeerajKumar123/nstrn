@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   TouchableOpacity,
   View,
@@ -10,11 +10,10 @@ import {
   Platform,
   Text,
 } from 'react-native';
-import SKInput from '../components/SKInput';
 import SKButton, {Link} from '../components/SKButton';
-import Heading from '../components/Heading';
+// import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
-import {useNavigation} from '@react-navigation/native';
+// import {useNavigation} from '@react-navigation/native';
 import {login} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
