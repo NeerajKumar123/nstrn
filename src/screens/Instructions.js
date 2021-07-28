@@ -3,9 +3,7 @@ import {TouchableOpacity, View, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
-const right_arrow = require('../../assets/right_arrow.png');
-const header_logo = require('../../assets/header_logo.png');
-
+import * as CustomFonts from '../constants/FontsDefs'
 const Instructions = props => {
   const navigation = useNavigation();
   return (
@@ -23,7 +21,7 @@ const Instructions = props => {
         <Image
           resizeMode="contain"
           style={{width: 136, height: 150}}
-          source={header_logo}
+          source={CustomFonts.header_logo}
         />
       </View>
       <View style={{marginTop: 47, width:'100%', alignItems:'center', paddingHorizontal:20}}>
@@ -66,7 +64,7 @@ const Instructions = props => {
         <Image
           resizeMode="contain"
           style={{width: 12, height: 25}}
-          source={right_arrow}
+          source={CustomFonts.right_arrow}
         />
       </TouchableOpacity>
     </View>

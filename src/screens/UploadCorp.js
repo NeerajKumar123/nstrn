@@ -1,48 +1,23 @@
-import React ,{useState} from  'react';
-import {TouchableOpacity, View, Text, ScrollView, Image, Alert} from 'react-native';
+import React from 'react';
+import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
-import SKButton, {UploadDocButton} from '../components/SKButton';
+import SKButton , {UploadDocButton} from '../components/SKButton';
+import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {uploadImage} from '../apihelper/Api'
-import * as CustomFonts from '../constants/FontsDefs'
-import SKLoader from '../components/SKLoader';
+const messeges = require('../../assets/messeges.png');
+const left_arrow = require('../../assets/left_arrow.png');
+const right_arrow = require('../../assets/right_arrow.png');
 
-const Identification = props => {
+const UploadCorp = props => {
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false)
-  const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
   const options = {
-    quality: .1,
-    maxWidth: 5,
-    maxHeight: 5,
-    includeBase64:true,
+    quality: 1,
+    maxWidth: 500,
+    maxHeight: 500,
   };
-
-  const intiateImageUploading = (res) =>{
-    setIsLoading(true)
-    const imgObj = res?.assets?.[0]
-    if (!imgObj.base64) Alert.alert('SukhTax','Something went wrong!')
-    const params = prepareParams(imgObj.base64)
-    console.log('params',params)
-    uploadImage(params,(uploadRes) =>{
-      setIsLoading(false)
-      console.log('uploadRes2222',uploadRes)
-      uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
-      setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
-    })
-  }
-
-
-  const prepareParams = (bs64Image) =>{
-    const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.Tax_File_Id;
-    const params = {User_id:userid,Tax_File_Id:taxFileID || 83,Year:parseInt('2020'),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
-    return params
-  }
-
   return (
     <View
       style={{
@@ -53,7 +28,6 @@ const Identification = props => {
         flex: 1,
       }}>
       <AppHeader navigation={navigation} />
-      {isLoading && <SKLoader/>}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -107,33 +81,28 @@ const Identification = props => {
           color={Colors.CLR_D9272A}
           value="- PR CARD"
         />
-        <UploadDocButton  marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}
+        <UploadDocButton marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}
         onClick={() => {
-          console.log('onClicked');
-          launchImageLibrary(options, res => {
-            console.log('res',res)
-            if (res?.didCancel) {
-              console.log('didCancel');
-            }
-            if (res?.error) {
-              console.log('error', res?.error ?? ERROR_MSG);
-            }
-            intiateImageUploading(res)
-          });
-        }}
-        />
+            console.log('onClicked');
+            launchImageLibrary(options, res => {
+              if (res?.didCancel) {
+                console.log('didCancel');
+              }
+              if (res?.error) {
+                console.log('error', res?.error ?? ERROR_MSG);
+              }
+            });
+          }} />
         <SKButton
-          disable = {!isUploadedSuccessfully}
           marginTop={30}
           fontSize={16}
-          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'BASIC INFO'}
+          title={'NEXT'}
           onPress={() => {
             console.log('link pressed');
-            navigation.navigate('BasicInfo');
+            navigation.navigate('Incorporators');
           }}
         />
       </ScrollView>
@@ -141,4 +110,4 @@ const Identification = props => {
   );
 };
 
-export default Identification;
+export default UploadCorp;

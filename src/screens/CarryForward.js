@@ -19,13 +19,8 @@ import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import AppHeader from '../components/AppHeader';
-const emailicon = require('../../assets/email.png');
-const header_logo = require('../../assets/header_logo.png');
-const passicon = require('../../assets/pass.png');
 const CarryForward = props => {
   const navigation = useNavigation();
-  const [email, setemail] = useState('neerajkiet@gmail.com');
-  const [pass, setPass] = useState('990099');
   const [isLoading, setIsLoading] = useState(false);
 
   const checkFormValidations = () => {
@@ -107,34 +102,6 @@ const CarryForward = props => {
           />
         </View>
       </ScrollView>
-    </View>
-  );
-};
-
-const Header = props => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        marginTop: Platform.OS == 'ios' ? 44 : 10,
-        width: '100%',
-        paddingHorizontal: 16,
-        backgroundColor: 'white',
-        justifyContent: 'flex-end',
-      }}>
-      <TouchableOpacity
-        onPress={() => {
-          props.onLeftPress && props.onLeftPress();
-        }}>
-        <Image
-          resizeMode="contain"
-          style={{
-            width: 38,
-            height: 38,
-          }}
-          source={header_logo}
-        />
-      </TouchableOpacity>
     </View>
   );
 };

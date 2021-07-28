@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -8,28 +8,40 @@ import {
   DeviceEventEmitter,
   Keyboard,
   Platform,
+  Dimensions,
 } from 'react-native';
 import SKInput from '../components/SKInput';
+import TouchableInput from '../components/TouchableInput';
 import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {login} from '../apihelper/Api';
+import {getAboutInfo} from '../apihelper/Api';
+import * as CustomFonts from '../constants/FontsDefs'
 import * as SKTStorage from '../helpers/SKTStorage';
+import {GENDER_OPTIONS, TIME_OPTIONS} from '../constants/StaticValues';
 import SKLoader from '../components/SKLoader';
-const user = require('../../assets/user.png');
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
+import SKModel from '../components/SKModel';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {format } from 'date-fns'
+const {width} = Dimensions.get('window');
 
 const BasicInfo = props => {
   const navigation = useNavigation();
-  const [sin, setsin] = useState('');
-  const [gender, setgender] = useState('MALE');
-  const [dob, setDOB] = useState('');
-  const [lastTime, setLastTime] = useState('FIRST');
+  const [sin, setsin] = useState('123456782');
+  const [gender, setgender] = useState('Male');
+  const [dob, setDOB] = useState(new Date());
+  const [lastTime, setLastTime] = useState('2020');
+  const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [isGenderVisible, setIsGenderVisible] = useState(false);
+  const iosVersion = parseInt(Platform.Version);  
+  let pickerHeight = 0
+  if(Platform.OS == 'ios'){
+    pickerHeight = iosVersion >= 14 ? 400 : 216
+  }
   const checkFormValidations = () => {
     let isValidForm = true;
     if (sin == undefined || sin.length < 10) {
@@ -41,16 +53,28 @@ const BasicInfo = props => {
     }
     return isValidForm;
   };
+
+  useEffect(() => {
+  setIsLoading(true)
+  const userid = global.userInfo?.user_id;
+  const taxFileID = global.userInfo?.Tax_File_Id;
+    const params = {User_Id:userid, Tax_File_Id:taxFileID || 83,Year:2020 }
+    getAboutInfo(params,(aboutRes) =>{
+      console.log('about res',aboutRes)
+      setIsLoading(false)
+    })
+  }, [])
+  
   return (
     <View
       style={{
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        flex:1
+        flex: 1,
       }}>
       {isLoading && <SKLoader />}
-      <AppHeader navigation = {navigation}/>
+      <AppHeader navigation={navigation} />
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 20,
@@ -66,44 +90,32 @@ const BasicInfo = props => {
         <SKInput
           marginTop={48}
           marginBottom={0}
-          leftAccImage={user}
+          leftAccImage={CustomFonts.Number}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={sin}
+          keyboardType = 'number-pad'
           placeholder="SIN Number"
           onEndEditing={value => {
             console.log('onEndEditing', value);
             setsin(value);
           }}
         />
-        <SKInput
-          leftAccImage={user}
-          marginBottom={0}
-          maxLength={10}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
-          borderColor={Colors.CLR_0065FF}
-          value={gender}
-          placeholder="Gender"
-          onEndEditing={value => {
-            console.log('onEndEditing', value);
-            setgender(value);
+        <TouchableInput
+          leftAccImage={CustomFonts.Gender}
+          rightAccImage={CustomFonts.ChevronDown}
+          value = {gender}
+          placeholder="Select Gender"
+          onClicked={() => {
+            setIsGenderVisible(true);
           }}
         />
-        <SKInput
-          leftAccImage={user}
-          marginBottom={0}
-          maxLength={10}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
-          borderColor={Colors.CLR_0065FF}
-          value={dob}
+        <TouchableInput
+          leftAccImage={CustomFonts.Calender}
+          value = {dob && format(dob, 'dd/MM/yyyy')}
           placeholder="Date of Birth (DD/MM/YYYY)"
-          onEndEditing={value => {
-            console.log('onEndEditing', value);
-            setgender(value);
+          onClicked={() => {
+            setShowDatePicker(true);
           }}
         />
         <Heading
@@ -112,36 +124,81 @@ const BasicInfo = props => {
           color={Colors.RED}
           value="WHEN THE LAST TIME YOU FILED WITH US?"
         />
-        <SKInput
-          leftAccImage={user}
-          marginBottom={0}
-          maxLength={10}
-          onRightPressed={() => {
-            console.log('onRightPressed');
-          }}
-          borderColor={Colors.CLR_0065FF}
+        <TouchableInput
+          leftAccImage={CustomFonts.Clock}
+          rightAccImage={CustomFonts.ChevronDown}
           value={lastTime}
-          placeholder="Date of Birth (DD/MM/YYYY)"
-          onEndEditing={value => {
-            console.log('onEndEditing', value);
-            setgender(value);
+          placeholder="Select"
+          onClicked={() => {
+            console.log('sdsd');
+            setIsLastTimeVisible(true);
           }}
         />
         <SKButton
-          marginTop ={30}
+          marginTop={30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
           title={'ADDRESS'}
           onPress={() => {
-            console.log('link pressed');
-            navigation.navigate('Address');
+            const nextPageParams = {sin:sin,gender:gender, dob:dob,lastTime:lastTime }
+            navigation.navigate('Address',{...nextPageParams});
           }}
         />
+        {isGenderVisible && (
+          <SKModel
+            title="Select Gender"
+            data={GENDER_OPTIONS}
+            onClose={() => {
+              setIsGenderVisible(false);
+            }}
+            onSelect={value => {
+              console.log('value', value);
+              setgender(value)
+              setIsGenderVisible(false);
+            }}
+          />
+        )}
+         {isLastTimeVisible && (
+          <SKModel
+            title="Select"
+            data={TIME_OPTIONS}
+            onClose={() => {
+              setIsLastTimeVisible(false);
+            }}
+            onSelect={value => {
+              console.log('value', value);
+              setLastTime(value)
+              setIsLastTimeVisible(false);
+            }}
+          />
+        )}
       </ScrollView>
-      
+      {showDatePicker && (
+        <View
+          style={{
+            backgroundColor:'#FFE6E6',
+            position: 'absolute',
+            bottom: 0,
+            height: pickerHeight,
+            width: width,
+          }}>
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={new Date()}
+            mode="date"
+            display='inline'
+            onChange={(event, selectedDate) => {
+              console.log(event.type, Date.parse(selectedDate));
+              setDOB(selectedDate)
+              console.log('====>',format(selectedDate, 'dd/MM/yyyy'))
+              setShowDatePicker(false);
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -10,7 +10,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import SKDropdown from '../components/SKDropdown';
+import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
 import SKInput from '../components/SKInput';
 import {useNavigation} from '@react-navigation/native';
@@ -20,24 +20,32 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import {register} from '../apihelper/Api';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {getCanadaProvinceList, saveAboutInfo} from '../apihelper/Api';
+import SKModel from '../components/SKModel';
 import * as CustomFonts from '../constants/FontsDefs';
-const right_arrow = require('../../assets/right_arrow.png');
-
+import {format } from 'date-fns'
 const Address = props => {
   const navigation = useNavigation();
-  const [mailingAddress, setMailingAddress] = useState('');
+  const pageParams = props.route.params;
+  const [mailingAddress, setMailingAddress] = useState('This is my mailing address.');
   const [province, setProvince] = useState('');
+  const [provinces, setProvinces] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [isProvinceVisible, setIsProvinceVisible] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const params = {};
+    getCanadaProvinceList(params, provinceRes => {
+      setIsLoading(false);
+      setProvinces(provinceRes?.data);
+    });
+  }, []);
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isMailingAddValid = Validator.isValidField(
-      mailingAddress,
-      ST_REGEX.FName,
-    );
-    const isProvinceValid = Validator.isValidField(province, ST_REGEX.LName);
+    const isMailingAddValid = mailingAddress.length > 0
+    const isProvinceValid = province?.state_id
 
     if (!isMailingAddValid) {
       isValidForm = false;
@@ -48,6 +56,25 @@ const Address = props => {
     }
     return isValidForm;
   };
+
+  const prepareParams = () => {
+    const userid = global.userInfo?.user_id;
+    const commaSepYrs = global.selectedYears.join();
+    const dob = pageParams.dob && format(pageParams.dob, 'yyyy-MM-dd')
+    const params = {
+      User_Id: userid,
+      SIN_Number: pageParams.sin,
+      Gender: pageParams.gender,
+      DOB: dob,
+      Last_Year_Tax_Filed: pageParams.lastTime,
+      Mailing_Address: mailingAddress,
+      Year: 2020,
+      Module_Type_Id: 2,
+      Years_Selected: commaSepYrs,
+    };
+    return params;
+  };
+
   return (
     <View
       style={{
@@ -58,7 +85,7 @@ const Address = props => {
         height: '100%',
       }}>
       {isLoading && <SKLoader />}
-      <AppHeader navigation = {navigation}/>
+      <AppHeader navigation={navigation} />
       <View
         style={{
           width: '100%',
@@ -93,32 +120,57 @@ const Address = props => {
             color={Colors.CLR_D9272A}
             value="WHICH PROVOINCE DID YOU LINE IN ON DECEMBER 31, 2020?"
           />
-          <SKDropdown
+          <TouchableInput
+            rightAccImage={CustomFonts.ChevronDown}
             marginBottom={2}
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
-            value={province}
+            value={province?.state_name}
             placeholder="Select Province"
-            onEndEditing={value => {
-              setLName(value);
+            onClicked={() => {
+              setIsProvinceVisible(true);
             }}
           />
         </KeyboardAvoidingView>
         <SKButton
-        marginTop = {30}
+          marginTop={30}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
           title={'BANKING'}
           onPress={() => {
-            console.log('link pressed');
-            navigation.navigate('BankingAndMore');
+            if(checkFormValidations()){
+              setIsLoading(true)
+              const params = prepareParams();
+            saveAboutInfo(params, saveRes => {
+              setIsLoading(false)
+              if (saveRes?.status == -1){
+                Alert.alert('SukhTax','Something went wrong')
+                return
+              }
+              global.userInfo = {...global.userInfo,...saveRes?.data[0]}
+              navigation.navigate('BankingAndMore', {province:province});
+            });
+            }            
           }}
         />
+        {isProvinceVisible && (
+          <SKModel
+            title="Select"
+            data={provinces}
+            keyLabel="state_name"
+            onClose={() => {
+              setIsProvinceVisible(false);
+            }}
+            onSelect={value => {
+              setProvince(value);
+              setIsProvinceVisible(false);
+            }}
+          />
+        )}
       </View>
-     
     </View>
   );
 };

@@ -6,7 +6,7 @@ import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
 import SKButton from '../components/SKButton';
-const HomePayment = props => {
+const IncorpPayment = props => {
   const [isPaynow, setIsPaynow] = useState(false);
   const [status, setStatus] = useState(1);
   const navigation = useNavigation();
@@ -25,7 +25,7 @@ const HomePayment = props => {
           paddingHorizontal: 20,
           height: '100%',
         }}>
-        <Heading value="ONLINE TAX FILING" marginTop={124} />
+        <Heading value="PAYMENTS" marginTop={100} />
         <PaymentFinalCard/>
         <SKButton
         marginTop={56}
@@ -37,7 +37,7 @@ const HomePayment = props => {
         title={'PAY NOW'}
         onPress={() => {
           console.log('onPress');
-          navigation.popToTop()
+          navigation.navigate('IncorpInProcess')
         }}
       />
     </ScrollView>
@@ -62,11 +62,10 @@ const PaymentFinalCard = props => {
         marginTop={12}
         fontWeight="700"
         color={Colors.CLR_D9272A}
-        value="BASED ON YOUR REQUIREMENTS, WE HAVE ASSESSED YOUR FEE TO "
+        value="PLEASE COMPLETE THE BELOW PAYMENT TO FINALIZE YOUR REGISTRATION REQUEST:"
       />
-      <KeyValueView marginTop={54} title="2020 TAX RETURN" value="$45" />
-      <KeyValueView marginTop={12} title="T-SLIPS x 5" value="$25" />
-      <KeyValueView marginTop={12} title="UBER" value="$100" />
+      <KeyValueView marginTop={54} title="ONTARIO CORPORATION" value="$499" />
+      <KeyValueView marginTop={12} title="NAMED CORPORATION" value="$100" />
       <View
         style={{
           marginVertical: 20,
@@ -75,7 +74,7 @@ const PaymentFinalCard = props => {
           width: '100%',
         }}
       />
-      <KeyValueView title="TOTAL" value="$170" />
+      <KeyValueView marginTop={12} title="TOTAL" value="$599" />
     </View>
   );
 };
@@ -98,4 +97,4 @@ const KeyValueView = props => {
   );
 };
 
-export default HomePayment;
+export default IncorpPayment;

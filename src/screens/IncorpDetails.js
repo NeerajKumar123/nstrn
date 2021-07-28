@@ -9,10 +9,10 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
-import * as CustomFonts from '../constants/FontsDefs'
 import {register} from '../apihelper/Api'
+import * as CustomFonts from '../constants/FontsDefs'
 
-const SignUp = props => {
+const IncorpDetails = props => {
   const navigation = useNavigation()
   const [fName, setFName] = useState('')
   const [lName, setLName] = useState('')
@@ -20,7 +20,6 @@ const SignUp = props => {
   const [mobile, setMobile] = useState('')
   const [pass, setPass] = useState('')
   const [cPass, setCPass] = useState('')
-  const [isSecurePass, setIsSecurePass] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
@@ -63,28 +62,26 @@ const SignUp = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
-        height: '100%',
+        flex:1
       }}>
       {isLoading && <SKLoader/>}
       <AppHeader navigation = {navigation}/>
       <KeyboardAvoidingView
         behavior={'position'}
         enabled={true}
-        style={{flex: 1, width:'100%', paddingHorizontal:20, paddingBottom:10}}
+        style={{backgroundColor: Colors.WHITE, flex: 1}}
         keyboardVerticalOffset={-200}>
       <ScrollView
-      showsVerticalScrollIndicator = {false}
-        style={{
-          width: '100%',
-          marginBottom: Platform.OS == 'ios' ?  100 : 0,
+        contentContainerStyle={{
+          paddingHorizontal: 32,
+          flex: 1,
         }}>
-        <Heading value="LETS LOG IN" marginTop={26} />
+        <Heading value="ABOUT YOU" marginTop={26} />
         <Heading
           fontSize={16}
-          marginTop={45}
-          color={Colors.BLACK}
-          value="LETS GET TO KNOW YOU BETTER"
+          marginTop={5}
+          color={Colors.CLR_D9272A}
+          value="INCORPORATORS' DETAILS :"
         />
         <SKInput
           leftAccImage={CustomFonts.UserIcon}
@@ -94,6 +91,18 @@ const SignUp = props => {
           borderColor={Colors.CLR_0065FF}
           value={''}
           placeholder = 'First Name'
+          onEndEditing={value => {
+            console.log('onEndEditing', value);
+            setFName(value)
+          }}
+        />
+        <SKInput
+          leftAccImage={CustomFonts.UserIcon}
+          marginBottom={2}
+          maxLength = {15}
+          borderColor={Colors.CLR_0065FF}
+          value={''}
+          placeholder = 'Middle Name'
           onEndEditing={value => {
             console.log('onEndEditing', value);
             setFName(value)
@@ -133,45 +142,39 @@ const SignUp = props => {
           }}
         />
         <SKInput
-          leftAccImage={CustomFonts.Lock}
+          leftAccImage={CustomFonts.Phone}
           marginBottom={2}
-          maxLength = {6}
+          maxLength = {10}
           borderColor={Colors.CLR_0065FF}
-          value={pass}
-          placeholder = 'Password'
+          value={mobile}
+          placeholder = 'Alternate Phone Number'
           onEndEditing={value => {
-            setPass(value)
+            setMobile(value)
           }}
         />
         <SKInput
-          leftAccImage={CustomFonts.Lock}
+          leftAccImage={CustomFonts.Number}
           marginBottom={2}
-          rightAccImage={isSecurePass ? CustomFonts.EyeOutlineOff : CustomFonts.EyeOutlineOn}
-          maxLength = {6}
+          maxLength = {10}
           borderColor={Colors.CLR_0065FF}
-          value={''}
-          isSecurePass = {isSecurePass}
-          placeholder = 'Confirm Password'
-          onRightPressed = {()=>{
-            console.log('isSecurePass',isSecurePass)
-            setIsSecurePass(!isSecurePass)
-          }}
+          value={mobile}
+          placeholder = 'SIN Number'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
-            setCPass(value)
+            setMobile(value)
           }}
         />
-      </ScrollView>
-      </KeyboardAvoidingView>
-      <View style = {{paddingHorizontal:20}}>
-      <SKButton
+       
+        <SKButton
           fontSize={16}
+          marginTop={33}
           width = '100%'
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'Continue'}
+          title={'NEXT'}
           onPress={() => {
+            navigation.navigate('AboutCorp') 
+            return
             Keyboard.dismiss()
             if(checkFormValidations()){
               setIsLoading(true)
@@ -181,7 +184,7 @@ const SignUp = props => {
                 if(regisRes?.status == 1){
                   const data = regisRes && regisRes.data[0]
                   console.log('data',data)
-                  navigation.navigate('SecurityCode', {pagetitle:'Security Code', pagesubs:'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:', email:email})
+                  navigation.navigate('AboutCorp', {pagetitle:'Security Code', pagesubs:'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:', email:email})
                 }else{
                   const msg = userRes?.message ?? 'Something went wront, Please try again later.'
                   Alert.alert('SukhTax',msg)
@@ -190,12 +193,12 @@ const SignUp = props => {
             }
           }}
         />
-      </View>
-      
+      </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
 
 
 
-export default SignUp;
+export default IncorpDetails;

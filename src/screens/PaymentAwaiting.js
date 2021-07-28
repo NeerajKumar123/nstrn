@@ -6,8 +6,7 @@ import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
 import SKButton from '../components/SKButton';
-const upload = require('../../assets/upload.png');
-const messeges = require('../../assets/messeges.png');
+
 const PaymentAwaiting = props => {
   const [isPaynow, setIsPaynow] = useState(false);
   const [status, setStatus] = useState(1);

@@ -5,10 +5,10 @@ import {
   Image,
   TouchableNativeFeedback,
   View,
-  Platform
+  Platform,
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
-import * as CustomFonts from '../constants/FontsDefs'
+import * as CustomFonts from '../constants/FontsDefs';
 import TouchableEffectView from '../components/TouchableEffectView';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const SKButton = props => {
@@ -22,7 +22,7 @@ const SKButton = props => {
     imageSource = undefined,
     backgroundColor = Colors.RED,
     height = 40,
-    iconsize = 20,
+    iconsize = 25,
     iconcolor = Colors.WHITE,
     fontSize = 15,
     titleColor = Colors.WHITE,
@@ -34,8 +34,12 @@ const SKButton = props => {
     rightImage,
     marginTop = 0,
     width = '100%',
-    fontFamily = CustomFonts.OpenSansRegular
+    fontFamily = CustomFonts.OpenSansRegular,
+    rightIconName = undefined,
   } = props;
+  const isLeftLocalPNG = leftImage && typeof leftImage == 'number';
+  const isRightLocalPNG = rightImage && typeof rightImage == 'number';
+
   return (
     <TouchableEffectView
       disabled={disable}
@@ -47,7 +51,7 @@ const SKButton = props => {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        borderRadius: height/2,
+        borderRadius: height / 2,
         height,
         borderColor,
         borderWidth: 4,
@@ -55,20 +59,31 @@ const SKButton = props => {
         width: width,
       }}
       onPress={() => {
-        props.onPress && props.onPress();
+        !disable  && props.onPress && props.onPress();
       }}>
-      <View style = {{width:'100%', flexDirection:'row', justifyContent:'center', height:'100%', alignItems:'center'}}>
-      {leftImage && (
+      <View
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          height: '100%',
+          alignItems: 'center',
+        }}>
+        {leftImage && isLeftLocalPNG && (
           <Image
             resizeMode="contain"
             style={{width: 15, height: 15}}
             source={leftImage}
           />
         )}
-
-        {iconName &&
-        <Icon style = {{marginRight:20}} name= {iconName} size={iconsize} color = {iconcolor} />
-        }
+        {leftImage && !isLeftLocalPNG && (
+          <Icon
+            style={{marginRight: 20}}
+            name={leftImage}
+            size={iconsize}
+            color={iconcolor}
+          />
+        )}
         {title && (
           <Text
             style={{
@@ -77,22 +92,29 @@ const SKButton = props => {
               color: titleColor,
               opacity: disable ? 0.5 : 1.0,
               textAlign: 'center',
-              marginLeft:leftImage ? 10 : 0,
-              marginRight : rightImage ? 10 : 0,
+              marginLeft: leftImage ? 10 : 0,
+              marginRight: rightImage ? 10 : 0,
               fontFamily,
             }}>
             {title}
           </Text>
         )}
-        {rightImage && (
+        {rightImage && isRightLocalPNG && (
           <Image
             resizeMode="contain"
-            style={{width: 15, height: 15}}
+            style={{width: 15, height: 15,opacity: disable ? 0.5 : 1.0}}
             source={rightImage}
           />
         )}
-        </View>
-        
+        {rightImage && !isRightLocalPNG && (
+          <Icon
+            name={rightImage}
+            size={iconsize}
+            color={iconcolor}
+            opacity = {disable ? 0.5 : 1.0}
+          />
+        )}
+      </View>
     </TouchableEffectView>
   );
 };
@@ -106,7 +128,7 @@ export const Link = props => {
     disable = false,
     alignment = 'right',
     marginTop = 0,
-    fontFamily = CustomFonts.OpenSansRegular
+    fontFamily = CustomFonts.OpenSansRegular,
   } = props;
   return (
     <TouchableOpacity
@@ -128,7 +150,7 @@ export const Link = props => {
             fontSize: fontSize,
             fontWeight: fontWeight,
             color: titleColor,
-            fontFamily
+            fontFamily,
           }}>
           {title}
         </Text>
@@ -137,4 +159,35 @@ export const Link = props => {
   );
 };
 
+export const UploadDocButton = props => {
+  const {marginTop = 30, title = 'UPLOAD', height = 46} = props;
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        props.onClick();
+      }}
+      style={{
+        width: '100%',
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderColor: Colors.CLR_29295F,
+        borderStyle: 'dashed',
+        borderWidth: 2,
+        borderRadius: 6,
+        height,
+        marginTop: marginTop,
+      }}>
+      <Text style={{fontFamily: CustomFonts.OpenSansRegular, fontSize: 15}}>
+        {title}
+      </Text>
+      <Image
+        resizeMode="contain"
+        style={{width: 24, height: 24}}
+        source={CustomFonts.upload}
+      />
+    </TouchableOpacity>
+  );
+};
 export default SKButton;

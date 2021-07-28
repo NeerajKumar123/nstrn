@@ -6,12 +6,11 @@ import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import AppHeader from '../components/AppHeader'
 import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs'
 import {useNavigation} from '@react-navigation/native';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import {resetPassword} from '../apihelper/Api'
-const passicon = require('../../assets/pass.png');
-const header_logo = require('../../assets/header_logo.png');
 
 const SetupNewPass = props => {
   const navigation = useNavigation()
@@ -63,7 +62,7 @@ const SetupNewPass = props => {
           marginTop={17}
           marginBottom={0}
           maxLength = {6}
-          leftAccImage={passicon}
+          leftAccImage={CustomFonts.Lock}
           borderColor={Colors.CLR_0065FF}
           value={pass}
           placeholder = 'Password'
@@ -72,7 +71,7 @@ const SetupNewPass = props => {
           }}
         />
         <SKInput
-          leftAccImage={passicon}
+          leftAccImage={CustomFonts.Lock}
           marginBottom={0}
           maxLength = {6}
           marginTop={10}

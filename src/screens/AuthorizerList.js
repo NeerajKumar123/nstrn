@@ -1,18 +1,23 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import SKButton from '../components/SKButton';
-import * as CustomFonts from '../constants/FontsDefs'
+import * as CustomFonts from '../constants/FontsDefs';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const left_arrow = require('../../assets/left_arrow.png');
-const right_arrow = require('../../assets/right_arrow.png');
+import {useIsFocused} from '@react-navigation/native';
 
 const AuthorizerList = props => {
-  const navigation = useNavigation()
-  const data = [{title:'TAXPAYER 1'},{title:'TAXPAYER 2'},{title:'TAXPAYER 3'}]
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    console.log('sdsdsd');
+    console.log('sdsdsd',global.isAuthorized);
+  }, [isFocused]);
+
   return (
     <View
       style={{
@@ -20,14 +25,14 @@ const AuthorizerList = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         width: '100%',
-        height:'100%',
+        height: '100%',
       }}>
-      <AppHeader navigation = {navigation} />
+      <AppHeader navigation={navigation} />
       <ScrollView
-        style={{width: '100%', marginBottom:100}}
+        style={{width: '100%', marginBottom: 100}}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          paddingBottom:10
+          paddingBottom: 10,
         }}>
         <Heading value="AUTHORIZE US PLEASE" marginTop={60} />
         <Heading
@@ -36,21 +41,28 @@ const AuthorizerList = props => {
           color={Colors.CLR_D9272A}
           value="WE WILL NEED YOU TO AUTHORIZE US IN ORDER FOR US TO PULL YOUR INFORMATION FROM CRA!"
         />
-       {data &&
-        data.map((item, index) => {
-          return (
-            <Card
-              item={item}
-              onSelected={() => {
-                  console.log('data',item)
-              }}
-            />
-          );
-        })}
+        <Card
+          title={'TAX PAYER 1'}
+          isAuthorized={global.isFAuthorized}
+          onSelected={() => {
+            navigation.navigate('SignaturePage', {authIndex: 0});
+          }}
+        />
+        {global.isFromSpouseFlow && 
+        <Card
+        title={'TAX PAYER 2'}
+        isAuthorized={global.isSAuthorized}
+        onSelected={() => {
+          navigation.navigate('SignaturePage', {authIndex: 1});
+        }}
+      />
+        }
+        
         <SKButton
-        marginTop = {30}
+          marginTop={30}
+          disable={!global.isAuthorized}
           fontSize={16}
-          rightImage={right_arrow}
+          rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
@@ -66,33 +78,48 @@ const AuthorizerList = props => {
 };
 
 const Card = props => {
-    const {item, height = 44, fontSize=15} = props
+  const {
+    title,
+    height = 44,
+    fontSize = 15,
+    onSelected,
+    isAuthorized = false,
+  } = props;
   return (
-      <View
+    <TouchableOpacity
+      onPress={() => {
+        onSelected && onSelected();
+      }}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
         marginTop: 15,
-        paddingVertical:5,
+        paddingVertical: 5,
         backgroundColor: 'white',
         justifyContent: 'center',
         borderRadius: 6,
-        alignItems:'center',
+        alignItems: 'center',
         width: '100%',
         minHeight: height,
-        backgroundColor:Colors.CLR_29295F,
+        backgroundColor: Colors.CLR_29295F,
       }}>
-        <Text
-          style={{
-            textAlign: 'left',
-            color: Colors.WHITE,
-            fontSize: fontSize,
-            fontWeight: 'bold',
-            fontFamily:CustomFonts.OpenSansRegular,
-          }}>
-          {item.title}
-        </Text>
-      </View>
+      <Text
+        style={{
+          textAlign: 'left',
+          color: Colors.WHITE,
+          fontSize: fontSize,
+          fontWeight: 'bold',
+          fontFamily: CustomFonts.OpenSansRegular,
+        }}>
+        {title}
+      </Text>
+      <Icon
+        style={{right: 20, position: 'absolute'}}
+        name={isAuthorized ? CustomFonts.CheckRight : CustomFonts.ChevronRight}
+        size={isAuthorized ? 20 : 30}
+        color={Colors.WHITE}
+      />
+    </TouchableOpacity>
   );
 };
 

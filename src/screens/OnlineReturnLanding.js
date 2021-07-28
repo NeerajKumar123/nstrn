@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   TouchableOpacity,
   View,
@@ -8,40 +8,26 @@ import {
   DeviceEventEmitter,
   Keyboard,
   Platform,
-  Text
+  Text,
 } from 'react-native';
-import SKInput from '../components/SKInput';
 import SKButton, {Link} from '../components/SKButton';
-import Heading from '../components/Heading';
+// import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
-import {useNavigation} from '@react-navigation/native';
+// import {useNavigation} from '@react-navigation/native';
 import {login} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
-const emailicon = require('../../assets/email.png');
-const header_logo = require('../../assets/header_logo.png');
-const passicon = require('../../assets/pass.png');
-const OnlineReturnLanding = props => {
-  const data = [{year:'2018'},{year:'2018'},{year:'2018'}]
-  const navigation = useNavigation();
-  const [email, setemail] = useState('neerajkiet@gmail.com');
-  const [pass, setPass] = useState('990099');
-  const [isLoading, setIsLoading] = useState(false);
 
-  const checkFormValidations = () => {
-    let isValidForm = true;
-    if (email == undefined || email.length < 10) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid email.');
-    } else if (pass == undefined || pass.length < 6) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid password.');
-    }
-    return isValidForm;
-  };
+const OnlineReturnLanding = props => {
+  const selectedYears = [];
+  const navigation = useNavigation();
+  const [isFSelected, setIsFSelected] = useState(false);
+  const [isSSelected, setIsSSelected] = useState(false);
+  const [isTSelected, setIsTSelected] = useState(false);
+
   return (
     <View
       style={{
@@ -64,25 +50,35 @@ const OnlineReturnLanding = props => {
           color={Colors.CLR_D9272A}
           value="WHICH YEARS DO YOU WANT
           TO APPLY FOR? SELECT ALL
-          THAT APPLY:"          
+          THAT APPLY:"
         />
-        {data &&
-        data.map((item, index) => {
-          return (
-            <DocCard
-              item={item}
-              onSelected={() => {
-                  console.log('data',item)
-              }}
-            />
-          );
-        })}
+        <DocCard
+          title={'2021'}
+          isSelected={isFSelected}
+          onSelected={() => {
+            setIsFSelected(!isFSelected);
+          }}
+        />
+        <DocCard
+          title={'2020'}
+          isSelected={isSSelected}
+          onSelected={() => {
+            setIsSSelected(!isSSelected);
+          }}
+        />
+        <DocCard
+          title={'2019'}
+          isSelected={isTSelected}
+          onSelected={() => {
+            setIsTSelected(!isTSelected);
+          }}
+        />
         <View
           style={{
             width: '100%',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginTop: 24
+            marginTop: 24,
           }}>
           <SKButton
             fontSize={16}
@@ -91,8 +87,16 @@ const OnlineReturnLanding = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'IDENTIFICATION'}
             onPress={() => {
-              console.log('onPress');
-              navigation.navigate('Identification');
+              if (isFSelected) selectedYears.push('2021');
+              if (isSSelected) selectedYears.push('2020');
+              if (isTSelected) selectedYears.push('2019');
+              if (isFSelected || isSSelected || isTSelected) {
+                console.log('onPress,', selectedYears);
+                global.selectedYears = selectedYears;
+                navigation.navigate('CarryForward');
+              } else {
+                Alert.alert('SukhTax', 'Please select year.');
+              }
             }}
           />
         </View>
@@ -102,37 +106,37 @@ const OnlineReturnLanding = props => {
 };
 
 const DocCard = props => {
-    const {item} = props
-    return (
-        <TouchableOpacity
-           style={{
-            flexDirection: 'row',
-            paddingHorizontal: 16,
-            marginTop: 20,
-            backgroundColor: 'white',
-            alignItems:'center',
-            justifyContent: 'space-between',
-            width: '100%',
-            height: 48,
-            borderRadius:6,
-            backgroundColor:Colors.CLR_7F7F9F
-          }}
-          onPress={() => {
-            props.onClicked && props.onClicked();
-          }}>
-          <Text
-            style={{
-              width: '100%',
-              textAlign: 'left',
-              color: Colors.CLR_29295F,
-              fontSize: 17,
-              fontWeight: '700',
-            }}>
-            {item.year}
-          </Text>
-        </TouchableOpacity>
-    );
-  };
-
+  const {title, isSelected = false, onSelected} = props;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        marginTop: 20,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: 48,
+        borderRadius: 6,
+        backgroundColor: isSelected ? Colors.PRIMARY_FILL : Colors.CLR_7F7F9F,
+      }}
+      key={`${Math.random()}`}
+      onPress={() => {
+        props.onSelected && props.onSelected();
+      }}>
+      <Text
+        style={{
+          width: '100%',
+          textAlign: 'center',
+          color: Colors.WHITE,
+          fontSize: 17,
+          fontWeight: '700',
+        }}>
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 export default OnlineReturnLanding;

@@ -5,9 +5,6 @@ import AppHeader from '../components/AppHeader';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-const profile = require('../../assets/profile.png');
-const request = require('../../assets/request.png');
-const messeges = require('../../assets/messeges.png');
 const AllDocuments = props => {
   const navigation = useNavigation()
   return (

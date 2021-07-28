@@ -3,11 +3,11 @@ import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
+import * as CustomFonts from '../constants/FontsDefs'
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
-import SKButton from '../components/SKButton';
-const upload = require('../../assets/upload.png');
-const messeges = require('../../assets/messeges.png');
+import SKButton, {UploadDocButton} from '../components/SKButton'; 
+
 const OnlineTaxFiling = props => {
   const [status, setStatus] = useState(1);
   const navigation = useNavigation();
@@ -124,32 +124,7 @@ const TaxFilingStatusCard = props => {
         }}>
         {descText}
       </Text>
-      {status == 1 && (
-        <TouchableOpacity
-          onPress={() => {
-            props.onClick();
-          }}
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            paddingHorizontal: 16,
-            paddingVertical: 11,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderColor: Colors.CLR_29295F,
-            borderStyle: 'dashed',
-            borderWidth: 2,
-            borderRadius: 6,
-            marginTop: 35,
-          }}>
-          <Text>UPLOAD THE MISSING DOC HERE</Text>
-          <Image
-            resizeMode="contain"
-            style={{width: 24, height: 24}}
-            source={upload}
-          />
-        </TouchableOpacity>
-      )}
+      {status == 1 && <UploadDocButton marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46} />}
     </View>
   );
 };
@@ -209,7 +184,7 @@ const MessegesView = props => {
             width: 42,
             height: 38,
           }}
-          source={messeges}
+          source={CustomFonts.messeges}
         />
       </TouchableOpacity>
     </LinearGradient>
