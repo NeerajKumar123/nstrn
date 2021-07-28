@@ -13,7 +13,7 @@ import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
 import * as CustomFonts from '../constants/FontsDefs'
 const DashCard = props => {
-  const {id, names, desc, image, colors} = props.item;
+  const {id, name, desc, image, colors} = props.item;
   return (
     <TouchableOpacity
       onPress={() => {
