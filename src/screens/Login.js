@@ -42,11 +42,13 @@ const Login = props => {
         contentContainerStyle={{
           paddingHorizontal: 32,
           flex: 1,
-        }}>
-        <Heading value="LETS LOG IN" marginTop={86} />
+       }}>
+             
+        <Heading value="LETS LOG IN" marginTop={50} />
+       
         <Heading
           fontSize={16}
-          marginTop={55}
+          marginTop={45}
           color={Colors.BLACK}
           value="IF YOU ALREADY HAVE REGISTERED,WELCOME BACK"
         />
