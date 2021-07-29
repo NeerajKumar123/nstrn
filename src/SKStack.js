@@ -7,7 +7,7 @@ import VerifyOTP from './screens/VerifyOTP';
 import SignUp from './screens/SignUp';
 import Home from './screens/Home';
 import AllDocuments from './screens/AllDocuments';
-import TaxReturns from './screens/TaxReturns';
+import HomeDocsListing from './screens/HomeDocsListing';
 import OnlineTaxFiling from './screens/OnlineTaxFiling';
 import SecurityCode from './screens/SecurityCode';
 import SetupNewPass from './screens/SetupNewPass';
@@ -128,9 +128,9 @@ const SKStack = () => {
           options={{title: 'AllDocuments', headerShown: false}}
         />
         <Stack.Screen
-          name="TaxReturns"
-          component={TaxReturns}
-          options={{title: 'TaxReturns', headerShown: false}}
+          name="HomeDocsListing"
+          component={HomeDocsListing}
+          options={{title: 'HomeDocsListing', headerShown: false}}
         />
         <Stack.Screen
           name="OnlineTaxFiling"

@@ -27,7 +27,7 @@ import {format } from 'date-fns'
 const Address = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  const [mailingAddress, setMailingAddress] = useState('This is my mailing address.');
+  const [mailingAddress, setMailingAddress] = useState();
   const [province, setProvince] = useState('');
   const [provinces, setProvinces] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,7 @@ const Address = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isMailingAddValid = mailingAddress.length > 0
+    const isMailingAddValid = mailingAddress?.length > 0
     const isProvinceValid = province?.state_id
 
     if (!isMailingAddValid) {
@@ -99,7 +99,7 @@ const Address = props => {
           <Heading
             fontSize={16}
             marginTop={45}
-            color={Colors.CLR_D9272A}
+            color={Colors.APP_RED_SUBHEADING_COLOR}
             value="WHAT IS YOUR MAILING ADDRESS?"
           />
           <SKInput
@@ -117,7 +117,7 @@ const Address = props => {
           <Heading
             fontSize={16}
             marginTop={45}
-            color={Colors.CLR_D9272A}
+            color={Colors.APP_RED_SUBHEADING_COLOR}
             value="WHICH PROVOINCE DID YOU LINE IN ON DECEMBER 31, 2020?"
           />
           <TouchableInput

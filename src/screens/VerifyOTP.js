@@ -196,7 +196,6 @@ const VerifyOTP = props => {
           borderColor={Colors.CLR_EB0000}
           title={'Register'}
           onPress={() => {
-            console.log('onPress');
           }}
         />
       </ScrollView>

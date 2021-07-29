@@ -35,7 +35,7 @@ const AnyThingElse = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE USE THE BELOW BOX TO TELL US ABOUT ANYTHING REGARDIING YOUR TAX YEAR, OR ABOUT ANYTHING YOU WOULD LIKE US TO KNOW."
         />
         <SKInput

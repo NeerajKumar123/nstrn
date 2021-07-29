@@ -35,22 +35,24 @@ const API = {
     })
       .then(res => {
         const resData = res && res.data;
+        console.log('Response=====>',path, JSON.stringify(resData))
         callback(resData);
       })
       .catch(error => {
-        extractError(error);
+        extractError(error, path);
         callback({status:0});
       });
   },
 };
 
-const extractError = error => {
+const extractError = (error, url) => {
   // Error 😨
   if (error.response) {
     /*
      * The request was made and the server responded with a
      * status code that falls out of the range of 2xx
      */
+    console.log('Erroring Url ===>',url);
     console.log('error.response.data', error.response.data);
     console.log('error.response.status',error.response.status);
     console.log(error.response.headers);

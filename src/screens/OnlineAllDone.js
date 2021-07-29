@@ -39,13 +39,13 @@ const OnlineAllDone = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WE WILL PROCESS YOUR DOCUMENTS AND PROVIDE YOU WITH A FEE QUOTE."
         />
        <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE COMPLETE THE PAYMENT ON HOME SCREEN TO PROCEED WITH YOUR RETURN."
         />
       </ScrollView>

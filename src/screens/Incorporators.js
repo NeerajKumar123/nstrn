@@ -48,7 +48,7 @@ const Incorporators = props => {
           fontSize={16}
           marginTop={20}
           marginBottom={30}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="LET'S ADD THE
           INCORPORATORS' DETAILS"
         />
@@ -61,7 +61,7 @@ const Incorporators = props => {
           />
           <Text
             style={{
-              color: Colors.CLR_D9272A,
+              color: Colors.APP_RED_SUBHEADING_COLOR,
               fontFamily: CustomFonts.OpenSansSemiBold,
               fontSize: 20,
               marginLeft: 23,
@@ -97,7 +97,6 @@ const Incorporators = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'NEXT'}
             onPress={() => {
-              console.log('onPress');
               navigation.navigate('IncorpDetails');
             }}
           />
@@ -123,12 +122,12 @@ const DocCard = props => {
       onPress={() => {
         props.onSelected && props.onSelected();
       }}>
-      <Icon name={'square-edit-outline'} size={27} color={Colors.CLR_29295F} />
+      <Icon name={'square-edit-outline'} size={27} color={Colors.APP_BLUE_HEADING_COLOR} />
       <Text
         style={{
           width: '100%',
           textAlign: 'left',
-          color: Colors.CLR_D9272A,
+          color: Colors.APP_RED_SUBHEADING_COLOR,
           fontSize: 20,
           fontFamily: CustomFonts.OpenSansRegular,
           fontWeight: '700',

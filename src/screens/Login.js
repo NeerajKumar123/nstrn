@@ -120,7 +120,6 @@ const Login = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'Register'}
           onPress={() => {
-            console.log('onPress');
             navigation.navigate('Instructions')
             }}
         />

@@ -55,7 +55,6 @@ const OnlineTaxFiling = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'EDIT INFO'}
             onPress={() => {
-              console.log('onPress');
             }}
           />
           <SKButton
@@ -66,7 +65,6 @@ const OnlineTaxFiling = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'Continue'}
             onPress={() => {
-              console.log('onPress');
               navigation.navigate('PaymentAwaiting');
             }}
           />
@@ -103,13 +101,13 @@ const TaxFilingStatusCard = props => {
       <Heading
         fontSize={20}
         fontWeight="700"
-        color={Colors.CLR_D9272A}
+        color={Colors.APP_RED_SUBHEADING_COLOR}
         value="STATUS OF FILE :"
       />
       <Heading
         fontSize={20}
         fontWeight="700"
-        color={Colors.CLR_29295F}
+        color={Colors.APP_BLUE_HEADING_COLOR}
         value={statusText}
         marginTop={2}
       />
@@ -133,7 +131,7 @@ const MessegesView = props => {
   return (
     <LinearGradient
       opacity={0.6}
-      colors={[Colors.CLR_D9272A, Colors.CLR_D72528]}
+      colors={[Colors.APP_RED_SUBHEADING_COLOR, Colors.CLR_D72528]}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,

@@ -42,43 +42,43 @@ const UploadCorp = props => {
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WE NEED TO VERIFY THAT IT'S REALLY YOU!"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE UPLOAD ONE OF THE FOLLOWING:"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- DRIVING LICENCE"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- PASSPORT"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="-PROVINCIAL ID CARD"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- CITIZENSHIP CARD"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- PR CARD"
         />
         <UploadDocButton marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}

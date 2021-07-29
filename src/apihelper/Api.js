@@ -153,7 +153,25 @@ export const onlineUpdateDependentInfo = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const getTaxReturnsDocs = (params,callback) => {
+  const path = `${BaseURL}/Documents_Get_Tax_Returns_Documents`
+  API.makePostRequest(path , params, callback);
+};
 
+export const getIncorporationDocs = (params,callback) => {
+  const path = `${BaseURL}/Documents_Get_Incorporation_Documents`
+  API.makePostRequest(path , params, callback);
+};
+
+export const getT1GeneralDocs = (params,callback) => {
+  const path = `${BaseURL}/Documents_Get_Tax_Docs_Documents`
+  API.makePostRequest(path , params, callback);
+};
+
+export const getCRALattersDocs = (params,callback) => {
+  const path = `${BaseURL}/Documents_Get_CRA_Letters_Documents`
+  API.makePostRequest(path , params, callback);
+};
 
 
 

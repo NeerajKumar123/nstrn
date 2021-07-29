@@ -114,7 +114,7 @@ const FamilyDetails = props => {
         <Heading
           fontSize={20}
           marginTop={45}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="MARITAL STATUS ON DECEMBER 31, 2020"
         />
         <TouchableInput
@@ -129,7 +129,7 @@ const FamilyDetails = props => {
         <Heading
           fontSize={20}
           marginTop={45}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="DID YOUR MARITAL STATUS CHANGED IN 2020?"
         />
         <TouchableInput
@@ -156,7 +156,7 @@ const FamilyDetails = props => {
         <Heading
           fontSize={20}
           marginTop={45}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="ANY DEPENDENTS IN 2020?"
         />
         <TouchableInput

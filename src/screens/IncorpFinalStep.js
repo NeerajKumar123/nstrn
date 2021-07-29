@@ -37,13 +37,13 @@ const IncorpFinalStep = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="AUTHORIZATION"
         />
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WE NEED YOUR
           AUTHORIZATION TO COMPLETE
           THE INCORPORATION PROCESS"

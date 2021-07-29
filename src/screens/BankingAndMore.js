@@ -130,7 +130,7 @@ const BankingAndMore = props => {
         <Heading
           fontSize={20}
           marginTop={45}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE ENTER YOUR DIRECT DIPOSIT INFORMATION"
         />
         <TouchableInput
@@ -174,7 +174,7 @@ const BankingAndMore = props => {
         <Heading
           fontSize={20}
           marginTop={45}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="DATE OF ENTRY INTO CANADA(IF IMMIGRATED)"
         />
         <TouchableInput

@@ -131,7 +131,7 @@ const ForgotPassword = props => {
         <ScrollView
           contentContainerStyle={{
             width: '100%',
-            paddingHorizontal: 30,
+            paddingHorizontal: 20,
             alignItems: 'center',
           }}>
           <View style={{width: '100%', marginTop: 86}}>
@@ -197,6 +197,8 @@ const ForgotPassword = props => {
               }
             }}
           />
+          {codeSentSuccessfully && 
+          <>
           <Heading
             fontSize={16}
             marginTop={30}
@@ -259,8 +261,6 @@ const ForgotPassword = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'Submit'}
             onPress={() => {
-              navigation.navigate('SetupNewPass');
-              return
               const otp = _otp;
               if (Number.isNaN(otp) || otp.length < 4) {
                 Alert.alert('SukhTax', 'Please enter a valid Security Code.');
@@ -304,6 +304,9 @@ const ForgotPassword = props => {
               });
             }}
           />
+          </>
+          }
+          
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

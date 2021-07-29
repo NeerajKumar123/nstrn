@@ -108,13 +108,13 @@ const MyTaxYear = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value={`LETS HAVE A LOOK AT HOW YOUR TAX YEAR ${currentYear} WENT!`}
         />
         <Heading
           fontSize={20}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE SELECT ALL THAT APPLY"
         />
         <View
@@ -127,7 +127,7 @@ const MyTaxYear = props => {
             height={50}
             marginTop={0}
             width={global.isFromSpouseFlow ? '48%' : '100%' } 
-            bgColor={Colors.CLR_29295F}
+            bgColor={Colors.APP_BLUE_HEADING_COLOR}
             item={{title: 'MY SELF'}}
             isSelected={mySelf}
             onSelected={() => {
@@ -140,7 +140,7 @@ const MyTaxYear = props => {
           height={50}
           marginTop={0}
           width="48%"
-          bgColor={Colors.CLR_29295F}
+          bgColor={Colors.APP_BLUE_HEADING_COLOR}
           item={{title: 'SPOUSE'}}
           isSelected={spouse}
           onSelected={() => {

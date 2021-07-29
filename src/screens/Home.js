@@ -28,20 +28,20 @@ const Home = props => {
         <Heading
           fontSize={16}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value={`Welcome, ${userFullName}`}
         />
         <Heading
           fontSize={16}
           marginTop={25}
-          color={Colors.CLR_29295F}
+          color={Colors.APP_BLUE_HEADING_COLOR}
           value="RECENT REQUEST"
         />
         <Heading
           fontSize={16}
           status={2}
           marginTop={15}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="TAX FILING"
           onClicked = {()=>{
             console.log('OnlineTaxFiling')
@@ -52,7 +52,7 @@ const Home = props => {
           fontSize={16}
           status={1}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="INCORPORATION"
           onClicked = {()=>{
             console.log('OnlineTaxFiling')
@@ -63,7 +63,7 @@ const Home = props => {
           fontSize={16}
           status={2}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="CRA LETTERS"
           onClicked = {()=>{
             console.log('OnlineTaxFiling')
@@ -95,7 +95,7 @@ const ProfDoccCardView = props => {
   return (
     <LinearGradient
       opacity={0.6}
-      colors={[Colors.CLR_D9272A, Colors.CLR_D72528]}
+      colors={[Colors.APP_RED_SUBHEADING_COLOR, Colors.CLR_D72528]}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -144,7 +144,7 @@ const MessegesView = props => {
   return (
     <LinearGradient
       opacity={0.6}
-      colors={[Colors.CLR_D9272A, Colors.CLR_D72528]}
+      colors={[Colors.APP_RED_SUBHEADING_COLOR, Colors.CLR_D72528]}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,

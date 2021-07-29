@@ -267,7 +267,7 @@ const Spouse = props => {
         <Heading
           fontSize={20}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="BANKING INFORMATION"
         />
         <TouchableInput

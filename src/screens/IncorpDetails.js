@@ -80,7 +80,7 @@ const IncorpDetails = props => {
         <Heading
           fontSize={16}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="INCORPORATORS' DETAILS :"
         />
         <SKInput
@@ -178,7 +178,8 @@ const IncorpDetails = props => {
             Keyboard.dismiss()
             if(checkFormValidations()){
               setIsLoading(true)
-              const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:'TESTDEVICETOKEN654321', Device_OS:'iOS', Module_Type_Id:2}
+              const testDeviceToken = `Device_token${Math.random()}`
+              const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:testDeviceToken, Device_OS:'iOS', Module_Type_Id:2}
               register(params,(regisRes) =>{
                 setIsLoading(false)
                 if(regisRes?.status == 1){

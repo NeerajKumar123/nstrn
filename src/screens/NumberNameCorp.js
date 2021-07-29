@@ -54,7 +54,7 @@ const NumberNameCorp = props => {
           fontSize={16}
           marginTop={20}
           marginBottom={30}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="ARE YOU LOOKING TO REGISTER
           AS A NUMBERED OR NAME
           CORPORATION?"
@@ -89,7 +89,6 @@ const NumberNameCorp = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'NEXT'}
             onPress={() => {
-              console.log('onPress');
               navigation.navigate('UploadCorp');
             }}
           />

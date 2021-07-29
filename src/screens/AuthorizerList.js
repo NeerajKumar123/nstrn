@@ -38,7 +38,7 @@ const AuthorizerList = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WE WILL NEED YOU TO AUTHORIZE US IN ORDER FOR US TO PULL YOUR INFORMATION FROM CRA!"
         />
         <Card
@@ -101,7 +101,7 @@ const Card = props => {
         alignItems: 'center',
         width: '100%',
         minHeight: height,
-        backgroundColor: Colors.CLR_29295F,
+        backgroundColor: Colors.APP_BLUE_HEADING_COLOR,
       }}>
       <Text
         style={{
