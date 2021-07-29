@@ -118,7 +118,9 @@ const Identification = props => {
             if (res?.error) {
               console.log('error', res?.error ?? ERROR_MSG);
             }
-            intiateImageUploading(res)
+            if(res?.assets){
+              intiateImageUploading(res)
+            }
           });
         }}
         />
