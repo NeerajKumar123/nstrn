@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -11,9 +11,9 @@ import {
   Text,
 } from 'react-native';
 import SKButton, {Link} from '../components/SKButton';
-// import Heading from '../components/Heading';
+import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
-// import {useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {login} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
@@ -47,7 +47,7 @@ const OnlineReturnLanding = props => {
         <Heading
           fontSize={16}
           marginTop={55}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WHICH YEARS DO YOU WANT
           TO APPLY FOR? SELECT ALL
           THAT APPLY:"

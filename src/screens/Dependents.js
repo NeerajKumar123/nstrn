@@ -112,12 +112,12 @@ const Dependents = props => {
         value="THIS IS SOMEONE WHO RELIES ON YOU FOR FINANCIAL SUPPORT"
         marginTop={20}
         fontSize={20}
-        color={Colors.CLR_D9272A}
+        color={Colors.APP_RED_SUBHEADING_COLOR}
         />
         <Heading
           fontSize={20}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="DEPENDENT 1"
         />
         <SKInput

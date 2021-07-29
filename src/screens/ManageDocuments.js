@@ -37,7 +37,6 @@ const ManageDocuments = props => {
     const params = {User_Id: userid, Tax_File_Id: taxFileID || 83};
     getUserDocuments(params, docsRes => {
       setIsLoading(false)
-      console.log('docsRes', docsRes);
       if (docsRes?.status == 1) {
         setDocs(docsRes.data);
       } else {
@@ -67,7 +66,7 @@ const ManageDocuments = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="SEE BELOW FOR ALL DOCUMENTS UPLOADED"
         />
         {docs &&
@@ -132,7 +131,6 @@ const ManageDocuments = props => {
           }}
         />
           }
-        
         {showDoc && (
           <DocumentViewer
             onClose={() => setShowDoc(false)}
@@ -177,7 +175,7 @@ const ManageDocCard = props => {
         <Text
           style={{
             textAlign: 'left',
-            color: Colors.CLR_29295F,
+            color: Colors.APP_BLUE_HEADING_COLOR,
             fontSize: fontSize,
             fontWeight: '500',
             fontFamily: CustomFonts.OpenSansRegular,

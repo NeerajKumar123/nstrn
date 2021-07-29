@@ -30,14 +30,14 @@ const IncorpInProcess = props => {
         fontSize={17}
         marginTop={12}
         fontWeight="700"
-        color={Colors.CLR_D9272A}
+        color={Colors.APP_RED_SUBHEADING_COLOR}
         value="THANK YOU FOR PROVIDING US WITH ALL RELEVANT INFORMATION. WE ARE WORKING HARD TO COMPLETE YOUR REQUEST"
       />
       <Heading
         fontSize={17}
         marginTop={12}
         fontWeight="700"
-        color={Colors.CLR_D9272A}
+        color={Colors.APP_RED_SUBHEADING_COLOR}
         value="SHOULD YOU HAVE ANY QUESTIONS DURING THIS PROCESS, PLEASE CALL US USING THE BUTTON BELOW:"
       />
       <SKButton
@@ -51,7 +51,6 @@ const IncorpInProcess = props => {
         borderColor={Colors.SECONDARY_FILL}
         title={'CALL US'}
         onPress={() => {
-          console.log('onPress');
           navigation.popToTop()
         }}
       />
@@ -96,10 +95,10 @@ const KeyValueView = props => {
         justifyContent: 'space-between',
         marginTop: props.marginTop,
       }}>
-      <Text style={{fontWeight: '700', fontSize: 20, color: Colors.CLR_29295F}}>
+      <Text style={{fontWeight: '700', fontSize: 20, color: Colors.APP_BLUE_HEADING_COLOR}}>
         {props.title}
       </Text>
-      <Text style={{fontWeight: '700', fontSize: 20, color: Colors.CLR_29295F}}>
+      <Text style={{fontWeight: '700', fontSize: 20, color: Colors.APP_BLUE_HEADING_COLOR}}>
         {props.value}
       </Text>
     </View>

@@ -114,7 +114,7 @@ const SignaturePage = props => {
           <Heading
             fontSize={16}
             marginTop={45}
-            color={Colors.CLR_D9272A}
+            color={Colors.APP_RED_SUBHEADING_COLOR}
             value="TAX PAYER INFORMATION"
           />
           <SKInput
@@ -162,7 +162,7 @@ const SignaturePage = props => {
           <Heading
             fontSize={12}
             marginTop={10}
-            color={Colors.CLR_D9272A}
+            color={Colors.APP_RED_SUBHEADING_COLOR}
             value="BY SIGNING AND DATING THIS PAGE, YOU AUTHORIZE THE CANADA REVENUE AGENCY TO INTRACT WITH SUKH TAX AND FINANCIAL SERVICES, WITH REF ID H6YX7GS,GROUP ID:G, UNDER LEVEL 2 OF AUTHORIZATION, WHERE SUKHTAX AND FINANCIAL SERVICES HAS THE ABILITY TO DISCLOSE AND REQUEST. I AGREE TO NO EXPIRY DATE ON THIS AUTHORIZARION, AND UNDERSTAND THAT I CAN CONTACT THE CANADA REVENUE AGENCY DIRECTLY AT A LATER TIME TO RECIND THIS AUTHORIZARION"
           />
           <Heading
@@ -234,7 +234,7 @@ const SignaturePage = props => {
                   <Icon
                     name={'content-save-outline'}
                     size={30}
-                    color={Colors.CLR_29295F}
+                    color={Colors.APP_BLUE_HEADING_COLOR}
                   />
                 </TouchableOpacity>
               )}
@@ -306,7 +306,7 @@ const SKCheckbox = props => {
         size={20}
         color={Colors.GRAY}
       />
-      <Text style={{color: Colors.CLR_29295F, marginLeft: 10, flex: 1}}>
+      <Text style={{color: Colors.APP_BLUE_HEADING_COLOR, marginLeft: 10, flex: 1}}>
         I authorize SukhTax and Financial Services as per below.
       </Text>
     </TouchableOpacity>

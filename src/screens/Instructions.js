@@ -49,7 +49,7 @@ const Instructions = props => {
         navigation.navigate('SignUp')
       }}
         style={{
-          backgroundColor: Colors.CLR_D9272A,
+          backgroundColor: Colors.APP_RED_SUBHEADING_COLOR,
           borderRadius: 28,
           width: 56,
           height: 56,

@@ -74,7 +74,7 @@ const OnlineDocuments = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="THIS IS WHERE YOU CAN MANAGE ALL DOCUMENTS UPLOADED TO SUKHTAX:"
         />
         {data &&
@@ -101,7 +101,7 @@ const OnlineDocuments = props => {
           })}
         <UploadedFilesStatus count={uploadImageCount} />
         <ManageDocButton
-          grads={[Colors.CLR_29295F, Colors.CLR_29295F]}
+          grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title="MANAGE DOCUMENTS"
           onClicked={() => {
             navigation.navigate('ManageDocuments');
@@ -187,7 +187,7 @@ const DocCard = props => {
         style={{
           width: '100%',
           textAlign: 'left',
-          color: Colors.CLR_29295F,
+          color: Colors.APP_BLUE_HEADING_COLOR,
           fontSize: 17,
           fontWeight: '700',
         }}>
@@ -223,7 +223,7 @@ const UploadedFilesStatus = props => {
         style={{
           width: '100%',
           textAlign: 'left',
-          color: Colors.CLR_D9272A,
+          color: Colors.APP_RED_SUBHEADING_COLOR,
           fontSize: 17,
           fontWeight: '700',
         }}>

@@ -4,7 +4,7 @@ import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 const Heading = props => {
   const {
-    color = Colors.CLR_29295F,
+    color = Colors.APP_BLUE_HEADING_COLOR,
     fontSize = 25,
     fontWeight = '700',
     value = 'Heading',

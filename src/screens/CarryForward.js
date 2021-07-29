@@ -53,7 +53,7 @@ const CarryForward = props => {
         <Heading
           fontSize={16}
           marginTop={55}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WE SEE THAT YOU FILED
           YOUR RETURN THROUGH
           THE APP LAST. WOULD YOU
@@ -63,7 +63,7 @@ const CarryForward = props => {
         <Heading
           fontSize={16}
           marginTop={30}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="DON'T WORRY, YOU'LL
           HAVE A CHANCE TO EDIT THE
           DETAILS THAT HAVE
@@ -84,7 +84,6 @@ const CarryForward = props => {
             borderColor={Colors.CLR_D3D3D9}
             title={'NO'}
             onPress={() => {
-              console.log('onPress');
               navigation.navigate('Identification');
             }}
           />
@@ -96,7 +95,6 @@ const CarryForward = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'YES'}
             onPress={() => {
-              console.log('onPress');
               navigation.navigate('Identification');
             }}
           />

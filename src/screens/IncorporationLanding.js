@@ -55,7 +55,7 @@ const IncorporationLanding = props => {
           fontSize={16}
           marginTop={20}
           marginBottom={30}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WHICH TYPE OF CORPORATION WOULD YOU LIKE TO REGISTER?"
         />
         {data &&
@@ -88,7 +88,6 @@ const IncorporationLanding = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'NEXT'}
             onPress={() => {
-              console.log('onPress');
               navigation.navigate('NumberNameCorp');
             }}
           />

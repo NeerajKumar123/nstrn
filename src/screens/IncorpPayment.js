@@ -36,7 +36,6 @@ const IncorpPayment = props => {
         borderColor={Colors.SECONDARY_FILL}
         title={'PAY NOW'}
         onPress={() => {
-          console.log('onPress');
           navigation.navigate('IncorpInProcess')
         }}
       />
@@ -61,7 +60,7 @@ const PaymentFinalCard = props => {
         fontSize={17}
         marginTop={12}
         fontWeight="700"
-        color={Colors.CLR_D9272A}
+        color={Colors.APP_RED_SUBHEADING_COLOR}
         value="PLEASE COMPLETE THE BELOW PAYMENT TO FINALIZE YOUR REGISTRATION REQUEST:"
       />
       <KeyValueView marginTop={54} title="ONTARIO CORPORATION" value="$499" />
@@ -87,10 +86,10 @@ const KeyValueView = props => {
         justifyContent: 'space-between',
         marginTop: props.marginTop,
       }}>
-      <Text style={{fontWeight: '700', fontSize: 20, color: Colors.CLR_29295F}}>
+      <Text style={{fontWeight: '700', fontSize: 20, color: Colors.APP_BLUE_HEADING_COLOR}}>
         {props.title}
       </Text>
-      <Text style={{fontWeight: '700', fontSize: 20, color: Colors.CLR_29295F}}>
+      <Text style={{fontWeight: '700', fontSize: 20, color: Colors.APP_BLUE_HEADING_COLOR}}>
         {props.value}
       </Text>
     </View>

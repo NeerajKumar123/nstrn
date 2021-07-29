@@ -1,3 +1,4 @@
+
 export const BLUE = 'blue';
 export const WHITE = 'white';
 export const BLACK = 'black';
@@ -10,6 +11,11 @@ export const GRAY = 'gray';
 export const DARKGRAY = 'darkgray';
 export const LIGHTGRAY = 'lightgray';
 export const ORANGE = 'orange';
+export const PRIMARY_FILL = '#D72528'
+export const PRIMARY_BORDER = '#F47F7F'
+export const SECONDARY_FILL = '#FAC0C0'
+export const APP_BLUE_HEADING_COLOR = '#29295F'
+export const APP_RED_SUBHEADING_COLOR = '#D9272A'
 export const CLR_EB0000 = '#EB0000'
 export const CLR_EB000080 = '#EB000080'
 export const CLR_EB000015 = '#EB000015'
@@ -21,12 +27,7 @@ export const CLR_CECFD1 = '#CECFD1'
 export const CLR_7F7F9F = '#7F7F9F'
 export const CLR_D3D3D9 = '#D3D3D9'
 export const CLR_E77C7E = '#E77C7E'
-export const CLR_29295F = '#29295F'
-export const CLR_D9272A = '#D9272A'
 export const CLR_00000020 = '#00000020'
 export const CLR_F47F7F = '#F47F7F'
 
-export const PRIMARY_FILL = '#D72528'
-export const PRIMARY_BORDER = '#F47F7F'
-export const SECONDARY_FILL = '#FAC0C0'
 
