@@ -9,6 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 const Home = props => {
   const navigation = useNavigation();
   const userFullName = global.userInfo ? `${global.userInfo.firstname} ${global.userInfo.lastname}` : ''
+  console.log('global.userInfo',global.userInfo)
   return (
     <View
       style={{

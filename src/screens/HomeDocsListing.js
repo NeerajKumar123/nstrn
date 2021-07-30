@@ -149,9 +149,6 @@ const TaxReturnCard = props => {
 
 const FileCard = props => {
   const {item, onClick} = props;
-  const array = item.document_file_name?.split('/');
-  const [lastItem] = array.slice(-1);
-
   return (
     <TouchableOpacity
       style={{
@@ -172,7 +169,7 @@ const FileCard = props => {
           fontWeight: '400',
           flex: 1,
         }}>
-        {lastItem || item.title || item.document_title}
+        {item.document_title}
       </Text>
       <Image
         resizeMode="contain"
