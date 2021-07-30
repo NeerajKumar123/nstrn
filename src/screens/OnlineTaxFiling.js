@@ -77,16 +77,18 @@ const OnlineTaxFiling = props => {
 const TaxFilingStatusCard = props => {
   const {status} = props;
   let statusText = '';
-  let descText = '';
-  if (status == 2) {
-    statusText = 'FILE SUBMITTED';
-    descText =
-      'THANK YOU FOR SUBMITTING YOUR FILE. WE ARE WORKING HARD TO REVIEW YOUR INFORMATION AND DOCUMENTS. WE WILL PROVIDE YOU WITH A PAYMENT QUOTE SHORTLY.';
+    let descText = '';
+    statusText = global.fileStatusRes.data[0].tax_file_status_name
+    descText = global.fileStatusRes.data[0].status_description
+    console.log('statusText', statusText)
+    console.log('descText', descText)
+  /*if (status == 2) {
+   // statusText = 'FILE SUBMITTED';
+   // descText = 'THANK YOU FOR SUBMITTING YOUR FILE. WE ARE WORKING HARD TO REVIEW YOUR INFORMATION AND DOCUMENTS. WE WILL PROVIDE YOU WITH A PAYMENT QUOTE SHORTLY.';
   } else {
-    statusText = 'MISSING DOCUMENTS';
-    descText =
-      'THANK YOU FOR SUBMITTING YOUR INFORMATION. LOOKS LIKE YOU STILL HAVE TO UPLOAD YOUR DOCUMENTS.PLEASE USE THE BUTTON BELOW TO UPLOAD';
-  }
+    //statusText = 'MISSING DOCUMENTS';
+   // descText = 'THANK YOU FOR SUBMITTING YOUR INFORMATION. LOOKS LIKE YOU STILL HAVE TO UPLOAD YOUR DOCUMENTS.PLEASE USE THE BUTTON BELOW TO UPLOAD';
+  }*/
   return (
     <View
       style={{
