@@ -20,6 +20,7 @@ import SKLoader from '../components/SKLoader';
 
 const ManageDocuments = props => {
   const navigation = useNavigation();
+  const pageParams = props.route.params;
   const [docs, setDocs] = useState();
   const [showDoc, setShowDoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
@@ -118,6 +119,7 @@ const ManageDocuments = props => {
           })}
           {docs && docs.length > 0 && 
           <SKButton
+          disable = {!pageParams.isDocAdded}
           fontSize={16}
           marginTop={30}
           rightImage={CustomFonts.right_arrow}

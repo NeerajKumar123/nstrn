@@ -28,8 +28,7 @@ const OnlineDocuments = props => {
     maxHeight: 5,
     includeBase64:true,
   };
-
-  const data = [{year: '2019'}, {year: '2020'}, {year: '2021'}];
+  const data = global.selectedYears;
   const [uploadImageCount, setUploadImageCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -81,10 +80,10 @@ const OnlineDocuments = props => {
           data.map((item, index) => {
             return (
               <DocCard
-              key = {item.year}
+              key = {item}
                 item={item}
                 onClicked={() => {
-                  console.log('onClicked');
+                  console.log('onClicked',item);
                   launchImageLibrary(options, res => {
                     console.log('res',res)
                     if (res?.didCancel) {
@@ -93,7 +92,7 @@ const OnlineDocuments = props => {
                     if (res?.error) {
                       console.log('error', res?.error ?? ERROR_MSG);
                     }
-                    intiateImageUploading(res, item.year)
+                    intiateImageUploading(res, item)
                   });
                 }}
               />
@@ -104,7 +103,7 @@ const OnlineDocuments = props => {
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title="MANAGE DOCUMENTS"
           onClicked={() => {
-            navigation.navigate('ManageDocuments');
+            navigation.navigate('ManageDocuments', {isDocAdded:uploadImageCount});
           }}
         />
         <SKButton
@@ -191,7 +190,7 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {`${item.year} DOCUMENTS`}
+        {`${item} DOCUMENTS`}
       </Text>
       <Image
         resizeMode="contain"

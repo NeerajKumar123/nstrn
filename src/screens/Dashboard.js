@@ -8,6 +8,7 @@ import {
   FlatList,
   DeviceEventEmitter,
   Platform,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import DashCard from '../components/DashCard';
@@ -63,6 +64,7 @@ const data = [
 ];
 
 const Dashboard = props => {
+   
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
 
@@ -73,25 +75,82 @@ const Dashboard = props => {
     getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
       console.log('fileStatusRes',fileStatusRes)
       setIsLoading(false)
-      global.fileStatusRes = fileStatusRes
+      const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
+      global.statusData = statusData || {}
     })
   }, [])
 
-
   const navigateToScreen = item => {
-    console.log('item', item);
     switch (item.id) {
       case 1:
         navigation.navigate('Home');
         break;
+        case 2:
+          const {book_an_appointment_link}  = global.statusData
+          navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
+          break;
       case 3:
-        navigation.navigate('OnlineReturnLanding');
+        const {Online_Button_Enabled} = global.statusData
+        if(!Online_Button_Enabled && 0){
+          Alert.alert('SukhTax','You have already submitted your details, and your file is currently being processed. Please use the Home screen to edit any details.')
+        }else{
+          moveToPage()
+        }
         break;
       case 4:
+        return
         navigation.navigate('IncorportionLandiing');
         break;
       default:
         break;
+    }
+  };
+  const moveToPage = props => {
+    navigation.navigate('OnlineReturnLanding')
+    return
+    const {
+      years_selected = 0,
+      identification_document_uploaded = 0,
+      about_info_filled = 0,
+      banking_family_info_filled = 0,
+      dependent_info_filled = 0,
+      spouse_info_filled = 0,
+      my_year_info_filled = 0,
+      document_uploaded = 0,
+      authorization_document_uploaded = 1
+    } = global.statusData;
+    // const 
+    //   years_selected = 0,
+    //   identification_document_uploaded = 0,
+    //   about_info_filled = 0,
+    //   banking_family_info_filled = 0,
+    //   dependent_info_filled = 0,
+    //   spouse_info_filled = 0,
+    //   my_year_info_filled = 0,
+    //   document_uploaded = 0,
+    //   authorization_document_uploaded = 0
+    
+
+     if(authorization_document_uploaded){
+      navigation.navigate('AnyThingElse')
+    }else if(document_uploaded){
+      navigation.navigate('AuthorizerList')
+    }else if(my_year_info_filled){
+      navigation.navigate('OnlineDocuments')
+    }else if(spouse_info_filled){
+      navigation.navigate('Dependents')
+    }else if(dependent_info_filled){
+      navigation.navigate('MyTaxYear')
+    }else if(banking_family_info_filled){
+      navigation.navigate('MyTaxYear')
+    }else if(about_info_filled){
+      navigation.navigate('BankingAndMore')
+    }else if(identification_document_uploaded){
+      navigation.navigate('BasicInfo')
+    }else if(years_selected){
+      navigation.navigate('Identification')
+    }else{
+      navigation.navigate('OnlineReturnLanding')
     }
   };
 
@@ -103,13 +162,13 @@ const Dashboard = props => {
         flex: 1,
         backgroundColor: 'white',
       }}>
+      {isLoading && <SKLoader/>}
       <DashHeader
         onRightClicked={() => {
           console.log('onRightClicked');
           navigation.navigate('Profile');
         }}
       />
-      {isLoading && <SKLoader/>}
       {data && (
         <FlatList
           contentContainerStyle={{

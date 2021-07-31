@@ -318,7 +318,7 @@ const Spouse = props => {
                 setIsLoading(false)
                 if (spouseRes?.status == 1) {
                   global.isFromSpouseFlow = true
-                  navigation.navigate('Dependents');
+                  navigation.push('Dependents', {depCount:1});
                 } else {
                   Alert.alert('SukhTax', 'Something wrong!');
                 }

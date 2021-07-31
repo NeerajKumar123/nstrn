@@ -32,6 +32,7 @@ import {format } from 'date-fns'
 
 const Dependents = props => {
   const navigation = useNavigation();
+  const pageParams = props.route.params;
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [dob, setDOB] = useState('');
@@ -42,6 +43,7 @@ const Dependents = props => {
   const [isGenderVisible, setIsGenderVisible] = useState()
   const [isDatePickerVisible, setIsDatePickerVisible] = useState()
   const [isRelationVisible, setIsRelationVisible] = useState()
+  const [depCount, setDepCount] = useState(pageParams?.depCount)
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -118,7 +120,7 @@ const Dependents = props => {
           fontSize={20}
           marginTop={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="DEPENDENT 1"
+          value={`DEPENDENT ${depCount}`}
         />
         <SKInput
           leftAccImage={CustomFonts.UserIcon}
@@ -144,6 +146,18 @@ const Dependents = props => {
             setLName(value)
           }}
         />
+        <SKInput
+          leftAccImage={CustomFonts.Number}
+          marginTop={20}
+          marginBottom={0}
+          maxLength={30}
+          borderColor={Colors.CLR_0065FF}
+          value={sinNo}
+          placeholder="Enter SIN"
+          onEndEditing={value => {
+            setSinNo(value)
+          }}
+        />
          <TouchableInput
           leftAccImage={CustomFonts.Calender}
           value = {dob && format(dob, 'dd/MM/yyyy')}
@@ -159,18 +173,6 @@ const Dependents = props => {
           placeholder = 'Select Gender'
           onClicked={() => {
             setIsGenderVisible(true);
-          }}
-        />
-        <SKInput
-          leftAccImage={CustomFonts.Number}
-          marginTop={20}
-          marginBottom={0}
-          maxLength={30}
-          borderColor={Colors.CLR_0065FF}
-          value={sinNo}
-          placeholder="Enter SIN"
-          onEndEditing={value => {
-            setSinNo(value)
           }}
         />
          <TouchableInput
@@ -195,8 +197,19 @@ const Dependents = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'ADD ANOTHER DEPENDENT'}
           onPress={() => {
-            console.log('link pressed');
-            navigation.navigate('BasicInfo');
+            if(depCount < 5){
+              console.log('link pressed');
+              if(checkFormValidations()){
+                setIsLoading(true)
+                const params = prepareParams()
+                onlineSaveDependentInfo(params, (depRes) =>{
+                  setIsLoading(false)
+                  navigation.push('Dependents', {depCount:depCount+1});
+                })
+              }
+            }else{
+              Alert.alert('SukhTax', 'You are not allowed to add more than 4 dependents.')
+            }
           }}
         />
          <SKButton
@@ -210,9 +223,6 @@ const Dependents = props => {
           onPress={() => {
             console.log('link pressed');
             if(checkFormValidations()){
-              // onlineUpdateDependentInfo(params, (updateRes)=>{
-              //   console.log('updateRes', updateRes)
-              // })
               setIsLoading(true)
               const params = prepareParams()
               onlineSaveDependentInfo(params, (depRes) =>{

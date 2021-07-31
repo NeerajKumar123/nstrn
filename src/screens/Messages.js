@@ -140,12 +140,12 @@ const MessageCard = props => {
         width: width - 40,
         marginTop: 5,
         flexDirection: 'row',
-        justifyContent: isUser ? 'flex-start' : 'flex-end',
+        justifyContent: isUser ? 'flex-end' : 'flex-start',
       }}>
       <Text
         style={{
           width: '50%',
-          backgroundColor: isUser ? 'gray' : 'pink',
+          backgroundColor: isUser ? Colors.CLR_EBEBEB : Colors.CLR_FFECEC,
           paddingHorizontal: 10,
           paddingVertical: 10,
           borderRadius: 6,

@@ -23,10 +23,8 @@ const MyTaxYear = props => {
   const [currentYear, setCurrentYear] = useState();
 
   useEffect(() => {
-    setCurrentYear(global.selectedYears[currentYearIndex]);
-    console.log(
-      global.selectedYears[currentYearIndex],
-    );
+    console.log('global.selectedYears',global.selectedYears)
+    setCurrentYear(global.selectedYears && currentYearIndex < global.selectedYears.length  ? global.selectedYears[currentYearIndex] : '2020.');
   }, [currentYearIndex]);
 
   const [data, setData] = useState([
@@ -76,14 +74,12 @@ const MyTaxYear = props => {
       Details_For: 0,
     };
     data.map(item => {
-      console.log('item', item);
       if (item.isSelected) {
         params[item.value] = 1;
       } else {
         params[item.value] = 0;
       }
     });
-    console.log('params', params);
     return params;
   };
 
@@ -177,11 +173,6 @@ const MyTaxYear = props => {
               />
             );
           })}
-        {console.log(
-          'currentYearIndex+1 > global.selectedYears.length',
-          currentYearIndex + 1,
-          global.selectedYears.length,
-        )}
         <SKButton
           marginTop={30}
           fontSize={16}
@@ -190,26 +181,36 @@ const MyTaxYear = props => {
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
           title={
-            currentYearIndex + 1 < global.selectedYears.length
+            currentYearIndex + 1 < global.selectedYears && global.selectedYears.length
               ? global.selectedYears[currentYearIndex + 1]
               : 'DOCUMENTS'
           }
           onPress={() => {
-            setIsLoading(true);
-            const params = prepareParams();
-            onlineSaveMyYearInfo(params, saveYrRes => {
-              if (saveYrRes?.status == 1) {
-                if (currentYearIndex + 1 < global.selectedYears.length) {
-                  console.log('saveYrRes',saveYrRes)
-                  setCurrentYearIndex(currentYearIndex + 1);
-                } else {
-                  navigation.navigate('OnlineDocuments');
-                }
-                setIsLoading(false);
-              } else {
-                Alert.alert('SukhTax', 'Something wrong');
+            if(mySelf || (spouse && isFromSpouseFlow)){
+              const selected = data && data.filter((x) => x.isSelected);
+              if(!selected?.length){
+                Alert.alert('SukhTax',global.isFromSpouseFlow ?  'Please select atleast one option for MYSELF OR SPOUSE' : 'Please select atleast one option for MYSELF')
+                return
               }
-            });
+  
+              setIsLoading(true);
+              const params = prepareParams();
+              onlineSaveMyYearInfo(params, saveYrRes => {
+                if (saveYrRes?.status == 1) {
+                  if (currentYearIndex + 1 < global.selectedYears && global.selectedYears.length) {
+                    console.log('saveYrRes',saveYrRes)
+                    setCurrentYearIndex(currentYearIndex + 1);
+                  } else {
+                    navigation.navigate('OnlineDocuments');
+                  }
+                  setIsLoading(false);
+                } else {
+                  Alert.alert('SukhTax', 'Something wrong');
+                }
+              });
+            }else{
+              Alert.alert('SukhTax', global.isFromSpouseFlow ? 'Please select one option from MYSELF OR SPOUSE' : 'Please select MYSELF')
+            }
           }}
         />
       </ScrollView>

@@ -43,6 +43,7 @@ import HSTRegistration from './screens/HSTRegistration';
 import IncorpPayment from './screens/IncorpPayment';
 import IncorpInProcess from './screens/IncorpInProcess';
 import Spouse from './screens/Spouse';
+import SKWebPage from './screens/SKWebPage';
 
 const Stack = createStackNavigator();
 
@@ -282,6 +283,12 @@ const SKStack = () => {
           component={Spouse}
           options={{title: 'Spouse', headerShown: false}}
         />
+        <Stack.Screen
+          name="SKWebPage"
+          component={SKWebPage}
+          options={{title: 'SKWebPage', headerShown: false}}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

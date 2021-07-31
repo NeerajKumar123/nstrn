@@ -7,6 +7,7 @@ import SKInput from '../components/SKInput';
 import * as CustomFonts from '../constants/FontsDefs'
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
+import {finalizeOnlineProcess} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OnlineAllDone = props => {
@@ -66,7 +67,15 @@ const OnlineAllDone = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'RETURN HOME'}
           onPress={() => {
-            console.log('link pressed');
+            const userid = global.userInfo?.user_id;
+            const taxFileID = global.userInfo?.Tax_File_Id || global.userInfo?.tax_file_id;  
+            const params = {
+              User_Id: userid,
+              Tax_File_Id: taxFileID
+            };
+            finalizeOnlineProcess(params,(finalizeRes) =>{
+              console.log('finalizeRes',finalizeRes)
+            })
             navigation.popToTop()
           }}
         />

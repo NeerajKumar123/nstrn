@@ -29,5 +29,6 @@ export const CLR_D3D3D9 = '#D3D3D9'
 export const CLR_E77C7E = '#E77C7E'
 export const CLR_00000020 = '#00000020'
 export const CLR_F47F7F = '#F47F7F'
-
+export const CLR_FFECEC = '#FFECEC'
+export const CLR_EBEBEB = '#EBEBEB'
 

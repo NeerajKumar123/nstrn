@@ -136,6 +136,7 @@ const TaxReturnCard = props => {
         data.map((item, index) => {
           return (
             <FileCard
+              key = {item.document_title}
               item={item}
               onClick={() => {
                 props.onDocClicked(item);

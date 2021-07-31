@@ -1,15 +1,16 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
+import SKLoader from '../components/SKLoader';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 import {useNavigation} from '@react-navigation/native';
+
 const Home = props => {
   const navigation = useNavigation();
   const userFullName = global.userInfo ? `${global.userInfo.firstname} ${global.userInfo.lastname}` : ''
-  console.log('global.userInfo',global.userInfo)
   return (
     <View
       style={{
@@ -51,22 +52,24 @@ const Home = props => {
         />
         <Heading
           fontSize={16}
-          status={1}
+          status={0}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="INCORPORATION"
           onClicked = {()=>{
+            return
             console.log('OnlineTaxFiling')
             navigation.navigate('OnlineTaxFiling')
           }}
         />
         <Heading
           fontSize={16}
-          status={2}
+          status={0}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="CRA LETTERS"
           onClicked = {()=>{
+            return
             console.log('OnlineTaxFiling')
             navigation.navigate('OnlineTaxFiling')
           }}

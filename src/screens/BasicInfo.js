@@ -189,7 +189,7 @@ const BasicInfo = props => {
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display='inline'
+            display={Platform.OS == 'ios' ? 'inline' : 'default'}
             onChange={(event, selectedDate) => {
               console.log(event.type, Date.parse(selectedDate));
               setDOB(selectedDate)
