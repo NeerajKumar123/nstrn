@@ -41,7 +41,7 @@ const Home = props => {
         />
         <Heading
           fontSize={16}
-          status={2}
+          status={1}
           marginTop={15}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="TAX FILING"
@@ -53,6 +53,7 @@ const Home = props => {
         <Heading
           fontSize={16}
           status={0}
+          status={1}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="INCORPORATION"
@@ -65,6 +66,7 @@ const Home = props => {
         <Heading
           fontSize={16}
           status={0}
+          status={1}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="CRA LETTERS"

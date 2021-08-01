@@ -19,7 +19,7 @@ import {
   uploadImage,
   getOnlinePaymentDetails,
   onlineSubmitFiling,
-  getTaxReturnsDocs
+  getTaxReturnsDocs,
 } from '../apihelper/Api';
 import SKButton, {UploadDocButton} from '../components/SKButton';
 import {useIsFocused} from '@react-navigation/native';
@@ -37,11 +37,13 @@ const OnlineTaxFiling = props => {
     includeBase64: true,
   };
 
-  const pagaHeading = () => {
+  const pageHeading = () => {
     let title = 'ONLINE TAX FILING';
     const {tax_file_status_id} = global.statusData;
-    if (tax_file_status_id == 10 || tax_file_status_id == 12) {
+    if (tax_file_status_id == 10) {
       title = 'PAYMENTS';
+    } else if (tax_file_status_id == 12) {
+      title = 'ADDITIONAL PAYMENTS';
     }
     return title;
   };
@@ -59,7 +61,7 @@ const OnlineTaxFiling = props => {
 
   const prepareParams = bs64Image => {
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.Tax_File_Id;
+    const taxFileID = global.userInfo?.tax_file_id;
     const params = {
       User_id: userid,
       Tax_File_Id: taxFileID || 83,
@@ -86,12 +88,11 @@ const OnlineTaxFiling = props => {
           paddingHorizontal: 20,
           height: '100%',
         }}>
-        <Heading value={pagaHeading()} marginTop={124} />
+        <Heading value={pageHeading()} marginTop={124} />
         <TaxFilingStatusCard
           navigation={navigation}
           marginTop={25}
           updateLoadingStatus={loadingStatus => {
-            console.log('updateLoadingStatus');
             setIsLoading(loadingStatus);
           }}
           uploadClick={() => {
@@ -219,13 +220,10 @@ const TaxFilingStatusCard = props => {
     additional_payment_required = 20,
     book_now_url,
     spouse_info_filled,
-    // tax_file_status_id
+    tax_file_status_id,
   } = global.statusData;
 
-  const tax_file_status_id = 16
-  
   const moveToPage = props => {
-    console.log('global.statusData',JSON.stringify(global.statusData))
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -235,31 +233,30 @@ const TaxFilingStatusCard = props => {
       spouse_info_filled = 0,
       my_year_info_filled = 0,
       document_uploaded = 0,
-      authorization_document_uploaded = 0
+      authorization_document_uploaded = 0,
     } = global.statusData;
-     if(authorization_document_uploaded){
-      navigation.navigate('AnyThingElse')
-    }else if(document_uploaded){
-      navigation.navigate('AuthorizerList')
-    }else if(my_year_info_filled){
-      navigation.navigate('OnlineDocuments')
-    }else if(spouse_info_filled){
-      navigation.navigate('Dependents')
-    }else if(dependent_info_filled){
-      navigation.navigate('MyTaxYear')
-    }else if(banking_family_info_filled){
-      navigation.navigate('MyTaxYear')
-    }else if(about_info_filled){
-      navigation.navigate('BankingAndMore')
-    }else if(identification_document_uploaded){
-      navigation.navigate('BasicInfo')
-    }else if(years_selected){
-      navigation.navigate('Identification')
-    }else{
-      navigation.navigate('OnlineReturnLanding')
+    if (authorization_document_uploaded) {
+      navigation.navigate('AnyThingElse');
+    } else if (document_uploaded) {
+      navigation.navigate('AuthorizerList');
+    } else if (my_year_info_filled) {
+      navigation.navigate('OnlineDocuments');
+    } else if (spouse_info_filled) {
+      navigation.navigate('Dependents');
+    } else if (dependent_info_filled) {
+      navigation.navigate('MyTaxYear');
+    } else if (banking_family_info_filled) {
+      navigation.navigate('MyTaxYear');
+    } else if (about_info_filled) {
+      navigation.navigate('BankingAndMore');
+    } else if (identification_document_uploaded) {
+      navigation.navigate('BasicInfo');
+    } else if (years_selected) {
+      navigation.navigate('Identification');
+    } else {
+      navigation.navigate('OnlineReturnLanding');
     }
   };
-
 
   if (
     (tax_file_status_id == 10 || tax_file_status_id == 12) &&
@@ -330,31 +327,50 @@ const TaxFilingStatusCard = props => {
         />
       )}
       {tax_file_status_id == 16 && (
-            <SKButton
-              fontSize={16}
-              marginTop = {30}
-              width="100%"
-              fontWeight={'normal'}
-              backgroundColor={Colors.CLR_7F7F9F}
-              borderColor={Colors.CLR_D3D3D9}
-              title={'DOWNLOAD MY TAX DOCS'}
-              // onPress={() => {
-              //   Alert.alert('SukhTax', 'Payment to be done.Under Development.')
-              // }}
-              onPress = {()=>{
-                updateLoadingStatus(true)
-                const params = {User_Id:global.userInfo?.user_id}
-                getTaxReturnsDocs(params,(taxReturnDocsRes) =>{
-                  updateLoadingStatus(false)
-                  if(taxReturnDocsRes?.data?.length){
-                    navigation.navigate('HomeDocsListing',{page_id:1,page_title:'TAX RETURNS', docs:taxReturnDocsRes?.data})
-                  }else{
-                    Alert.alert('Sukhtax','There is no document.')
-                  }
-                })
-              }}
-            />
-          )}
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.CLR_7F7F9F}
+          borderColor={Colors.CLR_D3D3D9}
+          title={'DOWNLOAD MY TAX DOCS'}
+          // onPress={() => {
+          //   Alert.alert('SukhTax', 'Payment to be done.Under Development.')
+          // }}
+          onPress={() => {
+            updateLoadingStatus(true);
+            const params = {User_Id: global.userInfo?.user_id};
+            getTaxReturnsDocs(params, taxReturnDocsRes => {
+              updateLoadingStatus(false);
+              if (taxReturnDocsRes?.data?.length) {
+                navigation.navigate('HomeDocsListing', {
+                  page_id: 1,
+                  page_title: 'TAX RETURNS',
+                  docs: taxReturnDocsRes?.data,
+                });
+              } else {
+                Alert.alert('Sukhtax', 'There is no document.');
+              }
+            });
+          }}
+        />
+      )}
+
+      {tax_file_status_id == 16 && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.SECONDARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'RATE US'}
+          onPress={() => {
+            //MOVE FOR RATING..
+          }}
+        />
+      )}
       <MessegesView
         count={new_message_count}
         onClick={() => {
@@ -371,7 +387,7 @@ const TaxFilingStatusCard = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'EDIT INFO'}
           onPress={() => {
-            moveToPage()
+            moveToPage();
           }}
         />
       )}
@@ -386,6 +402,22 @@ const TaxFilingStatusCard = props => {
           title={'BOOK NOW'}
           onPress={() => {
             navigation.navigate('SKWebPage', {pageUrl: book_now_url});
+          }}
+        />
+      )}
+      {(tax_file_status_id == 13 ||
+        tax_file_status_id == 15 ||
+        tax_file_status_id == 16) && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'RETURN TO HOME'}
+          onPress={() => {
+            navigation.popToTop();
           }}
         />
       )}
@@ -406,7 +438,11 @@ const TaxFilingStatusCard = props => {
               borderColor={Colors.PRIMARY_BORDER}
               title={'EDIT INFO'}
               onPress={() => {
-                moveToPage()
+                if (tax_file_status_id == 8) {
+                  navigation.popToTop();
+                } else {
+                  moveToPage();
+                }
               }}
             />
             <SKButton
@@ -477,7 +513,7 @@ const TaxFilingStatusCard = props => {
           title={'SUBMIT FOR FILING'}
           onPress={() => {
             const userid = global.userInfo?.user_id;
-            const taxFileID = global.userInfo?.Tax_File_Id || 83;
+            const taxFileID = global.userInfo?.tax_file_id || 83;
             const params = {User_id: userid, Tax_File_Id: taxFileID};
             updateLoadingStatus(true);
             onlineSubmitFiling(params, submitFileRes => {
@@ -507,7 +543,8 @@ const TaxFilingStatusCard = props => {
             title={'DETAILS'}
             onPress={() => {
               const userid = global.userInfo?.user_id;
-              const taxFileID = 3117;
+              const taxFileID = global.userInfo?.tax_file_id || 3127;
+              console.log('global', global.userInfo);
               const params = {
                 User_Id: userid,
                 Tax_File_Id: taxFileID,
@@ -545,7 +582,6 @@ const TaxFilingStatusCard = props => {
             justifyContent: 'space-between',
             marginTop: 18,
           }}>
-          {console.log('tax_file_status_id', tax_file_status_id)}
           <SKButton
             fontSize={16}
             width="48%"
@@ -554,12 +590,13 @@ const TaxFilingStatusCard = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'DETAILS'}
             onPress={() => {
+              console.log('global', global.userInfo);
               const userid = global.userInfo?.user_id;
-              const taxFileID = 3117;
+              const taxFileID = global.userInfo?.tax_file_id || 3127;
               const params = {
                 User_Id: userid,
                 Tax_File_Id: taxFileID,
-                Additional_Payment: additional_payment_required,
+                Additional_Payment: additional_payment_required > 0 ? 1 : 0,
               };
               updateLoadingStatus(true);
               getOnlinePaymentDetails(params, paymentDetailsRes => {
@@ -585,7 +622,7 @@ const TaxFilingStatusCard = props => {
           />
         </View>
       )}
-      {tax_file_status_id == 16 && (
+      {(tax_file_status_id == 16 || tax_file_status_id == 0) && (
         <SKButton
           fontSize={16}
           marginTop={30}

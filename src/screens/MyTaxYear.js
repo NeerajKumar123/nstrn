@@ -71,7 +71,7 @@ const MyTaxYear = props => {
       User_id: user_id,
       Tax_File_Id: tax_file_id || Tax_File_Id,
       Year: 2020,
-      Details_For: 0,
+      Details_For: global.isFromSpouseFlow ? 0 : 1,
     };
     data.map(item => {
       if (item.isSelected) {
@@ -192,9 +192,8 @@ const MyTaxYear = props => {
                 Alert.alert('SukhTax',global.isFromSpouseFlow ?  'Please select atleast one option for MYSELF OR SPOUSE' : 'Please select atleast one option for MYSELF')
                 return
               }
-  
               setIsLoading(true);
-              const params = prepareParams();
+              const params = prepareParams(true);
               onlineSaveMyYearInfo(params, saveYrRes => {
                 if (saveYrRes?.status == 1) {
                   if (currentYearIndex + 1 < global.selectedYears && global.selectedYears.length) {

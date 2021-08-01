@@ -33,8 +33,9 @@ const OnlineDocuments = props => {
   const [isLoading, setIsLoading] = useState(false)
 
   const prepareParams = (bs64Image,yr) =>{
+    console.log('global.userInfo',global.userInfo)
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.Tax_File_Id;
+    const taxFileID = global.userInfo?.tax_file_id;
     const params = {User_id:userid,Tax_File_Id:taxFileID || 83,Year:parseInt(yr),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
     return params
   }
@@ -116,8 +117,12 @@ const OnlineDocuments = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'AUTHORIZATION'}
           onPress={() => {
-            console.log('link pressed');
             navigation.navigate('AuthorizerList');
+            // if(global.isFromSpouseFlow){
+            //   navigation.navigate('AuthorizerList');
+            // }else{
+            //   navigation.navigate('AnyThingElse');
+            // }
           }}
         />
       </ScrollView>

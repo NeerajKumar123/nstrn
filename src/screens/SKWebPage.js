@@ -17,7 +17,6 @@ const { height } = Dimensions.get('window');
 const SKWebPage = (props) => {
   const navigation = useNavigation()
   const pageParams = props.route.params;
-  console.log('pageParams',pageParams)
   const [pageUrl] = useState(pageParams.pageUrl);
   const [isLoaderVisible, setIsLoaderVisible] = useState(false);
 

@@ -74,9 +74,9 @@ const Dashboard = props => {
     const params = {User_Id:userid}
     getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
       console.log('fileStatusRes',fileStatusRes)
-      setIsLoading(false)
       const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
       global.statusData = statusData || {}
+      setIsLoading(false)
     })
   }, [])
 
@@ -91,7 +91,7 @@ const Dashboard = props => {
           break;
       case 3:
         const {Online_Button_Enabled} = global.statusData
-        if(!Online_Button_Enabled && 0){
+        if(!Online_Button_Enabled){
           Alert.alert('SukhTax','You have already submitted your details, and your file is currently being processed. Please use the Home screen to edit any details.')
         }else{
           moveToPage()

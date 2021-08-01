@@ -34,7 +34,7 @@ const ManageDocuments = props => {
   const getDocs = () => {
     setIsLoading(true)
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.Tax_File_Id;
+    const taxFileID = global.userInfo?.tax_file_id;
     const params = {User_Id: userid, Tax_File_Id: taxFileID || 83};
     getUserDocuments(params, docsRes => {
       setIsLoading(false)
@@ -94,7 +94,7 @@ const ManageDocuments = props => {
                       text: 'Delete',
                       onPress: () => {
                         const userid = global.userInfo?.user_id;
-                        const taxFileID = global.userInfo?.Tax_File_Id;
+                        const taxFileID = global.userInfo?.tax_file_id;
                         const params = {
                           User_Id: userid,
                           Tax_File_Id: taxFileID || 83,
