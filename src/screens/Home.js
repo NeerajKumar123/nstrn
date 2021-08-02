@@ -187,8 +187,8 @@ const MessegesView = props => {
               fontWeight: '700',
               marginTop: 5,
               fontFamily:CustomFonts.OpenSansRegular
-            }}>
-            0 NEW MESSAGES
+              }}>
+            {`${global.fileStatusRes.data[0].new_message_count} NEW MESSAGES`}
           </Text>
         </View>
         <Image
