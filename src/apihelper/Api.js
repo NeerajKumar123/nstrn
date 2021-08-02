@@ -174,5 +174,14 @@ export const getCRALattersDocs = (params,callback) => {
 };
 
 
+export const getOnlinePaymentDetails = (params,callback) => {
+  const path = `${BaseURL}/Online_Get_Payment_Details`
+  API.makePostRequest(path , params, callback);
+};
 
+
+export const onlineSubmitFiling = (params,callback) => {
+  const path = `${BaseURL}/Online_Submit_For_Filing`
+  API.makePostRequest(path , params, callback);
+};
 

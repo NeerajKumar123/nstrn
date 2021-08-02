@@ -2698,6 +2698,11 @@
   "resolved" "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
   "version" "4.0.0"
 
+"escape-string-regexp@2.0.0":
+  "integrity" "sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w=="
+  "resolved" "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz"
+  "version" "2.0.0"
+
 "escodegen@^2.0.0":
   "integrity" "sha512-mmHKys/C8BFUGI+MAWNcSYoORYLMdPzjrknd2Vc+bUsjN5bXcr8EhrNB+UTqfL1y3I9c4fw2ihgtMPQLBRiQxw=="
   "resolved" "https://registry.yarnpkg.com/escodegen/-/escodegen-2.0.0.tgz"
@@ -2707,10 +2712,7 @@
     "estraverse" "^5.2.0"
     "esutils" "^2.0.2"
     "optionator" "^0.8.1"
-<<<<<<< HEAD
-=======
     "source-map" "~0.6.1"
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
   optionalDependencies:
     "source-map" "~0.6.1"
 
@@ -3221,14 +3223,11 @@
   "resolved" "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
-<<<<<<< HEAD
-=======
 "fsevents@^2.1.2", "fsevents@^2.3.2":
   "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
   "resolved" "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz"
   "version" "2.3.2"
 
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
   "resolved" "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz"
@@ -3545,7 +3544,7 @@
   "resolved" "https://registry.yarnpkg.com/interpret/-/interpret-1.4.0.tgz"
   "version" "1.4.0"
 
-"invariant@^2.2.4":
+"invariant@^2.2.4", "invariant@2.2.4":
   "integrity" "sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA=="
   "resolved" "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz"
   "version" "2.2.4"
@@ -4004,10 +4003,7 @@
     "@types/node" "*"
     "anymatch" "^3.0.3"
     "fb-watchman" "^2.0.0"
-<<<<<<< HEAD
-=======
     "fsevents" "^2.1.2"
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
     "graceful-fs" "^4.2.4"
     "jest-regex-util" "^26.0.0"
     "jest-serializer" "^26.6.2"
@@ -4029,10 +4025,7 @@
     "@types/node" "*"
     "anymatch" "^3.0.3"
     "fb-watchman" "^2.0.0"
-<<<<<<< HEAD
-=======
     "fsevents" "^2.3.2"
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
     "graceful-fs" "^4.2.4"
     "jest-regex-util" "^27.0.1"
     "jest-serializer" "^27.0.1"
@@ -4474,11 +4467,8 @@
   "integrity" "sha1-NzaitCi4e72gzIO1P6PWM6NcKug="
   "resolved" "https://registry.yarnpkg.com/jsonfile/-/jsonfile-2.4.0.tgz"
   "version" "2.4.0"
-<<<<<<< HEAD
-=======
   dependencies:
     "graceful-fs" "^4.1.6"
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
   optionalDependencies:
     "graceful-fs" "^4.1.6"
 
@@ -4486,11 +4476,8 @@
   "integrity" "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss="
   "resolved" "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz"
   "version" "4.0.0"
-<<<<<<< HEAD
-=======
   dependencies:
     "graceful-fs" "^4.1.6"
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
   optionalDependencies:
     "graceful-fs" "^4.1.6"
 
@@ -4549,11 +4536,8 @@
   "integrity" "sha1-QIhDO0azsbolnXh4XY6W9zugJDk="
   "resolved" "https://registry.yarnpkg.com/klaw/-/klaw-1.3.1.tgz"
   "version" "1.3.1"
-<<<<<<< HEAD
-=======
   dependencies:
     "graceful-fs" "^4.1.9"
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
   optionalDependencies:
     "graceful-fs" "^4.1.9"
 
@@ -5639,8 +5623,6 @@
   "integrity" "sha512-7AeGuCYNGmycyQbCqd/3PWH4eOoX/OiCa0uphp57NVTeAGdJGaAliecxwBDHYQCIvrW7aDBZCYeNTP/WX69mkg=="
   "resolved" "https://registry.yarnpkg.com/pretty-format/-/pretty-format-26.6.2.tgz"
   "version" "26.6.2"
-<<<<<<< HEAD
-=======
   dependencies:
     "@jest/types" "^26.6.2"
     "ansi-regex" "^5.0.0"
@@ -5651,26 +5633,12 @@
   "integrity" "sha512-7AeGuCYNGmycyQbCqd/3PWH4eOoX/OiCa0uphp57NVTeAGdJGaAliecxwBDHYQCIvrW7aDBZCYeNTP/WX69mkg=="
   "resolved" "https://registry.yarnpkg.com/pretty-format/-/pretty-format-26.6.2.tgz"
   "version" "26.6.2"
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
   dependencies:
     "@jest/types" "^26.6.2"
     "ansi-regex" "^5.0.0"
     "ansi-styles" "^4.0.0"
     "react-is" "^17.0.1"
 
-<<<<<<< HEAD
-"pretty-format@^26.6.2":
-  "integrity" "sha512-7AeGuCYNGmycyQbCqd/3PWH4eOoX/OiCa0uphp57NVTeAGdJGaAliecxwBDHYQCIvrW7aDBZCYeNTP/WX69mkg=="
-  "resolved" "https://registry.yarnpkg.com/pretty-format/-/pretty-format-26.6.2.tgz"
-  "version" "26.6.2"
-  dependencies:
-    "@jest/types" "^26.6.2"
-    "ansi-regex" "^5.0.0"
-    "ansi-styles" "^4.0.0"
-    "react-is" "^17.0.1"
-
-=======
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
 "pretty-format@^27.0.2":
   "integrity" "sha512-mXKbbBPnYTG7Yra9qFBtqj+IXcsvxsvOBco3QHxtxTl+hHKq6QdzMZ+q0CtL4ORHZgwGImRr2XZUX2EWzORxig=="
   "resolved" "https://registry.yarnpkg.com/pretty-format/-/pretty-format-27.0.2.tgz"
@@ -5871,7 +5839,15 @@
   "resolved" "https://registry.npmjs.org/react-native-view-shot/-/react-native-view-shot-3.1.2.tgz"
   "version" "3.1.2"
 
-"react-native@*", "react-native@>=0.42.0", "react-native@>=0.47", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.59", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@0.64.2":
+"react-native-webview@^11.6.5":
+  "integrity" "sha512-5U+hI8snkCrFeDy+bUTszwhzcJIenaaOy3ubhY77HZq7R0pFIZzRYWkT0YXe1ymRYW9mSU96nr6S0AVDk8qkMw=="
+  "resolved" "https://registry.npmjs.org/react-native-webview/-/react-native-webview-11.6.5.tgz"
+  "version" "11.6.5"
+  dependencies:
+    "escape-string-regexp" "2.0.0"
+    "invariant" "2.2.4"
+
+"react-native@*", "react-native@>=0.42.0", "react-native@>=0.47", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.59", "react-native@>=0.60 <=0.64", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@0.64.2":
   "integrity" "sha512-Ty/fFHld9DcYsFZujXYdeVjEhvSeQcwuTGXezyoOkxfiGEGrpL/uwUZvMzwShnU4zbbTKDu2PAm/uwuOittRGA=="
   "resolved" "https://registry.yarnpkg.com/react-native/-/react-native-0.64.2.tgz"
   "version" "0.64.2"
@@ -6148,7 +6124,6 @@
   "integrity" "sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA=="
   "resolved" "https://registry.yarnpkg.com/rimraf/-/rimraf-3.0.2.tgz"
   "version" "3.0.2"
-<<<<<<< HEAD
   dependencies:
     "glob" "^7.1.3"
 
@@ -6164,23 +6139,6 @@
   dependencies:
     "glob" "^7.1.3"
 
-=======
-  dependencies:
-    "glob" "^7.1.3"
-
-"rimraf@~2.2.6":
-  "integrity" "sha1-5Dm+Kq7jJzIZUnMPmaiSnk/FBYI="
-  "resolved" "https://registry.yarnpkg.com/rimraf/-/rimraf-2.2.8.tgz"
-  "version" "2.2.8"
-
-"rimraf@~2.6.2":
-  "integrity" "sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA=="
-  "resolved" "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.3.tgz"
-  "version" "2.6.3"
-  dependencies:
-    "glob" "^7.1.3"
-
->>>>>>> dd0c283a82b34f51b72c63e0ce28b827d4151cc5
 "rsvp@^4.8.4":
   "integrity" "sha512-nfMOlASu9OnRJo1mbEk2cz0D56a1MBNrJ7orjRZQG10XDyuvwksKbuXNp6qa+kbn839HwjwhBzhFmdsaEAfauA=="
   "resolved" "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz"

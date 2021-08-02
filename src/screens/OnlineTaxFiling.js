@@ -1,16 +1,77 @@
-import React, {useState} from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Alert,
+} from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
-import * as CustomFonts from '../constants/FontsDefs'
+import SKLoader from '../components/SKLoader';
+import * as CustomFonts from '../constants/FontsDefs';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
-import SKButton, {UploadDocButton} from '../components/SKButton'; 
+import {
+  uploadImage,
+  getOnlinePaymentDetails,
+  onlineSubmitFiling,
+  getTaxReturnsDocs,
+} from '../apihelper/Api';
+import SKButton, {UploadDocButton} from '../components/SKButton';
+import {useIsFocused} from '@react-navigation/native';
 
 const OnlineTaxFiling = props => {
-  const [status, setStatus] = useState(1);
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
+  useEffect(() => {}, [isFocused]);
+
+  const options = {
+    quality: 0.1,
+    maxWidth: 5,
+    maxHeight: 5,
+    includeBase64: true,
+  };
+
+  const pageHeading = () => {
+    let title = 'ONLINE TAX FILING';
+    const {tax_file_status_id} = global.statusData;
+    if (tax_file_status_id == 10) {
+      title = 'PAYMENTS';
+    } else if (tax_file_status_id == 12) {
+      title = 'ADDITIONAL PAYMENTS';
+    }
+    return title;
+  };
+
+  const intiateImageUploading = res => {
+    setIsLoading(true);
+    const imgObj = res?.assets?.[0];
+    if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
+    const params = prepareParams(imgObj.base64);
+    uploadImage(params, uploadRes => {
+      setIsLoading(false);
+      uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+    });
+  };
+
+  const prepareParams = bs64Image => {
+    const userid = global.userInfo?.user_id;
+    const taxFileID = global.userInfo?.tax_file_id;
+    const params = {
+      User_id: userid,
+      Tax_File_Id: taxFileID || 83,
+      Year: parseInt('2020'),
+      FileNameWithExtension: 'identification-document.jpg',
+      Base64String: bs64Image,
+    };
+    return params;
+  };
+
   return (
     <View
       style={{
@@ -20,26 +81,500 @@ const OnlineTaxFiling = props => {
         width: '100%',
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader />}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
           paddingHorizontal: 20,
           height: '100%',
         }}>
-        <Heading value="ONLINE TAX FILING" marginTop={124} />
+        <Heading value={pageHeading()} marginTop={124} />
         <TaxFilingStatusCard
-          status={status}
+          navigation={navigation}
           marginTop={25}
-          title="2018 TAX RETURN"
-          onClick={() => {
-            setStatus(2);
+          updateLoadingStatus={loadingStatus => {
+            setIsLoading(loadingStatus);
+          }}
+          uploadClick={() => {
+            console.log('onClicked');
+            launchImageLibrary(options, res => {
+              console.log('res', res);
+              if (res?.didCancel) {
+                console.log('didCancel');
+              }
+              if (res?.error) {
+                console.log('error', res?.error ?? ERROR_MSG);
+              }
+              if (res?.assets) {
+                intiateImageUploading(res);
+              }
+            });
           }}
         />
-        <MessegesView
+      </ScrollView>
+    </View>
+  );
+};
+
+const PaymentFinalCard = props => {
+  const {details} = props;
+  const totalAmount =
+    (details &&
+      details.reduce(function (sum, obj) {
+        const updatedSum = sum + obj.amount;
+        return updatedSum;
+      }, 0)) ||
+    0;
+  return (
+    <View
+      style={{
+        width: '100%',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: props.marginTop,
+      }}
+      onPress={() => {
+        props.onClick && props.onClick();
+      }}>
+      <Heading
+        fontSize={17}
+        marginTop={12}
+        fontWeight="700"
+        color={Colors.APP_RED_SUBHEADING_COLOR}
+        value="BASED ON YOUR REQUIREMENTS, WE HAVE ASSESSED YOUR FEE TO "
+      />
+      {details &&
+        details.map((obj, index) => {
+          return (
+            <KeyValueView
+              marginTop={20}
+              title={obj.item_name}
+              value={`$ ${obj.amount}`}
+            />
+          );
+        })}
+      <View
+        style={{
+          marginVertical: 20,
+          height: 2,
+          backgroundColor: Colors.CLR_00000020,
+          width: '100%',
+        }}
+      />
+      <KeyValueView title="TOTAL" value={`$ ${totalAmount}`} />
+      <SKButton
+        fontSize={16}
+        marginTop={30}
+        width="100%"
+        fontWeight={'normal'}
+        backgroundColor={Colors.PRIMARY_FILL}
+        borderColor={Colors.PRIMARY_BORDER}
+        title={'PAYNOW'}
+        onPress={() => {
+          Alert.alert('SukhTax', 'We are on it.');
+          return;
+        }}
+      />
+    </View>
+  );
+};
+const KeyValueView = props => {
+  return (
+    <View
+      style={{
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: props.marginTop,
+      }}>
+      <Text
+        style={{
+          fontWeight: '700',
+          fontSize: 20,
+          color: Colors.APP_BLUE_HEADING_COLOR,
+        }}>
+        {props.title}
+      </Text>
+      <Text
+        style={{
+          fontWeight: '700',
+          fontSize: 20,
+          color: Colors.APP_BLUE_HEADING_COLOR,
+        }}>
+        {props.value}
+      </Text>
+    </View>
+  );
+};
+
+const TaxFilingStatusCard = props => {
+  const {uploadClick, navigation, updateLoadingStatus} = props;
+  const [paymentDetails, setPaymentDetails] = useState();
+  const [isDetailsClicked, setIsDetailsClicked] = useState(false);
+  const {
+    tax_file_status_name = 'File not Submitted',
+    status_description = 'Looks like you have to complete your registration and upload document still!',
+    new_message_count = 0,
+    can_edit_documents = false,
+    payment_required = 100,
+    additional_payment_required = 20,
+    book_now_url,
+    spouse_info_filled,
+    tax_file_status_id,
+  } = global.statusData;
+
+  const moveToPage = props => {
+    const {
+      years_selected = 0,
+      identification_document_uploaded = 0,
+      about_info_filled = 0,
+      banking_family_info_filled = 0,
+      dependent_info_filled = 0,
+      spouse_info_filled = 0,
+      my_year_info_filled = 0,
+      document_uploaded = 0,
+      authorization_document_uploaded = 0,
+    } = global.statusData;
+    if (authorization_document_uploaded) {
+      navigation.navigate('AnyThingElse');
+    } else if (document_uploaded) {
+      navigation.navigate('AuthorizerList');
+    } else if (my_year_info_filled) {
+      navigation.navigate('OnlineDocuments');
+    } else if (spouse_info_filled) {
+      navigation.navigate('Dependents');
+    } else if (dependent_info_filled) {
+      navigation.navigate('MyTaxYear');
+    } else if (banking_family_info_filled) {
+      navigation.navigate('MyTaxYear');
+    } else if (about_info_filled) {
+      navigation.navigate('BankingAndMore');
+    } else if (identification_document_uploaded) {
+      navigation.navigate('BasicInfo');
+    } else if (years_selected) {
+      navigation.navigate('Identification');
+    } else {
+      navigation.navigate('OnlineReturnLanding');
+    }
+  };
+
+  if (
+    (tax_file_status_id == 10 || tax_file_status_id == 12) &&
+    isDetailsClicked
+  ) {
+    return <PaymentFinalCard details={paymentDetails} />;
+  }
+  return (
+    <View
+      style={{
+        width: '100%',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: props.marginTop,
+      }}>
+      <Heading
+        fontSize={20}
+        fontWeight="700"
+        color={Colors.APP_RED_SUBHEADING_COLOR}
+        value="STATUS OF FILE :"
+      />
+      <Heading
+        fontSize={20}
+        fontWeight="700"
+        color={Colors.APP_BLUE_HEADING_COLOR}
+        value={tax_file_status_name}
+        marginTop={2}
+      />
+      {tax_file_status_id == 10 && (
+        <Heading
+          fontSize={21}
+          marginTop={20}
+          fontWeight="700"
+          color={Colors.APP_BLUE_HEADING_COLOR}
+          value={`TOTAL AMOUNT: ${
+            payment_required + additional_payment_required
+          }$`}
+        />
+      )}
+      {tax_file_status_id == 12 && (
+        <Heading
+          fontSize={21}
+          marginTop={20}
+          fontWeight="700"
+          color={Colors.APP_RED_SUBHEADING_COLOR}
+          value={`ADDITIONAL PAYMENT : ${additional_payment_required}$`}
+        />
+      )}
+      <Text
+        style={{
+          textAlign: 'left',
+          color: Colors.BLACK,
+          fontSize: 17,
+          width: '100%',
+          fontWeight: '400',
+          marginTop: 30,
+        }}>
+        {status_description}
+      </Text>
+      {tax_file_status_id == 9 && (
+        <UploadDocButton
+          marginTop={35}
+          title="UPLOAD THE MISSING DOC HERE"
+          height={46}
           onClick={() => {
-            navigation.navigate('Messages');
+            uploadClick();
           }}
         />
+      )}
+      {tax_file_status_id == 16 && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.CLR_7F7F9F}
+          borderColor={Colors.CLR_D3D3D9}
+          title={'DOWNLOAD MY TAX DOCS'}
+          // onPress={() => {
+          //   Alert.alert('SukhTax', 'Payment to be done.Under Development.')
+          // }}
+          onPress={() => {
+            updateLoadingStatus(true);
+            const params = {User_Id: global.userInfo?.user_id};
+            getTaxReturnsDocs(params, taxReturnDocsRes => {
+              updateLoadingStatus(false);
+              if (taxReturnDocsRes?.data?.length) {
+                navigation.navigate('HomeDocsListing', {
+                  page_id: 1,
+                  page_title: 'TAX RETURNS',
+                  docs: taxReturnDocsRes?.data,
+                });
+              } else {
+                Alert.alert('Sukhtax', 'There is no document.');
+              }
+            });
+          }}
+        />
+      )}
+
+      {tax_file_status_id == 16 && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.SECONDARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'RATE US'}
+          onPress={() => {
+            //MOVE FOR RATING..
+          }}
+        />
+      )}
+      <MessegesView
+        count={new_message_count}
+        onClick={() => {
+          navigation.navigate('Messages');
+        }}
+      />
+      {tax_file_status_id == 7 && can_edit_documents && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.SECONDARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'EDIT INFO'}
+          onPress={() => {
+            moveToPage();
+          }}
+        />
+      )}
+      {tax_file_status_id == 13 && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'BOOK NOW'}
+          onPress={() => {
+            navigation.navigate('SKWebPage', {pageUrl: book_now_url});
+          }}
+        />
+      )}
+      {(tax_file_status_id == 13 ||
+        tax_file_status_id == 15 ||
+        tax_file_status_id == 16) && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'RETURN TO HOME'}
+          onPress={() => {
+            navigation.popToTop();
+          }}
+        />
+      )}
+      {(tax_file_status_id == 9 || tax_file_status_id == 8) &&
+        can_edit_documents && (
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 18,
+            }}>
+            <SKButton
+              fontSize={16}
+              width="48%"
+              fontWeight={'normal'}
+              backgroundColor={Colors.SECONDARY_FILL}
+              borderColor={Colors.PRIMARY_BORDER}
+              title={'EDIT INFO'}
+              onPress={() => {
+                if (tax_file_status_id == 8) {
+                  navigation.popToTop();
+                } else {
+                  moveToPage();
+                }
+              }}
+            />
+            <SKButton
+              fontSize={16}
+              width="48%"
+              fontWeight={'normal'}
+              backgroundColor={Colors.PRIMARY_FILL}
+              borderColor={Colors.PRIMARY_BORDER}
+              title={'Continue'}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          </View>
+        )}
+      {tax_file_status_id == 14 && (
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 18,
+          }}>
+          <SKButton
+            fontSize={16}
+            width={spouse_info_filled ? '48%' : '100%'}
+            rightImage={
+              global.isFAuthorized
+                ? CustomFonts.CheckRight
+                : CustomFonts.ChevronRight
+            }
+            fontWeight={'normal'}
+            backgroundColor={Colors.CLR_7F7F9F}
+            borderColor={Colors.CLR_D3D3D9}
+            title={spouse_info_filled ? 'TAXPAYER 1' : 'TAXPAYER'}
+            onPress={() => {
+              navigation.navigate('SignaturePage', {authIndex: 0});
+            }}
+          />
+          {spouse_info_filled == 1 && (
+            <SKButton
+              fontSize={16}
+              width="48%"
+              rightImage={
+                global.isSAuthorized
+                  ? CustomFonts.CheckRight
+                  : CustomFonts.ChevronRight
+              }
+              fontWeight={'normal'}
+              backgroundColor={Colors.CLR_7F7F9F}
+              borderColor={Colors.CLR_D3D3D9}
+              title={'TAXPAYER 2'}
+              onPress={() => {
+                navigation.navigate('SignaturePage', {authIndex: 1});
+              }}
+            />
+          )}
+        </View>
+      )}
+      {tax_file_status_id == 14 && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'SUBMIT FOR FILING'}
+          onPress={() => {
+            const userid = global.userInfo?.user_id;
+            const taxFileID = global.userInfo?.tax_file_id || 83;
+            const params = {User_id: userid, Tax_File_Id: taxFileID};
+            updateLoadingStatus(true);
+            onlineSubmitFiling(params, submitFileRes => {
+              updateLoadingStatus(false);
+              if (submitFileRes?.status) {
+                navigation.goBack();
+              }
+            });
+          }}
+        />
+      )}
+      {tax_file_status_id == 10 && (
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 18,
+          }}>
+          {console.log('tax_file_status_id', tax_file_status_id)}
+          <SKButton
+            fontSize={16}
+            width="48%"
+            fontWeight={'normal'}
+            backgroundColor={Colors.SECONDARY_FILL}
+            borderColor={Colors.PRIMARY_BORDER}
+            title={'DETAILS'}
+            onPress={() => {
+              const userid = global.userInfo?.user_id;
+              const taxFileID = global.userInfo?.tax_file_id || 3127;
+              console.log('global', global.userInfo);
+              const params = {
+                User_Id: userid,
+                Tax_File_Id: taxFileID,
+                Additional_Payment: additional_payment_required,
+              };
+              updateLoadingStatus(true);
+              getOnlinePaymentDetails(params, paymentDetailsRes => {
+                updateLoadingStatus(false);
+                setIsDetailsClicked(true);
+                if (paymentDetailsRes?.status) {
+                  setPaymentDetails(paymentDetailsRes?.data);
+                  setIsDetailsClicked(true);
+                }
+              });
+            }}
+          />
+          <SKButton
+            fontSize={16}
+            width="48%"
+            fontWeight={'normal'}
+            backgroundColor={Colors.PRIMARY_FILL}
+            borderColor={Colors.PRIMARY_BORDER}
+            title={'PAY SECURELY'}
+            onPress={() => {
+              Alert.alert('Sukhtax', 'Payment to be done.Under Development.');
+            }}
+          />
+        </View>
+      )}
+      {tax_file_status_id == 12 && (
         <View
           style={{
             width: '100%',
@@ -53,8 +588,25 @@ const OnlineTaxFiling = props => {
             fontWeight={'normal'}
             backgroundColor={Colors.SECONDARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'EDIT INFO'}
+            title={'DETAILS'}
             onPress={() => {
+              console.log('global', global.userInfo);
+              const userid = global.userInfo?.user_id;
+              const taxFileID = global.userInfo?.tax_file_id || 3127;
+              const params = {
+                User_Id: userid,
+                Tax_File_Id: taxFileID,
+                Additional_Payment: additional_payment_required > 0 ? 1 : 0,
+              };
+              updateLoadingStatus(true);
+              getOnlinePaymentDetails(params, paymentDetailsRes => {
+                updateLoadingStatus(false);
+                setIsDetailsClicked(true);
+                if (paymentDetailsRes?.status) {
+                  setPaymentDetails(paymentDetailsRes?.data);
+                  setIsDetailsClicked(true);
+                }
+              });
             }}
           />
           <SKButton
@@ -63,73 +615,33 @@ const OnlineTaxFiling = props => {
             fontWeight={'normal'}
             backgroundColor={Colors.PRIMARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'Continue'}
+            title={'PAY SECURELY'}
             onPress={() => {
-              navigation.navigate('PaymentAwaiting');
+              Alert.alert('Sukhtax', 'Payment to be done.Under Development.');
             }}
           />
         </View>
-      </ScrollView>
-    </View>
-  );
-};
-
-const TaxFilingStatusCard = props => {
-  const {status} = props;
-  let statusText = '';
-    let descText = '';
-    statusText = global.fileStatusRes.data[0].tax_file_status_name
-    descText = global.fileStatusRes.data[0].status_description
-    console.log('statusText', statusText)
-    console.log('descText', descText)
-  /*if (status == 2) {
-   // statusText = 'FILE SUBMITTED';
-   // descText = 'THANK YOU FOR SUBMITTING YOUR FILE. WE ARE WORKING HARD TO REVIEW YOUR INFORMATION AND DOCUMENTS. WE WILL PROVIDE YOU WITH A PAYMENT QUOTE SHORTLY.';
-  } else {
-    //statusText = 'MISSING DOCUMENTS';
-   // descText = 'THANK YOU FOR SUBMITTING YOUR INFORMATION. LOOKS LIKE YOU STILL HAVE TO UPLOAD YOUR DOCUMENTS.PLEASE USE THE BUTTON BELOW TO UPLOAD';
-  }*/
-  return (
-    <View
-      style={{
-        width: '100%',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: props.marginTop,
-      }}
-      onPress={() => {
-        props.onClick && props.onClick();
-      }}>
-      <Heading
-        fontSize={20}
-        fontWeight="700"
-        color={Colors.APP_RED_SUBHEADING_COLOR}
-        value="STATUS OF FILE :"
-      />
-      <Heading
-        fontSize={20}
-        fontWeight="700"
-        color={Colors.APP_BLUE_HEADING_COLOR}
-        value={statusText}
-        marginTop={2}
-      />
-      <Text
-        style={{
-          textAlign: 'left',
-          color: Colors.BLACK,
-          fontSize: 17,
-          width: '100%',
-          fontWeight: '400',
-          marginTop: 30,
-        }}>
-        {descText}
-      </Text>
-      {status == 1 && <UploadDocButton marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46} />}
+      )}
+      {(tax_file_status_id == 16 || tax_file_status_id == 0) && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'NEW FILING'}
+          onPress={() => {
+            navigation.popToTop();
+          }}
+        />
+      )}
     </View>
   );
 };
 
 const MessegesView = props => {
+  const {count} = props;
   return (
     <LinearGradient
       opacity={0.6}
@@ -175,7 +687,11 @@ const MessegesView = props => {
               fontWeight: '700',
               marginTop: 5,
             }}>
+<<<<<<< HEAD
            {`${global.fileStatusRes.data[0].new_message_count} NEW MESSAGES`}
+=======
+            {`${count} NEW MESSAGES`}
+>>>>>>> 0d487b71da1670f5b89d7de7c34ce604ee68bd55
           </Text>
         </View>
         <Image

@@ -20,6 +20,7 @@ import SKLoader from '../components/SKLoader';
 
 const ManageDocuments = props => {
   const navigation = useNavigation();
+  const pageParams = props.route.params;
   const [docs, setDocs] = useState();
   const [showDoc, setShowDoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
@@ -33,7 +34,7 @@ const ManageDocuments = props => {
   const getDocs = () => {
     setIsLoading(true)
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.Tax_File_Id;
+    const taxFileID = global.userInfo?.tax_file_id;
     const params = {User_Id: userid, Tax_File_Id: taxFileID || 83};
     getUserDocuments(params, docsRes => {
       setIsLoading(false)
@@ -93,7 +94,7 @@ const ManageDocuments = props => {
                       text: 'Delete',
                       onPress: () => {
                         const userid = global.userInfo?.user_id;
-                        const taxFileID = global.userInfo?.Tax_File_Id;
+                        const taxFileID = global.userInfo?.tax_file_id;
                         const params = {
                           User_Id: userid,
                           Tax_File_Id: taxFileID || 83,
@@ -118,6 +119,7 @@ const ManageDocuments = props => {
           })}
           {docs && docs.length > 0 && 
           <SKButton
+          disable = {!pageParams.isDocAdded}
           fontSize={16}
           marginTop={30}
           rightImage={CustomFonts.right_arrow}

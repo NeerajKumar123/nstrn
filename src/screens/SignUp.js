@@ -174,7 +174,7 @@ const SignUp = props => {
             Keyboard.dismiss()
             if(checkFormValidations()){
               setIsLoading(true)
-              const testDeviceToken = `Device_token${Math.random()}`
+              const testDeviceToken = 'DEVICE_TOKEN_123456789'
               const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:testDeviceToken, Device_OS:'iOS', Module_Type_Id:2}
               register(params,(regisRes) =>{
                 setIsLoading(false)

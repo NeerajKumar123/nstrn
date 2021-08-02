@@ -58,8 +58,9 @@ const Address = props => {
   };
 
   const prepareParams = () => {
+    console.log('saveAboutInfo',global.selectedYears)
     const userid = global.userInfo?.user_id;
-    const commaSepYrs = global.selectedYears.join();
+    const commaSepYrs = global.selectedYears && global.selectedYears.join();
     const dob = pageParams.dob && format(pageParams.dob, 'yyyy-MM-dd')
     const params = {
       User_Id: userid,

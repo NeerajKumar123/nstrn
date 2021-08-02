@@ -30,7 +30,6 @@ import ViewShot from 'react-native-view-shot';
 const SignaturePage = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  console.log('pageParams',pageParams)
   const [fName, setFName] = useState('name');
   const [lName, setLName] = useState('name');
   const [sinNo, setSinNo] = useState('12345632');
@@ -68,12 +67,12 @@ const SignaturePage = props => {
 
   const prepareParams = (image, spouseNo) => {
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.Tax_File_Id;
+    const taxFileID = global.userInfo?.tax_file_id;
     const params = {
       User_Id: userid,
-      Tax_File_Id: taxFileID || 83,
+      Tax_File_Id: taxFileID,
       Title: `Customer_Authorization${spouseNo}`,
-      FileNameWithExtension: `Customer_Authorization${spouseNo}`,
+      FileNameWithExtension: `Customer_Authorization${spouseNo}.jpg`,
       Base64String: image,
     };
     return params;
@@ -101,9 +100,9 @@ const SignaturePage = props => {
           ref={viewShotRef}
           options={{
             format: 'jpg',
-            quality: 0.3,
-            height: 10,
-            width: 10,
+            quality: 0.8,
+            height: 400,
+            width: 300,
             result: 'base64',
           }}>
           <Heading
@@ -180,10 +179,8 @@ const SignaturePage = props => {
               style={{width: '100%', height: 200}}
               ref={signPad}
               onSaveEvent={result => {
-                console.log('onSaveEvent', result, result.pathName);
               }}
               onDragEvent={() => {
-                console.log('onDragEvent');
                 setIsSignStart(true);
                 setIsSignSaved(false);
               }}

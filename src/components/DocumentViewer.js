@@ -7,8 +7,6 @@ const {width} = Dimensions.get('window');
 const cross = require('../../assets/cross.png');
 const  DocumentViewer = props => {
   const {item,onClose} = props
-  const array = item.document_file_name?.split('/');
-  const [lastItem] = array.slice(-1);
   return (
     <Modal
       visible={true}
@@ -17,7 +15,7 @@ const  DocumentViewer = props => {
       width = {'100%'}
       onCancel={() => {}}>
         <CloseButtonHeader
-          title={lastItem}
+          title={item.document_title}
           onClose={() => {
             onClose && onClose();
           }}

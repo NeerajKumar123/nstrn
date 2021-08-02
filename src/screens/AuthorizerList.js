@@ -14,8 +14,6 @@ const AuthorizerList = props => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    console.log('sdsdsd');
-    console.log('sdsdsd',global.isAuthorized);
   }, [isFocused]);
 
   return (
@@ -57,7 +55,6 @@ const AuthorizerList = props => {
         }}
       />
         }
-        
         <SKButton
           marginTop={30}
           disable={!global.isAuthorized}

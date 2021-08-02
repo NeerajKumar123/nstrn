@@ -28,14 +28,14 @@ const OnlineDocuments = props => {
     maxHeight: 5,
     includeBase64:true,
   };
-
-  const data = [{year: '2019'}, {year: '2020'}, {year: '2021'}];
+  const data = global.selectedYears;
   const [uploadImageCount, setUploadImageCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
 
   const prepareParams = (bs64Image,yr) =>{
+    console.log('global.userInfo',global.userInfo)
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.Tax_File_Id;
+    const taxFileID = global.userInfo?.tax_file_id;
     const params = {User_id:userid,Tax_File_Id:taxFileID || 83,Year:parseInt(yr),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
     return params
   }
@@ -81,10 +81,10 @@ const OnlineDocuments = props => {
           data.map((item, index) => {
             return (
               <DocCard
-              key = {item.year}
+              key = {item}
                 item={item}
                 onClicked={() => {
-                  console.log('onClicked');
+                  console.log('onClicked',item);
                   launchImageLibrary(options, res => {
                     console.log('res',res)
                     if (res?.didCancel) {
@@ -93,7 +93,7 @@ const OnlineDocuments = props => {
                     if (res?.error) {
                       console.log('error', res?.error ?? ERROR_MSG);
                     }
-                    intiateImageUploading(res, item.year)
+                    intiateImageUploading(res, item)
                   });
                 }}
               />
@@ -104,7 +104,7 @@ const OnlineDocuments = props => {
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title="MANAGE DOCUMENTS"
           onClicked={() => {
-            navigation.navigate('ManageDocuments');
+            navigation.navigate('ManageDocuments', {isDocAdded:uploadImageCount});
           }}
         />
         <SKButton
@@ -117,8 +117,12 @@ const OnlineDocuments = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'AUTHORIZATION'}
           onPress={() => {
-            console.log('link pressed');
             navigation.navigate('AuthorizerList');
+            // if(global.isFromSpouseFlow){
+            //   navigation.navigate('AuthorizerList');
+            // }else{
+            //   navigation.navigate('AnyThingElse');
+            // }
           }}
         />
       </ScrollView>
@@ -191,7 +195,7 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {`${item.year} DOCUMENTS`}
+        {`${item} DOCUMENTS`}
       </Text>
       <Image
         resizeMode="contain"
