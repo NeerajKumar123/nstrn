@@ -77,7 +77,7 @@ const SignUp = props => {
       showsVerticalScrollIndicator = {false}
         style={{
           width: '100%',
-          marginBottom: Platform.OS == 'ios' ?  100 : 0,
+          marginBottom: Platform.OS == 'ios' ?  30 : 0,
         }}>
         <Heading value="LETS LOG IN" marginTop={26} />
         <Heading
@@ -162,7 +162,6 @@ const SignUp = props => {
           }}
         />
       </ScrollView>
-      </KeyboardAvoidingView>
       <View style = {{paddingHorizontal:20}}>
       <SKButton
           fontSize={16}
@@ -175,15 +174,16 @@ const SignUp = props => {
             Keyboard.dismiss()
             if(checkFormValidations()){
               setIsLoading(true)
-              const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:'TESTDEVICETOKEN654321', Device_OS:'iOS', Module_Type_Id:2}
+              const testDeviceToken = 'DEVICE_TOKEN_123456789'
+              const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:testDeviceToken, Device_OS:'iOS', Module_Type_Id:2}
               register(params,(regisRes) =>{
                 setIsLoading(false)
                 if(regisRes?.status == 1){
-                  const data = regisRes && regisRes.data[0]
-                  console.log('data',data)
+                  const data = regisRes?.data
+                  global.userInfo = {...global.userInfo,user_id:data}
                   navigation.navigate('SecurityCode', {pagetitle:'Security Code', pagesubs:'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:', email:email})
                 }else{
-                  const msg = userRes?.message ?? 'Something went wront, Please try again later.'
+                  const msg = regisRes?.message ?? 'Something went wront, Please try again later.'
                   Alert.alert('SukhTax',msg)
                 }
               })
@@ -191,6 +191,7 @@ const SignUp = props => {
           }}
         />
       </View>
+      </KeyboardAvoidingView>
       
     </View>
   );

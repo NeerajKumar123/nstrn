@@ -28,7 +28,7 @@ const Messages = props => {
   const [keyboardHeight] = useKeyboard();
   const [isLoading, setIsLoading] = useState(false);
   const userid = global.userInfo?.user_id;
-  const taxFileID = global.userInfo?.Tax_File_Id;
+  const taxFileID = global.userInfo?.tax_file_id;
 
   const getUpdatedMsgList = isloader => {
     setIsLoading(isloader);
@@ -140,12 +140,12 @@ const MessageCard = props => {
         width: width - 40,
         marginTop: 5,
         flexDirection: 'row',
-        justifyContent: isUser ? 'flex-start' : 'flex-end',
+        justifyContent: isUser ? 'flex-end' : 'flex-start',
       }}>
       <Text
         style={{
           width: '50%',
-          backgroundColor: isUser ? 'gray' : 'pink',
+          backgroundColor: isUser ? Colors.CLR_EBEBEB : Colors.CLR_FFECEC,
           paddingHorizontal: 10,
           paddingVertical: 10,
           borderRadius: 6,

@@ -267,7 +267,7 @@ const Spouse = props => {
         <Heading
           fontSize={20}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="BANKING INFORMATION"
         />
         <TouchableInput
@@ -318,7 +318,7 @@ const Spouse = props => {
                 setIsLoading(false)
                 if (spouseRes?.status == 1) {
                   global.isFromSpouseFlow = true
-                  navigation.navigate('Dependents');
+                  navigation.push('Dependents', {depCount:1});
                 } else {
                   Alert.alert('SukhTax', 'Something wrong!');
                 }

@@ -56,7 +56,7 @@ const BankingAndMore = props => {
       setBanks(instRes?.data);
       setBank(instRes?.data?.[0])
       const userid = global.userInfo?.user_id;
-      const taxFileID = global.userInfo?.Tax_File_Id;
+      const taxFileID = global.userInfo?.tax_file_id;
       const params = {
         User_Id: userid,
         Tax_File_Id: taxFileID || 83,
@@ -130,7 +130,7 @@ const BankingAndMore = props => {
         <Heading
           fontSize={20}
           marginTop={45}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE ENTER YOUR DIRECT DIPOSIT INFORMATION"
         />
         <TouchableInput
@@ -174,7 +174,7 @@ const BankingAndMore = props => {
         <Heading
           fontSize={20}
           marginTop={45}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="DATE OF ENTRY INTO CANADA(IF IMMIGRATED)"
         />
         <TouchableInput
@@ -244,7 +244,7 @@ const BankingAndMore = props => {
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display="inline"
+            display={Platform.OS == 'ios' ? "inline" : 'default'}
             onChange={(event, selectedDate) => {
               console.log(event.type, Date.parse(selectedDate));
               setEntryDate(selectedDate);

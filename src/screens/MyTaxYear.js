@@ -23,10 +23,8 @@ const MyTaxYear = props => {
   const [currentYear, setCurrentYear] = useState();
 
   useEffect(() => {
-    setCurrentYear(global.selectedYears[currentYearIndex]);
-    console.log(
-      global.selectedYears[currentYearIndex],
-    );
+    console.log('global.selectedYears',global.selectedYears)
+    setCurrentYear(global.selectedYears && currentYearIndex < global.selectedYears.length  ? global.selectedYears[currentYearIndex] : '2020.');
   }, [currentYearIndex]);
 
   const [data, setData] = useState([
@@ -73,17 +71,15 @@ const MyTaxYear = props => {
       User_id: user_id,
       Tax_File_Id: tax_file_id || Tax_File_Id,
       Year: 2020,
-      Details_For: 0,
+      Details_For: global.isFromSpouseFlow ? 0 : 1,
     };
     data.map(item => {
-      console.log('item', item);
       if (item.isSelected) {
         params[item.value] = 1;
       } else {
         params[item.value] = 0;
       }
     });
-    console.log('params', params);
     return params;
   };
 
@@ -108,13 +104,13 @@ const MyTaxYear = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value={`LETS HAVE A LOOK AT HOW YOUR TAX YEAR ${currentYear} WENT!`}
         />
         <Heading
           fontSize={20}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE SELECT ALL THAT APPLY"
         />
         <View
@@ -127,7 +123,7 @@ const MyTaxYear = props => {
             height={50}
             marginTop={0}
             width={global.isFromSpouseFlow ? '48%' : '100%' } 
-            bgColor={Colors.CLR_29295F}
+            bgColor={Colors.APP_BLUE_HEADING_COLOR}
             item={{title: 'MY SELF'}}
             isSelected={mySelf}
             onSelected={() => {
@@ -140,7 +136,7 @@ const MyTaxYear = props => {
           height={50}
           marginTop={0}
           width="48%"
-          bgColor={Colors.CLR_29295F}
+          bgColor={Colors.APP_BLUE_HEADING_COLOR}
           item={{title: 'SPOUSE'}}
           isSelected={spouse}
           onSelected={() => {
@@ -177,11 +173,6 @@ const MyTaxYear = props => {
               />
             );
           })}
-        {console.log(
-          'currentYearIndex+1 > global.selectedYears.length',
-          currentYearIndex + 1,
-          global.selectedYears.length,
-        )}
         <SKButton
           marginTop={30}
           fontSize={16}
@@ -190,26 +181,35 @@ const MyTaxYear = props => {
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
           title={
-            currentYearIndex + 1 < global.selectedYears.length
+            currentYearIndex + 1 < global.selectedYears && global.selectedYears.length
               ? global.selectedYears[currentYearIndex + 1]
               : 'DOCUMENTS'
           }
           onPress={() => {
-            setIsLoading(true);
-            const params = prepareParams();
-            onlineSaveMyYearInfo(params, saveYrRes => {
-              if (saveYrRes?.status == 1) {
-                if (currentYearIndex + 1 < global.selectedYears.length) {
-                  console.log('saveYrRes',saveYrRes)
-                  setCurrentYearIndex(currentYearIndex + 1);
-                } else {
-                  navigation.navigate('OnlineDocuments');
-                }
-                setIsLoading(false);
-              } else {
-                Alert.alert('SukhTax', 'Something wrong');
+            if(mySelf || (spouse && isFromSpouseFlow)){
+              const selected = data && data.filter((x) => x.isSelected);
+              if(!selected?.length){
+                Alert.alert('SukhTax',global.isFromSpouseFlow ?  'Please select atleast one option for MYSELF OR SPOUSE' : 'Please select atleast one option for MYSELF')
+                return
               }
-            });
+              setIsLoading(true);
+              const params = prepareParams(true);
+              onlineSaveMyYearInfo(params, saveYrRes => {
+                if (saveYrRes?.status == 1) {
+                  if (currentYearIndex + 1 < global.selectedYears && global.selectedYears.length) {
+                    console.log('saveYrRes',saveYrRes)
+                    setCurrentYearIndex(currentYearIndex + 1);
+                  } else {
+                    navigation.navigate('OnlineDocuments');
+                  }
+                  setIsLoading(false);
+                } else {
+                  Alert.alert('SukhTax', 'Something wrong');
+                }
+              });
+            }else{
+              Alert.alert('SukhTax', global.isFromSpouseFlow ? 'Please select one option from MYSELF OR SPOUSE' : 'Please select MYSELF')
+            }
           }}
         />
       </ScrollView>

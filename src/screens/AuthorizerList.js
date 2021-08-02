@@ -14,8 +14,6 @@ const AuthorizerList = props => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    console.log('sdsdsd');
-    console.log('sdsdsd',global.isAuthorized);
   }, [isFocused]);
 
   return (
@@ -38,7 +36,7 @@ const AuthorizerList = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WE WILL NEED YOU TO AUTHORIZE US IN ORDER FOR US TO PULL YOUR INFORMATION FROM CRA!"
         />
         <Card
@@ -57,7 +55,6 @@ const AuthorizerList = props => {
         }}
       />
         }
-        
         <SKButton
           marginTop={30}
           disable={!global.isAuthorized}
@@ -101,7 +98,7 @@ const Card = props => {
         alignItems: 'center',
         width: '100%',
         minHeight: height,
-        backgroundColor: Colors.CLR_29295F,
+        backgroundColor: Colors.APP_BLUE_HEADING_COLOR,
       }}>
       <Text
         style={{

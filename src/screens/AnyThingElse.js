@@ -35,7 +35,7 @@ const AnyThingElse = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE USE THE BELOW BOX TO TELL US ABOUT ANYTHING REGARDIING YOUR TAX YEAR, OR ABOUT ANYTHING YOU WOULD LIKE US TO KNOW."
         />
         <SKInput
@@ -61,7 +61,7 @@ const AnyThingElse = props => {
             console.log('link pressed');
             setIsLoading(true);
             const userid = global.userInfo?.user_id;
-            const taxFileID = global.userInfo?.Tax_File_Id;      
+            const taxFileID = global.userInfo?.tax_file_id;      
             const params = {
               User_Id: userid,
               Tax_File_Id: taxFileID || 83,

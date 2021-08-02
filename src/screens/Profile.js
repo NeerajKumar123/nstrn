@@ -79,7 +79,7 @@ const Profile = props => {
       <AppHeader navigation = {navigation}/>
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: 32,
+          paddingHorizontal: 20,
           flex: 1,
         }}>
         <Heading value="PROFILE" marginTop={26} />
@@ -150,7 +150,6 @@ const Profile = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'Submit'}
           onPress={() => {
-            console.log('onPress');
             Keyboard.dismiss();
             if (checkFormValidations()) {
               setIsLoading(true);

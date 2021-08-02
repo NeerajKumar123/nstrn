@@ -43,7 +43,6 @@ const PaymentAwaiting = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'DETAILS'}
             onPress={() => {
-              console.log('onPress');
               props.detailsClicked && props.detailsClicked();
             }}
           />
@@ -55,7 +54,6 @@ const PaymentAwaiting = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'PAY SECURELY'}
             onPress={() => {
-              console.log('onPress');
               navigation.navigate('HomePayment');
             }}
           />
@@ -81,13 +79,13 @@ const PaymentStatusCard = props => {
       <Heading
         fontSize={20}
         fontWeight="700"
-        color={Colors.CLR_D9272A}
+        color={Colors.APP_RED_SUBHEADING_COLOR}
         value="STATUS OF FILE :"
       />
       <Heading
         fontSize={20}
         fontWeight="700"
-        color={Colors.CLR_29295F}
+        color={Colors.APP_BLUE_HEADING_COLOR}
         value={statusText}
         marginTop={2}
       />
@@ -95,7 +93,7 @@ const PaymentStatusCard = props => {
         fontSize={20}
         marginTop={35}
         fontWeight="700"
-        color={Colors.CLR_29295F}
+        color={Colors.APP_BLUE_HEADING_COLOR}
         value="TOTAL AMOUNT : 50.00$"
       />
 

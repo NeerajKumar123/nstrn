@@ -14,7 +14,7 @@ const SKSwitch = props => {
     fontFamily = CustomFonts.OpenSansRegular,
     textAlign = 'left',
     onToggle = undefined,
-    color = Colors.CLR_29295F,
+    color = Colors.APP_BLUE_HEADING_COLOR,
     isOn = false,
   } = props;
 

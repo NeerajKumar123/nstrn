@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -11,9 +11,9 @@ import {
   Text,
 } from 'react-native';
 import SKButton, {Link} from '../components/SKButton';
-// import Heading from '../components/Heading';
+import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
-// import {useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {login} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
@@ -24,9 +24,9 @@ import AppHeader from '../components/AppHeader';
 const OnlineReturnLanding = props => {
   const selectedYears = [];
   const navigation = useNavigation();
-  const [isFSelected, setIsFSelected] = useState(false);
-  const [isSSelected, setIsSSelected] = useState(false);
-  const [isTSelected, setIsTSelected] = useState(false);
+  const [isFSelected, setIsFSelected] = useState(global.selectedYears && global.selectedYears.includes('2019'));
+  const [isSSelected, setIsSSelected] = useState(global.selectedYears && global.selectedYears.includes('2020'));
+  const [isTSelected, setIsTSelected] = useState(global.selectedYears && global.selectedYears.includes('2021'));
 
   return (
     <View
@@ -47,16 +47,16 @@ const OnlineReturnLanding = props => {
         <Heading
           fontSize={16}
           marginTop={55}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WHICH YEARS DO YOU WANT
           TO APPLY FOR? SELECT ALL
           THAT APPLY:"
         />
         <DocCard
-          title={'2021'}
-          isSelected={isFSelected}
+          title={'2019'}
+          isSelected={isTSelected}
           onSelected={() => {
-            setIsFSelected(!isFSelected);
+            setIsTSelected(!isTSelected);
           }}
         />
         <DocCard
@@ -66,11 +66,12 @@ const OnlineReturnLanding = props => {
             setIsSSelected(!isSSelected);
           }}
         />
-        <DocCard
-          title={'2019'}
-          isSelected={isTSelected}
+       
+         <DocCard
+          title={'2021'}
+          isSelected={isFSelected}
           onSelected={() => {
-            setIsTSelected(!isTSelected);
+            setIsFSelected(!isFSelected);
           }}
         />
         <View
@@ -91,9 +92,10 @@ const OnlineReturnLanding = props => {
               if (isSSelected) selectedYears.push('2020');
               if (isTSelected) selectedYears.push('2019');
               if (isFSelected || isSSelected || isTSelected) {
-                console.log('onPress,', selectedYears);
+                global.selectedYears = undefined
                 global.selectedYears = selectedYears;
-                navigation.navigate('CarryForward');
+                // navigation.navigate('CarryForward');
+                navigation.navigate('Identification');
               } else {
                 Alert.alert('SukhTax', 'Please select year.');
               }
@@ -119,7 +121,7 @@ const DocCard = props => {
         width: '100%',
         height: 48,
         borderRadius: 6,
-        backgroundColor: isSelected ? Colors.PRIMARY_FILL : Colors.CLR_7F7F9F,
+        backgroundColor: isSelected ? Colors.PRIMARY_BORDER : Colors.CLR_7F7F9F,
       }}
       key={`${Math.random()}`}
       onPress={() => {

@@ -37,9 +37,10 @@ const Identification = props => {
 
 
   const prepareParams = (bs64Image) =>{
+    const year = global.selectedYears[0]
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.Tax_File_Id;
-    const params = {User_id:userid,Tax_File_Id:taxFileID || 83,Year:parseInt('2020'),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
+    const taxFileID = global.userInfo?.tax_file_id ? global.userInfo?.tax_file_id :0;
+    const params = {User_id:userid,Tax_File_Id:taxFileID,Year:year,FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
     return params
   }
 
@@ -68,43 +69,43 @@ const Identification = props => {
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WE NEED TO VERIFY THAT IT'S REALLY YOU!"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE UPLOAD ONE OF THE FOLLOWING:"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- DRIVING LICENCE"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- PASSPORT"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="-PROVINCIAL ID CARD"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- CITIZENSHIP CARD"
         />
         <Heading
           fontSize={16}
           marginTop={20}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- PR CARD"
         />
         <UploadDocButton  marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}
@@ -118,7 +119,9 @@ const Identification = props => {
             if (res?.error) {
               console.log('error', res?.error ?? ERROR_MSG);
             }
-            intiateImageUploading(res)
+            if(res?.assets){
+              intiateImageUploading(res)
+            }
           });
         }}
         />

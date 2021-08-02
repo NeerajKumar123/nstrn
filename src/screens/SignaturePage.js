@@ -30,7 +30,6 @@ import ViewShot from 'react-native-view-shot';
 const SignaturePage = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  console.log('pageParams',pageParams)
   const [fName, setFName] = useState('name');
   const [lName, setLName] = useState('name');
   const [sinNo, setSinNo] = useState('12345632');
@@ -68,12 +67,12 @@ const SignaturePage = props => {
 
   const prepareParams = (image, spouseNo) => {
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.Tax_File_Id;
+    const taxFileID = global.userInfo?.tax_file_id;
     const params = {
       User_Id: userid,
-      Tax_File_Id: taxFileID || 83,
+      Tax_File_Id: taxFileID,
       Title: `Customer_Authorization${spouseNo}`,
-      FileNameWithExtension: `Customer_Authorization${spouseNo}`,
+      FileNameWithExtension: `Customer_Authorization${spouseNo}.jpg`,
       Base64String: image,
     };
     return params;
@@ -101,9 +100,9 @@ const SignaturePage = props => {
           ref={viewShotRef}
           options={{
             format: 'jpg',
-            quality: 0.3,
-            height: 10,
-            width: 10,
+            quality: 0.8,
+            height: 400,
+            width: 300,
             result: 'base64',
           }}>
           <Heading
@@ -114,7 +113,7 @@ const SignaturePage = props => {
           <Heading
             fontSize={16}
             marginTop={45}
-            color={Colors.CLR_D9272A}
+            color={Colors.APP_RED_SUBHEADING_COLOR}
             value="TAX PAYER INFORMATION"
           />
           <SKInput
@@ -162,7 +161,7 @@ const SignaturePage = props => {
           <Heading
             fontSize={12}
             marginTop={10}
-            color={Colors.CLR_D9272A}
+            color={Colors.APP_RED_SUBHEADING_COLOR}
             value="BY SIGNING AND DATING THIS PAGE, YOU AUTHORIZE THE CANADA REVENUE AGENCY TO INTRACT WITH SUKH TAX AND FINANCIAL SERVICES, WITH REF ID H6YX7GS,GROUP ID:G, UNDER LEVEL 2 OF AUTHORIZATION, WHERE SUKHTAX AND FINANCIAL SERVICES HAS THE ABILITY TO DISCLOSE AND REQUEST. I AGREE TO NO EXPIRY DATE ON THIS AUTHORIZARION, AND UNDERSTAND THAT I CAN CONTACT THE CANADA REVENUE AGENCY DIRECTLY AT A LATER TIME TO RECIND THIS AUTHORIZARION"
           />
           <Heading
@@ -180,10 +179,8 @@ const SignaturePage = props => {
               style={{width: '100%', height: 200}}
               ref={signPad}
               onSaveEvent={result => {
-                console.log('onSaveEvent', result, result.pathName);
               }}
               onDragEvent={() => {
-                console.log('onDragEvent');
                 setIsSignStart(true);
                 setIsSignSaved(false);
               }}
@@ -234,7 +231,7 @@ const SignaturePage = props => {
                   <Icon
                     name={'content-save-outline'}
                     size={30}
-                    color={Colors.CLR_29295F}
+                    color={Colors.APP_BLUE_HEADING_COLOR}
                   />
                 </TouchableOpacity>
               )}
@@ -306,7 +303,7 @@ const SKCheckbox = props => {
         size={20}
         color={Colors.GRAY}
       />
-      <Text style={{color: Colors.CLR_29295F, marginLeft: 10, flex: 1}}>
+      <Text style={{color: Colors.APP_BLUE_HEADING_COLOR, marginLeft: 10, flex: 1}}>
         I authorize SukhTax and Financial Services as per below.
       </Text>
     </TouchableOpacity>

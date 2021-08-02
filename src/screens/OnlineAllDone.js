@@ -7,6 +7,7 @@ import SKInput from '../components/SKInput';
 import * as CustomFonts from '../constants/FontsDefs'
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
+import {finalizeOnlineProcess} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OnlineAllDone = props => {
@@ -39,13 +40,13 @@ const OnlineAllDone = props => {
         <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WE WILL PROCESS YOUR DOCUMENTS AND PROVIDE YOU WITH A FEE QUOTE."
         />
        <Heading
           fontSize={20}
           marginTop={5}
-          color={Colors.CLR_D9272A}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
           value="PLEASE COMPLETE THE PAYMENT ON HOME SCREEN TO PROCEED WITH YOUR RETURN."
         />
       </ScrollView>
@@ -66,7 +67,15 @@ const OnlineAllDone = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'RETURN HOME'}
           onPress={() => {
-            console.log('link pressed');
+            const userid = global.userInfo?.user_id;
+            const taxFileID = global.userInfo?.tax_file_id || global.userInfo?.tax_file_id;  
+            const params = {
+              User_Id: userid,
+              Tax_File_Id: taxFileID
+            };
+            finalizeOnlineProcess(params,(finalizeRes) =>{
+              console.log('finalizeRes',finalizeRes)
+            })
             navigation.popToTop()
           }}
         />
