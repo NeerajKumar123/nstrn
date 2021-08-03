@@ -24,20 +24,19 @@ const ManageDocuments = props => {
   const [docs, setDocs] = useState();
   const [showDoc, setShowDoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
-  const [isLoading, setIsLoading] = useState(false)
-
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getDocs();
   }, []);
 
   const getDocs = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const userid = global.userInfo?.user_id;
     const taxFileID = global.userInfo?.tax_file_id;
     const params = {User_Id: userid, Tax_File_Id: taxFileID};
     getUserDocuments(params, docsRes => {
-      setIsLoading(false)
+      setIsLoading(false);
       if (docsRes?.status == 1) {
         setDocs(docsRes.data);
       } else {
@@ -56,7 +55,7 @@ const ManageDocuments = props => {
         height: '100%',
       }}>
       <AppHeader navigation={navigation} />
-      {isLoading && <SKLoader/>}
+      {isLoading && <SKLoader />}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -70,12 +69,21 @@ const ManageDocuments = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="SEE BELOW FOR ALL DOCUMENTS UPLOADED"
         />
+        {docs && docs.length < 1 && (
+          <Heading
+            fontSize={20}
+            textAlign="center"
+            marginTop={50}
+            color={Colors.GRAY}
+            value="THERE IS NO DOCUMENTS TO SHOW"
+          />
+        )}
         {docs &&
           docs.map((item, index) => {
             return (
               <ManageDocCard
                 item={item}
-                key = {`${item.tax_file_document_id}`}
+                key={`${item.tax_file_document_id}`}
                 onOpen={() => {
                   console.log('opening', item);
                   setSelectedItem(item);
@@ -100,7 +108,7 @@ const ManageDocuments = props => {
                           Tax_File_Id: taxFileID,
                           Tax_File_Document_Id: item.tax_file_document_id,
                         };
-                        setIsLoading(true)
+                        setIsLoading(true);
                         deleteDocument(params, delRes => {
                           console.log('delRes', delRes);
                           getDocs();
@@ -117,22 +125,22 @@ const ManageDocuments = props => {
               />
             );
           })}
-          {docs && docs.length > 0 && 
+        {docs && docs.length > 0 && (
           <SKButton
-          disable = {!pageParams.isDocAdded}
-          fontSize={16}
-          marginTop={30}
-          rightImage={CustomFonts.right_arrow}
-          fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'AUTHORIZATION'}
-          onPress={() => {
-            console.log('link pressed');
-            navigation.navigate('AuthorizerList');
-          }}
-        />
-          }
+            disable={!pageParams.isDocAdded}
+            fontSize={16}
+            marginTop={30}
+            rightImage={CustomFonts.right_arrow}
+            fontWeight={'normal'}
+            backgroundColor={Colors.PRIMARY_FILL}
+            borderColor={Colors.PRIMARY_BORDER}
+            title={'AUTHORIZATION'}
+            onPress={() => {
+              console.log('link pressed');
+              navigation.navigate('AuthorizerList');
+            }}
+          />
+        )}
         {showDoc && (
           <DocumentViewer
             onClose={() => setShowDoc(false)}
@@ -186,7 +194,7 @@ const ManageDocCard = props => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-      style = {{width:40, height:'100%',alignItems:'flex-end'}}
+        style={{width: 40, height: '100%', alignItems: 'flex-end'}}
         onPress={() => {
           onDelete && onDelete();
         }}>

@@ -16,7 +16,7 @@ import SKLoader from '../components/SKLoader';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
-import {getActiveFileStatusOnLogin} from '../apihelper/Api';
+import {getActiveFileStatusOnLogin,getServicePriceList} from '../apihelper/Api';
 
 const data = [
   {
@@ -67,16 +67,24 @@ const Dashboard = props => {
    
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
+  const [taxFilingFee, setTaxFilingFee] = useState(44.99)
 
   useEffect(() => {
     setIsLoading(true)
     const userid = global.userInfo?.user_id;
     const params = {User_Id:userid}
     getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
-      console.log('fileStatusRes',fileStatusRes)
       const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
       global.statusData = statusData || {}
       setIsLoading(false)
+    })
+    getServicePriceList((priceRes) =>{
+      if(priceRes?.data){
+        const fees = priceRes?.data
+        const onlineTaxFeeObjs = fees && fees.filter((x) => x.services_fee_id == 1);
+        const feeObj = onlineTaxFeeObjs?.[0]
+        setTaxFilingFee(feeObj?.service_fee)
+      }
     })
   }, [])
 
@@ -185,6 +193,7 @@ const Dashboard = props => {
           numColumns={2}
           renderItem={({item}) => (
             <DashCard
+              fee = {taxFilingFee}
               item={item}
               onSelected={() => {
                 navigateToScreen(item);

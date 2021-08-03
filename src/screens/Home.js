@@ -148,7 +148,6 @@ const ProfDoccCardView = props => {
 
 const MessegesView = props => {
   const {new_message_count = 0} = global.statusData;
-  console.log('new_message_count',global.statusData)
   return (
     <LinearGradient
       opacity={0.6}

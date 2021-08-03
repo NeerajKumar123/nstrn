@@ -207,9 +207,7 @@ export const onlineSaveAdditionalPaymentInfo = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
-
-
-
-
-
-
+export const getServicePriceList = (callback) => {
+  const path = `${BaseURL}/Get_Service_PriceList`
+  API.makeGetRequest(path , callback);
+};
