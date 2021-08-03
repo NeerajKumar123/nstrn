@@ -687,11 +687,7 @@ const MessegesView = props => {
               fontWeight: '700',
               marginTop: 5,
             }}>
-<<<<<<< HEAD
-           {`${global.fileStatusRes.data[0].new_message_count} NEW MESSAGES`}
-=======
             {`${count} NEW MESSAGES`}
->>>>>>> 0d487b71da1670f5b89d7de7c34ce604ee68bd55
           </Text>
         </View>
         <Image

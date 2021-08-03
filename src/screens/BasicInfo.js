@@ -59,8 +59,10 @@ const BasicInfo = props => {
   const userid = global.userInfo?.user_id;
   const taxFileID = global.userInfo?.tax_file_id;
     const params = {User_Id:userid, Tax_File_Id:taxFileID || 83,Year:2020 }
-    getAboutInfo(params,(aboutRes) =>{
-      console.log('about res',aboutRes)
+    getAboutInfo(params,(about) =>{
+        console.log('about res', about)
+        const aboutRes = about?.data && about?.data.length > 0 ? about?.data[0] : undefined
+        global.aboutRes = statusData || {}
       setIsLoading(false)
     })
   }, [])
@@ -93,19 +95,21 @@ const BasicInfo = props => {
           leftAccImage={CustomFonts.Number}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
-          value={sin}
+          //value={sin}
           keyboardType = 'number-pad'
           placeholder="SIN Number"
-          onEndEditing={value => {
+          value={global.aboutRes.SIN_number}
+          /*onEndEditing={value => {
             console.log('onEndEditing', value);
             setsin(value);
-          }}
+          }}*/
         />
         <TouchableInput
           leftAccImage={CustomFonts.Gender}
           rightAccImage={CustomFonts.ChevronDown}
           value = {gender}
           placeholder="Select Gender"
+          value={global.aboutRes.gender}
           onClicked={() => {
             setIsGenderVisible(true);
           }}
@@ -114,6 +118,7 @@ const BasicInfo = props => {
           leftAccImage={CustomFonts.Calender}
           value = {dob && format(dob, 'dd/MM/yyyy')}
           placeholder="Date of Birth (DD/MM/YYYY)"
+          value={global.aboutRes.DOB}
           onClicked={() => {
             setShowDatePicker(true);
           }}
@@ -127,7 +132,8 @@ const BasicInfo = props => {
         <TouchableInput
           leftAccImage={CustomFonts.Clock}
           rightAccImage={CustomFonts.ChevronDown}
-          value={lastTime}
+          //value={lastTime}
+          value={global.aboutRes.last_year_filed}
           placeholder="Select"
           onClicked={() => {
             console.log('sdsd');
