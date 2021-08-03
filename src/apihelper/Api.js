@@ -187,3 +187,29 @@ export const onlineSubmitFiling = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+
+export const stripeGenerateEphemeralKey = (params,callback) => {
+  const path = `${BaseURL}/Stripe_Generate_Ephemeral_Key`
+  API.makePostRequest(path , params, callback);
+};
+
+export const stripeSubmitPayment = (params,callback) => {
+  const path = `${BaseURL}/Stripe_Submit_Payment`
+  API.makePostRequest(path , params, callback);
+};
+
+export const onlineSavePaymentInfo = (params,callback) => {
+  const path = `${BaseURL}/Online_Save_Payment_Info`
+  API.makePostRequest(path , params, callback);
+};
+export const onlineSaveAdditionalPaymentInfo = (params,callback) => {
+  const path = `${BaseURL}/Online_Save_Additional_Payment_Info`
+  API.makePostRequest(path , params, callback);
+};
+
+
+
+
+
+
+

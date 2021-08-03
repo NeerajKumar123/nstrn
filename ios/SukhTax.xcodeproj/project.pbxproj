@@ -19,6 +19,7 @@
 		071766D32694CD0A002D2719 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 071766C82694CD0A002D2719 /* OpenSans-Light.ttf */; };
 		071766D42694CD0A002D2719 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 071766C92694CD0A002D2719 /* OpenSans-SemiBold.ttf */; };
 		071766D52694CD0A002D2719 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 071766CA2694CD0A002D2719 /* OpenSans-Regular.ttf */; };
+		0794553826B7C37000306053 /* Fix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794553726B7C37000306053 /* Fix.swift */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -53,6 +54,8 @@
 		071766C92694CD0A002D2719 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		071766CA2694CD0A002D2719 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		076CB2A3269AE7F5007C2602 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		0794553626B7C37000306053 /* SukhTax-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SukhTax-Bridging-Header.h"; sourceTree = "<group>"; };
+		0794553726B7C37000306053 /* Fix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fix.swift; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* SukhTax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SukhTax.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SukhTax/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SukhTax/AppDelegate.m; sourceTree = "<group>"; };
@@ -158,6 +161,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				0794553726B7C37000306053 /* Fix.swift */,
 				071766AD2694CCE9002D2719 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* SukhTax */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -165,6 +169,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				EFFC1B4074C5A137C59D0BE1 /* Pods */,
+				0794553626B7C37000306053 /* SukhTax-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -250,7 +255,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1240;
 					};
 				};
 			};
@@ -465,6 +470,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				0794553826B7C37000306053 /* Fix.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -484,6 +490,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 42CD1BA56CB683085937E37E /* Pods-SukhTax-SukhTaxTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -511,6 +518,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7114508B6851FD8A0D32B04B /* Pods-SukhTax-SukhTaxTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = SukhTaxTests/Info.plist;
@@ -542,6 +550,7 @@
 				DEVELOPMENT_TEAM = N9T6K48WRZ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SukhTax/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -554,6 +563,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.RewardsPlus.Rplus;
 				PRODUCT_NAME = SukhTax;
 				PROVISIONING_PROFILE_SPECIFIER = RPlusDev15June21;
+				SWIFT_OBJC_BRIDGING_HEADER = "SukhTax-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -570,6 +580,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SukhTax/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -582,6 +593,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.RewardsPlus.Rplus;
 				PRODUCT_NAME = SukhTax;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "SukhTax-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -641,11 +653,7 @@
 					/usr/lib/swift,
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
-					"\"$(inherited)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -699,11 +707,7 @@
 					/usr/lib/swift,
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
-					"\"$(inherited)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

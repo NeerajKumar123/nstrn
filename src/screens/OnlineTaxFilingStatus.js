@@ -6,6 +6,8 @@ import {
   ScrollView,
   Image,
   Alert,
+  Platform,
+  Linking
 } from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
@@ -24,17 +26,17 @@ import {
 import SKButton, {UploadDocButton} from '../components/SKButton';
 import {useIsFocused} from '@react-navigation/native';
 
-const OnlineTaxFiling = props => {
+const OnlineTaxFilingStatus = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {}, [isFocused]);
 
-  const options = {
-    quality: 0.1,
+  const imageQualityOptions = {
+    quality: .1,
     maxWidth: 5,
     maxHeight: 5,
-    includeBase64: true,
+    includeBase64:true,
   };
 
   const pageHeading = () => {
@@ -64,7 +66,7 @@ const OnlineTaxFiling = props => {
     const taxFileID = global.userInfo?.tax_file_id;
     const params = {
       User_id: userid,
-      Tax_File_Id: taxFileID || 83,
+      Tax_File_Id: taxFileID,
       Year: parseInt('2020'),
       FileNameWithExtension: 'identification-document.jpg',
       Base64String: bs64Image,
@@ -87,6 +89,7 @@ const OnlineTaxFiling = props => {
         contentContainerStyle={{
           paddingHorizontal: 20,
           height: '100%',
+          paddingBottom:Platform.OS == 'ios' ? 100 : 0
         }}>
         <Heading value={pageHeading()} marginTop={124} />
         <TaxFilingStatusCard
@@ -97,7 +100,7 @@ const OnlineTaxFiling = props => {
           }}
           uploadClick={() => {
             console.log('onClicked');
-            launchImageLibrary(options, res => {
+            launchImageLibrary(imageQualityOptions, res => {
               console.log('res', res);
               if (res?.didCancel) {
                 console.log('didCancel');
@@ -171,8 +174,8 @@ const PaymentFinalCard = props => {
         borderColor={Colors.PRIMARY_BORDER}
         title={'PAYNOW'}
         onPress={() => {
-          Alert.alert('SukhTax', 'We are on it.');
-          return;
+          const nextPageParams = {payment_required:totalAmount,additional_payment_required:0}
+          navigation.navigate('PaymentScreen',{...nextPageParams})    
         }}
       />
     </View>
@@ -215,13 +218,16 @@ const TaxFilingStatusCard = props => {
     tax_file_status_name = 'File not Submitted',
     status_description = 'Looks like you have to complete your registration and upload document still!',
     new_message_count = 0,
-    can_edit_documents = false,
+    can_edit_documents = 0,
     payment_required = 100,
     additional_payment_required = 20,
     book_now_url,
     spouse_info_filled,
-    tax_file_status_id,
+    // tax_file_status_id,
   } = global.statusData;
+  console.log('global.statusData',global.statusData)
+
+  const tax_file_status_id  = 10
 
   const moveToPage = props => {
     const {
@@ -357,7 +363,7 @@ const TaxFilingStatusCard = props => {
         />
       )}
 
-      {tax_file_status_id == 16 && (
+      {tax_file_status_id == 16  &&  (
         <SKButton
           fontSize={16}
           marginTop={30}
@@ -368,6 +374,10 @@ const TaxFilingStatusCard = props => {
           title={'RATE US'}
           onPress={() => {
             //MOVE FOR RATING..
+            const appLink = Platform.OS == 'ios' ? 'https://apps.apple.com/ca/app/sukh-tax/id1551644082' : 'https://play.google.com/store/apps/details?id=com.ushatek.sukhtax&hl=en_US&gl=US'
+            Linking.canOpenURL(appLink).then(supported => {
+              supported && Linking.openURL(appLink);
+          }, (err) => console.log(err));      
           }}
         />
       )}
@@ -377,7 +387,7 @@ const TaxFilingStatusCard = props => {
           navigation.navigate('Messages');
         }}
       />
-      {tax_file_status_id == 7 && can_edit_documents && (
+      {tax_file_status_id == 7 && can_edit_documents == 1 && (
         <SKButton
           fontSize={16}
           marginTop={30}
@@ -422,7 +432,7 @@ const TaxFilingStatusCard = props => {
         />
       )}
       {(tax_file_status_id == 9 || tax_file_status_id == 8) &&
-        can_edit_documents && (
+        can_edit_documents == 1 && (
           <View
             style={{
               width: '100%',
@@ -513,7 +523,7 @@ const TaxFilingStatusCard = props => {
           title={'SUBMIT FOR FILING'}
           onPress={() => {
             const userid = global.userInfo?.user_id;
-            const taxFileID = global.userInfo?.tax_file_id || 83;
+            const taxFileID = global.userInfo?.tax_file_id;
             const params = {User_id: userid, Tax_File_Id: taxFileID};
             updateLoadingStatus(true);
             onlineSubmitFiling(params, submitFileRes => {
@@ -569,7 +579,8 @@ const TaxFilingStatusCard = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'PAY SECURELY'}
             onPress={() => {
-              Alert.alert('Sukhtax', 'Payment to be done.Under Development.');
+              const nextPageParams = {payment_required:payment_required,additional_payment_required:additional_payment_required}
+              navigation.navigate('PaymentScreen',{...nextPageParams})    
             }}
           />
         </View>
@@ -617,7 +628,8 @@ const TaxFilingStatusCard = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'PAY SECURELY'}
             onPress={() => {
-              Alert.alert('Sukhtax', 'Payment to be done.Under Development.');
+              const nextPageParams = {payment_required:payment_required,additional_payment_required:additional_payment_required}
+              navigation.navigate('PaymentScreen',{...nextPageParams})    
             }}
           />
         </View>
@@ -703,4 +715,4 @@ const MessegesView = props => {
   );
 };
 
-export default OnlineTaxFiling;
+export default OnlineTaxFilingStatus;

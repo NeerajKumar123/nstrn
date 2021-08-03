@@ -14,7 +14,7 @@ const Identification = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
   const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
-  const options = {
+  const imageQualityOptions = {
     quality: .1,
     maxWidth: 5,
     maxHeight: 5,
@@ -111,7 +111,7 @@ const Identification = props => {
         <UploadDocButton  marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}
         onClick={() => {
           console.log('onClicked');
-          launchImageLibrary(options, res => {
+          launchImageLibrary(imageQualityOptions, res => {
             console.log('res',res)
             if (res?.didCancel) {
               console.log('didCancel');

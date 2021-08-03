@@ -8,7 +8,7 @@ import SignUp from './screens/SignUp';
 import Home from './screens/Home';
 import AllDocuments from './screens/AllDocuments';
 import HomeDocsListing from './screens/HomeDocsListing';
-import OnlineTaxFiling from './screens/OnlineTaxFiling';
+import OnlineTaxFilingStatus from './screens/OnlineTaxFilingStatus';
 import SecurityCode from './screens/SecurityCode';
 import SetupNewPass from './screens/SetupNewPass';
 import Instructions from './screens/Instructions';
@@ -44,6 +44,7 @@ import IncorpPayment from './screens/IncorpPayment';
 import IncorpInProcess from './screens/IncorpInProcess';
 import Spouse from './screens/Spouse';
 import SKWebPage from './screens/SKWebPage';
+import PaymentScreen from './screens/PaymentScreen';
 
 const Stack = createStackNavigator();
 
@@ -134,9 +135,9 @@ const SKStack = () => {
           options={{title: 'HomeDocsListing', headerShown: false}}
         />
         <Stack.Screen
-          name="OnlineTaxFiling"
-          component={OnlineTaxFiling}
-          options={{title: 'OnlineTaxFiling', headerShown: false}}
+          name="OnlineTaxFilingStatus"
+          component={OnlineTaxFilingStatus}
+          options={{title: 'OnlineTaxFilingStatus', headerShown: false}}
         />
         <Stack.Screen
           name="Messages"
@@ -287,6 +288,11 @@ const SKStack = () => {
           name="SKWebPage"
           component={SKWebPage}
           options={{title: 'SKWebPage', headerShown: false}}
+        />
+         <Stack.Screen
+          name="PaymentScreen"
+          component={PaymentScreen}
+          options={{title: 'PaymentScreen', headerShown: false}}
         />
 
       </Stack.Navigator>

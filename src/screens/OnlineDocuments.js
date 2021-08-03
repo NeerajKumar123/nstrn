@@ -22,7 +22,7 @@ import { uploadDocumentBS64 } from '../apihelper/Api';
 
 const OnlineDocuments = props => {
   const navigation = useNavigation();
-  const options = {
+  const imageQualityOptions = {
     quality: .1,
     maxWidth: 5,
     maxHeight: 5,
@@ -36,7 +36,7 @@ const OnlineDocuments = props => {
     console.log('global.userInfo',global.userInfo)
     const userid = global.userInfo?.user_id;
     const taxFileID = global.userInfo?.tax_file_id;
-    const params = {User_id:userid,Tax_File_Id:taxFileID || 83,Year:parseInt(yr),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
+    const params = {User_id:userid,Tax_File_Id:taxFileID,Year:parseInt(yr),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
     return params
   }
 
@@ -85,7 +85,7 @@ const OnlineDocuments = props => {
                 item={item}
                 onClicked={() => {
                   console.log('onClicked',item);
-                  launchImageLibrary(options, res => {
+                  launchImageLibrary(imageQualityOptions, res => {
                     console.log('res',res)
                     if (res?.didCancel) {
                       console.log('didCancel');

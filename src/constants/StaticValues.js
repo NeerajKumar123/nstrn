@@ -23,3 +23,8 @@ export const ErrorStrings = {
   InvalidLName:'Please enter valid last name.',
 
 };
+
+export const stripekey_test = 'pk_test_51I8rlGBHi8nqbGSxAKVuVuxEit58oIMidFfbncCMy5GiAoDPoMIR2v9u87I29FOHcQ0ipuIyje0puIUpOPjSngqK00I7UTmxka'
+export const stripekey_live = 'pk_live_51I8rlGBHi8nqbGSxLUoRmQIMdKS2IupbsgiNJertoE7QEB0kHwQnBOepeKaE2Fgp6mSVOAIbPeByVHcK6Q3d8NjR00pN3scqwz'
+export const stripeAccountId = 'acct_1I8rlGBHi8nqbGSx'
+
