@@ -33,9 +33,9 @@ const OnlineTaxFilingStatus = props => {
   useEffect(() => {}, [isFocused]);
 
   const imageQualityOptions = {
-    quality: .1,
-    maxWidth: 5,
-    maxHeight: 5,
+    quality: .8,
+    maxWidth: 300,
+    maxHeight: 400,
     includeBase64:true,
   };
 
@@ -63,7 +63,7 @@ const OnlineTaxFilingStatus = props => {
 
   const prepareParams = bs64Image => {
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.tax_file_id;
+    const taxFileID = global.statusData?.tax_file_id;
     const params = {
       User_id: userid,
       Tax_File_Id: taxFileID,
@@ -225,6 +225,7 @@ const TaxFilingStatusCard = props => {
     spouse_info_filled,
     tax_file_status_id,
   } = global.statusData;
+
   const moveToPage = props => {
     const {
       years_selected = 0,
@@ -337,9 +338,6 @@ const TaxFilingStatusCard = props => {
           backgroundColor={Colors.CLR_7F7F9F}
           borderColor={Colors.CLR_D3D3D9}
           title={'DOWNLOAD MY TAX DOCS'}
-          // onPress={() => {
-          //   Alert.alert('SukhTax', 'Payment to be done.Under Development.')
-          // }}
           onPress={() => {
             updateLoadingStatus(true);
             const params = {User_Id: global.userInfo?.user_id};
@@ -519,7 +517,7 @@ const TaxFilingStatusCard = props => {
           title={'SUBMIT FOR FILING'}
           onPress={() => {
             const userid = global.userInfo?.user_id;
-            const taxFileID = global.userInfo?.tax_file_id;
+            const taxFileID = global.statusData?.tax_file_id;
             const params = {User_id: userid, Tax_File_Id: taxFileID};
             updateLoadingStatus(true);
             onlineSubmitFiling(params, submitFileRes => {
@@ -549,7 +547,7 @@ const TaxFilingStatusCard = props => {
             title={'DETAILS'}
             onPress={() => {
               const userid = global.userInfo?.user_id;
-              const taxFileID = global.userInfo?.tax_file_id || 3127;
+              const taxFileID = global.statusData?.tax_file_id;
               console.log('global', global.userInfo);
               const params = {
                 User_Id: userid,
@@ -599,7 +597,7 @@ const TaxFilingStatusCard = props => {
             onPress={() => {
               console.log('global', global.userInfo);
               const userid = global.userInfo?.user_id;
-              const taxFileID = global.userInfo?.tax_file_id || 3127;
+              const taxFileID = global.statusData?.tax_file_id;
               const params = {
                 User_Id: userid,
                 Tax_File_Id: taxFileID,

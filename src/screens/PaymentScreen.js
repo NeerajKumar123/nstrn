@@ -44,10 +44,11 @@ const PaymentScreen = props => {
 
   const fetchPaymentIntentClientSecret = async () => {
     setIsLoading(true);
-    const {Stripe_Customer_Id, user_id, tax_file_id} = global.userInfo;
+    const {Stripe_Customer_Id, user_id} = global.userInfo;
+    const {tax_file_id} = global.statusData
     const params = {
       User_Id: user_id,
-      Tax_File_Id: tax_file_id || 3127,
+      Tax_File_Id: tax_file_id,
       Stripe_Customer_Id: Stripe_Customer_Id,
       API_Version: '2020-08-27',
     };
@@ -55,7 +56,7 @@ const PaymentScreen = props => {
       console.log('params', res);
       const intentParams = {
         User_Id: user_id,
-        Tax_File_Id: tax_file_id || 3127,
+        Tax_File_Id: tax_file_id,
         Stripe_Customer_Id: Stripe_Customer_Id,
         Payable_Amount: pageParams?.payment_required + pageParams?.additional_payment_required,
         Currency: 'CAD',
@@ -77,6 +78,7 @@ const PaymentScreen = props => {
       mailing_address: mailing_address,
       user_mobile: user_mobile,
     };
+    setIsLoading(true);
     // Confirm the payment with the card details
     const {paymentIntent, error} = await confirmPayment(clientSecret, {
       type: 'Card',
@@ -84,11 +86,20 @@ const PaymentScreen = props => {
     });
     if (error) {
       setIsLoading(false);
-      console.log('Payment confirmation error', error);
+      Alert.alert('SukhTax', 'We are facing some techinical glitch , Please try again.');
     } else if (paymentIntent) {
       setIsLoading(false);
       Alert.alert('SukhTax', 'Payment done successfully!');
-      navigation.popToTop();
+      const {id,status} = paymentIntent
+      const {user_id} = global.userInfo;
+      const {tax_file_id} = global.statusData
+      const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Payment_Intent_id:id,Payment_Status:status,Additional_Payment:pageParams?.additional_payment_required ? pageParams?.additional_payment_required : 0 }
+      onlineSavePaymentInfo(params, (savePaymentRes)=>{
+        navigation.popToTop();
+        // if(savePaymentRes?.status == 1){
+        //   navigation.popToTop();
+        // }
+      })
     }
   };
 
@@ -130,18 +141,6 @@ const PaymentScreen = props => {
             setCard(cardDetails);
           }}
         />
-        <SKInput
-          marginTop={20}
-          marginBottom={0}
-          leftAccImage={CustomFonts.Email}
-          maxLength={30}
-          borderColor={Colors.CLR_0065FF}
-          value={address}
-          placeholder="Address"
-          onEndEditing={value => {
-            setAddress(value);
-          }}
-        />
         <SKButton
           fontSize={16}
           marginTop={30}
@@ -150,10 +149,11 @@ const PaymentScreen = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'PAY NOW'}
           onPress={() => {
-            console.log('card', card);
-            if (card) {
-              Keyboard.dismiss();
+            Keyboard.dismiss();
+            if (card?.complete) {
               handlePayPress();
+            }else{
+              Alert.alert('SukhTax', 'Please fill up the complete card details.')
             }
           }}
         />

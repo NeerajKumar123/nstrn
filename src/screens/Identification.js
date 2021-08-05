@@ -15,9 +15,9 @@ const Identification = props => {
   const [isLoading, setIsLoading] = useState(false)
   const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
   const imageQualityOptions = {
-    quality: .1,
-    maxWidth: 5,
-    maxHeight: 5,
+    quality: .8,
+    maxWidth: 300,
+    maxHeight: 400,
     includeBase64:true,
   };
 

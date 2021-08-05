@@ -23,9 +23,9 @@ import { uploadDocumentBS64 } from '../apihelper/Api';
 const OnlineDocuments = props => {
   const navigation = useNavigation();
   const imageQualityOptions = {
-    quality: .1,
-    maxWidth: 5,
-    maxHeight: 5,
+    quality: .8,
+    maxWidth: 300,
+    maxHeight: 400,
     includeBase64:true,
   };
   const data = global.selectedYears;
