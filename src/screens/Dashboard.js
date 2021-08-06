@@ -70,6 +70,9 @@ const Dashboard = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [taxFilingFee, setTaxFilingFee] = useState(44.99);
+  const userFullName = global.userInfo
+    ? `${global.userInfo.firstname} ${global.userInfo.lastname}`
+    : '';
 
   useEffect(() => {
     setIsLoading(true);
@@ -175,6 +178,15 @@ const Dashboard = props => {
           navigation.navigate('Profile');
         }}
       />
+      <Text
+        style={{
+          fontWeight: '700',
+          fontSize: 20,
+          color: Colors.APP_RED_SUBHEADING_COLOR,
+          fontFamily: CustomFonts.OpenSansRegular,
+        }}>
+        {`Welcome, ${userFullName}`}
+      </Text>
       {data && (
         <FlatList
           contentContainerStyle={{

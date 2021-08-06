@@ -50,10 +50,10 @@ const SignUp = props => {
       Alert.alert('SukhTax','Please enter valid Phone Number');
     }else if(!isPassValid){
       isValidForm = false;
-      Alert.alert('SukhTax','Please enter valid Password');
+      Alert.alert('SukhTax',`Password should be \n1.Minimum of 5\n2.Maximum of 16\n3.Atleast one upper case\n4.Atleast one lower case\n5.Atleast one number\n6.Atleast one special char)`);
     }else if(!isCPassValid){
       isValidForm = false;
-      Alert.alert('SukhTax','Please enter valid Confirm Password');
+      Alert.alert('SukhTax',`Password should be \n1.Minimum of 5\n2.Maximum of 16\n3.Atleast one upper case\n4.Atleast one lower case\n5.Atleast one number\n6.Atleast one special char)`);
     }else if(pass != cPass){
       isValidForm = false;
       Alert.alert('SukhTax','Passwords mismatch');
@@ -182,6 +182,7 @@ const SignUp = props => {
           onPress={() => {
             Keyboard.dismiss()
             if(checkFormValidations()){
+              
               setIsLoading(true)
               const testDeviceToken = 'DEVICE_TOKEN_123456789'
               const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:testDeviceToken, Device_OS:'iOS', Module_Type_Id:2}
