@@ -11,8 +11,10 @@ import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs'
 const Login = props => {
   const navigation = useNavigation();
-  const [email, setemail] = useState('neerajkiet@gmail.com')
-  const [pass, setPass] = useState('990099')
+  // const [email, setemail] = useState('neerajkiet@gmail.com')
+  // const [pass, setPass] = useState('990099')
+  const [email, setemail] = useState('')
+  const [pass, setPass] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
@@ -102,7 +104,7 @@ const Login = props => {
                   });
                 }else{
                   const msg = userRes?.message ?? 'Something went wront, Please try again later.'
-                  Alert.alert('SukhTax',msg)
+                  // Alert.alert('SukhTax',msg)
                 }
               })
             }

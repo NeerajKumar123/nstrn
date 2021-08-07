@@ -73,7 +73,6 @@ const Dashboard = props => {
     const userid = global.userInfo?.user_id;
     const params = {User_Id:userid}
     getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
-      console.log('fileStatusRes',fileStatusRes)
       const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
       global.statusData = statusData || {}
       setIsLoading(false)
@@ -86,16 +85,17 @@ const Dashboard = props => {
         navigation.navigate('Home');
         break;
         case 2:
-          const {book_an_appointment_link}  = global.statusData
-          navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
+          // const {book_an_appointment_link}  = global.statusData
+          // navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
           break;
       case 3:
-        const {Online_Button_Enabled} = global.statusData
-        if(!Online_Button_Enabled){
-          Alert.alert('SukhTax','You have already submitted your details, and your file is currently being processed. Please use the Home screen to edit any details.')
-        }else{
-          moveToPage()
-        }
+        moveToPage()
+        // const {Online_Button_Enabled} = global.statusData
+        // if(!Online_Button_Enabled){
+        //   Alert.alert('SukhTax','You have already submitted your details, and your file is currently being processed. Please use the Home screen to edit any details.')
+        // }else{
+        //   moveToPage()
+        // }
         break;
       case 4:
         return

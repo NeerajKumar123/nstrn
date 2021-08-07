@@ -18,3 +18,6 @@ const App = () => {
 };
 
 export default App;
+
+
+//react-native run-android --no-packager --variant=release

@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Modal, Platform,Dimensions,Text} from 'react-native';
 const {width, height} = Dimensions.get('window');
 import * as Colors from '../constants/ColorDefs';
+import Lottie from 'lottie-react-native';
 
 const loader = require('../../assets/loader.json');
  const SKLoader = (props) => {
@@ -13,7 +14,14 @@ const loader = require('../../assets/loader.json');
         onRequestClose={() => {}}>
         <View
           style={styles.alertContainer}>
-          <View style={styles.indicator}/>
+          <View style={styles.indicator}>
+            <Lottie
+              style={styles.lottie}
+              autoPlay
+              loop
+              source={loader}
+            />
+          </View>
         </View>
       </Modal>
     );

@@ -180,11 +180,12 @@ const MyTaxYear = props => {
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={
-            currentYearIndex + 1 < global.selectedYears && global.selectedYears.length
-              ? global.selectedYears[currentYearIndex + 1]
-              : 'DOCUMENTS'
-          }
+          title={'DOCUMENTS'}
+          // title={
+          //   currentYearIndex + 1 < global.selectedYears && global.selectedYears.length
+          //     ? global.selectedYears[currentYearIndex + 1]
+          //     : 'DOCUMENTS'
+          // }
           onPress={() => {
             if(mySelf || (spouse && isFromSpouseFlow)){
               const selected = data && data.filter((x) => x.isSelected);
@@ -196,12 +197,13 @@ const MyTaxYear = props => {
               const params = prepareParams(true);
               onlineSaveMyYearInfo(params, saveYrRes => {
                 if (saveYrRes?.status == 1) {
-                  if (currentYearIndex + 1 < global.selectedYears && global.selectedYears.length) {
-                    console.log('saveYrRes',saveYrRes)
-                    setCurrentYearIndex(currentYearIndex + 1);
-                  } else {
-                    navigation.navigate('OnlineDocuments');
-                  }
+                  navigation.navigate('OnlineDocuments');
+                  // if (currentYearIndex + 1 < global.selectedYears && global.selectedYears.length) {
+                  //   console.log('saveYrRes',saveYrRes)
+                  //   setCurrentYearIndex(currentYearIndex + 1);
+                  // } else {
+                  //   navigation.navigate('OnlineDocuments');
+                  // }
                   setIsLoading(false);
                 } else {
                   Alert.alert('SukhTax', 'Something wrong');
