@@ -123,6 +123,7 @@ const SignaturePage = props => {
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={lName}
+            autoCapitalize = 'words'
             placeholder="First Name"
             onEndEditing={value => {
               setFName(value);
@@ -135,6 +136,7 @@ const SignaturePage = props => {
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={lName}
+            autoCapitalize = 'words'
             placeholder="Last Name"
             onEndEditing={value => {
               setLName(value);
