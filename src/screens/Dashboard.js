@@ -112,9 +112,11 @@ const Dashboard = props => {
       //   }
       //   break;
       case 4:
-        return;
-        navigation.navigate('IncorportionLandiing');
+        navigation.navigate('IncorporationLanding');
         break;
+        case 6:
+        navigation.navigate('CRALanding');
+        break;        
       default:
         break;
     }

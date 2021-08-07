@@ -126,7 +126,7 @@ const Identification = props => {
         }}
         />
         <SKButton
-          disable = {!isUploadedSuccessfully}
+          // disable = {!isUploadedSuccessfully}
           marginTop={30}
           fontSize={16}
           rightImage={CustomFonts.right_arrow}
@@ -135,8 +135,12 @@ const Identification = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'BASIC INFO'}
           onPress={() => {
-            console.log('link pressed');
-            navigation.navigate('BasicInfo');
+            setIsLoading(true)
+            setTimeout(() => {
+              setIsLoading(false)
+            }, 5000);        
+            // console.log('link pressed');
+            // navigation.navigate('BasicInfo');
           }}
         />
       </ScrollView>

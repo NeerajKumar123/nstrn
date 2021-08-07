@@ -45,6 +45,7 @@ import IncorpInProcess from './screens/IncorpInProcess';
 import Spouse from './screens/Spouse';
 import SKWebPage from './screens/SKWebPage';
 import PaymentScreen from './screens/PaymentScreen';
+import CRALanding from './screens/CRALanding';
 
 const Stack = createStackNavigator();
 
@@ -294,6 +295,13 @@ const SKStack = () => {
           component={PaymentScreen}
           options={{title: 'PaymentScreen', headerShown: false}}
         />
+
+<Stack.Screen
+          name="CRALanding"
+          component={CRALanding}
+          options={{title: 'CRALanding', headerShown: false}}
+        />
+
 
       </Stack.Navigator>
     </NavigationContainer>
