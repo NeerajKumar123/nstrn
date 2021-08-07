@@ -77,37 +77,31 @@ const Dashboard = props => {
   useEffect(() => {
     setIsLoading(true);
     const userid = global.userInfo?.user_id;
-    const params = {User_Id: userid};
-    getActiveFileStatusOnLogin(params, fileStatusRes => {
-      const statusData =
-        fileStatusRes?.data && fileStatusRes?.data.length > 0
-          ? fileStatusRes?.data[0]
-          : undefined;
-      global.statusData = statusData || {};
-      setIsLoading(false);
-    });
-    getServicePriceList(priceRes => {
-      if (priceRes?.data) {
-        const fees = priceRes?.data;
-        const onlineTaxFeeObjs =
-          fees && fees.filter(x => x.services_fee_id == 1);
-        const feeObj = onlineTaxFeeObjs?.[0];
-        setTaxFilingFee(feeObj?.service_fee);
-      }
-    });
-  }, []);
+    const params = {User_Id:userid}
+    getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
+      const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
+      global.statusData = statusData || {}
+      setIsLoading(false)
+    })
+  }, [])
 
   const navigateToScreen = item => {
     switch (item.id) {
       case 1:
         navigation.navigate('Home');
         break;
-      case 2:
-        const {book_an_appointment_link} = global.statusData;
-        navigation.navigate('SKWebPage', {pageUrl: book_an_appointment_link});
-        break;
+        case 2:
+          // const {book_an_appointment_link}  = global.statusData
+          // navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
+          break;
       case 3:
-        moveToPage();
+        moveToPage()
+        // const {Online_Button_Enabled} = global.statusData
+        // if(!Online_Button_Enabled){
+        //   Alert.alert('SukhTax','You have already submitted your details, and your file is currently being processed. Please use the Home screen to edit any details.')
+        // }else{
+        //   moveToPage()
+        // }
         break;
       // case 3:
       //   const {Online_Button_Enabled} = global.statusData
