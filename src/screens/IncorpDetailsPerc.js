@@ -48,7 +48,7 @@ const IncorpDetailsPerc = props => {
         keyboardVerticalOffset={-150}>
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: 32,
+          paddingHorizontal: 20,
           flex: 1,
         }}>
         <Heading value="ABOUT YOU" marginTop={26} />

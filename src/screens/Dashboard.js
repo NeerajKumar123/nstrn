@@ -91,8 +91,8 @@ const Dashboard = props => {
         navigation.navigate('Home');
         break;
         case 2:
-          // const {book_an_appointment_link}  = global.statusData
-          // navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
+          const {book_an_appointment_link}  = global.statusData
+          navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
           break;
       case 3:
         moveToPage()

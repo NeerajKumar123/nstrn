@@ -14,10 +14,10 @@ const loader = require('../../assets/loader_gf.gif');
         <View
           style={styles.alertContainer}>
           <View style={styles.indicator}>
-            <Image
+            {/* <Image
               style={styles.lottie}
               source={loader}
-            />
+            /> */}
           </View>
         </View>
       </Modal>

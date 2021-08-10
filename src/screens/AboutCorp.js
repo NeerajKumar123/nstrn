@@ -71,7 +71,7 @@ const AboutCorp = props => {
         keyboardVerticalOffset={-200}>
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: 32,
+          paddingHorizontal: 20,
           flex: 1,
         }}>
         <Heading value="ABOUT YOUR CORPORATION" marginTop={26} />
