@@ -193,8 +193,8 @@ const MessegesView = props => {
               fontWeight: '700',
               marginTop: 5,
               fontFamily:CustomFonts.OpenSansRegular
-            }}>
-            0 NEW MESSAGES
+              }}>
+            {`0 NEW MESSAGES`}
           </Text>
         </View>
         <Image
