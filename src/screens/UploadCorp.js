@@ -1,24 +1,49 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import SKButton , {UploadDocButton} from '../components/SKButton';
-import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {uploadImageIncorp} from '../apihelper/Api'
 const messeges = require('../../assets/messeges.png');
 const left_arrow = require('../../assets/left_arrow.png');
 const right_arrow = require('../../assets/right_arrow.png');
 
 const UploadCorp = props => {
   const navigation = useNavigation();
+  const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const imageQualityOptions = {
     quality: .8,
     maxWidth: 300,
     maxHeight: 400,
     includeBase64:true,
   };
+
+  const intiateImageUploading = (res) =>{
+    setIsLoading(true)
+    const imgObj = res?.assets?.[0]
+    console.log('imgObj',imgObj)
+    if (!imgObj.base64) Alert.alert('SukhTax','Something went wrong!')
+    const params = prepareParams(imgObj.base64)
+    console.log('params',params)
+    uploadImageIncorp(params,(uploadRes) =>{
+      setIsLoading(false)
+      console.log('uploadRes2222',uploadRes)
+      uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
+      setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
+    })
+  }
+
+  const prepareParams = (bs64Image) =>{
+    const year = global?.selectedYears?.[0]
+    const userid = global.userInfo?.user_id;
+    const taxFileID = global.userInfo?.tax_file_id ? global.userInfo?.tax_file_id :0;
+    const params = {User_id:userid,Tax_File_Id:taxFileID,Year:year,FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
+    return params
+  }
 
   return (
     <View
@@ -83,19 +108,27 @@ const UploadCorp = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- PR CARD"
         />
-        <UploadDocButton marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}
+        <UploadDocButton
+        marginTop = {35}
+        title = 'UPLOAD THE MISSING DOC HERE'
+        height ={46}
         onClick={() => {
-            console.log('onClicked');
-            launchImageLibrary(imageQualityOptions, res => {
-              if (res?.didCancel) {
-                console.log('didCancel');
-              }
-              if (res?.error) {
-                console.log('error', res?.error ?? ERROR_MSG);
-              }
-            });
-          }} />
+          console.log('onClicked');
+          launchImageLibrary(imageQualityOptions, res => {
+            console.log('res',res)
+            if (res?.didCancel) {
+              console.log('didCancel');
+            }
+            if (res?.error) {
+              console.log('error', res?.error ?? ERROR_MSG);
+            }
+            if(res?.assets){
+              intiateImageUploading(res)
+            }
+          });
+        }} />
         <SKButton
+          // disable = {!isUploadedSuccessfully}
           marginTop={30}
           fontSize={16}
           fontWeight={'normal'}

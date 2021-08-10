@@ -14,17 +14,21 @@ import * as CustomFonts from '../constants/FontsDefs'
 
 const IncorpDetails = props => {
   const navigation = useNavigation()
-  const [fName, setFName] = useState('')
-  const [lName, setLName] = useState('')
-  const [email, setEmail] = useState('')
-  const [mobile, setMobile] = useState('')
-  const [pass, setPass] = useState('')
-  const [cPass, setCPass] = useState('')
+  const [fName, setFName] = useState()
+  const [mName, setMName] = useState()
+  const [lName, setLName] = useState()
+  const [email, setEmail] = useState()
+  const [mobile, setMobile] = useState()
+  const [altMobile, setAltMobile] = useState()
+  const [sin, setSin] = useState()
+  const [pass, setPass] = useState()
+  const [cPass, setCPass] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
     let isValidForm = true;
     const isFNameValid =  Validator.isValidField(fName, ST_REGEX.FName)
+    const isMNameValid =  Validator.isValidField(mName, ST_REGEX.LName)
     const isLNameValid =  Validator.isValidField(lName, ST_REGEX.LName)
     const isEmailValid =  Validator.isValidField(email, ST_REGEX.Email)
     const isMobileValid =  Validator.isValidField(mobile, ST_REGEX.Mobile)
@@ -34,6 +38,9 @@ const IncorpDetails = props => {
     if (!isFNameValid) {
       isValidForm = false;
       Alert.alert('SukhTax','Please enter valid First Name');
+    }else if(!isMNameValid){
+      isValidForm = false;
+      Alert.alert('SukhTax','Please enter valid Middle Name');
     }else if(!isLNameValid){
       isValidForm = false;
       Alert.alert('SukhTax','Please enter valid Last Name');
@@ -53,7 +60,6 @@ const IncorpDetails = props => {
       isValidForm = false;
       Alert.alert('SukhTax','Passwords mismatch');
     }
-
     return isValidForm;
   };
   return (
@@ -70,7 +76,7 @@ const IncorpDetails = props => {
         behavior={'position'}
         enabled={true}
         style={{backgroundColor: Colors.WHITE, flex: 1}}
-        keyboardVerticalOffset={-200}>
+        keyboardVerticalOffset={-150}>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 32,
@@ -89,7 +95,7 @@ const IncorpDetails = props => {
           marginBottom={2}
           maxLength = {15}
           borderColor={Colors.CLR_0065FF}
-          value={''}
+          value={fName}
           placeholder = 'First Name'
           onEndEditing={value => {
             console.log('onEndEditing', value);
@@ -101,11 +107,11 @@ const IncorpDetails = props => {
           marginBottom={2}
           maxLength = {15}
           borderColor={Colors.CLR_0065FF}
-          value={''}
+          value={mName}
           placeholder = 'Middle Name'
           onEndEditing={value => {
             console.log('onEndEditing', value);
-            setFName(value)
+            setMName(value)
           }}
         />
         <SKInput
@@ -146,10 +152,10 @@ const IncorpDetails = props => {
           marginBottom={2}
           maxLength = {10}
           borderColor={Colors.CLR_0065FF}
-          value={mobile}
+          value={altMobile}
           placeholder = 'Alternate Phone Number'
           onEndEditing={value => {
-            setMobile(value)
+            setAltMobile(value)
           }}
         />
         <SKInput
@@ -157,13 +163,12 @@ const IncorpDetails = props => {
           marginBottom={2}
           maxLength = {10}
           borderColor={Colors.CLR_0065FF}
-          value={mobile}
+          value={sin}
           placeholder = 'SIN Number'
           onEndEditing={value => {
-            setMobile(value)
+            setSin(value)
           }}
         />
-       
         <SKButton
           fontSize={16}
           marginTop={33}
@@ -173,7 +178,7 @@ const IncorpDetails = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'NEXT'}
           onPress={() => {
-            navigation.navigate('AboutCorp') 
+            navigation.navigate('IncorpDetailsPerc') 
             return
             Keyboard.dismiss()
             if(checkFormValidations()){

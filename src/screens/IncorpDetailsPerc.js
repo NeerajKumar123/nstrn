@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {TouchableOpacity, View, Alert, ScrollView, Image,Keyboard,Platform, KeyboardAvoidingView} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
@@ -9,51 +9,28 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
-import {incorpGetNatureOfBussiness} from '../apihelper/Api'
+import {register} from '../apihelper/Api'
 import * as CustomFonts from '../constants/FontsDefs'
-import TouchableInput from '../components/TouchableInput';
-import SKModel from '../components/SKModel';
 
-const AboutCorp = props => {
+const IncorpDetailsPerc = props => {
   const navigation = useNavigation()
-  const [naturesOfBussiness, setNaturesOfBussiness] = useState()
-  const [selectedNature, setSelectedNature] = useState()
-  const [ifOther, setIfOther] = useState()
-  const [bussAddress, setBussAddress] = useState()
-  const [isNOBVisible, setIsNOBVisible] = useState(false)
+  const [address, setAddress] = useState()
+  const [ownershipPerc, setOwnershipPerc] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isNatureValid =  true
-    const isOtherValid =  true
-    const isBAddressValid =  true
-    if (!isNatureValid) {
+    const isAddValid =  Validator.isValidField(fName, ST_REGEX.FName)
+    const isPercValid =  ownershipPerc > 0
+    if (!isAddValid) {
       isValidForm = false;
-      Alert.alert('SukhTax','Please select a valid nature of bussiness.');
-    }else if(!isOtherValid){
+      Alert.alert('SukhTax','Please enter valid Address');
+    }else if(!isPercValid){
       isValidForm = false;
-      Alert.alert('SukhTax','Please enter if any other.');
-    }else if(!isBAddressValid){
-      isValidForm = false;
-      Alert.alert('SukhTax','Please enter valid bussiness address.');
+      Alert.alert('SukhTax','Please enter valid Adsress');
     }
-
     return isValidForm;
   };
-
-  useEffect(() => {
-    setIsLoading(true)
-    incorpGetNatureOfBussiness({}, (natureRes) =>{
-      if(natureRes?.status == 1){
-        const natures = natureRes?.data
-        setNaturesOfBussiness(natures)
-        setSelectedNature(natures[0])
-        setIsLoading(false)
-      }
-    })
-  }, [])
-
   return (
     <View
       style={{
@@ -68,50 +45,44 @@ const AboutCorp = props => {
         behavior={'position'}
         enabled={true}
         style={{backgroundColor: Colors.WHITE, flex: 1}}
-        keyboardVerticalOffset={-200}>
+        keyboardVerticalOffset={-150}>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 32,
           flex: 1,
         }}>
-        <Heading value="ABOUT YOUR CORPORATION" marginTop={26} />
+        <Heading value="ABOUT YOU" marginTop={26} />
         <Heading
           fontSize={16}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="LET'S LEARN MORE ABOUT
-          YOUR BUSINESS"
-        />
-        <TouchableInput
-          rightAccImage={CustomFonts.ChevronDown}
-          placeholder="Select"
-          value={selectedNature?.nature_of_business}
-          onClicked={() => {
-            setIsNOBVisible(true);
-          }}
+          value="INCORPORATORS' DETAILS :"
         />
         <SKInput
+          leftAccImage={CustomFonts.UserIcon}
+          marginTop={26}
           marginBottom={2}
           maxLength = {15}
           borderColor={Colors.CLR_0065FF}
-          value={ifOther}
-          placeholder = 'IF OTHER, PLEASE SPECIFY'
+          value={address}
+          placeholder = 'Address'
           onEndEditing={value => {
-            setIfOther(value)
+            console.log('onEndEditing', value);
+            setAddress(value)
           }}
         />
         <SKInput
+          leftAccImage={CustomFonts.Number}
           marginBottom={2}
-          maxLength = {15}
-          height = {100}
+          maxLength = {10}
           borderColor={Colors.CLR_0065FF}
-          value={bussAddress}
-          placeholder = 'BUSINESS ADDRESS (IF SAME AS INCORPORATOR, PLEASE ENTER SAME ADDRESS)'
+          value={ownershipPerc}
+          placeholder = 'PERCENTAGE OWNERSHIP(%)'
           onEndEditing={value => {
-            setBussAddress(value)
+            setOwnershipPerc(value)
           }}
         />
-         <SKButton
+        <SKButton
           fontSize={16}
           marginTop={33}
           width = '100%'
@@ -120,7 +91,7 @@ const AboutCorp = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'NEXT'}
           onPress={() => {
-            navigation.navigate('IncorpFinalStep')
+            navigation.navigate('AboutCorp') 
             return
             Keyboard.dismiss()
             if(checkFormValidations()){
@@ -132,7 +103,7 @@ const AboutCorp = props => {
                 if(regisRes?.status == 1){
                   const data = regisRes && regisRes.data[0]
                   console.log('data',data)
-                  navigation.navigate('SecurityCode', {pagetitle:'Security Code', pagesubs:'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:', email:email})
+                  navigation.navigate('AboutCorp', {pagetitle:'Security Code', pagesubs:'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:', email:email})
                 }else{
                   const msg = userRes?.message ?? 'Something went wront, Please try again later.'
                   Alert.alert('SukhTax',msg)
@@ -142,20 +113,6 @@ const AboutCorp = props => {
           }}
         />
       </ScrollView>
-      {isNOBVisible && (
-        <SKModel
-          title="Select Gender"
-          data={naturesOfBussiness}
-          keyLabel="nature_of_business"
-          onClose={() => {
-            setIsNOBVisible(false);
-          }}
-          onSelect={value => {
-            setIsNOBVisible(false)
-            setSelectedNature(value)
-          }}
-        />
-      )}
       </KeyboardAvoidingView>
     </View>
   );
@@ -163,4 +120,4 @@ const AboutCorp = props => {
 
 
 
-export default AboutCorp;
+export default IncorpDetailsPerc;

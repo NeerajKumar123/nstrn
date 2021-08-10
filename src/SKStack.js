@@ -32,11 +32,13 @@ import PaymentAwaiting from './screens/PaymentAwaiting';
 import HomePayment from './screens/HomePayment';
 import CarryForward from './screens/CarryForward';
 import OnlineReturnLanding from './screens/OnlineReturnLanding';
+
 import IncorporationLanding from './screens/IncorporationLanding';
 import NumberNameCorp from './screens/NumberNameCorp';
 import UploadCorp from './screens/UploadCorp';
 import Incorporators from './screens/Incorporators';
 import IncorpDetails from './screens/IncorpDetails';
+import IncorpDetailsPerc from './screens/IncorpDetailsPerc';
 import AboutCorp from './screens/AboutCorp';
 import IncorpFinalStep from './screens/IncorpFinalStep';
 import HSTRegistration from './screens/HSTRegistration';
@@ -256,6 +258,11 @@ const SKStack = () => {
           options={{title: 'IncorpDetails', headerShown: false}}
         />
         <Stack.Screen
+          name="IncorpDetailsPerc"
+          component={IncorpDetailsPerc}
+          options={{title: 'IncorpDetailsPerc', headerShown: false}}
+        />
+        <Stack.Screen
           name="AboutCorp"
           component={AboutCorp}
           options={{title: 'AboutCorp', headerShown: false}}
@@ -301,6 +308,7 @@ const SKStack = () => {
           component={CRALanding}
           options={{title: 'CRALanding', headerShown: false}}
         />
+        
 
 
       </Stack.Navigator>

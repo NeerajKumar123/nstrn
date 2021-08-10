@@ -37,7 +37,7 @@ const Identification = props => {
 
 
   const prepareParams = (bs64Image) =>{
-    const year = global.selectedYears[0]
+    const year = global?.selectedYears?.[0]
     const userid = global.userInfo?.user_id;
     const taxFileID = global.userInfo?.tax_file_id ? global.userInfo?.tax_file_id :0;
     const params = {User_id:userid,Tax_File_Id:taxFileID,Year:year,FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
@@ -126,7 +126,7 @@ const Identification = props => {
         }}
         />
         <SKButton
-          // disable = {!isUploadedSuccessfully}
+          disable = {!isUploadedSuccessfully}
           marginTop={30}
           fontSize={16}
           rightImage={CustomFonts.right_arrow}
@@ -136,11 +136,7 @@ const Identification = props => {
           title={'BASIC INFO'}
           onPress={() => {
             setIsLoading(true)
-            setTimeout(() => {
-              setIsLoading(false)
-            }, 5000);        
-            // console.log('link pressed');
-            // navigation.navigate('BasicInfo');
+            navigation.navigate('BasicInfo');
           }}
         />
       </ScrollView>

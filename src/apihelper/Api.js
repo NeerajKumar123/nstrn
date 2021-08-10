@@ -229,3 +229,8 @@ export const getServicePriceList = (callback) => {
   const path = `${BaseURL}/Get_Service_PriceList`
   API.makeGetRequest(path , callback);
 };
+
+export const uploadImageIncorp = (params,callback) => {
+  const path = `${BaseURL}/Online_Upload_Identification_Document_Base64`
+  API.makePostRequest(path , params, callback);
+};

@@ -30,6 +30,7 @@ const loader = require('../../assets/loader_gf.gif');
     lottie: {
       width: 100,
       height: 100,
+      borderRadius:50
     },
     alertContainer: {
       flex: 1,
