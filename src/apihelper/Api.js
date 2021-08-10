@@ -185,3 +185,21 @@ export const onlineSubmitFiling = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+// Incorp.....
+export const incorpGetIncorpType = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Incorporation_Type`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpGetIncorpCategory = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Incorporation_Category`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpGetNatureOfBussiness = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Nature_Of_Business`
+  API.makePostRequest(path , params, callback);
+};
+
+
+

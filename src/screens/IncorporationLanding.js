@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -15,25 +15,29 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {login} from '../apihelper/Api';
+import {incorpGetIncorpType} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 const IncorporationLanding = props => {
-  const data = [
-    {corpType: 'FEDERAL CORP.', cost: 'TOTAL COST: $399.99'},
-    {corpType: 'ONTARIO CORP.', cost: 'TOTAL COST: $499.99'},
-    {corpType: 'PROFESSIONAL CORP.', cost: 'TOTAL COST: $799.99'},
-  ];
+  const [incorpTypes, setIncorpTypes] = useState()
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCorp, setSelectedCorp] = useState();
 
   useEffect(() => {
-    setSelectedCorp(3)
-  }, [selectedCorp])
+    setIsLoading(true)
+    incorpGetIncorpType({}, (typeRes) =>{
+      if(typeRes?.status == 1){
+        const incoprs = typeRes?.data
+        setIncorpTypes(incoprs)
+        setSelectedCorp(incoprs[0])
+        setIsLoading(false)
+      }
+    })
+  }, [])
 
   return (
     <View
@@ -44,6 +48,7 @@ const IncorporationLanding = props => {
         width: '100%',
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader/>}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -58,16 +63,13 @@ const IncorporationLanding = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="WHICH TYPE OF CORPORATION WOULD YOU LIKE TO REGISTER?"
         />
-        {data &&
-          data.map((item, index) => {
+        {incorpTypes &&
+          incorpTypes.map((item, index) => {
             return (
               <DocCard
                 item={item}
-                isSelected={
-                  item.corpType == selectedCorp && selectedCorp.corpType
-                }
+                selectedCorp = {selectedCorp}
                 onSelected={() => {
-                  console.log('data', item);
                   setSelectedCorp(item);
                 }}
               />
@@ -116,8 +118,9 @@ const IncorporationLanding = props => {
 };
 
 const DocCard = props => {
-  const {item, isSelected} = props;
-  console.log('isSelected', isSelected);
+  const {item, selectedCorp} = props;
+  const {fee,incorporation_type} = item
+  const isSelected = selectedCorp?.incorporation_type_id == item.incorporation_type_id
   return (
     <TouchableOpacity
       style={{
@@ -142,7 +145,7 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {item.corpType}
+        {incorporation_type}
       </Text>
       <Text
         style={{
@@ -153,7 +156,7 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {item.cost}
+        {fee}
       </Text>
     </TouchableOpacity>
   );

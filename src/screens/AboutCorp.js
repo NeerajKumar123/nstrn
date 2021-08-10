@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, View, Alert, ScrollView, Image,Keyboard,Platform, KeyboardAvoidingView} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
@@ -9,13 +9,18 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
-import {register} from '../apihelper/Api'
+import {incorpGetNatureOfBussiness} from '../apihelper/Api'
 import * as CustomFonts from '../constants/FontsDefs'
+import TouchableInput from '../components/TouchableInput';
+import SKModel from '../components/SKModel';
+
 const AboutCorp = props => {
   const navigation = useNavigation()
   const [fName, setFName] = useState('')
   const [lName, setLName] = useState('')
-
+  const [naturesOfBussiness, setNaturesOfBussiness] = useState()
+  const [selectedNature, setSelectedNature] = useState()
+  const [isNOBVisible, setIsNOBVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
@@ -52,6 +57,19 @@ const AboutCorp = props => {
 
     return isValidForm;
   };
+
+  useEffect(() => {
+    setIsLoading(true)
+    incorpGetNatureOfBussiness({}, (natureRes) =>{
+      if(natureRes?.status == 1){
+        const natures = natureRes?.data
+        setNaturesOfBussiness(natures)
+        setSelectedNature(natures[0])
+        setIsLoading(false)
+      }
+    })
+  }, [])
+
   return (
     <View
       style={{
@@ -80,16 +98,12 @@ const AboutCorp = props => {
           value="LET'S LEARN MORE ABOUT
           YOUR BUSINESS"
         />
-        <SKInput
-          marginTop={26}
-          marginBottom={2}
-          maxLength = {15}
-          borderColor={Colors.CLR_0065FF}
-          value={''}
-          placeholder = 'NATURE OF BUSINESS'
-          onEndEditing={value => {
-            console.log('onEndEditing', value);
-            setFName(value)
+        <TouchableInput
+          rightAccImage={CustomFonts.ChevronDown}
+          placeholder="Select"
+          value={selectedNature?.nature_of_business}
+          onClicked={() => {
+            setIsNOBVisible(true);
           }}
         />
         <SKInput
@@ -143,6 +157,20 @@ const AboutCorp = props => {
           }}
         />
       </ScrollView>
+      {isNOBVisible && (
+        <SKModel
+          title="Select Gender"
+          data={naturesOfBussiness}
+          keyLabel="nature_of_business"
+          onClose={() => {
+            setIsNOBVisible(false);
+          }}
+          onSelect={value => {
+            setIsNOBVisible(false)
+            setSelectedNature(value)
+          }}
+        />
+      )}
       </KeyboardAvoidingView>
     </View>
   );

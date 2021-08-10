@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -15,23 +15,29 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {login} from '../apihelper/Api';
+import {incorpGetIncorpCategory} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 const NumberNameCorp = props => {
-  const data = [
-    {corpType: 'NUMBERED', cost: 'CORPORATION'},
-    {corpType: 'NAMED CORP.', cost: '$100 EXTRA'},
-  ];
   const navigation = useNavigation();
+  const [incorpCategories, setIncorpCategories] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCorp, setSelectedCorp] = useState();
+  const [selectedCategory, setSelectedCategory] = useState();
+
   useEffect(() => {
-    setIsLoading(8282)
-  }, [isLoading])
+    setIsLoading(true)
+    incorpGetIncorpCategory({}, (cateRes) =>{
+      if(cateRes?.status == 1){
+        const incorpCats = cateRes?.data
+        setIncorpCategories(incorpCats)
+        setSelectedCategory(incorpCats[0])
+        setIsLoading(false)
+      }
+    })
+  }, [])
 
 
   return (
@@ -43,6 +49,7 @@ const NumberNameCorp = props => {
         width: '100%',
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader/>}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -59,17 +66,14 @@ const NumberNameCorp = props => {
           AS A NUMBERED OR NAME
           CORPORATION?"
         />
-        {data &&
-          data.map((item, index) => {
+        {incorpCategories &&
+          incorpCategories.map((item, index) => {
             return (
               <DocCard
                 item={item}
-                isSelected={
-                  item.corpType == selectedCorp && selectedCorp.corpType
-                }
+                selectedCategory = {selectedCategory}
                 onSelected={() => {
-                  console.log('data', item);
-                  setSelectedCorp(item);
+                  setSelectedCategory(item);
                 }}
               />
             );
@@ -117,24 +121,27 @@ const NumberNameCorp = props => {
 };
 
 const DocCard = props => {
-  const {item, isSelected} = props;
-  console.log('isSelected', isSelected);
+  const {item, selectedCategory,onSelected} = props;
+  const {incorporation_category,fee} = item
+  const isSelected = selectedCategory?.incorporation_category_id == item.incorporation_category_id
+  const showFee = parseFloat(fee) > 0
   return (
     <TouchableOpacity
       style={{
         flexDirection: 'column',
+        justifyContent:'center',
         paddingHorizontal: 16,
         marginTop: 20,
         paddingVertical: 14,
         backgroundColor: 'white',
         alignItems: 'center',
         width: '100%',
+        minHeight:70,
         borderRadius: 6,
-        // backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.CLR_7F7F9F,
-        backgroundColor: Colors.CLR_E77C7E,
+        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.CLR_7F7F9F,
       }}
       onPress={() => {
-        props.onSelected && props.onSelected();
+        onSelected();
       }}>
       <Text
         style={{
@@ -144,19 +151,22 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {item.corpType}
+        {incorporation_category}
       </Text>
+      {showFee && 
       <Text
-        style={{
-          width: '100%',
-          textAlign: 'left',
-          marginTop: 3,
-          color: Colors.WHITE,
-          fontSize: 17,
-          fontWeight: '700',
-        }}>
-        {item.cost}
-      </Text>
+      style={{
+        width: '100%',
+        textAlign: 'left',
+        marginTop: 3,
+        color: Colors.WHITE,
+        fontSize: 17,
+        fontWeight: '700',
+      }}>
+      {fee}
+    </Text>
+      }
+      
     </TouchableOpacity>
   );
 };
