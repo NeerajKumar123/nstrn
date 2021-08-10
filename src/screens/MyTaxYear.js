@@ -21,10 +21,19 @@ const MyTaxYear = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentYearIndex, setCurrentYearIndex] = useState(0);
   const [currentYear, setCurrentYear] = useState();
+  const [buttonTitle, setButtonTitle] = useState('DOCUMENTS')
 
   useEffect(() => {
-    console.log('global.selectedYears',global.selectedYears)
     setCurrentYear(global.selectedYears && currentYearIndex < global.selectedYears.length  ? global.selectedYears[currentYearIndex] : '2020.');
+    const length = global.selectedYears ? global.selectedYears.length : 0
+    const nextIndex = currentYearIndex + 1
+    console.log('length',length, nextIndex)
+    if(nextIndex < length){
+        const title = global.selectedYears[nextIndex]
+        console.log('length',length, nextIndex,title,global.selectedYears)
+        // setButtonTitle(title)
+        setButtonTitle('NEXT')
+    }
   }, [currentYearIndex]);
 
   const [data, setData] = useState([
@@ -53,14 +62,8 @@ const MyTaxYear = props => {
   const [mySelf, setMySelf] = useState();
   const [spouse, setSpouse] = useState();
 
-  function ifObjExist(arr, obj, mappingKey) {
-    return arr.some(function (el) {
-      console.log(el[mappingKey], obj[mappingKey]);
-      return el[mappingKey] === obj[mappingKey];
-    });
-  }
 
-  const prepareParams = () => {
+  const prepareParams = (flag) => {
     const {
       user_id,
       tax_file_id = 83,
@@ -71,7 +74,7 @@ const MyTaxYear = props => {
       User_id: user_id,
       Tax_File_Id: tax_file_id || Tax_File_Id,
       Year: 2020,
-      Details_For: global.isFromSpouseFlow ? 0 : 1,
+      Details_For: flag ? 0 : 1,
     };
     data.map(item => {
       if (item.isSelected) {
@@ -144,7 +147,6 @@ const MyTaxYear = props => {
             setSpouse(!spouse);
           }}
         />
-
           }
           
         </View>
@@ -173,6 +175,7 @@ const MyTaxYear = props => {
               />
             );
           })}
+          {console.log('title',buttonTitle)}
         <SKButton
           marginTop={30}
           fontSize={16}
@@ -180,11 +183,7 @@ const MyTaxYear = props => {
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={
-            currentYearIndex + 1 < global.selectedYears && global.selectedYears.length
-              ? global.selectedYears[currentYearIndex + 1]
-              : 'DOCUMENTS'
-          }
+          title={buttonTitle}
           onPress={() => {
             if(mySelf || (spouse && isFromSpouseFlow)){
               const selected = data && data.filter((x) => x.isSelected);
@@ -193,16 +192,20 @@ const MyTaxYear = props => {
                 return
               }
               setIsLoading(true);
-              const params = prepareParams(true);
+              const params = prepareParams(false);
               onlineSaveMyYearInfo(params, saveYrRes => {
                 if (saveYrRes?.status == 1) {
-                  if (currentYearIndex + 1 < global.selectedYears && global.selectedYears.length) {
-                    console.log('saveYrRes',saveYrRes)
-                    setCurrentYearIndex(currentYearIndex + 1);
-                  } else {
-                    navigation.navigate('OnlineDocuments');
-                  }
-                  setIsLoading(false);
+                  const params = prepareParams(true);
+                  onlineSaveMyYearInfo(params, saveYrRes => {
+                    setIsLoading(false);
+                    const length = global.selectedYears ? global.selectedYears.length : 0
+                    const nextIndex = currentYearIndex + 1
+                    if (nextIndex < length) {
+                      setCurrentYearIndex(nextIndex);
+                    } else {
+                      navigation.navigate('OnlineDocuments');
+                    }
+                  })                     
                 } else {
                   Alert.alert('SukhTax', 'Something wrong');
                 }

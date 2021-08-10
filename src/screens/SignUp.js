@@ -21,6 +21,7 @@ const SignUp = props => {
   const [pass, setPass] = useState('')
   const [cPass, setCPass] = useState('')
   const [isSecurePass, setIsSecurePass] = useState(true)
+  const [isSecurePassC, setIsSecurePassC] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
@@ -29,8 +30,11 @@ const SignUp = props => {
     const isLNameValid =  Validator.isValidField(lName, ST_REGEX.LName)
     const isEmailValid =  Validator.isValidField(email, ST_REGEX.Email)
     const isMobileValid =  Validator.isValidField(mobile, ST_REGEX.Mobile)
-    const isPassValid =  Validator.isValidField(pass, ST_REGEX.Password)
-    const isCPassValid =  Validator.isValidField(cPass, ST_REGEX.Password)
+    // const isPassValid =  Validator.isValidField(pass, ST_REGEX.Password)
+    // const isCPassValid =  Validator.isValidField(cPass, ST_REGEX.Password)
+    const isPassValid =  pass && pass.length > 4 && pass.length < 17
+    const isCPassValid =  cPass && cPass.length > 4 && cPass.length < 17
+
 
     if (!isFNameValid) {
       isValidForm = false;
@@ -46,10 +50,10 @@ const SignUp = props => {
       Alert.alert('SukhTax','Please enter valid Phone Number');
     }else if(!isPassValid){
       isValidForm = false;
-      Alert.alert('SukhTax','Please enter valid Password');
+      Alert.alert('SukhTax',`Password should be \n1.Minimum of 5\n2.Maximum of 16\n3.Atleast one upper case\n4.Atleast one lower case\n5.Atleast one number\n6.Atleast one special char)`);
     }else if(!isCPassValid){
       isValidForm = false;
-      Alert.alert('SukhTax','Please enter valid Confirm Password');
+      Alert.alert('SukhTax',`Password should be \n1.Minimum of 5\n2.Maximum of 16\n3.Atleast one upper case\n4.Atleast one lower case\n5.Atleast one number\n6.Atleast one special char)`);
     }else if(pass != cPass){
       isValidForm = false;
       Alert.alert('SukhTax','Passwords mismatch');
@@ -90,6 +94,7 @@ const SignUp = props => {
           leftAccImage={CustomFonts.UserIcon}
           marginTop={26}
           marginBottom={2}
+          autoCapitalize = 'words'
           maxLength = {15}
           borderColor={Colors.CLR_0065FF}
           value={''}
@@ -106,6 +111,7 @@ const SignUp = props => {
           borderColor={Colors.CLR_0065FF}
           value={lName}
           placeholder = 'Last Name'
+          autoCapitalize = 'words'
           onEndEditing={value => {
             setLName(value)
           }}
@@ -135,10 +141,15 @@ const SignUp = props => {
         <SKInput
           leftAccImage={CustomFonts.Lock}
           marginBottom={2}
-          maxLength = {6}
+          maxLength = {16}
           borderColor={Colors.CLR_0065FF}
           value={pass}
+          isSecurePass = {isSecurePass}
           placeholder = 'Password'
+          rightAccImage={isSecurePass ? CustomFonts.EyeOutlineOff : CustomFonts.EyeOutlineOn}
+          onRightPressed = {()=>{
+            setIsSecurePass(!isSecurePass)
+          }}
           onEndEditing={value => {
             setPass(value)
           }}
@@ -146,18 +157,16 @@ const SignUp = props => {
         <SKInput
           leftAccImage={CustomFonts.Lock}
           marginBottom={2}
-          rightAccImage={isSecurePass ? CustomFonts.EyeOutlineOff : CustomFonts.EyeOutlineOn}
-          maxLength = {6}
+          rightAccImage={isSecurePassC ? CustomFonts.EyeOutlineOff : CustomFonts.EyeOutlineOn}
+          maxLength = {16}
           borderColor={Colors.CLR_0065FF}
           value={''}
-          isSecurePass = {isSecurePass}
+          isSecurePass = {isSecurePassC}
           placeholder = 'Confirm Password'
           onRightPressed = {()=>{
-            console.log('isSecurePass',isSecurePass)
-            setIsSecurePass(!isSecurePass)
+            setIsSecurePassC(!isSecurePassC)
           }}
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setCPass(value)
           }}
         />
@@ -173,6 +182,7 @@ const SignUp = props => {
           onPress={() => {
             Keyboard.dismiss()
             if(checkFormValidations()){
+              
               setIsLoading(true)
               const testDeviceToken = 'DEVICE_TOKEN_123456789'
               const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:testDeviceToken, Device_OS:'iOS', Module_Type_Id:2}

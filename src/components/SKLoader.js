@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, Modal, Platform,Dimensions,Text} from 'react-native';
+import {StyleSheet, View, Modal, Platform,Dimensions,Text, Image} from 'react-native';
 const {width, height} = Dimensions.get('window');
 import * as Colors from '../constants/ColorDefs';
-
-const loader = require('../../assets/loader.json');
+import Lottie from 'lottie-react-native';
+const loader = require('../../assets/loader_gf.gif');
  const SKLoader = (props) => {
     return (        
       <Modal
@@ -13,7 +13,12 @@ const loader = require('../../assets/loader.json');
         onRequestClose={() => {}}>
         <View
           style={styles.alertContainer}>
-          <View style={styles.indicator}/>
+          <View style={styles.indicator}>
+            <Image
+              style={styles.lottie}
+              source={loader}
+            />
+          </View>
         </View>
       </Modal>
     );
@@ -23,8 +28,8 @@ const loader = require('../../assets/loader.json');
 
   const styles = StyleSheet.create({
     lottie: {
-      width: 60,
-      height: 60,
+      width: 100,
+      height: 100,
     },
     alertContainer: {
       flex: 1,
@@ -38,8 +43,8 @@ const loader = require('../../assets/loader.json');
 
     },
     indicator: {
-      width: 60,
-      height: 60,
+      width: 100,
+      height: 100,
       borderRadius: 30,
       backgroundColor: Colors.TRANS,
       justifyContent: 'space-around',

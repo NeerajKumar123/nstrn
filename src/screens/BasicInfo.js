@@ -58,11 +58,9 @@ const BasicInfo = props => {
   setIsLoading(true)
   const userid = global.userInfo?.user_id;
   const taxFileID = global.userInfo?.tax_file_id;
-    const params = {User_Id:userid, Tax_File_Id:taxFileID || 83,Year:2020 }
-    getAboutInfo(params,(about) =>{
-        console.log('about res', about)
-        const aboutRes = about?.data && about?.data.length > 0 ? about?.data[0] : undefined
-        global.aboutRes = statusData || {}
+    const params = {User_Id:userid, Tax_File_Id:taxFileID,Year:2020 }
+    getAboutInfo(params,(aboutRes) =>{
+      console.log('about res',aboutRes)
       setIsLoading(false)
     })
   }, [])

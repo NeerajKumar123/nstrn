@@ -28,9 +28,9 @@ const SKSwitch = props => {
         justifyContent: 'space-between',
         alignItems:'center',
         padding: 2,
-        width: '100%'
+        width: '100%',
       }}>
-      <Text style={{color, fontSize, fontWeight, fontFamily, textAlign}}>
+      <Text style={{color, fontSize, fontWeight, fontFamily, textAlign, flex:1}}>
         {value}
       </Text>
       <TouchableOpacity

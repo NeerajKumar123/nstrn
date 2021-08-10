@@ -46,8 +46,8 @@ const Home = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="TAX FILING"
           onClicked = {()=>{
-            console.log('OnlineTaxFiling')
-            navigation.navigate('OnlineTaxFiling')
+            console.log('OnlineTaxFilingStatus')
+            navigation.navigate('OnlineTaxFilingStatus')
           }}
         />
         <Heading
@@ -59,8 +59,8 @@ const Home = props => {
           value="INCORPORATION"
           onClicked = {()=>{
             return
-            console.log('OnlineTaxFiling')
-            navigation.navigate('OnlineTaxFiling')
+            console.log('OnlineTaxFilingStatus')
+            navigation.navigate('OnlineTaxFilingStatus')
           }}
         />
         <Heading
@@ -72,8 +72,8 @@ const Home = props => {
           value="CRA LETTERS"
           onClicked = {()=>{
             return
-            console.log('OnlineTaxFiling')
-            navigation.navigate('OnlineTaxFiling')
+            console.log('OnlineTaxFilingStatus')
+            navigation.navigate('OnlineTaxFilingStatus')
           }}
         />
         <View
@@ -108,7 +108,7 @@ const ProfDoccCardView = props => {
         backgroundColor: 'white',
         justifyContent: 'center',
         borderRadius: 6,
-        width: 165,
+        width: '48%',
         height: 100,
       }}>
       <TouchableOpacity
@@ -147,6 +147,7 @@ const ProfDoccCardView = props => {
 };
 
 const MessegesView = props => {
+  const {new_message_count = 0} = global.statusData;
   return (
     <LinearGradient
       opacity={0.6}
@@ -193,8 +194,8 @@ const MessegesView = props => {
               fontWeight: '700',
               marginTop: 5,
               fontFamily:CustomFonts.OpenSansRegular
-              }}>
-            {`0 NEW MESSAGES`}
+            }}>
+            {`${new_message_count} NEW MESSAGES`}
           </Text>
         </View>
         <Image

@@ -14,6 +14,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import * as CustomFonts from '../constants/FontsDefs'
 const DashCard = props => {
   const {id, name = 'Card Name', desc, image, colors} = props.item;
+  const {fee} = props
+  let displayDesc = name
+  if(id == 3){
+    displayDesc = `STARTING FROM $${fee}`
+  }
   return (
     <TouchableOpacity
       onPress={() => {
@@ -57,7 +62,7 @@ const DashCard = props => {
             fontSize: 15,
             fontFamily:Platform.OS == 'android' ?  CustomFonts.OpenSansBold : CustomFonts.OpenSansRegular,
           }}>
-          {desc}
+          {displayDesc}
         </Text>
       </LinearGradient>
     </TouchableOpacity>

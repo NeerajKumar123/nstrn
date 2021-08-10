@@ -21,6 +21,7 @@ const SKInput = props => {
     setIsSecure(isSecurePass);
   }, [isSecurePass]);
   const {
+    autoCapitalize = 'none',
     leftAccImage ,
     rightAccImage ,
     marginTop = 10,
@@ -94,7 +95,7 @@ const SKInput = props => {
         keyboardType={keyboardType}
         multiline={multiline}
         secureTextEntry = {isSecure}
-        autoCapitalize="none"
+        autoCapitalize={autoCapitalize}
         autoCompleteType="off"
         autoCorrect={false}
         placeholder={placeholder}

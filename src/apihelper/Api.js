@@ -1,5 +1,7 @@
 import API from './BaseAPI';
 
+// test commit
+
 const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
 
 export const register = (params,callback) => {
@@ -203,3 +205,27 @@ export const incorpGetNatureOfBussiness = (params,callback) => {
 
 
 
+
+export const stripeGenerateEphemeralKey = (params,callback) => {
+  const path = `${BaseURL}/Stripe_Generate_Ephemeral_Key`
+  API.makePostRequest(path , params, callback);
+};
+
+export const stripeSubmitPayment = (params,callback) => {
+  const path = `${BaseURL}/Stripe_Submit_Payment`
+  API.makePostRequest(path , params, callback);
+};
+
+export const onlineSavePaymentInfo = (params,callback) => {
+  const path = `${BaseURL}/Online_Save_Payment_Info`
+  API.makePostRequest(path , params, callback);
+};
+export const onlineSaveAdditionalPaymentInfo = (params,callback) => {
+  const path = `${BaseURL}/Online_Save_Additional_Payment_Info`
+  API.makePostRequest(path , params, callback);
+};
+
+export const getServicePriceList = (callback) => {
+  const path = `${BaseURL}/Get_Service_PriceList`
+  API.makeGetRequest(path , callback);
+};

@@ -5,7 +5,7 @@ export const ST_REGEX = {
   Email:
     '^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,4})$',
   Mobile: '^[6789]{1}[0-9]{9}$',
-  Password: '^[a-zA-Z0-9]{6}$',
+  Password: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{5,16}$',
   Address: '^[0-9a-zA-Z\s,-]+$',
   BankAccount: '^\d{5,10}$',
   BranchCode: '^\d{5,8}$',
@@ -23,3 +23,8 @@ export const ErrorStrings = {
   InvalidLName:'Please enter valid last name.',
 
 };
+
+export const stripekey_test = 'pk_test_51I8rlGBHi8nqbGSxAKVuVuxEit58oIMidFfbncCMy5GiAoDPoMIR2v9u87I29FOHcQ0ipuIyje0puIUpOPjSngqK00I7UTmxka'
+export const stripekey_live = 'pk_live_51I8rlGBHi8nqbGSxLUoRmQIMdKS2IupbsgiNJertoE7QEB0kHwQnBOepeKaE2Fgp6mSVOAIbPeByVHcK6Q3d8NjR00pN3scqwz'
+export const stripeAccountId = 'acct_1I8rlGBHi8nqbGSx'
+

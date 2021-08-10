@@ -30,9 +30,9 @@ import ViewShot from 'react-native-view-shot';
 const SignaturePage = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  const [fName, setFName] = useState('name');
-  const [lName, setLName] = useState('name');
-  const [sinNo, setSinNo] = useState('12345632');
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
+  const [sinNo, setSinNo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(true);
   const [isSignStart, setIsSignStart] = useState(false);
@@ -123,6 +123,7 @@ const SignaturePage = props => {
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={lName}
+            autoCapitalize = 'words'
             placeholder="First Name"
             onEndEditing={value => {
               setFName(value);
@@ -135,6 +136,7 @@ const SignaturePage = props => {
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={lName}
+            autoCapitalize = 'words'
             placeholder="Last Name"
             onEndEditing={value => {
               setLName(value);

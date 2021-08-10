@@ -59,7 +59,7 @@ const BankingAndMore = props => {
       const taxFileID = global.userInfo?.tax_file_id;
       const params = {
         User_Id: userid,
-        Tax_File_Id: taxFileID || 83,
+        Tax_File_Id: taxFileID,
         Year: 2020,
       };
       getBankingAndFamilyInfo(params, bankingAndFamilyRes => {

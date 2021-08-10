@@ -13,11 +13,13 @@ const right_arrow = require('../../assets/right_arrow.png');
 
 const UploadCorp = props => {
   const navigation = useNavigation();
-  const options = {
-    quality: 1,
-    maxWidth: 500,
-    maxHeight: 500,
+  const imageQualityOptions = {
+    quality: .8,
+    maxWidth: 300,
+    maxHeight: 400,
+    includeBase64:true,
   };
+
   return (
     <View
       style={{
@@ -84,7 +86,7 @@ const UploadCorp = props => {
         <UploadDocButton marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}
         onClick={() => {
             console.log('onClicked');
-            launchImageLibrary(options, res => {
+            launchImageLibrary(imageQualityOptions, res => {
               if (res?.didCancel) {
                 console.log('didCancel');
               }

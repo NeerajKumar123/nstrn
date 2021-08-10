@@ -14,10 +14,10 @@ const Identification = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
   const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
-  const options = {
-    quality: .1,
-    maxWidth: 5,
-    maxHeight: 5,
+  const imageQualityOptions = {
+    quality: .8,
+    maxWidth: 300,
+    maxHeight: 400,
     includeBase64:true,
   };
 
@@ -111,7 +111,7 @@ const Identification = props => {
         <UploadDocButton  marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}
         onClick={() => {
           console.log('onClicked');
-          launchImageLibrary(options, res => {
+          launchImageLibrary(imageQualityOptions, res => {
             console.log('res',res)
             if (res?.didCancel) {
               console.log('didCancel');
@@ -126,7 +126,7 @@ const Identification = props => {
         }}
         />
         <SKButton
-          disable = {!isUploadedSuccessfully}
+          // disable = {!isUploadedSuccessfully}
           marginTop={30}
           fontSize={16}
           rightImage={CustomFonts.right_arrow}
@@ -135,8 +135,12 @@ const Identification = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'BASIC INFO'}
           onPress={() => {
-            console.log('link pressed');
-            navigation.navigate('BasicInfo');
+            setIsLoading(true)
+            setTimeout(() => {
+              setIsLoading(false)
+            }, 5000);        
+            // console.log('link pressed');
+            // navigation.navigate('BasicInfo');
           }}
         />
       </ScrollView>

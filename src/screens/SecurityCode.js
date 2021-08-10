@@ -175,7 +175,7 @@ const SecurityCode = props => {
         <SKButton
           fontSize={16}
           marginTop={40}
-          width={305}
+          width={'100%'}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
@@ -202,7 +202,7 @@ const SecurityCode = props => {
         />
         <SKButton
           fontSize={16}
-          width={305}
+          width={'100%'}
           marginTop={20}
           fontWeight={'normal'}
           backgroundColor={Colors.CLR_F58080}

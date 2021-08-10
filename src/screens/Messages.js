@@ -32,7 +32,7 @@ const Messages = props => {
 
   const getUpdatedMsgList = isloader => {
     setIsLoading(isloader);
-    const params = {User_Id: userid, Tax_File_Id: taxFileID || 83};
+    const params = {User_Id: userid, Tax_File_Id: taxFileID};
     getMessages(params, msgRes => {
       setIsLoading(false);
       if (msgRes && msgRes.status == 1) {
@@ -103,7 +103,7 @@ const Messages = props => {
             setIsLoading(true);
             const params = {
               User_Id: userid,
-              Tax_File_Id: taxFileID || 83,
+              Tax_File_Id: taxFileID,
               Message: chatText,
             };
             saveMessage(params, saveMsgRes => {
