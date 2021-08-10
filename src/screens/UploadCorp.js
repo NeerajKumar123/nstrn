@@ -40,7 +40,7 @@ const UploadCorp = props => {
   const prepareParams = (bs64Image) =>{
     const year = global?.selectedYears?.[0]
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.tax_file_id ? global.userInfo?.tax_file_id :0;
+    const taxFileID = global.statusData?.tax_file_id;
     const params = {User_id:userid,Tax_File_Id:taxFileID,Year:year,FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
     return params
   }
@@ -110,7 +110,7 @@ const UploadCorp = props => {
         />
         <UploadDocButton
         marginTop = {35}
-        title = 'UPLOAD THE MISSING DOC HERE'
+        title = 'UPLOAD THE DOC HERE'
         height ={46}
         onClick={() => {
           console.log('onClicked');

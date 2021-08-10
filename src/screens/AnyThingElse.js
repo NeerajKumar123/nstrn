@@ -61,7 +61,7 @@ const AnyThingElse = props => {
             console.log('link pressed');
             setIsLoading(true);
             const userid = global.userInfo?.user_id;
-            const taxFileID = global.userInfo?.tax_file_id;      
+            const taxFileID = global.statusData?.tax_file_id;
             const params = {
               User_Id: userid,
               Tax_File_Id: taxFileID,

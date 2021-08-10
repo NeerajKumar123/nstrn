@@ -28,7 +28,7 @@ const Messages = props => {
   const [keyboardHeight] = useKeyboard();
   const [isLoading, setIsLoading] = useState(false);
   const userid = global.userInfo?.user_id;
-  const taxFileID = global.userInfo?.tax_file_id;
+  const taxFileID = global.statusData?.tax_file_id;
 
   const getUpdatedMsgList = isloader => {
     setIsLoading(isloader);

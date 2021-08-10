@@ -30,11 +30,8 @@ const SignUp = props => {
     const isLNameValid =  Validator.isValidField(lName, ST_REGEX.LName)
     const isEmailValid =  Validator.isValidField(email, ST_REGEX.Email)
     const isMobileValid =  Validator.isValidField(mobile, ST_REGEX.Mobile)
-    // const isPassValid =  Validator.isValidField(pass, ST_REGEX.Password)
-    // const isCPassValid =  Validator.isValidField(cPass, ST_REGEX.Password)
-    const isPassValid =  pass && pass.length > 4 && pass.length < 17
-    const isCPassValid =  cPass && cPass.length > 4 && cPass.length < 17
-
+    const isPassValid =  Validator.isValidField(pass, ST_REGEX.Password)
+    const isCPassValid =  Validator.isValidField(cPass, ST_REGEX.Password)
 
     if (!isFNameValid) {
       isValidForm = false;
@@ -83,7 +80,7 @@ const SignUp = props => {
           width: '100%',
           marginBottom: Platform.OS == 'ios' ?  30 : 0,
         }}>
-        <Heading value="LETS LOG IN" marginTop={26} />
+        <Heading value="LETS SIGN UP" marginTop={26} />
         <Heading
           fontSize={16}
           marginTop={45}
@@ -182,7 +179,6 @@ const SignUp = props => {
           onPress={() => {
             Keyboard.dismiss()
             if(checkFormValidations()){
-              
               setIsLoading(true)
               const testDeviceToken = 'DEVICE_TOKEN_123456789'
               const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:testDeviceToken, Device_OS:'iOS', Module_Type_Id:2}

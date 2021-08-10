@@ -37,7 +37,7 @@ const Home = props => {
           fontSize={16}
           marginTop={25}
           color={Colors.APP_BLUE_HEADING_COLOR}
-          value="RECENT REQUEST"
+          value="RECENT REQUESTS"
         />
         <Heading
           fontSize={16}

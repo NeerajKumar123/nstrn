@@ -81,7 +81,7 @@ export const DashHeader = props => {
           props.onRightClicked && props.onRightClicked();
         }}>
         <Image
-          source={CustomFonts.acc_icon}
+          source={CustomFonts.account_icon}
           resizeMode="contain"
           style={{
             width: 38,

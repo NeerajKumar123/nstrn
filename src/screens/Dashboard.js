@@ -76,13 +76,15 @@ const Dashboard = props => {
 
   useEffect(() => {
     setIsLoading(true);
-    const userid = global.userInfo?.user_id;
-    const params = {User_Id:userid}
-    getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
-      const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
-      global.statusData = statusData || {}
-      setIsLoading(false)
-    })
+    setTimeout(() => {
+      const userid = global.userInfo?.user_id;
+      const params = {User_Id:userid}
+      getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
+        setIsLoading(false)
+        const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
+        global.statusData = statusData || {}
+      })
+    }, 500);
   }, [])
 
   const navigateToScreen = item => {
@@ -96,21 +98,7 @@ const Dashboard = props => {
           break;
       case 3:
         moveToPage()
-        // const {Online_Button_Enabled} = global.statusData
-        // if(!Online_Button_Enabled){
-        //   Alert.alert('SukhTax','You have already submitted your details, and your file is currently being processed. Please use the Home screen to edit any details.')
-        // }else{
-        //   moveToPage()
-        // }
         break;
-      // case 3:
-      //   const {Online_Button_Enabled} = global.statusData
-      //   if(!Online_Button_Enabled){
-      //     Alert.alert('SukhTax','You have already submitted your details, and your file is currently being processed. Please use the Home screen to edit any details.')
-      //   }else{
-      //     moveToPage()
-      //   }
-      //   break;
       case 4:
         navigation.navigate('IncorporationLanding');
         break;
@@ -123,7 +111,7 @@ const Dashboard = props => {
   };
   const moveToPage = props => {
     navigation.navigate('OnlineReturnLanding');
-    return;
+    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,

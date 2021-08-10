@@ -170,7 +170,7 @@ export const UploadDocButton = props => {
         width: '100%',
         flexDirection: 'row',
         paddingHorizontal: 16,
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         alignItems: 'center',
         borderColor: Colors.APP_BLUE_HEADING_COLOR,
         borderStyle: 'dashed',

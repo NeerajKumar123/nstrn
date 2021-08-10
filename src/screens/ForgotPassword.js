@@ -86,6 +86,8 @@ const ForgotPassword = props => {
     if (index === 3 && otp.length === 4) {
       input4.current.blur();
     }
+
+    console.log('_otps',_otps, _otp)
   };
 
   const getRef = index => {
@@ -261,6 +263,7 @@ const ForgotPassword = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'Submit'}
             onPress={() => {
+              console.log('otp',_otp, secCode)
               const otp = _otp;
               if (Number.isNaN(otp) || otp.length < 4) {
                 Alert.alert('SukhTax', 'Please enter a valid Security Code.');
@@ -306,7 +309,6 @@ const ForgotPassword = props => {
           />
           </>
           }
-          
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

@@ -9,20 +9,25 @@ import {login} from '../apihelper/Api'
 import * as SKTStorage from '../helpers/SKTStorage'
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs'
+import * as Validator from '../helpers/SKTValidator';
+import {ST_REGEX} from '../constants/StaticValues'
 const Login = props => {
   const navigation = useNavigation();
   // const [email, setemail] = useState('neerajkiet@gmail.com')
   // const [pass, setPass] = useState('990099')
   const [email, setemail] = useState('')
   const [pass, setPass] = useState('')
+  const [isSecurePass, setIsSecurePass] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
   const checkFormValidations = () => {
+    const isEmailValid =  Validator.isValidField(email, ST_REGEX.Email)
+    const isPassValid =  Validator.isValidField(pass, ST_REGEX.Password)
     let isValidForm = true;
-    if (email == undefined || email.length < 10) {
+    if (!isEmailValid) {
       isValidForm = false;
       Alert.alert('SukhTax','Please enter valid email.' );
-    }else if (pass == undefined || pass.length < 6) {
+    }else if (!isPassValid) {
       isValidForm = false;
       Alert.alert('SukhTax','Please enter valid password.' );
     }
@@ -44,7 +49,6 @@ const Login = props => {
        }}>
              
         <Heading value="LETS LOG IN" marginTop={50} />
-       
         <Heading
           fontSize={16}
           marginTop={45}
@@ -63,13 +67,19 @@ const Login = props => {
             setemail(value)
           }}
         />
+        
         <SKInput
           leftAccImage={CustomFonts.Lock}
-          marginBottom={0}
-          maxLength = {10}
+          marginBottom={2}
+          maxLength = {16}
           borderColor={Colors.CLR_0065FF}
           value={pass}
+          isSecurePass = {isSecurePass}
           placeholder = 'Password'
+          rightAccImage={isSecurePass ? CustomFonts.EyeOutlineOff : CustomFonts.EyeOutlineOn}
+          onRightPressed = {()=>{
+            setIsSecurePass(!isSecurePass)
+          }}
           onEndEditing={value => {
             setPass(value)
           }}
@@ -104,7 +114,7 @@ const Login = props => {
                   });
                 }else{
                   const msg = userRes?.message ?? 'Something went wront, Please try again later.'
-                  // Alert.alert('SukhTax',msg)
+                  Alert.alert('SukhTax',msg)
                 }
               })
             }

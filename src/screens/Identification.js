@@ -39,7 +39,7 @@ const Identification = props => {
   const prepareParams = (bs64Image) =>{
     const year = global?.selectedYears?.[0]
     const userid = global.userInfo?.user_id;
-    const taxFileID = global.userInfo?.tax_file_id ? global.userInfo?.tax_file_id :0;
+    const taxFileID = global.statusData?.tax_file_id;
     const params = {User_id:userid,Tax_File_Id:taxFileID,Year:year,FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
     return params
   }
@@ -108,7 +108,7 @@ const Identification = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="- PR CARD"
         />
-        <UploadDocButton  marginTop = {35} title = 'UPLOAD THE MISSING DOC HERE' height ={46}
+        <UploadDocButton  marginTop = {35} title = 'UPLOAD THE DOC HERE' height ={46}
         onClick={() => {
           console.log('onClicked');
           launchImageLibrary(imageQualityOptions, res => {
@@ -135,7 +135,6 @@ const Identification = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'BASIC INFO'}
           onPress={() => {
-            setIsLoading(true)
             navigation.navigate('BasicInfo');
           }}
         />

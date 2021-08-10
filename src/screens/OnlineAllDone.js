@@ -68,7 +68,7 @@ const OnlineAllDone = props => {
           title={'RETURN HOME'}
           onPress={() => {
             const userid = global.userInfo?.user_id;
-            const taxFileID = global.userInfo?.tax_file_id || global.userInfo?.tax_file_id;  
+            const taxFileID = global.statusData?.tax_file_id;
             const params = {
               User_Id: userid,
               Tax_File_Id: taxFileID

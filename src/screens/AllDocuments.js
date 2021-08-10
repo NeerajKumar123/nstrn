@@ -68,7 +68,7 @@ const AllDocuments = props => {
         />
         <DocOptionCard
           grads={[Colors.APP_RED_SUBHEADING_COLOR, Colors.CLR_D72528]}
-          title="T1 GENERAL, NOA, T-SLIPS"
+          title="T1 GENERAL NOA T-SLIPS"
           onClicked = {()=>{
             setIsLoading(true)
             const params = {User_Id:global.userInfo?.user_id}

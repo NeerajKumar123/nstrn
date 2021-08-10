@@ -322,7 +322,7 @@ const TaxFilingStatusCard = props => {
       {tax_file_status_id == 9 && (
         <UploadDocButton
           marginTop={35}
-          title="UPLOAD THE MISSING DOC HERE"
+          title="UPLOAD THE DOC HERE"
           height={46}
           onClick={() => {
             uploadClick();
@@ -595,7 +595,6 @@ const TaxFilingStatusCard = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'DETAILS'}
             onPress={() => {
-              console.log('global', global.userInfo);
               const userid = global.userInfo?.user_id;
               const taxFileID = global.statusData?.tax_file_id;
               const params = {

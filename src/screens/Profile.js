@@ -154,7 +154,7 @@ const Profile = props => {
             if (checkFormValidations()) {
               setIsLoading(true);
               const params = {
-                user_id:2,
+                user_id:global.userInfo?.user_id,
                 First_Name: fName,
                 Last_Name: lName,
                 Email_Id: email,

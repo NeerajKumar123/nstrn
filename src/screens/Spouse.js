@@ -44,8 +44,8 @@ const Spouse = props => {
   const [isFillingForWife, setIsFillingForWife] = useState(false);
   const [lastTime, setLastTime] = useState();
   const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
-  const [fName, setFName] = useState('spousename');
-  const [lName, setLName] = useState('spousenamelast');
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
   const [dob, setDOB] = useState();
   const [gender, setGender] = useState();
   const [sinNo, setSinNo] = useState('');
@@ -55,8 +55,8 @@ const Spouse = props => {
   const [residencies, setResidencies] = useState();
   const [bank, setBank] = useState('');
   const [banks, setBanks] = useState();
-  const [accountNo, setAccountNo] = useState('7654321');
-  const [branchNo, setBranhcNo] = useState('12345');
+  const [accountNo, setAccountNo] = useState('');
+  const [branchNo, setBranhcNo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGenderVisible, setIsGenderVisible] = useState();
   const [isDatePickerVisible, setIsDatePickerVisible] = useState();
@@ -204,7 +204,9 @@ const Spouse = props => {
           borderColor={Colors.CLR_0065FF}
           value={fName}
           placeholder="Enter First Name"
-          onEndEditing={value => {}}
+          onEndEditing={value => {
+            setFName(value)
+          }}
         />
         <SKInput
           leftAccImage={CustomFonts.UserIcon}
@@ -214,7 +216,9 @@ const Spouse = props => {
           borderColor={Colors.CLR_0065FF}
           value={lName}
           placeholder="Enter Last Name"
-          onEndEditing={value => {}}
+          onEndEditing={value => {
+            setLName(value)
+          }}
         />
         <TouchableInput
           leftAccImage={CustomFonts.Calender}

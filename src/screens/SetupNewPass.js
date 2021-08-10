@@ -61,7 +61,7 @@ const SetupNewPass = props => {
         <SKInput
           marginTop={17}
           marginBottom={0}
-          maxLength = {6}
+          maxLength = {16}
           leftAccImage={CustomFonts.Lock}
           borderColor={Colors.CLR_0065FF}
           value={pass}
@@ -73,7 +73,7 @@ const SetupNewPass = props => {
         <SKInput
           leftAccImage={CustomFonts.Lock}
           marginBottom={0}
-          maxLength = {6}
+          maxLength = {16}
           marginTop={10}
           borderColor={Colors.CLR_0065FF}
           value={cPass}
