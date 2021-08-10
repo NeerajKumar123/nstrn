@@ -93,19 +93,21 @@ const BasicInfo = props => {
           leftAccImage={CustomFonts.Number}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
-          value={sin}
+          //value={sin}
           keyboardType = 'number-pad'
           placeholder="SIN Number"
-          onEndEditing={value => {
+          value={global.aboutRes.SIN_number}
+          /*onEndEditing={value => {
             console.log('onEndEditing', value);
             setsin(value);
-          }}
+          }}*/
         />
         <TouchableInput
           leftAccImage={CustomFonts.Gender}
           rightAccImage={CustomFonts.ChevronDown}
           value = {gender}
           placeholder="Select Gender"
+          value={global.aboutRes.gender}
           onClicked={() => {
             setIsGenderVisible(true);
           }}
@@ -114,6 +116,7 @@ const BasicInfo = props => {
           leftAccImage={CustomFonts.Calender}
           value = {dob && format(dob, 'dd/MM/yyyy')}
           placeholder="Date of Birth (DD/MM/YYYY)"
+          value={global.aboutRes.DOB}
           onClicked={() => {
             setShowDatePicker(true);
           }}
@@ -127,7 +130,8 @@ const BasicInfo = props => {
         <TouchableInput
           leftAccImage={CustomFonts.Clock}
           rightAccImage={CustomFonts.ChevronDown}
-          value={lastTime}
+          //value={lastTime}
+          value={global.aboutRes.last_year_filed}
           placeholder="Select"
           onClicked={() => {
             console.log('sdsd');
