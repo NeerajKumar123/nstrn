@@ -9,7 +9,7 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 import * as Colors from '../constants/ColorDefs';
-import {incorpGetNatureOfBussiness} from '../apihelper/Api'
+import {incorpGetNatureOfBussiness, incorpSaveAboutCorp} from '../apihelper/Api'
 import * as CustomFonts from '../constants/FontsDefs'
 import TouchableInput from '../components/TouchableInput';
 import SKModel from '../components/SKModel';
@@ -38,7 +38,6 @@ const AboutCorp = props => {
       isValidForm = false;
       Alert.alert('SukhTax','Please enter valid bussiness address.');
     }
-
     return isValidForm;
   };
 
@@ -120,19 +119,17 @@ const AboutCorp = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'NEXT'}
           onPress={() => {
-            navigation.navigate('IncorpFinalStep')
-            return
             Keyboard.dismiss()
             if(checkFormValidations()){
               setIsLoading(true)
-              const testDeviceToken = 'DEVICE_TOKEN_123456789'
-              const params = {First_Name:fName,Last_Name:lName, Email_Id:email,Mobile_No:mobile,Password:pass,Device_Token:testDeviceToken, Device_OS:'iOS', Module_Type_Id:2}
-              register(params,(regisRes) =>{
+              const {incorporation_id, user_id} = global.statusData
+              const params = {User_id:user_id, Incorporation_Id:incorporation_id,Nature_of_Business_Id:selectedNature.nature_of_business_id, Other_Business:ifOther,Business_Address:bussAddress}
+              incorpSaveAboutCorp(params,(saveRes) =>{
+                console.log('saveRes',saveRes)
                 setIsLoading(false)
-                if(regisRes?.status == 1){
-                  const data = regisRes && regisRes.data[0]
-                  console.log('data',data)
-                  navigation.navigate('SecurityCode', {pagetitle:'Security Code', pagesubs:'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:', email:email})
+                if(saveRes?.status == 1){
+                  const data = saveRes && saveRes.data[0]
+                  navigation.navigate('IncorpFinalStep');
                 }else{
                   const msg = userRes?.message ?? 'Something went wront, Please try again later.'
                   Alert.alert('SukhTax',msg)
@@ -153,6 +150,7 @@ const AboutCorp = props => {
           onSelect={value => {
             setIsNOBVisible(false)
             setSelectedNature(value)
+            console.log('value',value)
           }}
         />
       )}

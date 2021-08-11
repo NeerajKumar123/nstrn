@@ -19,15 +19,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SKLoader from '../components/SKLoader';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { uploadDocumentBS64 } from '../apihelper/Api';
+import {ImageQualityOptions} from '../constants/StaticValues'
 
 const OnlineDocuments = props => {
   const navigation = useNavigation();
-  const imageQualityOptions = {
-    quality: .8,
-    maxWidth: 300,
-    maxHeight: 400,
-    includeBase64:true,
-  };
+
   const data = global.selectedYears;
   const [uploadImageCount, setUploadImageCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
@@ -85,7 +81,7 @@ const OnlineDocuments = props => {
                 item={item}
                 onClicked={() => {
                   console.log('onClicked',item);
-                  launchImageLibrary(imageQualityOptions, res => {
+                  launchImageLibrary(ImageQualityOptions, res => {
                     console.log('res',res)
                     if (res?.didCancel) {
                       console.log('didCancel');

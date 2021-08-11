@@ -9,17 +9,12 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {uploadImage} from '../apihelper/Api'
 import * as CustomFonts from '../constants/FontsDefs'
 import SKLoader from '../components/SKLoader';
+import {ImageQualityOptions} from '../constants/StaticValues'
 
 const Identification = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
   const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
-  const imageQualityOptions = {
-    quality: .8,
-    maxWidth: 300,
-    maxHeight: 400,
-    includeBase64:true,
-  };
 
   const intiateImageUploading = (res) =>{
     setIsLoading(true)
@@ -111,7 +106,7 @@ const Identification = props => {
         <UploadDocButton  marginTop = {35} title = 'UPLOAD THE DOC HERE' height ={46}
         onClick={() => {
           console.log('onClicked');
-          launchImageLibrary(imageQualityOptions, res => {
+          launchImageLibrary(ImageQualityOptions, res => {
             console.log('res',res)
             if (res?.didCancel) {
               console.log('didCancel');

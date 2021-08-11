@@ -100,7 +100,7 @@ const Dashboard = props => {
         moveToPage()
         break;
       case 4:
-        navigation.navigate('IncorporationLanding');
+        navigation.navigate('IncorporationLandiing');
         break;
         case 6:
         navigation.navigate('CRALanding');

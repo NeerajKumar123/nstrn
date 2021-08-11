@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -9,15 +9,31 @@ import {
 } from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
+import SKLoader from '../components/SKLoader';
 import SKButton from '../components/SKButton';
-import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {incorpGetIncorporatorList} from '../apihelper/Api';
 const IncorpFinalStep = props => {
   const navigation = useNavigation();
 
-  const data = [{name: 'INCORPORATOR 1'}, {name: 'INCORPORATOR 2'}, {name: 'INCORPORATOR 3'}];
+  const [incorporators, setIncorporators] = useState()
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true)
+    const {incorporation_id, user_id} = global.statusData
+      // const params = {User_id:user_id,Incorporation_Id:incorporation_id}
+      const params = {User_id:user_id,Incorporation_Id:30}
+    incorpGetIncorporatorList(params, (incoproratorsRes) =>{
+      setIsLoading(false)
+      if(incoproratorsRes?.status == 1){
+        setIncorporators(incoproratorsRes?.data)
+      }
+    })
+  }, []);
+
   return (
     <View
       style={{
@@ -28,6 +44,7 @@ const IncorpFinalStep = props => {
         height: '100%',
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader/>}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -48,13 +65,14 @@ const IncorpFinalStep = props => {
           AUTHORIZATION TO COMPLETE
           THE INCORPORATION PROCESS"
         />
-        {data &&
-          data.map((item, index) => {
+        {incorporators &&
+          incorporators.map((item, index) => {
             return (
               <DocCard
                 item={item}
                 onSelected={() => {
                   console.log('data', item);
+                  navigation.navigate('SignaturePage', {authIndex: 1});
                 }}
               />
             );
@@ -77,7 +95,8 @@ const IncorpFinalStep = props => {
 };
 
 const DocCard = props => {
-  const {item} = props;
+  const {item, isSelected} = props;
+  const {Column1} = item
   return (
     <TouchableOpacity
       style={{
@@ -93,7 +112,7 @@ const DocCard = props => {
         backgroundColor:Colors.CLR_7F7F9F
       }}
       onPress={() => {
-        props.onClicked && props.onClicked();
+        props.onSelected && props.onSelected();
       }}>
       <Text
         style={{
@@ -103,7 +122,7 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {item.name}
+        {Column1}
       </Text>
       <Icon
         style={{position: 'absolute', right: 20}}

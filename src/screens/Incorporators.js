@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -15,18 +15,35 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {login} from '../apihelper/Api';
+import {incorpGetIncorporatorList} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
-import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
+import SKLoader from '../components/SKLoader';
+import {useIsFocused} from '@react-navigation/native';
 
 const Incorporators = props => {
-  const data = [{name: 'JAPJOT SINGH'}, {name: 'JOHN SMITH'}];
+  const [incorporators, setIncorporators] = useState()
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCorp, setSelectedCorp] = useState();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if(isFocused){
+      setIsLoading(true)
+      const {incorporation_id, user_id} = global.statusData
+      // const params = {User_id:user_id,Incorporation_Id:incorporation_id}
+      const params = {User_id:user_id,Incorporation_Id:30}
+      incorpGetIncorporatorList(params, (incoproratorsRes) =>{
+        setIsLoading(false)
+        if(incoproratorsRes?.status == 1){
+          setIncorporators(incoproratorsRes?.data)
+        }
+      })
+    }
+  }, [isFocused]);
+
 
   return (
     <View
@@ -37,6 +54,7 @@ const Incorporators = props => {
         width: '100%',
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader/>}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -52,13 +70,17 @@ const Incorporators = props => {
           value="LET'S ADD THE
           INCORPORATORS' DETAILS"
         />
-        <TouchableOpacity style={{width: '100%', flexDirection: 'row'}}>
-          <Icon
-            style={{marginRight: 0}}
-            name={'close-circle-outline'}
-            size={30}
-            color={Colors.RED}
-          />
+        <TouchableOpacity 
+        style={{width: '100%', flexDirection: 'row'}}
+        onPress = {() =>{
+          navigation.navigate('IncorpDetails');
+        }}
+        >
+        <Image
+          resizeMode="contain"
+          style={{width: 30, height: 30, alignSelf: 'center'}}
+          source={CustomFonts.add_filled_circle}
+        />
           <Text
             style={{
               color: Colors.APP_RED_SUBHEADING_COLOR,
@@ -70,14 +92,14 @@ const Incorporators = props => {
             ADD INCORPORATOR
           </Text>
         </TouchableOpacity>
-        {data &&
-          data.map((item, index) => {
+        {incorporators &&
+          incorporators.map((item, index) => {
             return (
               <DocCard
+                key = {item.Column1}
                 item={item}
                 onSelected={() => {
-                  console.log('data', item);
-                  setSelectedCorp(item);
+                  navigation.navigate('IncorpDetails',{...item});
                 }}
               />
             );
@@ -90,6 +112,7 @@ const Incorporators = props => {
             marginTop: 24,
           }}>
           <SKButton
+            disable = {!incorporators || incorporators?.length < 1}
             fontSize={16}
             marginTop={30}
             fontWeight={'normal'}
@@ -97,7 +120,7 @@ const Incorporators = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'NEXT'}
             onPress={() => {
-              navigation.navigate('IncorpDetails');
+              navigation.navigate('AboutCorp');
             }}
           />
         </View>
@@ -108,7 +131,7 @@ const Incorporators = props => {
 
 const DocCard = props => {
   const {item, isSelected} = props;
-  console.log('isSelected', isSelected);
+  const {Column1} = item
   return (
     <TouchableOpacity
       style={{
@@ -118,6 +141,7 @@ const DocCard = props => {
         alignItems: 'center',
         width: '100%',
         borderRadius: 6,
+        paddingRight:20
       }}
       onPress={() => {
         props.onSelected && props.onSelected();
@@ -133,7 +157,7 @@ const DocCard = props => {
           fontWeight: '700',
           marginLeft: 23,
         }}>
-        {item.name}
+        {Column1.toUpperCase()}
       </Text>
     </TouchableOpacity>
   );

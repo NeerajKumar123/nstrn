@@ -187,22 +187,6 @@ export const onlineSubmitFiling = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
-// Incorp.....
-export const incorpGetIncorpType = (params,callback) => {
-  const path = `${BaseURL}/Incorporation_Get_Incorporation_Type`
-  API.makePostRequest(path , params, callback);
-};
-
-export const incorpGetIncorpCategory = (params,callback) => {
-  const path = `${BaseURL}/Incorporation_Get_Incorporation_Category`
-  API.makePostRequest(path , params, callback);
-};
-
-export const incorpGetNatureOfBussiness = (params,callback) => {
-  const path = `${BaseURL}/Incorporation_Get_Nature_Of_Business`
-  API.makePostRequest(path , params, callback);
-};
-
 
 
 
@@ -230,7 +214,88 @@ export const getServicePriceList = (callback) => {
   API.makeGetRequest(path , callback);
 };
 
-export const uploadImageIncorp = (params,callback) => {
-  const path = `${BaseURL}/Online_Upload_Identification_Document_Base64`
+
+// Incorp.....
+export const incorpGetIncorpType = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Incorporation_Type`
   API.makePostRequest(path , params, callback);
 };
+
+export const incorpGetIncorpCategory = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Incorporation_Category`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpRegisterCorp = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Register_Corporation`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpGetNatureOfBussiness = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Nature_Of_Business`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpUploadImage = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Upload_Identification_Document_Base64`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpSaveIncorporatorDetails = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Save_Incorporator_Detail`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpGetIncorporatorList = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Incorporator_List`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpGetIncorporatorDetails = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Incorporator_Details`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpUpdateIncorporatorDetails = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Update_Incorporator_Detail`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpSaveAboutCorp = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Save_About_Corporation`
+  API.makePostRequest(path , params, callback);
+};
+export const incorpUploadAuthImage = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Upload_Authorization_Document_Base64`
+  API.makePostRequest(path , params, callback);
+};
+export const incorpSaveHSTRegistration = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Save_HST_Registration`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpGetPaymentDetails = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Payment_Details`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpGetEphemeralKey = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Generate_Ephemeral_Key`
+  API.makePostRequest(path , params, callback);
+};
+export const incorpSubmitPayment = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Submit_Payment`
+  API.makePostRequest(path , params, callback);
+};
+export const incorpSavePaymentInfo = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Save_Payment_Info`
+  API.makePostRequest(path , params, callback);
+};
+
+export const incorpGetIncorpStatus = (params,callback) => {
+  const path = `${BaseURL}/Incorporation_Get_Incorporation_Status`
+  API.makePostRequest(path , params, callback);
+};
+
+
+

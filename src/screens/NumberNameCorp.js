@@ -15,7 +15,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {incorpGetIncorpCategory} from '../apihelper/Api';
+import {incorpGetIncorpCategory, incorpRegisterCorp} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
@@ -23,6 +23,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 const NumberNameCorp = props => {
   const navigation = useNavigation();
+  const pageParams = props.route.params;
   const [incorpCategories, setIncorpCategories] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState();
@@ -70,6 +71,7 @@ const NumberNameCorp = props => {
           incorpCategories.map((item, index) => {
             return (
               <DocCard
+                key = {item.incorporation_category}
                 item={item}
                 selectedCategory = {selectedCategory}
                 onSelected={() => {
@@ -93,27 +95,21 @@ const NumberNameCorp = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'NEXT'}
             onPress={() => {
-              navigation.navigate('UploadCorp');
+              setIsLoading(true)
+                const {user_id} = global.statusData
+                const params = {User_id:user_id, Incorporation_Type_Id:pageParams?.incorporation_type_id,Incorporation_Category_Id:selectedCategory?.incorporation_category_id}
+                incorpRegisterCorp(params, (regisRes) =>{
+                  console.log('regisRes',regisRes)
+                  setIsLoading(false)
+                  if(regisRes?.status == 1){
+                    global.statusData = {...global.statusData,...regisRes?.data[0]}
+                    navigation.navigate('UploadCorp');
+                  }else{
+                    Alert.alert('SukhTax', regisRes?.message)
+                  }
+                })
             }}
           />
-        </View>
-        <View
-          style={{
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 30,
-          }}>
-          <Text
-            style={{
-              width: '60%',
-              textAlign: 'center',
-              color: Colors.BLACK,
-              fontSize: 12,
-              fontFamily: CustomFonts.OpenSansRegular,
-            }}>
-            DONT WORRY! ALL OUR FEES ALREADY INCLUDE GOVT. CHARGES
-          </Text>
         </View>
       </ScrollView>
     </View>
@@ -127,6 +123,7 @@ const DocCard = props => {
   const showFee = parseFloat(fee) > 0
   return (
     <TouchableOpacity
+      key = {incorporation_category}
       style={{
         flexDirection: 'column',
         justifyContent:'center',
@@ -151,7 +148,7 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {incorporation_category}
+        {incorporation_category.toUpperCase()}
       </Text>
       {showFee && 
       <Text
@@ -163,7 +160,7 @@ const DocCard = props => {
         fontSize: 17,
         fontWeight: '700',
       }}>
-      {fee}
+      {`$${fee} EXTRA`}
     </Text>
       }
       

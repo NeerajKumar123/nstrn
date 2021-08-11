@@ -15,7 +15,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {incorpGetIncorpType} from '../apihelper/Api';
+import {incorpGetIncorpType, incorpRegisterCorp} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
@@ -67,6 +67,7 @@ const IncorporationLanding = props => {
           incorpTypes.map((item, index) => {
             return (
               <DocCard
+                key = {item.incorporation_type}
                 item={item}
                 selectedCorp = {selectedCorp}
                 onSelected={() => {
@@ -90,7 +91,23 @@ const IncorporationLanding = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'NEXT'}
             onPress={() => {
-              navigation.navigate('NumberNameCorp');
+              if(selectedCorp?.incorporation_type_id == 3){
+                setIsLoading(true)
+                const {user_id} = global.userInfo
+                const params = {User_id:user_id, Incorporation_Type_Id:selectedCorp?.incorporation_type_id,Incorporation_Category_Id:0}
+                incorpRegisterCorp(params, (regisRes) =>{
+                  console.log('regisRes',regisRes)
+                  setIsLoading(false)
+                  if(regisRes?.status == 1){
+                    global.statusData = {...global.statusData,...regisRes?.data[0]}
+                    navigation.navigate('UploadCorp');
+                  }else{
+                    Alert.alert('SukhTax', regisRes?.message)
+                  }
+                })
+              }else{
+                navigation.navigate('NumberNameCorp',{...selectedCorp});
+              }
             }}
           />
         </View>
@@ -145,7 +162,7 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {incorporation_type}
+        {incorporation_type.toUpperCase()}
       </Text>
       <Text
         style={{
@@ -156,7 +173,7 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {fee}
+        {`TOTAL COST: $${fee}`}
       </Text>
     </TouchableOpacity>
   );

@@ -25,19 +25,13 @@ import {
 } from '../apihelper/Api';
 import SKButton, {UploadDocButton} from '../components/SKButton';
 import {useIsFocused} from '@react-navigation/native';
+import {ImageQualityOptions} from '../constants/StaticValues'
 
 const OnlineTaxFilingStatus = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {}, [isFocused]);
-
-  const imageQualityOptions = {
-    quality: .8,
-    maxWidth: 300,
-    maxHeight: 400,
-    includeBase64:true,
-  };
 
   const pageHeading = () => {
     let title = 'ONLINE TAX FILING';
@@ -100,7 +94,7 @@ const OnlineTaxFilingStatus = props => {
           }}
           uploadClick={() => {
             console.log('onClicked');
-            launchImageLibrary(imageQualityOptions, res => {
+            launchImageLibrary(ImageQualityOptions, res => {
               console.log('res', res);
               if (res?.didCancel) {
                 console.log('didCancel');

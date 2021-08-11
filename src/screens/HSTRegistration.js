@@ -34,20 +34,15 @@ const HSTRegistration = props => {
         contentContainerStyle={{
           paddingHorizontal: 20,
         }}>
-        <Heading value="FINAL STEP" marginTop={122} />
+        <Heading value="HST REGISTRATION" marginTop={122} />
+        
         <Heading
           fontSize={20}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="AUTHORIZATION"
-        />
-        <Heading
-          fontSize={20}
-          marginTop={5}
-          color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="WE NEED YOUR
-          AUTHORIZATION TO COMPLETE
-          THE INCORPORATION PROCESS"
+          value="WOULD YOU LIKE US TO
+          REGISTER YOUR CORPORATION
+          AS AN HST REGISTRANT?"
         />
         {data &&
           data.map((item, index) => {
@@ -68,7 +63,6 @@ const HSTRegistration = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'NEXT'}
           onPress={() => {
-            console.log('link pressed');
             navigation.navigate('IncorpPayment');
           }}
         />
