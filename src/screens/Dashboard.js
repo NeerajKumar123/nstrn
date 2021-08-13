@@ -81,14 +81,15 @@ const Dashboard = props => {
       const {user_id} = global.userInfo
       const params = {User_Id:user_id}
       getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
-        console.log('fileStatusRes',fileStatusRes)
         setIsLoading(false)
         const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
+        console.log('statusData',statusData, global.userInfo)
         global.onlineStatusData = statusData || {}
         incorpGetIncorpStatus(params,(incStatusRes) =>{
           if(incStatusRes?.status == 1){
             const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
-            global.incStatusData = incStatusData || {}
+            global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
+
           }
         })  
       })
@@ -164,40 +165,24 @@ const Dashboard = props => {
   };
 
   const incorpMoveToPage = props => {
-    navigation.navigate('IncorporationLanding')
-    return
     const {
-      years_selected = 0,
-      identification_document_uploaded = 0,
-      about_info_filled = 0,
-      banking_family_info_filled = 0,
-      dependent_info_filled = 0,
-      spouse_info_filled = 0,
-      my_year_info_filled = 0,
-      document_uploaded = 0,
-      authorization_document_uploaded = 1,
+      hst_registration, // HST
+      identification_document_uploaded, // incprtr
+      authorization_document_uploaded, // HST
+      incorporation_status_id
     } = global.incStatusData;
-
-    if (authorization_document_uploaded) {
-      navigation.navigate('AnyThingElse');
-    } else if (document_uploaded) {
-      navigation.navigate('AuthorizerList');
-    } else if (my_year_info_filled) {
-      navigation.navigate('OnlineDocuments');
-    } else if (spouse_info_filled) {
-      navigation.navigate('Dependents');
-    } else if (dependent_info_filled) {
-      navigation.navigate('MyTaxYear');
-    } else if (banking_family_info_filled) {
-      navigation.navigate('MyTaxYear');
-    } else if (about_info_filled) {
-      navigation.navigate('BankingAndMore');
-    } else if (identification_document_uploaded) {
-      navigation.navigate('BasicInfo');
-    } else if (years_selected) {
-      navigation.navigate('Identification');
-    } else {
-      navigation.navigate('OnlineReturnLanding');
+    if(incorporation_status_id ==1 ){
+      if (hst_registration || authorization_document_uploaded) {
+        navigation.navigate('HSTRegistration');
+      } else if (identification_document_uploaded) {
+        navigation.navigate('IncorporatorsList');
+      } else {
+        navigation.navigate('OnlineReturnLanding');
+      }
+    }else if(incorporation_status_id == 2){
+      navigation.navigate('IncorpInProcessScreen');
+    }else if(incorporation_status_id == 3){
+      navigation.navigate('IncorpAllSet');
     }
   };
 

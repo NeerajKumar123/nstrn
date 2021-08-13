@@ -17,7 +17,7 @@ import * as CustomFonts from '../constants/FontsDefs';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
-import SKButton,{DarkBlueButton} from '../components/SKButton';
+import SKButton, {DarkBlueButton} from '../components/SKButton';
 import {useIsFocused} from '@react-navigation/native';
 
 const IncorpApplyStatus = props => {
@@ -31,7 +31,7 @@ const IncorpApplyStatus = props => {
   } = global.incStatusData;
   const isFocused = useIsFocused();
   useEffect(() => {}, [isFocused]);
-  
+
   return (
     <View
       style={{
@@ -65,14 +65,14 @@ const IncorpApplyStatus = props => {
             navigation={navigation}
           />
         )}
-        {incorporation_status_id == 3 &&
-        <AllSet
-        incorporation_status_name={incorporation_status_name}
-        status_description={status_description}
-        new_message_count={new_message_count}
-        navigation={navigation}
-      />}
-        
+        {incorporation_status_id == 3 && (
+          <AllSet
+            incorporation_status_name={incorporation_status_name}
+            status_description={status_description}
+            new_message_count={new_message_count}
+            navigation={navigation}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -85,38 +85,26 @@ const NotSubmitted = props => {
     status_description,
     new_message_count,
   } = props;
-  const moveToPage = props => {
+
+  const incorpMoveToPage = props => {
     const {
-      years_selected = 0,
-      identification_document_uploaded = 0,
-      about_info_filled = 0,
-      banking_family_info_filled = 0,
-      dependent_info_filled = 0,
-      spouse_info_filled = 0,
-      my_year_info_filled = 0,
-      document_uploaded = 0,
-      authorization_document_uploaded = 0,
+      hst_registration, // HST
+      identification_document_uploaded, // incprtr
+      authorization_document_uploaded, // HST
+      incorporation_status_id,
     } = global.incStatusData;
-    if (authorization_document_uploaded) {
-      navigation.navigate('AnyThingElse');
-    } else if (document_uploaded) {
-      navigation.navigate('AuthorizerList');
-    } else if (my_year_info_filled) {
-      navigation.navigate('OnlineDocuments');
-    } else if (spouse_info_filled) {
-      navigation.navigate('Dependents');
-    } else if (dependent_info_filled) {
-      navigation.navigate('MyTaxYear');
-    } else if (banking_family_info_filled) {
-      navigation.navigate('MyTaxYear');
-    } else if (about_info_filled) {
-      navigation.navigate('BankingAndMore');
-    } else if (identification_document_uploaded) {
-      navigation.navigate('BasicInfo');
-    } else if (years_selected) {
-      navigation.navigate('Identification');
-    } else {
-      navigation.navigate('OnlineReturnLanding');
+    if (incorporation_status_id == 1) {
+      if (hst_registration || authorization_document_uploaded) {
+        navigation.navigate('HSTRegistration');
+      } else if (identification_document_uploaded) {
+        navigation.navigate('IncorporatorsList');
+      } else {
+        navigation.navigate('OnlineReturnLanding');
+      }
+    } else if (incorporation_status_id == 2) {
+      navigation.navigate('IncorpInProcessScreen');
+    } else if (incorporation_status_id == 3) {
+      navigation.navigate('IncorpAllSet');
     }
   };
 
@@ -153,81 +141,24 @@ const NotSubmitted = props => {
         }}>
         {status_description}
       </Text>
-      <MessegesView
-        count={new_message_count}
-        onClick={() => {
-          navigation.navigate('Messages');
+      <SKButton
+        fontSize={16}
+        marginTop={30}
+        width="100%"
+        fontWeight={'normal'}
+        backgroundColor={Colors.SECONDARY_FILL}
+        borderColor={Colors.PRIMARY_BORDER}
+        title={'EDIT INFO'}
+        onPress={() => {
+          incorpMoveToPage();
         }}
       />
     </View>
   );
 };
-
-const MessegesView = props => {
-  const {count} = props;
-  return (
-    <LinearGradient
-      opacity={0.6}
-      colors={[Colors.APP_RED_SUBHEADING_COLOR, Colors.CLR_D72528]}
-      style={{
-        flexDirection: 'row',
-        paddingHorizontal: 16,
-        marginTop: 50,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        borderRadius: 6,
-        width: '100%',
-        height: 90,
-      }}>
-      <TouchableOpacity
-        style={{
-          width: '100%',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-        onPress={() => {
-          props.onClick && props.onClick();
-        }}>
-        <View style={{flexDirection: 'column'}}>
-          <Text
-            style={{
-              width: '100%',
-              textAlign: 'left',
-              color: Colors.WHITE,
-              fontSize: 20,
-              fontWeight: '700',
-              marginTop: 5,
-            }}>
-            MESSAGES :
-          </Text>
-          <Text
-            style={{
-              width: '100%',
-              textAlign: 'left',
-              color: Colors.WHITE,
-              fontSize: 20,
-              fontWeight: '700',
-              marginTop: 5,
-            }}>
-            {`${count} NEW MESSAGES`}
-          </Text>
-        </View>
-        <Image
-          resizeMode="contain"
-          style={{
-            width: 42,
-            height: 38,
-          }}
-          source={CustomFonts.messeges}
-        />
-      </TouchableOpacity>
-    </LinearGradient>
-  );
-};
-
 const AllSet = props => {
   const {navigation} = props;
+  const {incorporation_status_name, status_description} = global.incStatusData;
   return (
     <View
       style={{
@@ -236,20 +167,13 @@ const AllSet = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <Heading value="ALL SET!" marginTop={100} />
+      <Heading value={incorporation_status_name} marginTop={100} />
       <Heading
         fontSize={17}
         marginTop={12}
         fontWeight="700"
         color={Colors.APP_RED_SUBHEADING_COLOR}
-        value="YOU'RE READY TIORUY GET STARTED WITH YOUR BUSINESS!"
-      />
-      <Heading
-        fontSize={17}
-        marginTop={12}
-        fontWeight="700"
-        color={Colors.APP_RED_SUBHEADING_COLOR}
-        value="SUKHTAX WISHES YOU ALL THE BEST IN THIS NEW VENTURE!"
+        value={status_description}
       />
       <SKButton
         marginTop={56}
@@ -286,19 +210,20 @@ const AllSet = props => {
         }}
       />
       <DarkBlueButton
-      title={'RETURN TO HOME'}
-      onClick = {()=>{
-        navigation.popToTop();
-      }}
+        title={'RETURN TO HOME'}
+        onClick={() => {
+          navigation.popToTop();
+        }}
       />
     </View>
   );
 };
 const InProcess = props => {
   const {navigation} = props;
+  const {incorporation_status_name, status_description} = global.incStatusData;
   const openLink = () => {
-    const {company_contact_number} = global.incStatusData
-    let finalLink = company_contact_number
+    const {company_contact_number} = global.incStatusData;
+    let finalLink = company_contact_number;
     if (Platform.OS == 'ios') {
       finalLink = `telprompt:${finalLink}`;
     } else {
@@ -325,20 +250,13 @@ const InProcess = props => {
         width: '100%',
         paddingHorizontal: 20,
       }}>
-      <Heading value="IN PROCESS" marginTop={100} />
+      <Heading value={incorporation_status_name} marginTop={100} />
       <Heading
         fontSize={17}
         marginTop={12}
         fontWeight="700"
         color={Colors.APP_RED_SUBHEADING_COLOR}
-        value="THANK YOU FOR PROVIDING US WITH ALL RELEVANT INFORMATION. WE ARE WORKING HARD TO COMPLETE YOUR REQUEST"
-      />
-      <Heading
-        fontSize={17}
-        marginTop={12}
-        fontWeight="700"
-        color={Colors.APP_RED_SUBHEADING_COLOR}
-        value="SHOULD YOU HAVE ANY QUESTIONS DURING THIS PROCESS, PLEASE CALL US USING THE BUTTON BELOW:"
+        value={status_description}
       />
       <SKButton
         marginTop={56}
@@ -354,10 +272,10 @@ const InProcess = props => {
         }}
       />
       <DarkBlueButton
-      title={'RETURN TO HOME'}
-      onClick = {()=>{
-        navigation.popToTop();
-      }}
+        title={'RETURN TO HOME'}
+        onClick={() => {
+          navigation.popToTop();
+        }}
       />
     </View>
   );

@@ -31,7 +31,6 @@ import {
   const IncorpPaymentScreen = props => {
     const navigation = useNavigation();
     const pageParams = props.route.params;
-    console.log('nextPageParams', pageParams);
     const [isLoading, setIsLoading] = useState(false);
     const [address, setAddress] = useState('');
     const [clientSecret, setClientSecret] = useState('');
@@ -44,8 +43,7 @@ import {
   
     const fetchPaymentIntentClientSecret = async () => {
       setIsLoading(true);
-      const {incorporation_id, user_id} = global.incStatusData
-      const {Stripe_Customer_Id} = global.onlineStatusData
+      const {incorporation_id, user_id,Stripe_Customer_Id} = global.incStatusData
       const params = {
         User_Id: user_id,
         Incorporation_Id: incorporation_id,
@@ -95,14 +93,12 @@ import {
         const {incorporation_id, user_id} = global.incStatusData
         const params = {User_Id:user_id,Incorporation_Id:incorporation_id,Payment_Intent_id:id,Payment_Status:status}
         incorpSavePaymentInfo(params, (savePaymentRes)=>{
-          navigation.navigate('IncorpInProcessScreen')
-          // if(savePaymentRes?.status == 1){
-          //   navigation.navigate('IncorpInProcessScreen')
-          // }else{
-          //   const msg = savePaymentRes?.message ?? 'Something went wront, Please try again later.'
-          //   Alert.alert('SukhTax',msg)
-
-          // }
+          if(savePaymentRes?.status == 1){
+            navigation.navigate('IncorpInProcessScreen')
+          }else{
+            const msg = savePaymentRes?.message ?? 'Something went wront, Please try again later.'
+            Alert.alert('SukhTax',msg)
+          }
         })
       }
     };
@@ -141,7 +137,6 @@ import {
               height: 50,
             }}
             onCardChange={cardDetails => {
-              console.log('cardDetails', cardDetails);
               setCard(cardDetails);
             }}
           />

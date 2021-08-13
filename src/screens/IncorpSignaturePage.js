@@ -67,10 +67,10 @@ const IncorpSignaturePage = props => {
   };
 
   const prepareParams = (image) => {
-    const {incorporator_id, user_id} = pageParams
+    const {incorporation_id,incorporator_id, user_id} = pageParams
     const params = {
       User_Id: user_id,
-      Incorporation_Id: incorporator_id,
+      Incorporation_Id: incorporation_id,
       Title: `Incorporator_Authorization_${incorporator_id}`,
       FileNameWithExtension: `Incorporator_Authorization_${incorporator_id}.jpg`,
       Base64String: image,

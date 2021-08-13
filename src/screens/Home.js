@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 const Home = props => {
   const navigation = useNavigation();
   const userFullName = global.userInfo ? `${global.userInfo.firstname} ${global.userInfo.lastname}` : ''
+  const {incorporation_status_id =  1 } = global.incStatusData
   return (
     <View
       style={{
@@ -53,7 +54,7 @@ const Home = props => {
         <Heading
           fontSize={16}
           status={0}
-          status={1}
+          status={incorporation_status_id}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="INCORPORATION"

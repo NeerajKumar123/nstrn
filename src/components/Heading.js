@@ -36,7 +36,7 @@ const Heading = props => {
         <Image
           resizeMode="contain"
           style={{width: 20, height: 20}}
-          source={status == 2 ? CustomFonts.green_tick : CustomFonts.status_gray}
+          source={status > 2 ? CustomFonts.green_tick : CustomFonts.status_gray}
         />
       ) : null}
     </TouchableOpacity>

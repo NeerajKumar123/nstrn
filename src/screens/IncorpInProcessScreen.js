@@ -5,13 +5,14 @@ import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
-import SKButton from '../components/SKButton';
+import SKButton,{DarkBlueButton} from '../components/SKButton';
 import * as CustomFonts from '../constants/FontsDefs';
 
 const IncorpInProcessScreen = props => {
   const navigation = useNavigation();
   const openLink = () => {
     const {company_contact_number} = global.incStatusData
+    console.log('company_contact_number',company_contact_number)
     let finalLink = company_contact_number
     if (Platform.OS == 'ios') {
       finalLink = `telprompt:${finalLink}`;
@@ -67,18 +68,12 @@ const IncorpInProcessScreen = props => {
           openLink()
         }}
       />
-      <SKButton
-          fontSize={16}
-          marginTop={30}
-          width="100%"
-          fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'RETURN TO HOME'}
-          onPress={() => {
-            navigation.popToTop();
-          }}
-        />
+      <DarkBlueButton
+      title={'RETURN TO HOME'}
+      onClick = {()=>{
+        navigation.popToTop();
+      }}
+      />
     </View>
   );
 };

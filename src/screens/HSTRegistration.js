@@ -20,7 +20,7 @@ const HSTRegistration = props => {
   const navigation = useNavigation();
 
   const data = [{name: 'YES (FREE OF CHARGE)', id:1}, {name: 'NO', id:0}];
-  const [selectedOption, setSelectedOption] = useState()
+  const [selectedOption, setSelectedOption] = useState({name: 'YES (FREE OF CHARGE)', id:1})
   return (
     <View
       style={{

@@ -52,7 +52,6 @@ const OnlinePaymentScreen = props => {
       API_Version: stripeAPIVersion,
     };
     stripeGenerateEphemeralKey(params, res => {
-      console.log('params', res);
       const intentParams = {
         User_Id: user_id,
         Tax_File_Id: tax_file_id,
@@ -61,7 +60,6 @@ const OnlinePaymentScreen = props => {
         Currency: 'CAD',
       };
       stripeSubmitPayment(intentParams, intentRes => {
-        console.log('intentRes', intentRes);
         const {client_secret} = intentRes;
         setClientSecret(client_secret);
         setIsLoading(false);
@@ -135,7 +133,6 @@ const OnlinePaymentScreen = props => {
             height: 50,
           }}
           onCardChange={cardDetails => {
-            console.log('cardDetails', cardDetails);
             setCard(cardDetails);
           }}
         />

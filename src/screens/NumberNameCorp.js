@@ -18,7 +18,6 @@ import {useNavigation} from '@react-navigation/native';
 import {incorpGetIncorpCategory, incorpRegisterCorp} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
-import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 const NumberNameCorp = props => {

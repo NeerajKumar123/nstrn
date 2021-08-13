@@ -7,6 +7,7 @@ import * as Colors from '../constants/ColorDefs';
 import SKButton from '../components/SKButton';
 import SKLoader from '../components/SKLoader';
 import {incorpGetPaymentDetails} from '../apihelper/Api';
+import * as CustomFonts from '../constants/FontsDefs';
 
 const IncorpPaymentDetails = props => {
   const [isPaynow, setIsPaynow] = useState(false);
@@ -93,6 +94,24 @@ const IncorpPaymentDetails = props => {
           navigation.navigate('IncorpPaymentScreen',{...nextPageParams})    
         }}
       />
+      <View
+          style={{
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 30,
+          }}>
+          <Text
+            style={{
+              width: '60%',
+              textAlign: 'center',
+              color: Colors.BLACK,
+              fontSize: 12,
+              fontFamily: CustomFonts.OpenSansRegular,
+            }}>
+            DONT WORRY ALL PAYMENTS ARE SECURED
+          </Text>
+        </View>
     </ScrollView>
     </View>
   );
