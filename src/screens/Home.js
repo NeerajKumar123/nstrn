@@ -58,9 +58,7 @@ const Home = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="INCORPORATION"
           onClicked = {()=>{
-            return
-            console.log('OnlineTaxFilingStatus')
-            navigation.navigate('OnlineTaxFilingStatus')
+            navigation.navigate('IncorpApplyStatus')
           }}
         />
         <Heading
@@ -147,7 +145,7 @@ const ProfDoccCardView = props => {
 };
 
 const MessegesView = props => {
-  const {new_message_count = 0} = global.statusData;
+  const {new_message_count = 0} = global.onlineStatusData;
   return (
     <LinearGradient
       opacity={0.6}

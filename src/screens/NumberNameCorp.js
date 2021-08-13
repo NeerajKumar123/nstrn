@@ -96,13 +96,12 @@ const NumberNameCorp = props => {
             title={'NEXT'}
             onPress={() => {
               setIsLoading(true)
-                const {user_id} = global.statusData
+                const {user_id} = global.incStatusData
                 const params = {User_id:user_id, Incorporation_Type_Id:pageParams?.incorporation_type_id,Incorporation_Category_Id:selectedCategory?.incorporation_category_id}
                 incorpRegisterCorp(params, (regisRes) =>{
-                  console.log('regisRes',regisRes)
                   setIsLoading(false)
                   if(regisRes?.status == 1){
-                    global.statusData = {...global.statusData,...regisRes?.data[0]}
+                    global.incStatusData = {...global.incStatusData,...regisRes?.data[0]}
                     navigation.navigate('UploadCorp');
                   }else{
                     Alert.alert('SukhTax', regisRes?.message)

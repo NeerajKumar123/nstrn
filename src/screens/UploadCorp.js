@@ -27,7 +27,7 @@ const UploadCorp = props => {
   }
 
   const prepareParams = (bs64Image) =>{
-    const {incorporation_id, user_id} = global.statusData
+    const {incorporation_id, user_id} = global.incStatusData
     const params = {User_id:user_id,Incorporation_Id:incorporation_id, FileNameWithExtension:'incorp-identification-document.jpg',Base64String:bs64Image}
     return params
   }
@@ -125,7 +125,7 @@ const UploadCorp = props => {
           title={'NEXT'}
           onPress={() => {
             console.log('link pressed');
-            navigation.navigate('Incorporators');
+            navigation.navigate('IncorporatorsList');
           }}
         />
       </ScrollView>

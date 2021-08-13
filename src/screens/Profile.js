@@ -50,9 +50,9 @@ const Profile = props => {
     return isValidForm;
   };
   useEffect(() => {
-    const userid = global.userInfo?.user_id
+    const {user_id} = global.userInfo
     setIsLoading(true)
-    getUserProfileDetails({user_id:userid},(userDetailsRes)=>{
+    getUserProfileDetails({user_id:user_id},(userDetailsRes)=>{
       setIsLoading(false)
       if(userDetailsRes?.status == 1){
         const user = userDetailsRes?.data?.[0]
@@ -153,8 +153,9 @@ const Profile = props => {
             Keyboard.dismiss();
             if (checkFormValidations()) {
               setIsLoading(true);
+              const {user_id} = global.userInfo
               const params = {
-                user_id:global.userInfo?.user_id,
+                user_id:user_id,
                 First_Name: fName,
                 Last_Name: lName,
                 Email_Id: email,

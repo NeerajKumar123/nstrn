@@ -21,15 +21,16 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import {onlineUploadAuthrizationDocumentBS64} from '../apihelper/Api';
+import {incorpUploadAuthImage} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 import SignatureCapture from 'react-native-signature-capture';
 import ViewShot from 'react-native-view-shot';
 
-const SignaturePage = props => {
+const IncorpSignaturePage = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
+  console.log('pageParams',pageParams)
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [sinNo, setSinNo] = useState('');
@@ -65,13 +66,13 @@ const SignaturePage = props => {
     return isValidForm;
   };
 
-  const prepareParams = (image, spouseNo) => {
-    const {user_id,tax_file_id} = global.onlineStatusData
+  const prepareParams = (image) => {
+    const {incorporator_id, user_id} = pageParams
     const params = {
       User_Id: user_id,
-      Tax_File_Id: tax_file_id,
-      Title: `Customer_Authorization${spouseNo}`,
-      FileNameWithExtension: `Customer_Authorization${spouseNo}.jpg`,
+      Incorporation_Id: incorporator_id,
+      Title: `Incorporator_Authorization_${incorporator_id}`,
+      FileNameWithExtension: `Incorporator_Authorization_${incorporator_id}.jpg`,
       Base64String: image,
     };
     return params;
@@ -259,23 +260,14 @@ const SignaturePage = props => {
             if (checkFormValidations()) {
               viewShotRef.current.capture().then(bs64Image => {
                 setIsLoading(true)
-                const params = prepareParams(bs64Image, 1);
-                onlineUploadAuthrizationDocumentBS64(params, signUploadRes => {
-                  console.log('signUploadRes', signUploadRes);
-                  setIsLoading(false)
-                  if(pageParams.authIndex == 0){
-                    global.isFAuthorized = true
-                  }else if(pageParams.authIndex == 1){
-                    global.isSAuthorized = true
-                  }else if(pageParams.authIndex == 2){
-                    global.isTAuthorized = true
-                  }
-                  if(global.isFromSpouseFlow){
-                    global.isAuthorized = global.isFAuthorized && global.isSAuthorized
-                  }else{
-                    global.isAuthorized = global.isFAuthorized
-                  }
+                const params = prepareParams(bs64Image);
+                incorpUploadAuthImage(params, signUploadRes => {
+                  const {incorpAuthIds = []} = global.incStatusData
+                  const {incorporator_id} = pageParams
+                  incorpAuthIds.push(incorporator_id)
+                  global.incStatusData.incorpAuthIds = incorpAuthIds
                   navigation.goBack()
+                  setIsLoading(false)
                 });
               });
             }
@@ -311,4 +303,4 @@ const SKCheckbox = props => {
   );
 };
 
-export default SignaturePage;
+export default IncorpSignaturePage;

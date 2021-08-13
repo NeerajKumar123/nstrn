@@ -33,7 +33,7 @@ const IncorporationLanding = props => {
       if(typeRes?.status == 1){
         const incoprs = typeRes?.data
         setIncorpTypes(incoprs)
-        setSelectedCorp(incoprs[0])
+        setSelectedCorp(incoprs[2])
         setIsLoading(false)
       }
     })
@@ -93,13 +93,13 @@ const IncorporationLanding = props => {
             onPress={() => {
               if(selectedCorp?.incorporation_type_id == 3){
                 setIsLoading(true)
-                const {user_id} = global.userInfo
+                const {user_id} = global.incStatusData
                 const params = {User_id:user_id, Incorporation_Type_Id:selectedCorp?.incorporation_type_id,Incorporation_Category_Id:0}
                 incorpRegisterCorp(params, (regisRes) =>{
                   console.log('regisRes',regisRes)
                   setIsLoading(false)
                   if(regisRes?.status == 1){
-                    global.statusData = {...global.statusData,...regisRes?.data[0]}
+                    global.incStatusData = {...global.incStatusData,...regisRes?.data[0]}
                     navigation.navigate('UploadCorp');
                   }else{
                     Alert.alert('SukhTax', regisRes?.message)
@@ -145,7 +145,6 @@ const DocCard = props => {
         paddingHorizontal: 16,
         marginTop: 20,
         paddingVertical: 14,
-        backgroundColor: 'white',
         alignItems: 'center',
         width: '100%',
         borderRadius: 6,

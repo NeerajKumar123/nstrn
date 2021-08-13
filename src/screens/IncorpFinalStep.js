@@ -15,24 +15,43 @@ import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {incorpGetIncorporatorList} from '../apihelper/Api';
+import {useIsFocused} from '@react-navigation/native';
+import * as CustomFonts from '../constants/FontsDefs';
+
 const IncorpFinalStep = props => {
   const navigation = useNavigation();
-
+  const isFocused = useIsFocused()
   const [incorporators, setIncorporators] = useState()
   const [isLoading, setIsLoading] = useState(false);
+  const [isAllAuthed, setIsAllAuthed] = useState(false)
 
   useEffect(() => {
-    setIsLoading(true)
-    const {incorporation_id, user_id} = global.statusData
-      // const params = {User_id:user_id,Incorporation_Id:incorporation_id}
-      const params = {User_id:user_id,Incorporation_Id:30}
+    // setIsLoading(true)
+    const {incorporation_id, user_id} = global.incStatusData
+      const params = {User_id:user_id,Incorporation_Id:incorporation_id}
     incorpGetIncorporatorList(params, (incoproratorsRes) =>{
-      setIsLoading(false)
+      // setIsLoading(false)
       if(incoproratorsRes?.status == 1){
         setIncorporators(incoproratorsRes?.data)
       }
     })
   }, []);
+
+  // check if all cops authed
+  useEffect(() => {
+    if(isFocused && incorporators){
+      let count = 0
+      incorporators?.map((item) =>{
+        const {incorpAuthIds = []} = global.incStatusData
+        console.log('incorporators',incorpAuthIds.includes(item.incorporator_id))
+        if(incorpAuthIds.includes(item.incorporator_id)){
+          count++
+        }
+      })
+      setIsAllAuthed(count >= incorporators.length)
+    }
+  }, [isFocused,incorporators]);
+
 
   return (
     <View
@@ -69,15 +88,18 @@ const IncorpFinalStep = props => {
           incorporators.map((item, index) => {
             return (
               <DocCard
+                key = {item.Column1}
                 item={item}
                 onSelected={() => {
                   console.log('data', item);
-                  navigation.navigate('SignaturePage', {authIndex: 1});
+                  navigation.navigate('IncorpSignaturePage', {...item});
                 }}
               />
             );
           })}
+          {console.log('isAllAuthed',isAllAuthed)}
         <SKButton
+          disable = {!isAllAuthed}
           marginTop={30}
           fontSize={16}
           fontWeight={'normal'}
@@ -95,8 +117,11 @@ const IncorpFinalStep = props => {
 };
 
 const DocCard = props => {
-  const {item, isSelected} = props;
-  const {Column1} = item
+  const {item} = props;
+  const {Column1,incorporator_id} = item
+  const {incorpAuthIds = []} = global.incStatusData
+  const isAuthorized = incorpAuthIds.includes(incorporator_id)
+ 
   return (
     <TouchableOpacity
       style={{
@@ -126,7 +151,7 @@ const DocCard = props => {
       </Text>
       <Icon
         style={{position: 'absolute', right: 20}}
-        name="check-circle"
+        name={isAuthorized ? CustomFonts.CheckRight : CustomFonts.ChevronRight}
         size={23}
         color={Colors.WHITE}
       />

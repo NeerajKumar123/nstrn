@@ -19,6 +19,7 @@ import * as CustomFonts from '../constants/FontsDefs';
 import {
   getActiveFileStatusOnLogin,
   getServicePriceList,
+  incorpGetIncorpStatus
 } from '../apihelper/Api';
 
 const data = [
@@ -77,14 +78,29 @@ const Dashboard = props => {
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
-      const userid = global.userInfo?.user_id;
-      const params = {User_Id:userid}
+      const {user_id} = global.userInfo
+      const params = {User_Id:user_id}
       getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
+        console.log('fileStatusRes',fileStatusRes)
         setIsLoading(false)
         const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
-        global.statusData = statusData || {}
+        global.onlineStatusData = statusData || {}
+        incorpGetIncorpStatus(params,(incStatusRes) =>{
+          if(incStatusRes?.status == 1){
+            const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
+            global.incStatusData = incStatusData || {}
+          }
+        })  
       })
     }, 500);
+
+    getServicePriceList((priceListRes) =>{
+      if(priceListRes?.status == 1){
+        let onlineTaxFees = priceListRes?.data?.filter(fee => fee.services_fee_id == 1);
+        const feeObj = onlineTaxFees[0]
+        setTaxFilingFee(feeObj?.service_fee)
+      }
+    })
   }, [])
 
   const navigateToScreen = item => {
@@ -93,14 +109,14 @@ const Dashboard = props => {
         navigation.navigate('Home');
         break;
         case 2:
-          const {book_an_appointment_link}  = global.statusData
+          const {book_an_appointment_link}  = global.onlineStatusData
           navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
           break;
       case 3:
-        moveToPage()
+        onlineMoveToPage()
         break;
       case 4:
-        navigation.navigate('IncorporationLandiing');
+        incorpMoveToPage()
         break;
         case 6:
         navigation.navigate('CRALanding');
@@ -109,7 +125,7 @@ const Dashboard = props => {
         break;
     }
   };
-  const moveToPage = props => {
+  const onlineMoveToPage = props => {
     navigation.navigate('OnlineReturnLanding');
     return
     const {
@@ -122,7 +138,45 @@ const Dashboard = props => {
       my_year_info_filled = 0,
       document_uploaded = 0,
       authorization_document_uploaded = 1,
-    } = global.statusData;
+    } = global.onlineStatusData;
+
+    if (authorization_document_uploaded) {
+      navigation.navigate('AnyThingElse');
+    } else if (document_uploaded) {
+      navigation.navigate('AuthorizerList');
+    } else if (my_year_info_filled) {
+      navigation.navigate('OnlineDocuments');
+    } else if (spouse_info_filled) {
+      navigation.navigate('Dependents');
+    } else if (dependent_info_filled) {
+      navigation.navigate('MyTaxYear');
+    } else if (banking_family_info_filled) {
+      navigation.navigate('MyTaxYear');
+    } else if (about_info_filled) {
+      navigation.navigate('BankingAndMore');
+    } else if (identification_document_uploaded) {
+      navigation.navigate('BasicInfo');
+    } else if (years_selected) {
+      navigation.navigate('Identification');
+    } else {
+      navigation.navigate('OnlineReturnLanding');
+    }
+  };
+
+  const incorpMoveToPage = props => {
+    navigation.navigate('IncorporationLanding')
+    return
+    const {
+      years_selected = 0,
+      identification_document_uploaded = 0,
+      about_info_filled = 0,
+      banking_family_info_filled = 0,
+      dependent_info_filled = 0,
+      spouse_info_filled = 0,
+      my_year_info_filled = 0,
+      document_uploaded = 0,
+      authorization_document_uploaded = 1,
+    } = global.incStatusData;
 
     if (authorization_document_uploaded) {
       navigation.navigate('AnyThingElse');

@@ -186,7 +186,7 @@ const SecurityCode = props => {
             if (Number.isNaN(otp) || otp.length < 4) {
               Alert.alert('SukhTax', 'Please enter a valid OTP');
             }else{
-              const userid = global.userInfo?.user_id
+              const {user_id} = global.userInfo
               if(userid){
                 setIsLoading(true)
                 const params = {user_id:userid,OTP:otp}

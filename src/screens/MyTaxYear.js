@@ -66,13 +66,12 @@ const MyTaxYear = props => {
   const prepareParams = (flag) => {
     const {
       user_id,
-      tax_file_id = 83,
-      Tax_File_Id,
-      tax_file_year_id,
-    } = global.userInfo;
+      tax_file_id,
+    } = global.onlineStatusData
+
     let params = {
       User_id: user_id,
-      Tax_File_Id: tax_file_id || Tax_File_Id,
+      Tax_File_Id: tax_file_id,
       Year: 2020,
       Details_For: flag ? 0 : 1,
     };

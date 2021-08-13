@@ -23,7 +23,7 @@ import AppHeader from '../components/AppHeader';
 import SKLoader from '../components/SKLoader';
 import {useIsFocused} from '@react-navigation/native';
 
-const Incorporators = props => {
+const IncorporatorsList = props => {
   const [incorporators, setIncorporators] = useState()
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
@@ -32,9 +32,8 @@ const Incorporators = props => {
   useEffect(() => {
     if(isFocused){
       setIsLoading(true)
-      const {incorporation_id, user_id} = global.statusData
-      // const params = {User_id:user_id,Incorporation_Id:incorporation_id}
-      const params = {User_id:user_id,Incorporation_Id:30}
+      const {incorporation_id, user_id} = global.incStatusData
+      const params = {User_id:user_id,Incorporation_Id:incorporation_id}
       incorpGetIncorporatorList(params, (incoproratorsRes) =>{
         setIsLoading(false)
         if(incoproratorsRes?.status == 1){
@@ -163,4 +162,4 @@ const DocCard = props => {
   );
 };
 
-export default Incorporators;
+export default IncorporatorsList;

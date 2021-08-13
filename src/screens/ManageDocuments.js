@@ -32,9 +32,8 @@ const ManageDocuments = props => {
 
   const getDocs = () => {
     setIsLoading(true);
-    const userid = global.userInfo?.user_id;
-    const taxFileID = global.statusData?.tax_file_id;
-    const params = {User_Id: userid, Tax_File_Id: taxFileID};
+    const {tax_file_id,user_id} = global.onlineStatusData
+    const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
     getUserDocuments(params, docsRes => {
       setIsLoading(false);
       if (docsRes?.status == 1) {
@@ -101,11 +100,10 @@ const ManageDocuments = props => {
                     {
                       text: 'Delete',
                       onPress: () => {
-                        const userid = global.userInfo?.user_id;
-                        const taxFileID = global.statusData?.tax_file_id;
+                        const {user_id,tax_file_id} = global.onlineStatusData
                         const params = {
-                          User_Id: userid,
-                          Tax_File_Id: taxFileID,
+                          User_Id: user_id,
+                          Tax_File_Id: tax_file_id,
                           Tax_File_Document_Id: item.tax_file_document_id,
                         };
                         setIsLoading(true);

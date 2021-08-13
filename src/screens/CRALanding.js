@@ -41,7 +41,7 @@ const CRALanding = props => {
         borderColor={Colors.SECONDARY_FILL}
         title={'NEW CRA LETTER'}
         onPress={() => {
-          navigation.navigate('IncorpInProcess')
+          navigation.navigate('IncorpInProcessScreen')
         }}
       />
     </ScrollView>

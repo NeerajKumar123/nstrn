@@ -122,7 +122,7 @@ const AboutCorp = props => {
             Keyboard.dismiss()
             if(checkFormValidations()){
               setIsLoading(true)
-              const {incorporation_id, user_id} = global.statusData
+              const {incorporation_id, user_id} = global.incStatusData
               const params = {User_id:user_id, Incorporation_Id:incorporation_id,Nature_of_Business_Id:selectedNature.nature_of_business_id, Other_Business:ifOther,Business_Address:bussAddress}
               incorpSaveAboutCorp(params,(saveRes) =>{
                 console.log('saveRes',saveRes)

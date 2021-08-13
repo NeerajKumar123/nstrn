@@ -39,7 +39,8 @@ const AllDocuments = props => {
           title="TAX RETURNS"
           onClicked = {()=>{
             setIsLoading(true)
-            const params = {User_Id:global.userInfo?.user_id}
+            const {user_id} = global.onlineStatusData
+            const params = {User_Id:user_id}
             getTaxReturnsDocs(params,(taxReturnDocsRes) =>{
               setIsLoading(false)
               if(taxReturnDocsRes?.data?.length){
@@ -55,7 +56,8 @@ const AllDocuments = props => {
           title="INCORPORATION DOCS"
           onClicked = {()=>{
             setIsLoading(true)
-            const params = {User_Id:global.userInfo?.user_id}
+            const {user_id} = global.onlineStatusData
+            const params = {User_Id:user_id}
             getIncorporationDocs(params, (incorpDocsRes) =>{
               setIsLoading(false)
               if(incorpDocsRes?.data?.length){
@@ -71,7 +73,8 @@ const AllDocuments = props => {
           title="T1 GENERAL NOA T-SLIPS"
           onClicked = {()=>{
             setIsLoading(true)
-            const params = {User_Id:global.userInfo?.user_id}
+            const {user_id} = global.onlineStatusData
+            const params = {user_id}
             getT1GeneralDocs(params, (t1GRes)=>{
               setIsLoading(false)
               if(t1GRes?.data?.length){
@@ -87,7 +90,8 @@ const AllDocuments = props => {
           title="CRA LETTERS DOCS"
           onClicked = {()=>{
             setIsLoading(true)
-            const params = {User_Id:global.userInfo?.user_id}
+            const {user_id} = global.onlineStatusData
+            const params = {User_Id:user_id}
             getCRALattersDocs(params, (craDocsRes)=>{
               setIsLoading(false)
               if(craDocsRes?.data?.length){

@@ -10,7 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import {finalizeOnlineProcess} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const OnlineAllDone = props => {
+const IncorpAllSet = props => {
   const navigation = useNavigation()
   return (
     <View
@@ -67,7 +67,7 @@ const OnlineAllDone = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'RETURN HOME'}
           onPress={() => {
-            const {user_id,tax_file_id} = global.onlineStatusData
+            const {user_id,tax_file_id} = global.incStatusData
             const params = {
               User_Id: user_id,
               Tax_File_Id: tax_file_id
@@ -83,4 +83,4 @@ const OnlineAllDone = props => {
   );
 };
 
-export default OnlineAllDone;
+export default IncorpAllSet;

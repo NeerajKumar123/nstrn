@@ -21,7 +21,7 @@ const SKButton = props => {
     iconName = undefined,
     imageSource = undefined,
     backgroundColor = Colors.RED,
-    height = 40,
+    height = 46,
     iconsize = 25,
     iconcolor = Colors.WHITE,
     fontSize = 15,
@@ -187,6 +187,29 @@ export const UploadDocButton = props => {
         style={{width: 24, height: 24}}
         source={CustomFonts.upload}
       />
+    </TouchableOpacity>
+  );
+};
+
+export const DarkBlueButton  = props => {
+  const {marginTop = 30, title = 'UPLOAD', height = 46} = props;
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        props.onClick();
+      }}
+      style={{
+        width: '100%',
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        height,
+        marginTop: marginTop,
+      }}>
+      <Text style={{fontFamily: CustomFonts.OpenSansRegular, fontSize: 18, fontWeight:'bold'}}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };

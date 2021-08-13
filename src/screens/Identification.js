@@ -33,9 +33,8 @@ const Identification = props => {
 
   const prepareParams = (bs64Image) =>{
     const year = global?.selectedYears?.[0]
-    const userid = global.userInfo?.user_id;
-    const taxFileID = global.statusData?.tax_file_id;
-    const params = {User_id:userid,Tax_File_Id:taxFileID,Year:year,FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
+    const {user_id,tax_file_id} = global.onlineStatusData
+    const params = {User_id:user_id,Tax_File_Id:tax_file_id,Year:year,FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
     return params
   }
 

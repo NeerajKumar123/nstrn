@@ -77,11 +77,10 @@ const Dependents = props => {
   };
 
   const prepareParams = (depID) =>{
-    const userid = global.userInfo?.user_id;
-    const taxFileID = global.statusData?.tax_file_id;
+    const {user_id,tax_file_id} = global.onlineStatusData
     const params = {
-      User_id:userid,
-      Tax_File_Id:taxFileID,
+      User_id:user_id,
+      Tax_File_Id:tax_file_id,
       First_Name:fName,
       Last_Name:lName,
       DOB:dob && format(dob, 'yyyy-MM-dd'),

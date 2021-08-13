@@ -35,7 +35,7 @@ const OnlineTaxFilingStatus = props => {
 
   const pageHeading = () => {
     let title = 'ONLINE TAX FILING';
-    const {tax_file_status_id} = global.statusData;
+    const {tax_file_status_id} = global.onlineStatusData;
     if (tax_file_status_id == 10) {
       title = 'PAYMENTS';
     } else if (tax_file_status_id == 12) {
@@ -56,11 +56,10 @@ const OnlineTaxFilingStatus = props => {
   };
 
   const prepareParams = bs64Image => {
-    const userid = global.userInfo?.user_id;
-    const taxFileID = global.statusData?.tax_file_id;
+    const {user_id,tax_file_id} = global.onlineStatusData
     const params = {
-      User_id: userid,
-      Tax_File_Id: taxFileID,
+      User_id: user_id,
+      Tax_File_Id: tax_file_id,
       Year: parseInt('2020'),
       FileNameWithExtension: 'identification-document.jpg',
       Base64String: bs64Image,
@@ -169,7 +168,7 @@ const PaymentFinalCard = props => {
         title={'PAYNOW'}
         onPress={() => {
           const nextPageParams = {payment_required:totalAmount,additional_payment_required:0}
-          navigation.navigate('PaymentScreen',{...nextPageParams})    
+          navigation.navigate('OnlinePaymentScreen',{...nextPageParams})    
         }}
       />
     </View>
@@ -218,7 +217,7 @@ const TaxFilingStatusCard = props => {
     book_now_url,
     spouse_info_filled,
     tax_file_status_id,
-  } = global.statusData;
+  } = global.onlineStatusData;
 
   const moveToPage = props => {
     const {
@@ -231,7 +230,7 @@ const TaxFilingStatusCard = props => {
       my_year_info_filled = 0,
       document_uploaded = 0,
       authorization_document_uploaded = 0,
-    } = global.statusData;
+    } = global.onlineStatusData;
     if (authorization_document_uploaded) {
       navigation.navigate('AnyThingElse');
     } else if (document_uploaded) {
@@ -334,7 +333,8 @@ const TaxFilingStatusCard = props => {
           title={'DOWNLOAD MY TAX DOCS'}
           onPress={() => {
             updateLoadingStatus(true);
-            const params = {User_Id: global.userInfo?.user_id};
+            const {user_id} = global.onlineStatusData
+            const params = {User_Id: user_id};
             getTaxReturnsDocs(params, taxReturnDocsRes => {
               updateLoadingStatus(false);
               if (taxReturnDocsRes?.data?.length) {
@@ -510,9 +510,8 @@ const TaxFilingStatusCard = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'SUBMIT FOR FILING'}
           onPress={() => {
-            const userid = global.userInfo?.user_id;
-            const taxFileID = global.statusData?.tax_file_id;
-            const params = {User_id: userid, Tax_File_Id: taxFileID};
+            const {user_id,tax_file_id} = global.onlineStatusData
+            const params = {User_id: user_id, Tax_File_Id: tax_file_id};
             updateLoadingStatus(true);
             onlineSubmitFiling(params, submitFileRes => {
               updateLoadingStatus(false);
@@ -540,12 +539,10 @@ const TaxFilingStatusCard = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'DETAILS'}
             onPress={() => {
-              const userid = global.userInfo?.user_id;
-              const taxFileID = global.statusData?.tax_file_id;
-              console.log('global', global.userInfo);
+              const {user_id,tax_file_id} = global.onlineStatusData
               const params = {
-                User_Id: userid,
-                Tax_File_Id: taxFileID,
+                User_Id: user_id,
+                Tax_File_Id: tax_file_id,
                 Additional_Payment: additional_payment_required,
               };
               updateLoadingStatus(true);
@@ -568,7 +565,7 @@ const TaxFilingStatusCard = props => {
             title={'PAY SECURELY'}
             onPress={() => {
               const nextPageParams = {payment_required:payment_required,additional_payment_required:additional_payment_required}
-              navigation.navigate('PaymentScreen',{...nextPageParams})    
+              navigation.navigate('OnlinePaymentScreen',{...nextPageParams})    
             }}
           />
         </View>
@@ -589,11 +586,10 @@ const TaxFilingStatusCard = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'DETAILS'}
             onPress={() => {
-              const userid = global.userInfo?.user_id;
-              const taxFileID = global.statusData?.tax_file_id;
+              const {user_id,tax_file_id} = global.onlineStatusData
               const params = {
-                User_Id: userid,
-                Tax_File_Id: taxFileID,
+                User_Id: user_id,
+                Tax_File_Id: tax_file_id,
                 Additional_Payment: additional_payment_required > 0 ? 1 : 0,
               };
               updateLoadingStatus(true);
@@ -616,7 +612,7 @@ const TaxFilingStatusCard = props => {
             title={'PAY SECURELY'}
             onPress={() => {
               const nextPageParams = {payment_required:payment_required,additional_payment_required:additional_payment_required}
-              navigation.navigate('PaymentScreen',{...nextPageParams})    
+              navigation.navigate('OnlinePaymentScreen',{...nextPageParams})    
             }}
           />
         </View>

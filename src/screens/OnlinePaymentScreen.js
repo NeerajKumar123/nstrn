@@ -14,12 +14,12 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import SKInput from '../components/SKInput';
 import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
+import {stripeAPIVersion} from '../constants/StaticValues'
 import {
   stripeGenerateEphemeralKey,
   stripeSubmitPayment,
@@ -28,7 +28,7 @@ import {
 import * as SKTStorage from '../helpers/SKTStorage';
 import * as CustomFonts from '../constants/FontsDefs';
 import AppHeader from '../components/AppHeader';
-const PaymentScreen = props => {
+const OnlinePaymentScreen = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   console.log('BankingAndMore pageParams', pageParams);
@@ -44,13 +44,12 @@ const PaymentScreen = props => {
 
   const fetchPaymentIntentClientSecret = async () => {
     setIsLoading(true);
-    const {Stripe_Customer_Id, user_id} = global.userInfo;
-    const {tax_file_id} = global.statusData
+    const {Stripe_Customer_Id, user_id,tax_file_id} = global.onlineStatusData
     const params = {
       User_Id: user_id,
       Tax_File_Id: tax_file_id,
       Stripe_Customer_Id: Stripe_Customer_Id,
-      API_Version: '2020-08-27',
+      API_Version: stripeAPIVersion,
     };
     stripeGenerateEphemeralKey(params, res => {
       console.log('params', res);
@@ -72,7 +71,7 @@ const PaymentScreen = props => {
 
   const handlePayPress = async () => {
     // Gather the customer's billing information (e.g., email)
-    const {mailing_address, user_email, user_mobile} = global.statusData;
+    const {mailing_address, user_email, user_mobile} = global.onlineStatusData;
     const billingDetails = {
       email: user_email,
       mailing_address: mailing_address,
@@ -91,8 +90,7 @@ const PaymentScreen = props => {
       setIsLoading(false);
       Alert.alert('SukhTax', 'Payment done successfully!');
       const {id,status} = paymentIntent
-      const {user_id} = global.userInfo;
-      const {tax_file_id} = global.statusData
+      const {user_id,tax_file_id} = global.onlineStatusData;
       const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Payment_Intent_id:id,Payment_Status:status,Additional_Payment:pageParams?.additional_payment_required ? pageParams?.additional_payment_required : 0 }
       onlineSavePaymentInfo(params, (savePaymentRes)=>{
         navigation.popToTop();
@@ -162,4 +160,4 @@ const PaymentScreen = props => {
   );
 };
 
-export default PaymentScreen;
+export default OnlinePaymentScreen;

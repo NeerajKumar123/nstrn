@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -6,19 +6,21 @@ import {
   ScrollView,
   Image,
   FlatList,
+  Alert
 } from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import SKButton from '../components/SKButton';
-import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
+import {incorpSaveHSTRegistration} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const HSTRegistration = props => {
   const navigation = useNavigation();
 
-  const data = [{name: 'YES (FREE OF CHARGE)'}, {name: 'NO'}];
+  const data = [{name: 'YES (FREE OF CHARGE)', id:1}, {name: 'NO', id:0}];
+  const [selectedOption, setSelectedOption] = useState()
   return (
     <View
       style={{
@@ -35,7 +37,6 @@ const HSTRegistration = props => {
           paddingHorizontal: 20,
         }}>
         <Heading value="HST REGISTRATION" marginTop={122} />
-        
         <Heading
           fontSize={20}
           marginTop={5}
@@ -48,14 +49,18 @@ const HSTRegistration = props => {
           data.map((item, index) => {
             return (
               <DocCard
+                key = {item.name}
                 item={item}
+                isSelected = {selectedOption?.id == item.id}
                 onSelected={() => {
                   console.log('data', item);
+                  setSelectedOption(item)
                 }}
               />
             );
           })}
         <SKButton
+          disable = {!selectedOption}
           marginTop={30}
           fontSize={16}
           fontWeight={'normal'}
@@ -63,7 +68,17 @@ const HSTRegistration = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'NEXT'}
           onPress={() => {
-            navigation.navigate('IncorpPayment');
+            const {incorporation_id, user_id} = global.incStatusData
+            const params = {User_id:user_id,Incorporation_Id:incorporation_id,HST_Registration:selectedOption?.id}
+            incorpSaveHSTRegistration(params, (hstRes) =>{
+              console.log('hstRes',hstRes)
+              if(hstRes?.status == 1){
+                navigation.navigate('IncorpPaymentDetails');
+              }else{
+                const msg = hstRes?.message ?? 'Something went wront, Please try again later.'
+                Alert.alert('SukhTax',msg)
+              }
+            })
           }}
         />
       </ScrollView>
@@ -72,7 +87,7 @@ const HSTRegistration = props => {
 };
 
 const DocCard = props => {
-  const {item} = props;
+  const {item,isSelected} = props;
   return (
     <TouchableOpacity
       style={{
@@ -85,10 +100,10 @@ const DocCard = props => {
         width: '100%',
         height: 48,
         borderRadius:6,
-        backgroundColor:Colors.CLR_7F7F9F
+        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.CLR_7F7F9F,
       }}
       onPress={() => {
-        props.onClicked && props.onClicked();
+        props.onSelected && props.onSelected();
       }}>
       <Text
         style={{

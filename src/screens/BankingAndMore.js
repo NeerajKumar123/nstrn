@@ -55,11 +55,10 @@ const BankingAndMore = props => {
       console.log('instRes', instRes);
       setBanks(instRes?.data);
       setBank(instRes?.data?.[0])
-      const userid = global.userInfo?.user_id;
-      const taxFileID = global.statusData?.tax_file_id;
+      const {tax_file_id,user_id} = global.onlineStatusData
       const params = {
-        User_Id: userid,
-        Tax_File_Id: taxFileID,
+        User_Id: user_id,
+        Tax_File_Id: tax_file_id,
         Year: 2020,
       };
       getBankingAndFamilyInfo(params, bankingAndFamilyRes => {

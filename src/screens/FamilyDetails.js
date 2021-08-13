@@ -73,12 +73,13 @@ const FamilyDetails = props => {
 
   const prepareParams = () =>{
     const {accountNo,bank,branchNo,enrtyDate,residency, province} = pageParams
-    const {user_id,tax_file_id = 83,Tax_File_Id, tax_file_year_id} = global.userInfo
+    const {user_id,Year_Wise_Records} = global.onlineStatusData
+    const {tax_file_id,tax_file_year_id,year} = Year_Wise_Records?.[0]
     const params = {
       User_id:user_id,
-      Tax_File_Id:tax_file_id || Tax_File_Id,
+      Tax_File_Id:tax_file_id,
       Tax_File_Year_Id:tax_file_year_id,
-      Year:2020,
+      Year:year,
       Province_Lived_In:province?.state_name,
       Institution_Id:bank?.institution_id,
       Branch:branchNo,

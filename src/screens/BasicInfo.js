@@ -56,11 +56,9 @@ const BasicInfo = props => {
 
   useEffect(() => {
     setIsLoading(true)
-  const userid = global.userInfo?.user_id;
-  const taxFileID = global.statusData?.tax_file_id;
-  const params = {User_Id:userid, Tax_File_Id:taxFileID,Year:2020 }
+    const {tax_file_id,user_id} = global.onlineStatusData
+    const params = {User_Id:user_id, Tax_File_Id:tax_file_id,Year:2020 }
     getAboutInfo(params,(aboutRes) =>{
-      console.log('getAboutInfo res',aboutRes)
       global.aboutRes = aboutRes
       setIsLoading(false)
     })

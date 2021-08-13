@@ -29,10 +29,8 @@ const OnlineDocuments = props => {
   const [isLoading, setIsLoading] = useState(false)
 
   const prepareParams = (bs64Image,yr) =>{
-    console.log('global.userInfo',global.userInfo)
-    const userid = global.userInfo?.user_id;
-    const taxFileID = global.statusData?.tax_file_id;
-    const params = {User_id:userid,Tax_File_Id:taxFileID,Year:parseInt(yr),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
+    const {user_id,tax_file_id} = global.onlineStatusData
+    const params = {User_id:user_id,Tax_File_Id:tax_file_id,Year:parseInt(yr),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
     return params
   }
 

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
+import {TouchableOpacity,Linking, View, Text, ScrollView, Alert} from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
@@ -8,10 +8,28 @@ import LinearGradient from 'react-native-linear-gradient';
 import SKButton from '../components/SKButton';
 import * as CustomFonts from '../constants/FontsDefs';
 
-const IncorpInProcess = props => {
-  const [isPaynow, setIsPaynow] = useState(false);
-  const [status, setStatus] = useState(1);
+const IncorpInProcessScreen = props => {
   const navigation = useNavigation();
+  const openLink = () => {
+    const {company_contact_number} = global.incStatusData
+    let finalLink = company_contact_number
+    if (Platform.OS == 'ios') {
+      finalLink = `telprompt:${finalLink}`;
+    } else {
+      finalLink = `tel:${finalLink}`;
+    }
+    Linking.canOpenURL(finalLink)
+      .then(supported => {
+        if (!supported) {
+          Alert.alert('SukhTax', 'Currently not availble');
+        } else {
+          return Linking.openURL(finalLink);
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+  };
   return (
     <View
       style={{
@@ -19,15 +37,9 @@ const IncorpInProcess = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         width: '100%',
+        paddingHorizontal:20
       }}>
-      <AppHeader navigation = {navigation}/>
-      <ScrollView
-        style={{width: '100%'}}
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-          height: '100%',
-        }}>
-        <Heading value="PAYMENTS" marginTop={100} />
+        <Heading value="IN PROCESS" marginTop={100} />
         <Heading
         fontSize={17}
         marginTop={12}
@@ -52,12 +64,23 @@ const IncorpInProcess = props => {
         borderColor={Colors.SECONDARY_FILL}
         title={'CALL US'}
         onPress={() => {
-          navigation.popToTop()
+          openLink()
         }}
       />
-    </ScrollView>
+      <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'RETURN TO HOME'}
+          onPress={() => {
+            navigation.popToTop();
+          }}
+        />
     </View>
   );
 };
 
-export default IncorpInProcess;
+export default IncorpInProcessScreen;

@@ -58,11 +58,11 @@ const Address = props => {
   };
 
   const prepareParams = () => {
-    const userid = global.userInfo?.user_id;
+    const {user_id} = global.onlineStatusData;
     const commaSepYrs = global.selectedYears && global.selectedYears.join();
     const dob = pageParams.dob && format(pageParams.dob, 'yyyy-MM-dd')
     const params = {
-      User_Id: userid,
+      User_Id: user_id,
       SIN_Number: pageParams.sin,
       Gender: pageParams.gender,
       DOB: dob,
@@ -150,8 +150,9 @@ const Address = props => {
                 Alert.alert('SukhTax','Something went wrong')
                 return
               }
-              global.userInfo = {...global.userInfo,...saveRes?.data[0]}
+              global.onlineStatusData = {...global.onlineStatusData,...saveRes?.data[0]}
               navigation.navigate('BankingAndMore', {province:province});
+              console.log('global.onlineStatusData',global.onlineStatusData)
             });
             }            
           }}

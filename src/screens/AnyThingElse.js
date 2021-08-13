@@ -60,11 +60,10 @@ const AnyThingElse = props => {
           onPress={() => {
             console.log('link pressed');
             setIsLoading(true);
-            const userid = global.userInfo?.user_id;
-            const taxFileID = global.statusData?.tax_file_id;
+           const {user_id,tax_file_id} = global.onlineStatusData
             const params = {
-              User_Id: userid,
-              Tax_File_Id: taxFileID,
+              User_Id: user_id,
+              Tax_File_Id: tax_file_id,
               Message: anythingText,
             };
             saveMessage(params, saveMsgRes => {

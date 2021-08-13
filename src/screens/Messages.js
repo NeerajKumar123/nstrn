@@ -27,12 +27,11 @@ const Messages = props => {
   const [chatText, setChatText] = useState('');
   const [keyboardHeight] = useKeyboard();
   const [isLoading, setIsLoading] = useState(false);
-  const userid = global.userInfo?.user_id;
-  const taxFileID = global.statusData?.tax_file_id;
 
   const getUpdatedMsgList = isloader => {
     setIsLoading(isloader);
-    const params = {User_Id: userid, Tax_File_Id: taxFileID};
+    const {tax_file_id,user_id} = global.onlineStatusData
+    const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
     getMessages(params, msgRes => {
       setIsLoading(false);
       if (msgRes && msgRes.status == 1) {
@@ -101,9 +100,10 @@ const Messages = props => {
           onRightPressed={() => {
             if (chatText.length < 1) return;
             setIsLoading(true);
+            const {tax_file_id,user_id} = global.onlineStatusData
             const params = {
-              User_Id: userid,
-              Tax_File_Id: taxFileID,
+              User_Id: user_id,
+              Tax_File_Id: tax_file_id,
               Message: chatText,
             };
             saveMessage(params, saveMsgRes => {

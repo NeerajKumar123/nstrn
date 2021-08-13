@@ -187,9 +187,6 @@ export const onlineSubmitFiling = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
-
-
-
 export const stripeGenerateEphemeralKey = (params,callback) => {
   const path = `${BaseURL}/Stripe_Generate_Ephemeral_Key`
   API.makePostRequest(path , params, callback);

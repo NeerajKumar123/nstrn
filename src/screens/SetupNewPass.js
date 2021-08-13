@@ -92,10 +92,10 @@ const SetupNewPass = props => {
           onPress={() => {
             Keyboard.dismiss()
             if(checkFormValidations()){
-              const userid = global.userInfo?.user_id
+              const {user_id} = global.userInfo
               if(userid){
                 setIsLoading(true)
-                const params = {user_id:userid, 'New_Password':pass}
+                const params = {user_id:user_id, 'New_Password':pass}
                 resetPassword(params, (res) =>{
                 setIsLoading(false)
                 if(res?.status == 1){

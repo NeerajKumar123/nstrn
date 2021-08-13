@@ -116,27 +116,31 @@ const IncorpDetailsPerc = props => {
                   incorpUpdateIncorporatorDetails(params, updateRes => {
                     console.log('updateRes', updateRes);
                     setIsLoading(false);
-                    if (updateRes?.status == 1) {
-                      navigation.navigate('Incorporators');
-                    } else {
-                      const msg =
-                      updateRes?.message ??
-                        'Something went wront, Please try again later.';
-                      Alert.alert('SukhTax', msg);
-                    }
+                    setTimeout(() => {
+                      if (updateRes?.status == 1) {
+                        navigation.navigate('IncorporatorsList');
+                      } else {
+                        const msg =
+                        updateRes?.message ??
+                          'Something went wront, Please try again later.';
+                        Alert.alert('SukhTax', msg);
+                      }
+                    }, 300);
                   });
                 }else{
                   incorpSaveIncorporatorDetails(params, saveRes => {
                     console.log('saveRes', saveRes);
                     setIsLoading(false);
-                    if (saveRes?.status == 1) {
-                      navigation.navigate('Incorporators');
-                    } else {
-                      const msg =
-                        saveRes?.message ??
-                        'Something went wront, Please try again later.';
-                      Alert.alert('SukhTax', msg);
-                    }
+                    setTimeout(() => {
+                      if (saveRes?.status == 1) {
+                        navigation.navigate('IncorporatorsList');
+                      } else {
+                        const msg =
+                          saveRes?.message ??
+                          'Something went wront, Please try again later.';
+                        Alert.alert('SukhTax', msg);
+                      }
+                    }, 300);
                   });
                 }
               }

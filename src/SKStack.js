@@ -36,18 +36,24 @@ import OnlineReturnLanding from './screens/OnlineReturnLanding';
 import IncorporationLanding from './screens/IncorporationLanding';
 import NumberNameCorp from './screens/NumberNameCorp';
 import UploadCorp from './screens/UploadCorp';
-import Incorporators from './screens/Incorporators';
+import IncorporatorsList from './screens/IncorporatorsList';
 import IncorpDetails from './screens/IncorpDetails';
 import IncorpDetailsPerc from './screens/IncorpDetailsPerc';
 import AboutCorp from './screens/AboutCorp';
 import IncorpFinalStep from './screens/IncorpFinalStep';
 import HSTRegistration from './screens/HSTRegistration';
-import IncorpPayment from './screens/IncorpPayment';
-import IncorpInProcess from './screens/IncorpInProcess';
+import IncorpPaymentDetails from './screens/IncorpPaymentDetails';
+import IncorpInProcessScreen from './screens/IncorpInProcessScreen';
 import Spouse from './screens/Spouse';
 import SKWebPage from './screens/SKWebPage';
-import PaymentScreen from './screens/PaymentScreen';
+import OnlinePaymentScreen from './screens/OnlinePaymentScreen';
 import CRALanding from './screens/CRALanding';
+import IncorpSignaturePage from './screens/IncorpSignaturePage';
+import IncorpPaymentScreen from './screens/IncorpPaymentScreen';
+import IncorpAllSet from './screens/IncorpAllSet';
+import IncorpApplyStatus from './screens/IncorpApplyStatus';
+
+
 
 const Stack = createStackNavigator();
 
@@ -248,9 +254,9 @@ const SKStack = () => {
           options={{title: 'UploadCorp', headerShown: false}}
         />
         <Stack.Screen
-          name="Incorporators"
-          component={Incorporators}
-          options={{title: 'Incorporators', headerShown: false}}
+          name="IncorporatorsList"
+          component={IncorporatorsList}
+          options={{title: 'IncorporatorsList', headerShown: false}}
         />
         <Stack.Screen
           name="IncorpDetails"
@@ -273,19 +279,24 @@ const SKStack = () => {
           options={{title: 'IncorpFinalStep', headerShown: false}}
         />
         <Stack.Screen
+          name="IncorpSignaturePage"
+          component={IncorpSignaturePage}
+          options={{title: 'IncorpSignaturePage', headerShown: false}}
+        />
+        <Stack.Screen
           name="HSTRegistration"
           component={HSTRegistration}
           options={{title: 'HSTRegistration', headerShown: false}}
         />
         <Stack.Screen
-          name="IncorpPayment"
-          component={IncorpPayment}
-          options={{title: 'IncorpPayment', headerShown: false}}
+          name="IncorpPaymentDetails"
+          component={IncorpPaymentDetails}
+          options={{title: 'IncorpPaymentDetails', headerShown: false}}
         />
         <Stack.Screen
-          name="IncorpInProcess"
-          component={IncorpInProcess}
-          options={{title: 'IncorpInProcess', headerShown: false}}
+          name="IncorpInProcessScreen"
+          component={IncorpInProcessScreen}
+          options={{title: 'IncorpInProcessScreen', headerShown: false}}
         />
          <Stack.Screen
           name="Spouse"
@@ -298,19 +309,32 @@ const SKStack = () => {
           options={{title: 'SKWebPage', headerShown: false}}
         />
          <Stack.Screen
-          name="PaymentScreen"
-          component={PaymentScreen}
-          options={{title: 'PaymentScreen', headerShown: false}}
+          name="OnlinePaymentScreen"
+          component={OnlinePaymentScreen}
+          options={{title: 'OnlinePaymentScreen', headerShown: false}}
         />
-
-<Stack.Screen
+          <Stack.Screen
+          name="IncorpPaymentScreen"
+          component={IncorpPaymentScreen}
+          options={{title: 'IncorpPaymentScreen', headerShown: false}}
+        />
+         <Stack.Screen
+          name="IncorpAllSet"
+          component={IncorpAllSet}
+          options={{title: 'IncorpAllSet', headerShown: false}}
+        />
+        
+        <Stack.Screen
+          name="IncorpApplyStatus"
+          component={IncorpApplyStatus}
+          options={{title: 'IncorpApplyStatus', headerShown: false}}
+        />
+        
+        <Stack.Screen
           name="CRALanding"
           component={CRALanding}
           options={{title: 'CRALanding', headerShown: false}}
         />
-        
-
-
       </Stack.Navigator>
     </NavigationContainer>
   );

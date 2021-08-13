@@ -227,7 +227,7 @@ const IncorpDetails = props => {
             onPress={() => {
               Keyboard.dismiss();
               if (checkFormValidations()) {
-                const {incorporation_id, user_id} = global.statusData;
+                const {incorporation_id, user_id} = global.incStatusData;
                 const params = {
                   User_id: user_id,
                   Incorporation_Id: incorporation_id,
@@ -242,7 +242,6 @@ const IncorpDetails = props => {
                   Address:details?.address,
                   Ownership_Percentage:details?.percentage_ownership
                 };
-                console.log('params', params);
                 navigation.navigate('IncorpDetailsPerc', {...params});
               }
             }}
