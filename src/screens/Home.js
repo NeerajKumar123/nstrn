@@ -47,7 +47,6 @@ const Home = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="TAX FILING"
           onClicked = {()=>{
-            console.log('OnlineTaxFilingStatus')
             navigation.navigate('OnlineTaxFilingStatus')
           }}
         />
@@ -71,7 +70,6 @@ const Home = props => {
           value="CRA LETTERS"
           onClicked = {()=>{
             return
-            console.log('OnlineTaxFilingStatus')
             navigation.navigate('OnlineTaxFilingStatus')
           }}
         />

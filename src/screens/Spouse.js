@@ -68,11 +68,9 @@ const Spouse = props => {
   useEffect(() => {
     setIsLoading(true);
     getInstitutionList({}, instRes => {
-      console.log('instRes', instRes);
       setBanks(instRes?.data);
       setBank(instRes?.data?.[0]);
       getResidencyList({}, resdencyRes => {
-        console.log('resdencyRes', resdencyRes);
         setResidencies(resdencyRes?.data);
         setResidency(resdencyRes?.data?.[0]);
         setIsLoading(false);
@@ -93,7 +91,6 @@ const Spouse = props => {
     const isBankValid = bank?.institution_id > 0;
     const isAccValid = accountNo.length > 5;
     const isBranchValid = branchNo.length > 4;
-    console.log('lastTime',lastTime)
     if (!isValidLastYear) {
       isValidForm = false;
       Alert.alert('SukhTax', 'isValidLastYear');
@@ -182,7 +179,6 @@ const Spouse = props => {
           isOn={isFillingForWife}
           value="ARE YOU FILLING FOR YOUR SPOUSE?"
           onToggle={status => {
-            console.log(status);
             setIsFillingForWife(!isFillingForWife);
           }}
         />
@@ -192,7 +188,6 @@ const Spouse = props => {
           value={lastTime}
           placeholder="Select"
           onClicked={() => {
-            console.log('sdsd');
             setIsLastTimeVisible(true);
           }}
         />
@@ -234,7 +229,6 @@ const Spouse = props => {
           value={gender}
           placeholder="Select Gender"
           onClicked={() => {
-            console.log('sdsd');
             setIsGenderVisible(true);
           }}
         />
@@ -244,7 +238,6 @@ const Spouse = props => {
           placeholder="Select Residency"
           value={residency?.residency_name}
           onClicked={() => {
-            console.log('sdsd');
             setIsResidenceVisible(true);
           }}
         />
@@ -314,7 +307,6 @@ const Spouse = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'DEPENDENTS'}
           onPress={() => {
-            console.log('link pressed');
             if (checkFormValidations()) {
               setIsLoading(true)
               const params = prepareParams();
@@ -324,7 +316,7 @@ const Spouse = props => {
                   global.isFromSpouseFlow = true
                   navigation.push('Dependents', {depCount:1});
                 } else {
-                  Alert.alert('SukhTax', 'Something wrong!');
+                  Alert.alert('SukhTax', 'Something went wrong!');
                 }
               });
             }
@@ -347,9 +339,7 @@ const Spouse = props => {
             mode="date"
             display="inline"
             onChange={(event, selectedDate) => {
-              console.log(event.type, Date.parse(selectedDate));
               setDOB(selectedDate);
-              console.log('====>', format(selectedDate, 'dd/MM/yyyy'));
               setIsDatePickerVisible(false);
             }}
           />
@@ -370,7 +360,6 @@ const Spouse = props => {
             mode="date"
             display="inline"
             onChange={(event, selectedDate) => {
-              console.log(event.type, Date.parse(selectedDate));
               setEnrtyDate(selectedDate);
               setIsImmDatePickerVisible(false);
             }}
@@ -385,7 +374,6 @@ const Spouse = props => {
             setIsLastTimeVisible(false);
           }}
           onSelect={value => {
-            console.log('value', value);
             setLastTime(value);
             setIsLastTimeVisible(false);
           }}
@@ -400,7 +388,6 @@ const Spouse = props => {
             setIsGenderVisible(false);
           }}
           onSelect={value => {
-            console.log('value', value);
             setGender(value);
             setIsGenderVisible(false);
           }}
@@ -414,7 +401,6 @@ const Spouse = props => {
             setIsRelationVisible(false);
           }}
           onSelect={value => {
-            console.log('value', value);
             setRelation(value);
             setIsRelationVisible(false);
           }}
@@ -444,7 +430,6 @@ const Spouse = props => {
             setIsBankVisible(false);
           }}
           onSelect={value => {
-            console.log('setIsBankVisible', value);
             setBank(value);
             setIsBankVisible(false);
           }}

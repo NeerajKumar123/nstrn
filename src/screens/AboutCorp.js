@@ -125,7 +125,6 @@ const AboutCorp = props => {
               const {incorporation_id, user_id} = global.incStatusData
               const params = {User_id:user_id, Incorporation_Id:incorporation_id,Nature_of_Business_Id:selectedNature.nature_of_business_id, Other_Business:ifOther,Business_Address:bussAddress}
               incorpSaveAboutCorp(params,(saveRes) =>{
-                console.log('saveRes',saveRes)
                 setIsLoading(false)
                 if(saveRes?.status == 1){
                   const data = saveRes && saveRes.data[0]
@@ -150,7 +149,6 @@ const AboutCorp = props => {
           onSelect={value => {
             setIsNOBVisible(false)
             setSelectedNature(value)
-            console.log('value',value)
           }}
         />
       )}

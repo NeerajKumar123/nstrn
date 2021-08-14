@@ -73,9 +73,13 @@ const IncorpAllSet = props => {
               Tax_File_Id: tax_file_id
             };
             finalizeOnlineProcess(params,(finalizeRes) =>{
-              console.log('finalizeRes',finalizeRes)
+              if(finalizeRes?.status == 1){
+                navigation.popToTop()
+              }else{
+                const msg = finalizeRes?.message ?? 'Something went wront, Please try again later.'
+                Alert.alert('SukhTax',msg)
+              }
             })
-            navigation.popToTop()
           }}
         />
       </View>

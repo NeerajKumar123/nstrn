@@ -27,10 +27,8 @@ const MyTaxYear = props => {
     setCurrentYear(global.selectedYears && currentYearIndex < global.selectedYears.length  ? global.selectedYears[currentYearIndex] : '2020.');
     const length = global.selectedYears ? global.selectedYears.length : 0
     const nextIndex = currentYearIndex + 1
-    console.log('length',length, nextIndex)
     if(nextIndex < length){
         const title = global.selectedYears[nextIndex]
-        console.log('length',length, nextIndex,title,global.selectedYears)
         // setButtonTitle(title)
         setButtonTitle('NEXT')
     }
@@ -129,7 +127,6 @@ const MyTaxYear = props => {
             item={{title: 'MY SELF'}}
             isSelected={mySelf}
             onSelected={() => {
-              console.log('data');
               setMySelf(!mySelf);
             }}
           />
@@ -142,7 +139,6 @@ const MyTaxYear = props => {
           item={{title: 'SPOUSE'}}
           isSelected={spouse}
           onSelected={() => {
-            console.log('data');
             setSpouse(!spouse);
           }}
         />
@@ -174,7 +170,6 @@ const MyTaxYear = props => {
               />
             );
           })}
-          {console.log('title',buttonTitle)}
         <SKButton
           marginTop={30}
           fontSize={16}

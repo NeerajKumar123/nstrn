@@ -53,7 +53,6 @@ const Dependents = props => {
     const isGenderValid = gender
     const isSinValid = sinNo.length > 5
     const isRelationValid = relation
-    console.log('fName',isFNameValid,isLNameValid,fName,lName)
     if (!isFNameValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid First Name.');
@@ -197,7 +196,6 @@ const Dependents = props => {
           title={'ADD ANOTHER DEPENDENT'}
           onPress={() => {
             if(depCount < 5){
-              console.log('link pressed');
               if(checkFormValidations()){
                 setIsLoading(true)
                 const params = prepareParams()
@@ -220,12 +218,10 @@ const Dependents = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'MY TAX YEAR'}
           onPress={() => {
-            console.log('link pressed');
             if(checkFormValidations()){
               setIsLoading(true)
               const params = prepareParams()
               onlineSaveDependentInfo(params, (depRes) =>{
-                console.log('depRes', depRes)
                 setIsLoading(false)
                 navigation.navigate('MyTaxYear');
               })
@@ -248,7 +244,6 @@ const Dependents = props => {
             mode="date"
             display="inline"
             onChange={(event, selectedDate) => {
-              console.log(event.type, Date.parse(selectedDate));
               setDOB(selectedDate)
               setIsDatePickerVisible(false);
             }}
@@ -263,7 +258,6 @@ const Dependents = props => {
               setIsGenderVisible(false);
             }}
             onSelect={value => {
-              console.log('value', value);
               setGender(value)
               setIsGenderVisible(false);
             }}
@@ -277,7 +271,6 @@ const Dependents = props => {
               setIsRelationVisible(false);
             }}
             onSelect={value => {
-              console.log('value', value);
               setRelation(value)
               setIsRelationVisible(false);
             }}

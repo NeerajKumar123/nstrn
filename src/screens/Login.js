@@ -88,7 +88,6 @@ const Login = props => {
           marginTop={19}
           title="Forgot Password ?"
           onPress={() => {
-            console.log('link pressed');
             navigation.navigate('ForgotPassword', {pagetitle:'FORGOT PASSWORD?', pagesubs:'WE HAVE SENT A SECURITY CODE TO YOUR PHONE. PLEASE ENTER BELOW:', preScreen:undefined})
           }}
         />

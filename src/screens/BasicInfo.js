@@ -96,7 +96,6 @@ const BasicInfo = props => {
           keyboardType = 'number-pad'
           placeholder="SIN Number"
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setsin(value);
           }}
         />
@@ -153,7 +152,6 @@ const BasicInfo = props => {
               setIsGenderVisible(false);
             }}
             onSelect={value => {
-              console.log('value', value);
               setgender(value)
               setIsGenderVisible(false);
             }}
@@ -167,7 +165,6 @@ const BasicInfo = props => {
               setIsLastTimeVisible(false);
             }}
             onSelect={value => {
-              console.log('value', value);
               setLastTime(value)
               setIsLastTimeVisible(false);
             }}
@@ -189,9 +186,7 @@ const BasicInfo = props => {
             mode="date"
             display={Platform.OS == 'ios' ? 'inline' : 'default'}
             onChange={(event, selectedDate) => {
-              console.log(event.type, Date.parse(selectedDate));
               setDOB(selectedDate)
-              console.log('====>',format(selectedDate, 'dd/MM/yyyy'))
               setShowDatePicker(false);
             }}
           />

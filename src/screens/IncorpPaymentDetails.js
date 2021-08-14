@@ -24,7 +24,6 @@ const IncorpPaymentDetails = props => {
     const params = {User_id:user_id,Incorporation_Id:incorporation_id}
     incorpGetPaymentDetails(params, (paymentDetailsRes) =>{
       setIsLoading(false)
-      console.log('paymentDetailsRes',paymentDetailsRes)
       if(paymentDetailsRes?.status == 1){
         setPayments(paymentDetailsRes?.data)
         let f = 0

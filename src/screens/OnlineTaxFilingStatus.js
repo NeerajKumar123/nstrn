@@ -23,15 +23,12 @@ import {
   onlineSubmitFiling,
   getTaxReturnsDocs,
 } from '../apihelper/Api';
-import SKButton, {UploadDocButton} from '../components/SKButton';
-import {useIsFocused} from '@react-navigation/native';
+import SKButton, {UploadDocButton,DarkBlueButton} from '../components/SKButton';
 import {ImageQualityOptions} from '../constants/StaticValues'
 
 const OnlineTaxFilingStatus = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const isFocused = useIsFocused();
-  useEffect(() => {}, [isFocused]);
 
   const pageHeading = () => {
     let title = 'ONLINE TAX FILING';
@@ -92,17 +89,13 @@ const OnlineTaxFilingStatus = props => {
             setIsLoading(loadingStatus);
           }}
           uploadClick={() => {
-            console.log('onClicked');
             launchImageLibrary(ImageQualityOptions, res => {
-              console.log('res', res);
               if (res?.didCancel) {
-                console.log('didCancel');
-              }
-              if (res?.error) {
+                Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+              }else if (res?.error) {
                 console.log('error', res?.error ?? ERROR_MSG);
-              }
-              if (res?.assets) {
-                intiateImageUploading(res);
+              }else if(res?.assets){
+                intiateImageUploading(res)
               }
             });
           }}
@@ -406,15 +399,9 @@ const TaxFilingStatusCard = props => {
       {(tax_file_status_id == 13 ||
         tax_file_status_id == 15 ||
         tax_file_status_id == 16) && (
-        <SKButton
-          fontSize={16}
-          marginTop={30}
-          width="100%"
-          fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'RETURN TO HOME'}
-          onPress={() => {
+          <DarkBlueButton
+          title={'RETURN TO DASHBOARD'}
+          onClick={() => {
             navigation.popToTop();
           }}
         />
@@ -530,7 +517,6 @@ const TaxFilingStatusCard = props => {
             justifyContent: 'space-between',
             marginTop: 18,
           }}>
-          {console.log('tax_file_status_id', tax_file_status_id)}
           <SKButton
             fontSize={16}
             width="48%"

@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {
-  TouchableOpacity,
   View,
   Text,
   ScrollView,
-  Image,
   Alert,
   Platform,
   Linking,
@@ -12,25 +10,18 @@ import {
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
-import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as Colors from '../constants/ColorDefs';
-import LinearGradient from 'react-native-linear-gradient';
 import SKButton, {DarkBlueButton} from '../components/SKButton';
-import {useIsFocused} from '@react-navigation/native';
 
 const IncorpApplyStatus = props => {
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);
   const {
     incorporation_status_name = 'File not Submitted',
     status_description = 'Looks like you have to complete your registration and upload document still!',
     new_message_count = 0,
     incorporation_status_id,
   } = global.incStatusData;
-  const isFocused = useIsFocused();
-  useEffect(() => {}, [isFocused]);
 
   return (
     <View
@@ -210,7 +201,7 @@ const AllSet = props => {
         }}
       />
       <DarkBlueButton
-        title={'RETURN TO HOME'}
+        title={'RETURN TO DASHBOARD'}
         onClick={() => {
           navigation.popToTop();
         }}
@@ -272,7 +263,7 @@ const InProcess = props => {
         }}
       />
       <DarkBlueButton
-        title={'RETURN TO HOME'}
+        title={'RETURN TO DASHBOARD'}
         onClick={() => {
           navigation.popToTop();
         }}

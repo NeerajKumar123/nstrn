@@ -31,7 +31,6 @@ import AppHeader from '../components/AppHeader';
 const OnlinePaymentScreen = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  console.log('BankingAndMore pageParams', pageParams);
   const [isLoading, setIsLoading] = useState(false);
   const [address, setAddress] = useState('');
   const [clientSecret, setClientSecret] = useState('');

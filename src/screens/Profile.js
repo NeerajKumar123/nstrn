@@ -56,7 +56,6 @@ const Profile = props => {
       setIsLoading(false)
       if(userDetailsRes?.status == 1){
         const user = userDetailsRes?.data?.[0]
-        console.log('userDetailsRes',user)
         setFName(user?.firstname ?? '')
         setLName(user?.lastname ?? '')
         setEmail(user?.email ?? '')
@@ -92,7 +91,6 @@ const Profile = props => {
           value={fName}
           placeholder="First Name"
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setFName(value);
           }}
         />
@@ -101,13 +99,11 @@ const Profile = props => {
           marginBottom={0}
           maxLength={15}
           onRightPressed={() => {
-            console.log('onRightPressed');
           }}
           borderColor={Colors.CLR_0065FF}
           value={lName}
           placeholder="Last Name"
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setLName(value);
           }}
         />
@@ -116,13 +112,11 @@ const Profile = props => {
           marginBottom={0}
           maxLength={30}
           onRightPressed={() => {
-            console.log('onRightPressed');
           }}
           borderColor={Colors.CLR_0065FF}
           value={email}
           placeholder="Email Address"
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setEmail(value);
           }}
         />
@@ -131,13 +125,11 @@ const Profile = props => {
           marginBottom={0}
           maxLength={10}
           onRightPressed={() => {
-            console.log('onRightPressed');
           }}
           borderColor={Colors.CLR_0065FF}
           value={mobile}
           placeholder="Phone Number"
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setMobile(value);
           }}
         />
@@ -162,7 +154,6 @@ const Profile = props => {
                 Mobile_No: mobile
               };
               updateUserProfile(params, updateRes => {
-                console.log('updateRes', updateRes);
                 setIsLoading(false);
               });
             }
@@ -182,7 +173,6 @@ const Profile = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'CHANGE PASSWORD'}
             onPress={() => {
-                console.log('link pressed');
                 navigation.navigate('ForgotPassword', {pagetitle:'CHANGE PASSWORD?', pagesubs:'WE HAVE SENT A SECURITY CODE TO YOUR PHONE. PLEASE ENTER BELOW:', preScreen:'Profile'})
                 }}
           />

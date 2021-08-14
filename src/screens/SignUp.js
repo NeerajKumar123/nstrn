@@ -97,7 +97,6 @@ const SignUp = props => {
           value={''}
           placeholder = 'First Name'
           onEndEditing={value => {
-            console.log('onEndEditing', value);
             setFName(value)
           }}
         />

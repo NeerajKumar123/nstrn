@@ -24,7 +24,6 @@ import * as CustomFonts from '../constants/FontsDefs';
 const IncorpDetails = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  console.log('pageParams', pageParams);
   const [details, setDetails] = useState();
   const [fName, setFName] = useState();
   const [mName, setMName] = useState();
@@ -38,7 +37,6 @@ const IncorpDetails = props => {
   useEffect(() => {
     if (pageParams) {
       setIsLoading(true);
-      console.log('pageParams', pageParams);
       const {user_id, incorporation_id, incorporator_id} = pageParams;
       const params = {
         User_Id: user_id,
@@ -59,7 +57,6 @@ const IncorpDetails = props => {
             SIN_number,
             email,
           } = data;
-          console.log('SIN_number',SIN_number)
           setFName(first_name);
           setLName(last_name);
           setMName(middle_name);
@@ -143,7 +140,6 @@ const IncorpDetails = props => {
             value={fName}
             placeholder="First Name"
             onEndEditing={value => {
-              console.log('onEndEditing', value);
               setFName(value);
             }}
           />
@@ -155,7 +151,6 @@ const IncorpDetails = props => {
             value={mName}
             placeholder="Middle Name"
             onEndEditing={value => {
-              console.log('onEndEditing', value);
               setMName(value);
             }}
           />
@@ -192,7 +187,6 @@ const IncorpDetails = props => {
               setMobile(value);
             }}
           />
-          {console.log('altMobile',altMobile)}
           <SKInput
             leftAccImage={CustomFonts.Phone}
             marginBottom={2}
@@ -204,7 +198,6 @@ const IncorpDetails = props => {
               setAltMobile(value);
             }}
           />
-          {console.log('sin',sin)}
           <SKInput
             leftAccImage={CustomFonts.Number}
             marginBottom={2}

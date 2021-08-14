@@ -152,7 +152,6 @@ const Address = props => {
               }
               global.onlineStatusData = {...global.onlineStatusData,...saveRes?.data[0]}
               navigation.navigate('BankingAndMore', {province:province});
-              console.log('global.onlineStatusData',global.onlineStatusData)
             });
             }            
           }}

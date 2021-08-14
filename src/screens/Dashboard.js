@@ -16,6 +16,7 @@ import SKLoader from '../components/SKLoader';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
+import {useIsFocused} from '@react-navigation/native';
 import {
   getActiveFileStatusOnLogin,
   getServicePriceList,
@@ -69,6 +70,7 @@ const data = [
 
 const Dashboard = props => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
   const [taxFilingFee, setTaxFilingFee] = useState(44.99);
   const userFullName = global.userInfo
@@ -76,25 +78,27 @@ const Dashboard = props => {
     : '';
 
   useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const {user_id} = global.userInfo
-      const params = {User_Id:user_id}
-      getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
-        setIsLoading(false)
-        const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
-        console.log('statusData',statusData, global.userInfo)
-        global.onlineStatusData = statusData || {}
-        incorpGetIncorpStatus(params,(incStatusRes) =>{
-          if(incStatusRes?.status == 1){
-            const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
-            global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
+    if(isFocused){
+      setIsLoading(true);
+      setTimeout(() => {
+        const {user_id} = global.userInfo
+        const params = {User_Id:user_id}
+        getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
+          const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
+          global.onlineStatusData = statusData ? statusData : {}
+          incorpGetIncorpStatus(params,(incStatusRes) =>{
+            if(incStatusRes?.status == 1){
+              setIsLoading(false)
+              const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
+              global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
+            }
+          })  
+        })
+      }, 500);
+    }
+  }, [isFocused])
 
-          }
-        })  
-      })
-    }, 500);
-
+  useEffect(() => {
     getServicePriceList((priceListRes) =>{
       if(priceListRes?.status == 1){
         let onlineTaxFees = priceListRes?.data?.filter(fee => fee.services_fee_id == 1);
@@ -110,8 +114,15 @@ const Dashboard = props => {
         navigation.navigate('Home');
         break;
         case 2:
-          const {book_an_appointment_link}  = global.onlineStatusData
-          navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
+          let {book_an_appointment_link}  = global.incStatusData
+          if(!book_an_appointment_link){
+            book_an_appointment_link  = global.statusData
+          }
+          if(book_an_appointment_link){
+            navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
+          }else{
+            Alert.alert('SukhTax','Something went wrong.')
+          }
           break;
       case 3:
         onlineMoveToPage()
@@ -139,7 +150,7 @@ const Dashboard = props => {
       my_year_info_filled = 0,
       document_uploaded = 0,
       authorization_document_uploaded = 1,
-    } = global.onlineStatusData;
+    } = global?.onlineStatusData;
 
     if (authorization_document_uploaded) {
       navigation.navigate('AnyThingElse');
@@ -163,14 +174,13 @@ const Dashboard = props => {
       navigation.navigate('OnlineReturnLanding');
     }
   };
-
   const incorpMoveToPage = props => {
     const {
       hst_registration, // HST
       identification_document_uploaded, // incprtr
       authorization_document_uploaded, // HST
       incorporation_status_id
-    } = global.incStatusData;
+    } = global?.incStatusData;
     if(incorporation_status_id ==1 ){
       if (hst_registration || authorization_document_uploaded) {
         navigation.navigate('HSTRegistration');
@@ -182,7 +192,9 @@ const Dashboard = props => {
     }else if(incorporation_status_id == 2){
       navigation.navigate('IncorpInProcessScreen');
     }else if(incorporation_status_id == 3){
-      navigation.navigate('IncorpAllSet');
+      navigation.navigate('IncorpApplyStatus');
+    }else {
+      navigation.navigate('OnlineReturnLanding');
     }
   };
 
@@ -197,7 +209,6 @@ const Dashboard = props => {
       {isLoading && <SKLoader />}
       <DashHeader
         onRightClicked={() => {
-          console.log('onRightClicked');
           navigation.navigate('Profile');
         }}
       />

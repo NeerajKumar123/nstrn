@@ -50,10 +50,11 @@ const FamilyDetails = props => {
   const [nextButtonTitle, setNextButtonTitle] = useState('MY TAX YEAR')
 
   useEffect(() => {
+    setIsLoading(true)
     getMaritalStatusList({}, maritalRes => {
-      console.log('maritalRes', maritalRes);
       setMaritalStatuses(maritalRes?.data);
       setMaritalStatus(maritalRes?.data?.[0])
+      setIsLoading(false)
     });
   }, []);
 
@@ -123,7 +124,6 @@ const FamilyDetails = props => {
           placeholder="Select Marital Status"
           value={maritalStatus?.marital_status_name}
           onClicked={() => {
-            console.log('sdsd');
             setIsMVisible(true);
           }}
         />
@@ -138,7 +138,6 @@ const FamilyDetails = props => {
           placeholder="Select"
           value={mChangeOpton?.value}
           onClicked={() => {
-            console.log('sdsd');
             setIsMChangeVisible(true);
           }}
         />
@@ -183,7 +182,6 @@ const FamilyDetails = props => {
               saveBankingAndFamilyInfoByYear(params, (saveBankingRes) =>{
                 setIsLoading(false)
                 if(saveBankingRes?.status == 1){
-                  console.log('saveBankingRes', maritalStatus,dependents)
                   global.isFromSpouseFlow = false
                   if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
                     navigation.navigate('Spouse',{dependentOption:dependentOption.id});
@@ -210,10 +208,8 @@ const FamilyDetails = props => {
             setIsMVisible(false);
           }}
           onSelect={value => {
-            console.log('value', value);
             setMaritalStatus(value);
             setIsMVisible(false);
-            console.log('dependentOption.id',dependentOption)
             if(value.marital_status_id == 2 || value.marital_status_id == 3){
               setNextButtonTitle('SPOUSE')
             }else if(dependentOption.id == 1){
@@ -233,7 +229,6 @@ const FamilyDetails = props => {
             setIsMChangeVisible(false);
           }}
           onSelect={value => {
-            console.log('value', value);
             setMChangeOpton(value);
             setIsMChangeVisible(false);
           }}
@@ -248,7 +243,6 @@ const FamilyDetails = props => {
             setIsDepOptionVisible(false);
           }}
           onSelect={value => {
-            console.log('value', value);
             setDependentOption(value);
             setIsDepOptionVisible(false);
             if(value.marital_status_id == 2 || value.marital_status_id == 3){
@@ -276,9 +270,7 @@ const FamilyDetails = props => {
             mode="date"
             display="inline"
             onChange={(event, selectedDate) => {
-              console.log(event.type, Date.parse(selectedDate));
               setMStatusChangedDate(selectedDate);
-              console.log('====>', format(selectedDate, 'dd/MM/yyyy'));
               setShowDatePicker(false);
             }}
           />

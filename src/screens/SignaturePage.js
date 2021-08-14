@@ -210,7 +210,6 @@ const SignaturePage = props => {
                   alignItems: 'flex-end',
                 }}
                 onPress={() => {
-                  console.log('sdsd');
                   signPad.current.resetImage();
                   setIsSignSaved(false);
                 }}>
@@ -225,7 +224,6 @@ const SignaturePage = props => {
                     alignItems: 'flex-end',
                   }}
                   onPress={() => {
-                    console.log('sdsd');
                     setIsSignStart(false);
                     setIsSignSaved(true);
                   }}>
@@ -261,7 +259,6 @@ const SignaturePage = props => {
                 setIsLoading(true)
                 const params = prepareParams(bs64Image, 1);
                 onlineUploadAuthrizationDocumentBS64(params, signUploadRes => {
-                  console.log('signUploadRes', signUploadRes);
                   setIsLoading(false)
                   if(pageParams.authIndex == 0){
                     global.isFAuthorized = true

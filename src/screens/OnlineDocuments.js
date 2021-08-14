@@ -39,10 +39,8 @@ const OnlineDocuments = props => {
     const imgObj = res?.assets?.[0]
     if (!imgObj.base64) Alert.alert('SukhTax','Something went wrong!')
     const params = prepareParams(imgObj.base64,yr)
-    console.log('params',params)
     uploadDocumentBS64(params,(uploadRes) =>{
       setIsLoading(false)
-      console.log('uploadRes2222',uploadRes)
       uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
       uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)
     })
@@ -78,16 +76,14 @@ const OnlineDocuments = props => {
               key = {item}
                 item={item}
                 onClicked={() => {
-                  console.log('onClicked',item);
                   launchImageLibrary(ImageQualityOptions, res => {
-                    console.log('res',res)
                     if (res?.didCancel) {
-                      console.log('didCancel');
-                    }
-                    if (res?.error) {
+                      Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+                    }else if (res?.error) {
                       console.log('error', res?.error ?? ERROR_MSG);
+                    }else if(res?.assets){
+                      intiateImageUploading(res)
                     }
-                    intiateImageUploading(res, item)
                   });
                 }}
               />

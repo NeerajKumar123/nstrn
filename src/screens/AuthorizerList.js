@@ -65,7 +65,6 @@ const AuthorizerList = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'ANYTHING ELSE'}
           onPress={() => {
-            console.log('link pressed');
             navigation.navigate('AnyThingElse');
           }}
         />

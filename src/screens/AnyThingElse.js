@@ -58,7 +58,6 @@ const AnyThingElse = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'FINISH'}
           onPress={() => {
-            console.log('link pressed');
             setIsLoading(true);
            const {user_id,tax_file_id} = global.onlineStatusData
             const params = {
@@ -67,7 +66,6 @@ const AnyThingElse = props => {
               Message: anythingText,
             };
             saveMessage(params, saveMsgRes => {
-              console.log('saveMsgRes', saveMsgRes)
               setIsLoading(false);
               navigation.navigate('OnlineAllDone');
             });

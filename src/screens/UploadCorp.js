@@ -101,16 +101,12 @@ const UploadCorp = props => {
         title = 'UPLOAD THE DOC HERE'
         height ={46}
         onClick={() => {
-          console.log('onClicked');
           launchImageLibrary(ImageQualityOptions, res => {
-            console.log('res',res)
             if (res?.didCancel) {
-              console.log('didCancel');
-            }
-            if (res?.error) {
+              Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+            }else if (res?.error) {
               console.log('error', res?.error ?? ERROR_MSG);
-            }
-            if(res?.assets){
+            }else if(res?.assets){
               intiateImageUploading(res)
             }
           });
@@ -124,7 +120,6 @@ const UploadCorp = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'NEXT'}
           onPress={() => {
-            console.log('link pressed');
             navigation.navigate('IncorporatorsList');
           }}
         />

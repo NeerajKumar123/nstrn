@@ -73,9 +73,8 @@ const OnlineAllDone = props => {
               Tax_File_Id: tax_file_id
             };
             finalizeOnlineProcess(params,(finalizeRes) =>{
-              console.log('finalizeRes',finalizeRes)
+              navigation.popToTop()
             })
-            navigation.popToTop()
           }}
         />
       </View>

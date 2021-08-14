@@ -30,7 +30,6 @@ import ViewShot from 'react-native-view-shot';
 const IncorpSignaturePage = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  console.log('pageParams',pageParams)
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [sinNo, setSinNo] = useState('');
@@ -211,7 +210,6 @@ const IncorpSignaturePage = props => {
                   alignItems: 'flex-end',
                 }}
                 onPress={() => {
-                  console.log('sdsd');
                   signPad.current.resetImage();
                   setIsSignSaved(false);
                 }}>
@@ -226,7 +224,6 @@ const IncorpSignaturePage = props => {
                     alignItems: 'flex-end',
                   }}
                   onPress={() => {
-                    console.log('sdsd');
                     setIsSignStart(false);
                     setIsSignSaved(true);
                   }}>

@@ -84,17 +84,14 @@ const ManageDocuments = props => {
                 item={item}
                 key={`${item.tax_file_document_id}`}
                 onOpen={() => {
-                  console.log('opening', item);
                   setSelectedItem(item);
                   setShowDoc(true);
                 }}
                 onDelete={() => {
-                  console.log('deleting', item);
                   const options = [
                     {
                       text: 'Cancel',
                       onPress: () => {
-                        console.log('Cancel');
                       },
                     },
                     {
@@ -108,7 +105,6 @@ const ManageDocuments = props => {
                         };
                         setIsLoading(true);
                         deleteDocument(params, delRes => {
-                          console.log('delRes', delRes);
                           getDocs();
                         });
                       },
@@ -134,7 +130,6 @@ const ManageDocuments = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'AUTHORIZATION'}
             onPress={() => {
-              console.log('link pressed');
               navigation.navigate('AuthorizerList');
             }}
           />

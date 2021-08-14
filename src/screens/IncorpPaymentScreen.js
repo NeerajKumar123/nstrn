@@ -51,7 +51,6 @@ import {
         API_Version: stripeAPIVersion,
       };
       incorpGetEphemeralKey(params, res => {
-        console.log('params', res);
         const intentParams = {
           User_Id: user_id,
           Incorporation_Id: incorporation_id,
@@ -60,7 +59,6 @@ import {
           Currency: 'CAD',
         };
         incorpSubmitPayment(intentParams, intentRes => {
-          console.log('intentRes', intentRes);
           const {client_secret} = intentRes;
           setClientSecret(client_secret);
           setIsLoading(false);
@@ -82,20 +80,32 @@ import {
         type: 'Card',
         billingDetails,
       });
-      console.log('paymentIntent',paymentIntent)
       if (error) {
         setIsLoading(false);
         Alert.alert('SukhTax', 'We are facing some techinical glitch , Please try again.');
       } else if (paymentIntent) {
-        setIsLoading(false);
-        Alert.alert('SukhTax', 'Payment done successfully!');
         const {id,status} = paymentIntent
         const {incorporation_id, user_id} = global.incStatusData
         const params = {User_Id:user_id,Incorporation_Id:incorporation_id,Payment_Intent_id:id,Payment_Status:status}
         incorpSavePaymentInfo(params, (savePaymentRes)=>{
           if(savePaymentRes?.status == 1){
-            navigation.navigate('IncorpInProcessScreen')
+            const paramsStatus = {User_Id:user_id}
+            incorpGetIncorpStatus(paramsStatus,(incStatusRes) =>{
+              if(incStatusRes?.status == 1){
+                setIsLoading(false);
+                const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
+                global.incStatusData = incStatusData
+                setTimeout(() => {
+                  navigation.navigate('IncorpApplyStatus')
+                }, 300);
+              }else{
+                setIsLoading(false);
+                const msg = incStatusRes?.message ?? 'Something went wront, Please try again later.'
+                Alert.alert('SukhTax',msg)
+              }
+            }) 
           }else{
+            setIsLoading(false);
             const msg = savePaymentRes?.message ?? 'Something went wront, Please try again later.'
             Alert.alert('SukhTax',msg)
           }

@@ -43,7 +43,6 @@ const IncorpFinalStep = props => {
       let count = 0
       incorporators?.map((item) =>{
         const {incorpAuthIds = []} = global.incStatusData
-        console.log('incorporators',incorpAuthIds.includes(item.incorporator_id))
         if(incorpAuthIds.includes(item.incorporator_id)){
           count++
         }
@@ -91,13 +90,11 @@ const IncorpFinalStep = props => {
                 key = {item.Column1}
                 item={item}
                 onSelected={() => {
-                  console.log('data', item);
                   navigation.navigate('IncorpSignaturePage', {...item});
                 }}
               />
             );
           })}
-          {console.log('isAllAuthed',isAllAuthed)}
         <SKButton
           disable = {!isAllAuthed}
           marginTop={30}
@@ -107,7 +104,6 @@ const IncorpFinalStep = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'NEXT'}
           onPress={() => {
-            console.log('link pressed');
             navigation.navigate('HSTRegistration');
           }}
         />

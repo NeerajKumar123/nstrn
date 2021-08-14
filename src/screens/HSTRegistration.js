@@ -53,7 +53,6 @@ const HSTRegistration = props => {
                 item={item}
                 isSelected = {selectedOption?.id == item.id}
                 onSelected={() => {
-                  console.log('data', item);
                   setSelectedOption(item)
                 }}
               />
@@ -71,7 +70,6 @@ const HSTRegistration = props => {
             const {incorporation_id, user_id} = global.incStatusData
             const params = {User_id:user_id,Incorporation_Id:incorporation_id,HST_Registration:selectedOption?.id}
             incorpSaveHSTRegistration(params, (hstRes) =>{
-              console.log('hstRes',hstRes)
               if(hstRes?.status == 1){
                 navigation.navigate('IncorpPaymentDetails');
               }else{

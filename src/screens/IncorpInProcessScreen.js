@@ -12,7 +12,6 @@ const IncorpInProcessScreen = props => {
   const navigation = useNavigation();
   const openLink = () => {
     const {company_contact_number} = global.incStatusData
-    console.log('company_contact_number',company_contact_number)
     let finalLink = company_contact_number
     if (Platform.OS == 'ios') {
       finalLink = `telprompt:${finalLink}`;
@@ -69,7 +68,7 @@ const IncorpInProcessScreen = props => {
         }}
       />
       <DarkBlueButton
-      title={'RETURN TO HOME'}
+      title={'RETURN TO DASHBOARD'}
       onClick = {()=>{
         navigation.popToTop();
       }}

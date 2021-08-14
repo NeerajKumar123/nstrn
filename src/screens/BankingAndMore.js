@@ -35,7 +35,6 @@ const {width} = Dimensions.get('window');
 const BankingAndMore = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  console.log('BankingAndMore pageParams', pageParams);
   const [bank, setBank] = useState('');
   const [banks, setBanks] = useState();
   const [accountNo, setAccountNo] = useState('7654321');
@@ -52,7 +51,6 @@ const BankingAndMore = props => {
   useEffect(() => {
     setIsLoading(true);
     getInstitutionList({}, instRes => {
-      console.log('instRes', instRes);
       setBanks(instRes?.data);
       setBank(instRes?.data?.[0])
       const {tax_file_id,user_id} = global.onlineStatusData
@@ -62,10 +60,8 @@ const BankingAndMore = props => {
         Year: 2020,
       };
       getBankingAndFamilyInfo(params, bankingAndFamilyRes => {
-        console.log('bankingAndFamilyRes', bankingAndFamilyRes);
         setFamilyInfo(bankingAndFamilyRes?.data)
         getResidencyList({}, resdencyRes => {
-          console.log('resdencyRes', resdencyRes);
           setResidencies(resdencyRes?.data);
           setResidency(resdencyRes?.data?.[0])
           setIsLoading(false);
@@ -166,7 +162,6 @@ const BankingAndMore = props => {
           placeholder="Select Residency"
           value={residency?.residency_name}
           onClicked={() => {
-            console.log('sdsd');
             setIsResidenceVisible(true);
           }}
         />
@@ -193,7 +188,6 @@ const BankingAndMore = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'FAMILY'}
           onPress={() => {
-            console.log('link pressed');
             if(checkFormValidations()){
               const nextPageParams = prepareParams()
               navigation.navigate('FamilyDetails',{...nextPageParams});
@@ -210,7 +204,6 @@ const BankingAndMore = props => {
             setIsBankVisible(false);
           }}
           onSelect={value => {
-            console.log('setIsBankVisible', value);
             setBank(value);
             setIsBankVisible(false);
           }}
@@ -245,9 +238,7 @@ const BankingAndMore = props => {
             mode="date"
             display={Platform.OS == 'ios' ? "inline" : 'default'}
             onChange={(event, selectedDate) => {
-              console.log(event.type, Date.parse(selectedDate));
               setEntryDate(selectedDate);
-              console.log('====>', format(selectedDate, 'dd/MM/yyyy'));
               setIsDatePickerVisible(false);
             }}
           />

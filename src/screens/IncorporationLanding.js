@@ -96,7 +96,6 @@ const IncorporationLanding = props => {
                 const {user_id} = global.incStatusData
                 const params = {User_id:user_id, Incorporation_Type_Id:selectedCorp?.incorporation_type_id,Incorporation_Category_Id:0}
                 incorpRegisterCorp(params, (regisRes) =>{
-                  console.log('regisRes',regisRes)
                   setIsLoading(false)
                   if(regisRes?.status == 1){
                     global.incStatusData = {...global.incStatusData,...regisRes?.data[0]}

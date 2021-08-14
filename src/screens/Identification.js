@@ -21,10 +21,8 @@ const Identification = props => {
     const imgObj = res?.assets?.[0]
     if (!imgObj.base64) Alert.alert('SukhTax','Something went wrong!')
     const params = prepareParams(imgObj.base64)
-    console.log('params',params)
     uploadImage(params,(uploadRes) =>{
       setIsLoading(false)
-      console.log('uploadRes2222',uploadRes)
       uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
       setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
     })
@@ -104,16 +102,12 @@ const Identification = props => {
         />
         <UploadDocButton  marginTop = {35} title = 'UPLOAD THE DOC HERE' height ={46}
         onClick={() => {
-          console.log('onClicked');
           launchImageLibrary(ImageQualityOptions, res => {
-            console.log('res',res)
             if (res?.didCancel) {
-              console.log('didCancel');
-            }
-            if (res?.error) {
+              Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+            }else if (res?.error) {
               console.log('error', res?.error ?? ERROR_MSG);
-            }
-            if(res?.assets){
+            }else if(res?.assets){
               intiateImageUploading(res)
             }
           });

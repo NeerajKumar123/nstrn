@@ -25,7 +25,6 @@ import * as CustomFonts from '../constants/FontsDefs';
 const IncorpDetailsPerc = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  console.log('pageParams', pageParams);
   const [address, setAddress] = useState(pageParams?.Address);
   const [ownershipPerc, setOwnershipPerc] = useState(pageParams?.Ownership_Percentage);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +79,6 @@ const IncorpDetailsPerc = props => {
             value={address}
             placeholder="Address"
             onEndEditing={value => {
-              console.log('onEndEditing', value);
               setAddress(value);
             }}
           />
@@ -114,7 +112,6 @@ const IncorpDetailsPerc = props => {
                 };
                 if(pageParams?.Incorporator_Id > 0){ /// updation case
                   incorpUpdateIncorporatorDetails(params, updateRes => {
-                    console.log('updateRes', updateRes);
                     setIsLoading(false);
                     setTimeout(() => {
                       if (updateRes?.status == 1) {
@@ -129,7 +126,6 @@ const IncorpDetailsPerc = props => {
                   });
                 }else{
                   incorpSaveIncorporatorDetails(params, saveRes => {
-                    console.log('saveRes', saveRes);
                     setIsLoading(false);
                     setTimeout(() => {
                       if (saveRes?.status == 1) {
