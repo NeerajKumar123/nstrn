@@ -131,7 +131,7 @@ const Dashboard = props => {
         incorpMoveToPage()
         break;
         case 6:
-        navigation.navigate('CRALanding');
+        // navigation.navigate('CRALanding');
         break;        
       default:
         break;
