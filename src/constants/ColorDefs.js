@@ -32,4 +32,7 @@ export const CLR_00000020 = '#00000020'
 export const CLR_F47F7F = '#F47F7F'
 export const CLR_FFECEC = '#FFECEC'
 export const CLR_EBEBEB = '#EBEBEB'
+export const CLR_414141 = '#414141'
+
+
 

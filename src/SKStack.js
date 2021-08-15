@@ -52,7 +52,11 @@ import IncorpSignaturePage from './screens/IncorpSignaturePage';
 import IncorpPaymentScreen from './screens/IncorpPaymentScreen';
 import IncorpAllSet from './screens/IncorpAllSet';
 import IncorpApplyStatus from './screens/IncorpApplyStatus';
-
+import RequestLanding from './screens/RequestLanding';
+import RequestYears from './screens/RequestYears';
+import RequestPaymentDetails from './screens/RequestPaymentDetails';
+import RequestPaymentScreen from './screens/RequestPaymentScreen';
+import RequestApplyStatus from './screens/RequestApplyStatus';
 
 
 const Stack = createStackNavigator();
@@ -323,17 +327,40 @@ const SKStack = () => {
           component={IncorpAllSet}
           options={{title: 'IncorpAllSet', headerShown: false}}
         />
-        
         <Stack.Screen
           name="IncorpApplyStatus"
           component={IncorpApplyStatus}
           options={{title: 'IncorpApplyStatus', headerShown: false}}
         />
-        
         <Stack.Screen
           name="CRALanding"
           component={CRALanding}
           options={{title: 'CRALanding', headerShown: false}}
+        />
+         <Stack.Screen
+          name="RequestLanding"
+          component={RequestLanding}
+          options={{title: 'RequestLanding', headerShown: false}}
+        />
+        <Stack.Screen
+          name="RequestYears"
+          component={RequestYears}
+          options={{title: 'RequestYears', headerShown: false}}
+        />
+        <Stack.Screen
+          name="RequestPaymentDetails"
+          component={RequestPaymentDetails}
+          options={{title: 'RequestPaymentDetails', headerShown: false}}
+        />
+        <Stack.Screen
+          name="RequestPaymentScreen"
+          component={RequestPaymentScreen}
+          options={{title: 'RequestPaymentScreen', headerShown: false}}
+        />
+        <Stack.Screen
+          name="RequestApplyStatus"
+          component={RequestApplyStatus}
+          options={{title: 'RequestApplyStatus', headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
