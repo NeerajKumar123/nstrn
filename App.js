@@ -9,7 +9,7 @@
 import React from 'react';
 import AuthNavigator from './src/AuthNavigator';
 import { StripeProvider } from '@stripe/stripe-react-native';
-import {stripekey_test} from '../SukhTax/src/constants/StaticValues'
+import {stripekey_test} from './src/constants/StaticValues'
 
 const App = () => {
   return (

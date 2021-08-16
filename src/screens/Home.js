@@ -69,8 +69,7 @@ const Home = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="CRA LETTERS"
           onClicked = {()=>{
-            return
-            navigation.navigate('OnlineTaxFilingStatus')
+            navigation.navigate('CRALattersStatus')
           }}
         />
         <View

@@ -57,7 +57,10 @@ import RequestYears from './screens/RequestYears';
 import RequestPaymentDetails from './screens/RequestPaymentDetails';
 import RequestPaymentScreen from './screens/RequestPaymentScreen';
 import RequestApplyStatus from './screens/RequestApplyStatus';
-
+import NewCRALatter from './screens/NewCRALatter';
+import CRALattersStatus from './screens/CRALattersStatus';
+import CRAReply from './screens/CRAReply';
+import CRAAttachments from './screens/CRAAttachments';
 
 const Stack = createStackNavigator();
 
@@ -361,6 +364,26 @@ const SKStack = () => {
           name="RequestApplyStatus"
           component={RequestApplyStatus}
           options={{title: 'RequestApplyStatus', headerShown: false}}
+        />
+        <Stack.Screen
+          name="NewCRALatter"
+          component={NewCRALatter}
+          options={{title: 'NewCRALatter', headerShown: false}}
+        />
+        <Stack.Screen
+          name="CRALattersStatus"
+          component={CRALattersStatus}
+          options={{title: 'CRALattersStatus', headerShown: false}}
+        />
+         <Stack.Screen
+          name="CRAReply"
+          component={CRAReply}
+          options={{title: 'CRAReply', headerShown: false}}
+        />
+        <Stack.Screen
+          name="CRAAttachments"
+          component={CRAAttachments}
+          options={{title: 'CRAAttachments', headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
