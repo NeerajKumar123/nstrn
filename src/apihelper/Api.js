@@ -296,3 +296,47 @@ export const incorpGetIncorpStatus = (params,callback) => {
 
 
 
+
+/// Request Docs
+
+export const taxDocsGetTaxDocsType = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Get_Tax_Docs_Type`
+  API.makePostRequest(path , params, callback);
+};
+
+export const taxDocsGenerateTaxDocId = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Generate_Tax_Docs_Id`
+  API.makePostRequest(path , params, callback);
+};
+
+export const taxDocsSaveTypeAndYear = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Save_Type_And_Year`
+  API.makePostRequest(path , params, callback);
+};
+
+export const taxDocsGetPaymentDetails = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Get_Payment_Details`
+  API.makePostRequest(path , params, callback);
+};
+
+export const taxDocsGenerateEphemeralKey = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Generate_Ephemeral_Key`
+  API.makePostRequest(path , params, callback);
+};
+
+export const taxDocsSubmitPayment = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Submit_Payment`
+  API.makePostRequest(path , params, callback);
+};
+
+export const taxDocsSavePaymentInfo = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Save_Payment_Info`
+  API.makePostRequest(path , params, callback);
+};
+
+export const taxDocsGetTaxDocsStatus = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Get_Incorporation_Status`
+  API.makePostRequest(path , params, callback);
+};
+
+

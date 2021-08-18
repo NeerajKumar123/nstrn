@@ -20,7 +20,8 @@ import {useIsFocused} from '@react-navigation/native';
 import {
   getActiveFileStatusOnLogin,
   getServicePriceList,
-  incorpGetIncorpStatus
+  incorpGetIncorpStatus,
+  taxDocsGetTaxDocsStatus
 } from '../apihelper/Api';
 
 const data = [
@@ -77,29 +78,9 @@ const Dashboard = props => {
     ? `${global.userInfo.firstname} ${global.userInfo.lastname}`
     : '';
 
-  // useEffect(() => {
-  //   if(isFocused){
-  //     setIsLoading(true);
-  //     setTimeout(() => {
-  //       const {user_id} = global.userInfo
-  //       const params = {User_Id:user_id}
-  //       getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
-  //         const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
-  //         global.onlineStatusData = statusData ? statusData : {}
-  //         incorpGetIncorpStatus(params,(incStatusRes) =>{
-  //           if(incStatusRes?.status == 1){
-  //             setIsLoading(false)
-  //             const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
-  //             global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
-  //           }
-  //         })  
-  //       })
-  //     }, 500);
-  //   }
-  // }, [isFocused])
-
   useEffect(() => {
-    setIsLoading(true);
+    if(isFocused){
+      setIsLoading(true);
       setTimeout(() => {
         const {user_id} = global.userInfo
         const params = {User_Id:user_id}
@@ -111,10 +92,38 @@ const Dashboard = props => {
               setIsLoading(false)
               const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
               global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
+              taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
+                const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
+                global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}
+              })
             }
           })  
         })
       }, 500);
+    }
+  }, [isFocused])
+
+  useEffect(() => {
+    setIsLoading(true);
+      // setTimeout(() => {
+      //   const {user_id} = global.userInfo
+      //   const params = {User_Id:user_id}
+      //   getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
+      //     const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
+      //     global.onlineStatusData = statusData ? statusData : {}
+      //     incorpGetIncorpStatus(params,(incStatusRes) =>{
+      //       if(incStatusRes?.status == 1){
+      //         setIsLoading(false)
+      //         const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
+      //         global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
+      //         taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
+      //           const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
+      //           global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}
+      //         })
+      //       }
+      //     })  
+      //   })
+      // }, 500);
     getServicePriceList((priceListRes) =>{
       if(priceListRes?.status == 1){
         let onlineTaxFees = priceListRes?.data?.filter(fee => fee.services_fee_id == 1);

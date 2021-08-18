@@ -20,9 +20,10 @@ import {
   import * as Colors from '../constants/ColorDefs';
   import {useNavigation} from '@react-navigation/native';
   import {
-    incorpGetEphemeralKey,
-    incorpSubmitPayment,
-    incorpSavePaymentInfo
+    taxDocsGenerateEphemeralKey,
+    taxDocsSubmitPayment,
+    taxDocsSavePaymentInfo,
+    taxDocsGetTaxDocsStatus
   } from '../apihelper/Api';
   import * as SKTStorage from '../helpers/SKTStorage';
   import * as CustomFonts from '../constants/FontsDefs';
@@ -43,22 +44,22 @@ import {
   
     const fetchPaymentIntentClientSecret = async () => {
       setIsLoading(true);
-      const {incorporation_id, user_id,Stripe_Customer_Id} = global.incStatusData
+      const {user_id, tax_docs_id,Stripe_Customer_Id} = global.taxDocsStatusData;
       const params = {
         User_Id: user_id,
-        Incorporation_Id: incorporation_id,
+        Tax_Docs_Id: tax_docs_id,
         Stripe_Customer_Id: Stripe_Customer_Id,
         API_Version: stripeAPIVersion,
       };
-      incorpGetEphemeralKey(params, res => {
+      taxDocsGenerateEphemeralKey(params, res => {
         const intentParams = {
           User_Id: user_id,
-          Incorporation_Id: incorporation_id,
+          Tax_Docs_Id: tax_docs_id,
           Stripe_Customer_Id: Stripe_Customer_Id,
           Payable_Amount: pageParams?.payment_required,
           Currency: 'CAD',
         };
-        incorpSubmitPayment(intentParams, intentRes => {
+        taxDocsSubmitPayment(intentParams, intentRes => {
           const {client_secret} = intentRes;
           setClientSecret(client_secret);
           setIsLoading(false);
@@ -68,7 +69,7 @@ import {
   
     const handlePayPress = async () => {
       // Gather the customer's billing information (e.g., email)
-      const {mailing_address, user_email, user_mobile} = global.incStatusData;
+      const {mailing_address, user_email, user_mobile} = global.taxDocsStatusData;
       const billingDetails = {
         email: user_email,
         mailing_address: mailing_address,
@@ -85,12 +86,12 @@ import {
         Alert.alert('SukhTax', 'We are facing some techinical glitch , Please try again.');
       } else if (paymentIntent) {
         const {id,status} = paymentIntent
-        const {incorporation_id, user_id} = global.incStatusData
-        const params = {User_Id:user_id,Incorporation_Id:incorporation_id,Payment_Intent_id:id,Payment_Status:status}
-        incorpSavePaymentInfo(params, (savePaymentRes)=>{
+        const {user_id, tax_docs_id} = global.taxDocsStatusData;
+        const params = {User_Id:user_id,Tax_Docs_Id:tax_docs_id,Payment_Intent_id:id,Payment_Status:status}
+        taxDocsSavePaymentInfo(params, (savePaymentRes)=>{
           if(savePaymentRes?.status == 1){
             const paramsStatus = {User_Id:user_id}
-            incorpGetIncorpStatus(paramsStatus,(incStatusRes) =>{
+            taxDocsGetTaxDocsStatus(paramsStatus,(incStatusRes) =>{
               if(incStatusRes?.status == 1){
                 setIsLoading(false);
                 const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
@@ -158,8 +159,6 @@ import {
             borderColor={Colors.PRIMARY_BORDER}
             title={'PAY NOW HST'}
             onPress={() => {
-              navigation.navigate('RequestApplyStatus') 
-              return
               Keyboard.dismiss();
               if (card?.complete) {
                 handlePayPress();

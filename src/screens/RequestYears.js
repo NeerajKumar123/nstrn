@@ -15,7 +15,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {incorpGetIncorpType, incorpRegisterCorp} from '../apihelper/Api';
+import {taxDocsSaveTypeAndYear} from '../apihelper/Api';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,8 +29,8 @@ const RequestYears = props => {
   let {pageIndex = 0} = pageParams
   const selectedDocsTypes = global.selectedDocsTypes
   let currentPage = selectedDocsTypes[pageIndex]
-  const heading = currentPage?.name
-  const subheading = currentPage?.name
+  const heading = currentPage?.tax_docs_type
+  const subheading = 'WHICH YEARS DO YOU NEED THE DOCUMENT FOR?'
   
   return (
     <View
@@ -52,8 +52,8 @@ const RequestYears = props => {
         <Heading value={heading} marginTop={60} />
         <Heading
           fontSize={16}
-          marginTop={20}
-          marginBottom={0}
+          marginTop={10}
+          marginBottom={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value={subheading}
         />
@@ -98,52 +98,30 @@ const RequestYears = props => {
             let selYrs = []
             years.map(item => {
               if (item.isSelected) {
-                selYrs.push(item)
+                selYrs.push(item.year)
               }
             });
-            if(selObj){
-              const newPageIndex = pageIndex + 1
-              navigation.push('RequestYears',{pageIndex:newPageIndex});
-            }else{
-                navigation.navigate('RequestPaymentDetails');
-            }
-            //   navigation.navigate('NumberNameCorp');
-              // if(selectedCorp?.incorporation_type_id == 3){
-              //   setIsLoading(true)
-              //   const {user_id} = global.incStatusData
-              //   const params = {User_id:user_id, Incorporation_Type_Id:selectedCorp?.incorporation_type_id,Incorporation_Category_Id:0}
-              //   incorpRegisterCorp(params, (regisRes) =>{
-              //     setIsLoading(false)
-              //     if(regisRes?.status == 1){
-              //       global.incStatusData = {...global.incStatusData,...regisRes?.data[0]}
-              //       navigation.navigate('UploadCorp');
-              //     }else{
-              //       Alert.alert('SukhTax', regisRes?.message)
-              //     }
-              //   })
-              // }else{
-              //   navigation.navigate('NumberNameCorp',{...selectedCorp});
-              // }
+            console.log('years',selYrs.join())
+              setIsLoading(true)
+                const {user_id,tax_docs_id} = global.taxDocsStatusData
+                const {tax_docs_type_id} = currentPage
+                const params = {User_id:user_id, Tax_Docs_Id:tax_docs_id,Tax_Docs_Type_Id:tax_docs_type_id,Years_Selected:selYrs.join()}
+                taxDocsSaveTypeAndYear(params, (saveRes) =>{
+                  setIsLoading(false)
+                  if(saveRes?.status == 1){
+                    if(selObj){
+                      const newPageIndex = pageIndex + 1
+                      navigation.push('RequestYears',{pageIndex:newPageIndex});
+                    }else{
+                        navigation.navigate('RequestPaymentDetails');
+                    }
+                  }else{
+                    Alert.alert('SukhTax', regisRes?.message)
+                  }
+                })
+              
             }}
           />
-        </View>
-        <View
-          style={{
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 30,
-          }}>
-          <Text
-            style={{
-              width: '60%',
-              textAlign: 'center',
-              color: Colors.BLACK,
-              fontSize: 12,
-              fontFamily: CustomFonts.OpenSansRegular,
-            }}>
-            DONT WORRY! ALL OUR FEES ALREADY INCLUDE GOVT. CHARGES
-          </Text>
         </View>
       </ScrollView>
     </View>

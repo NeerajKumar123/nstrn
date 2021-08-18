@@ -15,29 +15,29 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {incorpGetIncorpType, incorpRegisterCorp} from '../apihelper/Api';
+import {taxDocsGetTaxDocsType, taxDocsGenerateTaxDocId} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 const RequestLanding = props => {
-  const [docsTypes, setDocsTypes] = useState([{name:'d1'},{name:'d2'},{name:'d3'},{name:'d4'}])
+  const [docsTypes, setDocsTypes] = useState()
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDocs, setSelectedDocs] = useState();
 
-  // useEffect(() => {
-  //   setIsLoading(true)
-  //   incorpGetIncorpType({}, (typeRes) =>{
-  //     if(typeRes?.status == 1){
-  //       const incoprs = typeRes?.data
-  //       setIncorpTypes(incoprs)
-  //       setSelectedCorp(incoprs[2])
-  //       setIsLoading(false)
-  //     }
-  //   })
-  // }, [])
+  useEffect(() => {
+    setIsLoading(true)
+    taxDocsGetTaxDocsType({}, (typeRes) =>{
+      if(typeRes?.status == 1){
+        const docs = typeRes?.data
+        console.log('docs',docs)
+        setDocsTypes(docs)
+        setIsLoading(false)
+      }
+    })
+  }, [])
 
   return (
     <View
@@ -83,7 +83,7 @@ const RequestLanding = props => {
                     ...selectedValue,
                     isSelected: !selectedValue.isSelected,
                   };
-                  const index = docsTypes.findIndex(x => x.name === item.name);
+                  const index = docsTypes.findIndex(x => x.tax_docs_type_id === item.tax_docs_type_id);
                   const old = [...docsTypes];
                   if (index != -1) {
                     old[index] = newValue;
@@ -93,6 +93,13 @@ const RequestLanding = props => {
               />
             );
           })}
+                <DocCard
+                key = {'staticcard'}
+                item={{fee:'SEE DOCS REQUESTED', tax_docs_type:'PREVIOUS REQUESTS'}}
+                onSelected={() => {
+                  console.log('staticcard')
+                }}
+              />
         <View
           style={{
             width: '100%',
@@ -114,49 +121,22 @@ const RequestLanding = props => {
                   sels.push(item)
                 }
               });
-              console.log('sels',sels)
               global.selectedDocsTypes = sels
-              setTimeout(() => {
-                console.log('global.selectedDocsTypes',global.selectedDocsTypes)
-                navigation.navigate('RequestYears',{pageIndex:0});
-              }, 200);
-
-              // if(selectedCorp?.incorporation_type_id == 3){
-              //   setIsLoading(true)
-              //   const {user_id} = global.incStatusData
-              //   const params = {User_id:user_id, Incorporation_Type_Id:selectedCorp?.incorporation_type_id,Incorporation_Category_Id:0}
-              //   incorpRegisterCorp(params, (regisRes) =>{
-              //     setIsLoading(false)
-              //     if(regisRes?.status == 1){
-              //       global.incStatusData = {...global.incStatusData,...regisRes?.data[0]}
-              //       navigation.navigate('UploadCorp');
-              //     }else{
-              //       Alert.alert('SukhTax', regisRes?.message)
-              //     }
-              //   })
-              // }else{
-              //   navigation.navigate('NumberNameCorp',{...selectedCorp});
-              // }
+              setIsLoading(true)
+              const {user_id} = global.incStatusData
+              const params = {User_id:user_id}
+              taxDocsGenerateTaxDocId(params, (taxcDocIdRes) =>{
+                setIsLoading(false)
+                if(taxcDocIdRes?.status == 1){
+                  global.taxDocsStatusData = {...global.taxDocsStatusData, ...taxcDocIdRes?.data[0]}
+                  console.log('global.taxDocsStatusData',global.taxDocsStatusData)
+                  navigation.navigate('RequestYears',{pageIndex:0});
+                }else{
+                  Alert.alert('SukhTax', regisRes?.message)
+                }
+              })
             }}
           />
-        </View>
-        <View
-          style={{
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 30,
-          }}>
-          <Text
-            style={{
-              width: '60%',
-              textAlign: 'center',
-              color: Colors.BLACK,
-              fontSize: 12,
-              fontFamily: CustomFonts.OpenSansRegular,
-            }}>
-            DONT WORRY! ALL OUR FEES ALREADY INCLUDE GOVT. CHARGES
-          </Text>
         </View>
       </ScrollView>
     </View>
@@ -165,7 +145,7 @@ const RequestLanding = props => {
 
 const DocCard = props => {
   const {item,onSelected} = props;
-  const {name,isSelected} = item
+  const {tax_docs_type,fee,isSelected} = item
   return (
     <TouchableOpacity
       style={{
@@ -186,23 +166,25 @@ const DocCard = props => {
       <Text
         style={{
           width: '100%',
+          fontFamily:CustomFonts.OpenSansRegular,
           textAlign: 'left',
-          color: Colors.CLR_414141,
+          color: isSelected ? Colors.WHITE: Colors.CLR_414141,
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {name.toUpperCase()}
+        {tax_docs_type.toUpperCase()}
       </Text>
       <Text
         style={{
           width: '100%',
           textAlign: 'left',
           marginTop: 3,
-          color: Colors.CLR_414141,
-          fontSize: 17,
+          fontFamily:CustomFonts.OpenSansRegular,
+          color: isSelected ? Colors.WHITE: Colors.CLR_414141,
+          fontSize: 16,
           fontWeight: '700',
         }}>
-        {`TOTAL COST: $99.99`}
+        {`TOTAL COST: ${fee}`}
       </Text>
     </TouchableOpacity>
   );
