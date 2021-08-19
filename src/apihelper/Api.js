@@ -335,8 +335,16 @@ export const taxDocsSavePaymentInfo = (params,callback) => {
 };
 
 export const taxDocsGetTaxDocsStatus = (params,callback) => {
-  const path = `${BaseURL}/Tax_Docs_Get_Incorporation_Status`
+  const path = `${BaseURL}/Tax_Docs_Get_Status`
   API.makePostRequest(path , params, callback);
 };
 
+export const taxDocsFinalizeProcess = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Finalize_Process`
+  API.makePostRequest(path , params, callback);
+};
 
+export const taxDocsGetReqDocs = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Get_Requested_Docs`
+  API.makePostRequest(path , params, callback);
+};

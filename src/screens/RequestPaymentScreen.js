@@ -23,7 +23,8 @@ import {
     taxDocsGenerateEphemeralKey,
     taxDocsSubmitPayment,
     taxDocsSavePaymentInfo,
-    taxDocsGetTaxDocsStatus
+    taxDocsGetTaxDocsStatus,
+    taxDocsFinalizeProcess
   } from '../apihelper/Api';
   import * as SKTStorage from '../helpers/SKTStorage';
   import * as CustomFonts from '../constants/FontsDefs';
@@ -90,19 +91,30 @@ import {
         const params = {User_Id:user_id,Tax_Docs_Id:tax_docs_id,Payment_Intent_id:id,Payment_Status:status}
         taxDocsSavePaymentInfo(params, (savePaymentRes)=>{
           if(savePaymentRes?.status == 1){
-            const paramsStatus = {User_Id:user_id}
-            taxDocsGetTaxDocsStatus(paramsStatus,(incStatusRes) =>{
-              if(incStatusRes?.status == 1){
-                setIsLoading(false);
-                const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
-                global.incStatusData = incStatusData
-                setTimeout(() => {
-                  navigation.navigate('IncorpApplyStatus')
-                }, 300);
+            const params = {User_Id:user_id,Tax_Docs_Id:tax_docs_id}
+            taxDocsFinalizeProcess(params,(finalRes)=>{
+              console.log('finalRes',finalRes)
+              if(finalRes?.status == 1){
+                const paramsStatus = {User_Id:user_id}
+                taxDocsGetTaxDocsStatus(paramsStatus,(taxDocsRes) =>{
+                  if(taxDocsRes?.status == 1){
+                    setIsLoading(false);
+                    const taxDocsStatusData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
+                    global.taxDocsStatusData = taxDocsStatusData
+                    setTimeout(() => {
+                      navigation.navigate('RequestApplyStatus')
+                    }, 200);
+                  }else{
+                    setIsLoading(false);
+                    const msg = incStatusRes?.message ?? 'Something went wront, Please try again later.'
+                    Alert.alert('SukhTax',msg)
+                  }
+                })
               }else{
                 setIsLoading(false);
                 const msg = incStatusRes?.message ?? 'Something went wront, Please try again later.'
                 Alert.alert('SukhTax',msg)
+
               }
             }) 
           }else{

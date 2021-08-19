@@ -22,22 +22,21 @@ import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 const RequestLanding = props => {
-  const [docsTypes, setDocsTypes] = useState()
+  const [docsTypes, setDocsTypes] = useState();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDocs, setSelectedDocs] = useState();
 
   useEffect(() => {
-    setIsLoading(true)
-    taxDocsGetTaxDocsType({}, (typeRes) =>{
-      if(typeRes?.status == 1){
-        const docs = typeRes?.data
-        console.log('docs',docs)
-        setDocsTypes(docs)
-        setIsLoading(false)
+    setIsLoading(true);
+    taxDocsGetTaxDocsType({}, typeRes => {
+      if (typeRes?.status == 1) {
+        const docs = typeRes?.data;
+        setDocsTypes(docs);
+        setIsLoading(false);
       }
-    })
-  }, [])
+    });
+  }, []);
 
   return (
     <View
@@ -45,16 +44,16 @@ const RequestLanding = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        flex:1,
-        paddingBottom:20
+        flex: 1,
+        paddingBottom: 20,
       }}>
       <AppHeader navigation={navigation} />
-      {isLoading && <SKLoader/>}
+      {isLoading && <SKLoader />}
       <ScrollView
         style={{width: '100%'}}
-        showsVerticalScrollIndicator = {false}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingHorizontal: 20,          
+          paddingHorizontal: 20,
         }}>
         <Heading value="TAX DOCUMENTS" marginTop={60} />
         <Heading
@@ -76,14 +75,16 @@ const RequestLanding = props => {
           docsTypes.map((item, index) => {
             return (
               <DocCard
-                key = {item.name}
+                key={item.name}
                 item={item}
-                onSelected={(selectedValue) => {
+                onSelected={selectedValue => {
                   const newValue = {
                     ...selectedValue,
                     isSelected: !selectedValue.isSelected,
                   };
-                  const index = docsTypes.findIndex(x => x.tax_docs_type_id === item.tax_docs_type_id);
+                  const index = docsTypes.findIndex(
+                    x => x.tax_docs_type_id === item.tax_docs_type_id,
+                  );
                   const old = [...docsTypes];
                   if (index != -1) {
                     old[index] = newValue;
@@ -93,13 +94,14 @@ const RequestLanding = props => {
               />
             );
           })}
-                <DocCard
-                key = {'staticcard'}
-                item={{fee:'SEE DOCS REQUESTED', tax_docs_type:'PREVIOUS REQUESTS'}}
-                onSelected={() => {
-                  console.log('staticcard')
-                }}
-              />
+        <DocCard
+          key={'staticcard'}
+          isStatic={true}
+          item={{fee: 'SEE DOCS REQUESTED', tax_docs_type: 'PREVIOUS REQUESTS'}}
+          onSelected={() => {
+            navigation.navigate('AllDocuments');
+          }}
+        />
         <View
           style={{
             width: '100%',
@@ -115,26 +117,28 @@ const RequestLanding = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'NEXT'}
             onPress={() => {
-              let sels = []
+              let sels = [];
               docsTypes.map(item => {
                 if (item.isSelected) {
-                  sels.push(item)
+                  sels.push(item);
                 }
               });
-              global.selectedDocsTypes = sels
-              setIsLoading(true)
-              const {user_id} = global.incStatusData
-              const params = {User_id:user_id}
-              taxDocsGenerateTaxDocId(params, (taxcDocIdRes) =>{
-                setIsLoading(false)
-                if(taxcDocIdRes?.status == 1){
-                  global.taxDocsStatusData = {...global.taxDocsStatusData, ...taxcDocIdRes?.data[0]}
-                  console.log('global.taxDocsStatusData',global.taxDocsStatusData)
-                  navigation.navigate('RequestYears',{pageIndex:0});
-                }else{
-                  Alert.alert('SukhTax', regisRes?.message)
+              global.selectedDocsTypes = sels;
+              setIsLoading(true);
+              const {user_id} = global.incStatusData;
+              const params = {User_id: user_id};
+              taxDocsGenerateTaxDocId(params, taxcDocIdRes => {
+                setIsLoading(false);
+                if (taxcDocIdRes?.status == 1) {
+                  global.taxDocsStatusData = {
+                    ...global.taxDocsStatusData,
+                    ...taxcDocIdRes?.data[0],
+                  };
+                  navigation.navigate('RequestYears', {pageIndex: 0});
+                } else {
+                  Alert.alert('SukhTax', regisRes?.message);
                 }
-              })
+              });
             }}
           />
         </View>
@@ -144,8 +148,8 @@ const RequestLanding = props => {
 };
 
 const DocCard = props => {
-  const {item,onSelected} = props;
-  const {tax_docs_type,fee,isSelected} = item
+  const {item, onSelected, isStatic = false} = props;
+  const {tax_docs_type, fee, isSelected} = item;
   return (
     <TouchableOpacity
       style={{
@@ -156,19 +160,19 @@ const DocCard = props => {
         alignItems: 'center',
         width: '100%',
         borderRadius: 6,
-        borderWidth:1,
-        borderColor:Colors.CLR_E77C7E,
+        borderWidth: 1,
+        borderColor: Colors.CLR_E77C7E,
         backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
       }}
       onPress={() => {
-        onSelected(item)
+        onSelected(item);
       }}>
       <Text
         style={{
           width: '100%',
-          fontFamily:CustomFonts.OpenSansRegular,
+          fontFamily: CustomFonts.OpenSansRegular,
           textAlign: 'left',
-          color: isSelected ? Colors.WHITE: Colors.CLR_414141,
+          color: isSelected ? Colors.WHITE : Colors.CLR_414141,
           fontSize: 17,
           fontWeight: '700',
         }}>
@@ -179,12 +183,12 @@ const DocCard = props => {
           width: '100%',
           textAlign: 'left',
           marginTop: 3,
-          fontFamily:CustomFonts.OpenSansRegular,
-          color: isSelected ? Colors.WHITE: Colors.CLR_414141,
+          fontFamily: CustomFonts.OpenSansRegular,
+          color: isSelected ? Colors.WHITE : Colors.CLR_414141,
           fontSize: 16,
           fontWeight: '700',
         }}>
-        {`TOTAL COST: ${fee}`}
+        {isStatic ? `${fee}` : `TOTAL COST: ${fee}`}
       </Text>
     </TouchableOpacity>
   );

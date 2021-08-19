@@ -1,27 +1,43 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Alert,
-  Platform,
-  Linking,
-} from 'react-native';
+import {View, Text, ScrollView, Alert, Platform, Linking, TouchableOpacity, Image} from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
 import * as CustomFonts from '../constants/FontsDefs';
 import * as Colors from '../constants/ColorDefs';
 import SKButton, {DarkBlueButton} from '../components/SKButton';
+import DocumentViewer from '../components/DocumentViewer';
+import {
+  taxDocsGetReqDocs
+} from '../apihelper/Api';
 
 const RequestApplyStatus = props => {
   const navigation = useNavigation();
   const {
-    incorporation_status_name = 'File not Submitted',
+    tax_docs_status_name = 'File not Submitted',
     status_description = 'Looks like you have to complete your registration and upload document still!',
     new_message_count = 0,
-    incorporation_status_id,
-  } = global.incStatusData;
+    tax_docs_status_id = 1,
+  } = global.taxDocsStatusData;
+  
+  const [docs, setDocs] = useState()
+  const [showDoc, setShowDoc] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
+
+  useEffect(() => {
+    const {user_id, tax_docs_id,tax_docs_status_id} = global.taxDocsStatusData
+    if(tax_docs_status_id == 3){
+      const params = {User_Id:user_id,Tax_Docs_Id:tax_docs_id}
+      taxDocsGetReqDocs(params,(docsRes) =>{
+        if(docsRes?.status == 1){
+          setDocs(docsRes.data)
+        }else{
+          const msg = docsRes?.message ??'Something went wront, Please try again later.';
+        Alert.alert('SukhTax', msg);
+        }
+      })
+    }
+  }, [])
 
   return (
     <View
@@ -39,32 +55,44 @@ const RequestApplyStatus = props => {
           height: '100%',
           paddingBottom: Platform.OS == 'ios' ? 100 : 0,
         }}>
-        {incorporation_status_id == 1 && (
+        {tax_docs_status_id == 1 && (
           <NotSubmitted
-            incorporation_status_name={incorporation_status_name}
+            tax_docs_status_name={tax_docs_status_name}
             status_description={status_description}
             new_message_count={new_message_count}
             navigation={navigation}
             marginTop={25}
           />
         )}
-        {incorporation_status_id == 2 && (
+        {tax_docs_status_id == 2 && (
           <InProcess
-            incorporation_status_name={incorporation_status_name}
+            tax_docs_status_name={tax_docs_status_name}
             status_description={status_description}
             new_message_count={new_message_count}
             navigation={navigation}
           />
         )}
-        {incorporation_status_id == 3 && (
+        {tax_docs_status_id == 3 && (
           <AllSet
-            incorporation_status_name={incorporation_status_name}
+            reqDocs = {docs}
+            tax_docs_status_name={tax_docs_status_name}
             status_description={status_description}
             new_message_count={new_message_count}
             navigation={navigation}
+            onDocClicked = {(item)=>{
+              setSelectedItem(item)
+              setShowDoc(true)
+              console.log('onDocClicked',item)
+            }}
+           onAllDownloadClicked = {()=>{
+            console.log('onAllDownloadClicked')
+           }} 
           />
         )}
       </ScrollView>
+      {showDoc && (
+        <DocumentViewer onClose={() => setShowDoc(false)} item={selectedItem} />
+      )}
     </View>
   );
 };
@@ -72,31 +100,13 @@ const RequestApplyStatus = props => {
 const NotSubmitted = props => {
   const {
     navigation,
-    incorporation_status_name,
+    tax_docs_status_name,
     status_description,
     new_message_count,
   } = props;
 
   const incorpMoveToPage = props => {
-    const {
-      hst_registration, // HST
-      identification_document_uploaded, // incprtr
-      authorization_document_uploaded, // HST
-      incorporation_status_id,
-    } = global.incStatusData;
-    if (incorporation_status_id == 1) {
-      if (hst_registration || authorization_document_uploaded) {
-        navigation.navigate('HSTRegistration');
-      } else if (identification_document_uploaded) {
-        navigation.navigate('IncorporatorsList');
-      } else {
-        navigation.navigate('OnlineReturnLanding');
-      }
-    } else if (incorporation_status_id == 2) {
-      navigation.navigate('IncorpInProcessScreen');
-    } else if (incorporation_status_id == 3) {
-      navigation.navigate('IncorpAllSet');
-    }
+    navigation.navigate('RequestLanding');
   };
 
   return (
@@ -107,7 +117,7 @@ const NotSubmitted = props => {
         alignItems: 'center',
         marginTop: props.marginTop,
       }}>
-      <Heading value={'INCORPORATION'} marginTop={10} />
+      <Heading value={'TAX DOCUMENTS'} marginTop={10} />
       <Heading
         fontSize={20}
         fontWeight="700"
@@ -118,7 +128,7 @@ const NotSubmitted = props => {
         fontSize={20}
         fontWeight="700"
         color={Colors.APP_BLUE_HEADING_COLOR}
-        value={incorporation_status_name}
+        value={tax_docs_status_name}
         marginTop={2}
       />
       <Text
@@ -139,7 +149,7 @@ const NotSubmitted = props => {
         fontWeight={'normal'}
         backgroundColor={Colors.SECONDARY_FILL}
         borderColor={Colors.PRIMARY_BORDER}
-        title={'EDIT INFO'}
+        title={'NEW REQUEST'}
         onPress={() => {
           incorpMoveToPage();
         }}
@@ -148,8 +158,7 @@ const NotSubmitted = props => {
   );
 };
 const AllSet = props => {
-  const {navigation} = props;
-  const {incorporation_status_name, status_description} = global.incStatusData;
+  const {navigation,tax_docs_status_name, status_description,reqDocs,onAllDownloadClicked,onDocClicked} = props;
   return (
     <View
       style={{
@@ -158,7 +167,7 @@ const AllSet = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <Heading value={incorporation_status_name} marginTop={100} />
+      <Heading value={tax_docs_status_name} marginTop={100} />
       <Heading
         fontSize={17}
         marginTop={12}
@@ -166,6 +175,17 @@ const AllSet = props => {
         color={Colors.APP_RED_SUBHEADING_COLOR}
         value={status_description}
       />
+      {reqDocs && reqDocs.map((item, index) => {
+          return (
+            <FileCard
+              key = {item.document_title}
+              item={item}
+              onClick={() => {
+                onDocClicked(item);
+              }}
+            />
+          );
+        })}
       <SKButton
         marginTop={56}
         fontSize={16}
@@ -210,8 +230,7 @@ const AllSet = props => {
   );
 };
 const InProcess = props => {
-  const {navigation} = props;
-  const {incorporation_status_name, status_description} = global.incStatusData;
+  const {navigation,tax_docs_status_name, status_description} = props;
   const openLink = () => {
     const {company_contact_number} = global.incStatusData;
     let finalLink = company_contact_number;
@@ -241,7 +260,8 @@ const InProcess = props => {
         width: '100%',
         paddingHorizontal: 20,
       }}>
-      <Heading value={incorporation_status_name} marginTop={100} />
+        {console.log('tax_docs_status_name',tax_docs_status_name)}
+      <Heading value={tax_docs_status_name} marginTop={100} />
       <Heading
         fontSize={17}
         marginTop={12}
@@ -269,6 +289,39 @@ const InProcess = props => {
         }}
       />
     </View>
+  );
+};
+
+const FileCard = props => {
+  const {item, onClick} = props;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 20,
+        marginTop: 10,
+      }}
+      onPress={() => {
+        onClick();
+      }}>
+      <Text
+        style={{
+          textAlign: 'left',
+          color: Colors.BLACK,
+          fontSize: 15,
+          fontWeight: '400',
+          flex: 1,
+        }}>
+        {item.document_title}
+      </Text>
+      <Image
+        resizeMode="contain"
+        style={{width: 20, height: 20, marginLeft: 10}}
+        source={CustomFonts.download}
+      />
+    </TouchableOpacity>
   );
 };
 

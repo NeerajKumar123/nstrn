@@ -11,7 +11,10 @@ import {useNavigation} from '@react-navigation/native';
 const Home = props => {
   const navigation = useNavigation();
   const userFullName = global.userInfo ? `${global.userInfo.firstname} ${global.userInfo.lastname}` : ''
+  const {tax_file_status_id =  1 } = global.onlineStatusData
   const {incorporation_status_id =  1 } = global.incStatusData
+  const {tax_docs_status_id =  1 } = global.taxDocsStatusData
+  // const {incorporation_status_id =  1 } = global.incStatusData
   return (
     <View
       style={{
@@ -42,7 +45,7 @@ const Home = props => {
         />
         <Heading
           fontSize={16}
-          status={1}
+          status={tax_file_status_id >=13 ? 3 : 2}
           marginTop={15}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="TAX FILING"
@@ -59,6 +62,17 @@ const Home = props => {
           value="INCORPORATION"
           onClicked = {()=>{
             navigation.navigate('IncorpApplyStatus')
+          }}
+        />
+         <Heading
+          fontSize={16}
+          status={0}
+          status={tax_docs_status_id}
+          marginTop={5}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
+          value="TAX DOCUMENTS"
+          onClicked = {()=>{
+            navigation.navigate('RequestApplyStatus')
           }}
         />
         <Heading

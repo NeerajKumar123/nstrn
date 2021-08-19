@@ -15,7 +15,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {taxDocsSaveTypeAndYear} from '../apihelper/Api';
+import {taxDocsSaveTypeAndYear,taxDocsFinalizeProcess,taxDocsGetTaxDocsStatus} from '../apihelper/Api';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -101,21 +101,44 @@ const RequestYears = props => {
                 selYrs.push(item.year)
               }
             });
-            console.log('years',selYrs.join())
               setIsLoading(true)
                 const {user_id,tax_docs_id} = global.taxDocsStatusData
                 const {tax_docs_type_id} = currentPage
                 const params = {User_id:user_id, Tax_Docs_Id:tax_docs_id,Tax_Docs_Type_Id:tax_docs_type_id,Years_Selected:selYrs.join()}
                 taxDocsSaveTypeAndYear(params, (saveRes) =>{
-                  setIsLoading(false)
                   if(saveRes?.status == 1){
-                    if(selObj){
+                    if(tax_docs_type_id == 1 && global.selectedDocsTypes?.length == 1){
+                      const params = {User_Id:user_id,Tax_Docs_Id:tax_docs_id}
+                      taxDocsFinalizeProcess(params,(finalRes)=>{
+                        if(finalRes?.status == 1){
+                          console.log('finalRes',finalRes)
+                          const params = {User_Id:user_id}
+                          taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
+                            setIsLoading(false)
+                            if(taxDocsRes?.status == 1){
+                              const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
+                              global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}
+                              navigation.navigate('RequestApplyStatus');    
+                            }else{
+                              setIsLoading(false)
+                              Alert.alert('SukhTax', taxDocsRes?.message)     
+                            }
+                          })            
+                        }else{
+                          setIsLoading(false)
+                          Alert.alert('SukhTax', finalRes?.message) 
+                        }
+                      })
+                    }else if(selObj){
+                      setIsLoading(false)
                       const newPageIndex = pageIndex + 1
                       navigation.push('RequestYears',{pageIndex:newPageIndex});
                     }else{
-                        navigation.navigate('RequestPaymentDetails');
+                      setIsLoading(false)
+                      navigation.navigate('RequestPaymentDetails');
                     }
                   }else{
+                    setIsLoading(false)
                     Alert.alert('SukhTax', regisRes?.message)
                   }
                 })

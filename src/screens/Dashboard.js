@@ -85,19 +85,32 @@ const Dashboard = props => {
         const {user_id} = global.userInfo
         const params = {User_Id:user_id}
         getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
-          const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
-          global.onlineStatusData = statusData ? statusData : {}
-          incorpGetIncorpStatus(params,(incStatusRes) =>{
-            if(incStatusRes?.status == 1){
-              setIsLoading(false)
-              const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
-              global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
-              taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
-                const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
-                global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}
-              })
-            }
-          })  
+          if(fileStatusRes?.status == 1){
+            const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
+            global.onlineStatusData = statusData ? statusData : {}
+            incorpGetIncorpStatus(params,(incStatusRes) =>{
+              if(incStatusRes?.status == 1){
+                setIsLoading(false)
+                const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
+                global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
+                taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
+                  if(taxDocsRes?.status){
+                    const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
+                    global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}  
+                  }else{
+                    setIsLoading(false)
+                    Alert.alert('SukhTax', taxDocsRes?.message);
+                  }
+                })
+              }else{
+                setIsLoading(false)
+                Alert.alert('SukhTax', incStatusRes?.message);
+              }
+            })
+          }else{
+            setIsLoading(false)
+            Alert.alert('SukhTax', fileStatusRes?.message);
+          }
         })
       }, 500);
     }

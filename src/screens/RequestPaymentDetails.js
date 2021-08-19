@@ -91,8 +91,7 @@ const RequestPaymentDetails = props => {
           borderColor={Colors.SECONDARY_FILL}
           title={'PAY NOW'}
           onPress={() => {
-            // const nextPageParams = {payment_required: total};
-            const nextPageParams = {payment_required: 100};
+            const nextPageParams = {payment_required: total};
             navigation.navigate('RequestPaymentScreen', {...nextPageParams});
           }}
         />
