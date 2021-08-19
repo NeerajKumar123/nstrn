@@ -32,7 +32,7 @@ const RequestLanding = props => {
     taxDocsGetTaxDocsType({}, typeRes => {
       if (typeRes?.status == 1) {
         const docs = typeRes?.data;
-        setDocsTypes(docs);
+        setDocsTypes(dosc);
         setIsLoading(false);
       }
     });

@@ -241,7 +241,7 @@ const Dashboard = props => {
     }
   };
   const reqMoveToPage = props => {
-    navigation.navigate('RequestLanding');
+    navigation.navigate('RequestLandiing');
     
   };
 

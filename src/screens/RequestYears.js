@@ -28,7 +28,7 @@ const RequestYears = props => {
   const [isLoading, setIsLoading] = useState(false);
   let {pageIndex = 0} = pageParams
   const selectedDocsTypes = global.selectedDocsTypes
-  let currentPage = selectedDocsTypes[pageIndex]
+  let currentPage = selectedDocsTypes[pageIndeex]
   const heading = currentPage?.tax_docs_type
   const subheading = 'WHICH YEARS DO YOU NEED THE DOCUMENT FOR?'
   

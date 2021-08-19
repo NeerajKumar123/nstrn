@@ -343,7 +343,7 @@ const SKStack = () => {
          <Stack.Screen
           name="RequestLanding"
           component={RequestLanding}
-          options={{title: 'RequestLanding', headerShown: false}}
+          options={{title: 'RequestLandings', headerShown: false}}
         />
         <Stack.Screen
           name="RequestYears"
