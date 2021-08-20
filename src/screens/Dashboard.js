@@ -16,6 +16,8 @@ import SKLoader from '../components/SKLoader';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
+import {downloadFileFromUrl}  from '../helpers/BaseUtility';
+
 import {useIsFocused} from '@react-navigation/native';
 import {
   getActiveFileStatusOnLogin,
@@ -172,14 +174,15 @@ const Dashboard = props => {
           reqMoveToPage()
           break;
         case 6:
-        navigation.navigate('CRALanding');
+          downloadFileFromUrl('http://www.africau.edu/images/default/sample.pdf','test.pdf');
+        // navigation.navigate('CRALanding');
         break;        
       default:
         break;
     }
   };
   const onlineMoveToPage = props => {
-    navigation.navigate('OnlineReturnLanding');
+    navigation.navigate('IncorpDetailsPerc');
     return
     const {
       years_selected = 0,
@@ -202,9 +205,9 @@ const Dashboard = props => {
     } else if (spouse_info_filled) {
       navigation.navigate('Dependents');
     } else if (dependent_info_filled) {
-      navigation.navigate('MyTaxYear');
+      navigation.navigate('MyTaxYear',{pageIndex:0});
     } else if (banking_family_info_filled) {
-      navigation.navigate('MyTaxYear');
+      navigation.navigate('MyTaxYear',{pageIndex:0});
     } else if (about_info_filled) {
       navigation.navigate('BankingAndMore');
     } else if (identification_document_uploaded) {

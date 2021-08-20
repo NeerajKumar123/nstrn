@@ -233,9 +233,9 @@ const TaxFilingStatusCard = props => {
     } else if (spouse_info_filled) {
       navigation.navigate('Dependents');
     } else if (dependent_info_filled) {
-      navigation.navigate('MyTaxYear');
+      navigation.navigate('MyTaxYear',{pageIndex:0});
     } else if (banking_family_info_filled) {
-      navigation.navigate('MyTaxYear');
+      navigation.navigate('MyTaxYear',{pageIndex:0});
     } else if (about_info_filled) {
       navigation.navigate('BankingAndMore');
     } else if (identification_document_uploaded) {

@@ -223,7 +223,7 @@ const Dependents = props => {
               const params = prepareParams()
               onlineSaveDependentInfo(params, (depRes) =>{
                 setIsLoading(false)
-                navigation.navigate('MyTaxYear');
+                navigation.navigate('MyTaxYear',{pageIndex:0});
               })
             }
           }}

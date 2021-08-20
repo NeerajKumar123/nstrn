@@ -32,7 +32,6 @@ const OnlinePaymentScreen = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const [isLoading, setIsLoading] = useState(false);
-  const [address, setAddress] = useState('');
   const [clientSecret, setClientSecret] = useState('');
   const [card, setCard] = useState(undefined);
   const {confirmPayment, loading} = useConfirmPayment();

@@ -15,11 +15,11 @@ import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import AppHeader from '../components/AppHeader';
-import * as Validator from '../helpers/SKTValidator';
-import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import {incorpSaveIncorporatorDetails, incorpUpdateIncorporatorDetails} from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
+import TouchableInput from '../components/TouchableInput';
+import SKGGLAddressModel from '../components/SKGGLAddressModel';
 
 // Incorporation_Save_Incorporator_Detail
 const IncorpDetailsPerc = props => {
@@ -28,6 +28,7 @@ const IncorpDetailsPerc = props => {
   const [address, setAddress] = useState(pageParams?.Address);
   const [ownershipPerc, setOwnershipPerc] = useState(pageParams?.Ownership_Percentage);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAddViewVisible, setIsAddViewVisible] = useState(false);
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -70,16 +71,14 @@ const IncorpDetailsPerc = props => {
             color={Colors.APP_RED_SUBHEADING_COLOR}
             value="INCORPORATORS' DETAILS :"
           />
-          <SKInput
-            leftAccImage={CustomFonts.UserIcon}
-            marginTop={26}
+         <TouchableInput
             marginBottom={2}
-            maxLength={50}
+            maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={address}
             placeholder="Address"
-            onEndEditing={value => {
-              setAddress(value);
+            onClicked={() => {
+              setIsAddViewVisible(true);
             }}
           />
           <SKInput
@@ -144,6 +143,18 @@ const IncorpDetailsPerc = props => {
           />
         </ScrollView>
       </KeyboardAvoidingView>
+      {isAddViewVisible && (
+          <SKGGLAddressModel
+            onClose={() => {
+              setIsAddViewVisible(false);
+            }}
+            onSelectAddress={value => {
+              console.log('onSelectAddress', value);
+              setAddress(value);
+              setIsAddViewVisible(false);
+            }}
+          />
+        )}
     </View>
   );
 };

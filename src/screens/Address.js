@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -17,13 +17,12 @@ import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import AppHeader from '../components/AppHeader';
-import * as Validator from '../helpers/SKTValidator';
-import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import {getCanadaProvinceList, saveAboutInfo} from '../apihelper/Api';
 import SKModel from '../components/SKModel';
+import SKGGLAddressModel from '../components/SKGGLAddressModel';
 import * as CustomFonts from '../constants/FontsDefs';
-import {format } from 'date-fns'
+import {format} from 'date-fns';
 const Address = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
@@ -32,6 +31,7 @@ const Address = props => {
   const [provinces, setProvinces] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isProvinceVisible, setIsProvinceVisible] = useState(false);
+  const [isAddViewVisible, setIsAddViewVisible] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -44,8 +44,8 @@ const Address = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isMailingAddValid = mailingAddress?.length > 0
-    const isProvinceValid = province?.state_id
+    const isMailingAddValid = mailingAddress?.length > 0;
+    const isProvinceValid = province?.state_id;
 
     if (!isMailingAddValid) {
       isValidForm = false;
@@ -60,7 +60,7 @@ const Address = props => {
   const prepareParams = () => {
     const {user_id} = global.onlineStatusData;
     const commaSepYrs = global.selectedYears && global.selectedYears.join();
-    const dob = pageParams.dob && format(pageParams.dob, 'yyyy-MM-dd')
+    const dob = pageParams.dob && format(pageParams.dob, 'yyyy-MM-dd');
     const params = {
       User_Id: user_id,
       SIN_Number: pageParams.sin,
@@ -102,16 +102,15 @@ const Address = props => {
             color={Colors.APP_RED_SUBHEADING_COLOR}
             value="WHAT IS YOUR MAILING ADDRESS?"
           />
-          <SKInput
-            multiline={false}
-            marginTop={20}
-            marginBottom={0}
-            maxLength={30}
+          <TouchableInput
+            rightAccImage={CustomFonts.ChevronDown}
+            marginBottom={2}
+            maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={mailingAddress}
-            placeholder="Mailing Address"
-            onEndEditing={value => {
-              setMailingAddress(value);
+            placeholder="Enter Mailing Address"
+            onClicked={() => {
+              setIsAddViewVisible(true);
             }}
           />
           <Heading
@@ -141,19 +140,22 @@ const Address = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'BANKING'}
           onPress={() => {
-            if(checkFormValidations()){
-              setIsLoading(true)
+            if (checkFormValidations()) {
+              setIsLoading(true);
               const params = prepareParams();
-            saveAboutInfo(params, saveRes => {
-              setIsLoading(false)
-              if (saveRes?.status == -1){
-                Alert.alert('SukhTax','Something went wrong')
-                return
-              }
-              global.onlineStatusData = {...global.onlineStatusData,...saveRes?.data[0]}
-              navigation.navigate('BankingAndMore', {province:province});
-            });
-            }            
+              saveAboutInfo(params, saveRes => {
+                setIsLoading(false);
+                if (saveRes?.status == -1) {
+                  Alert.alert('SukhTax', 'Something went wrong');
+                  return;
+                }
+                global.onlineStatusData = {
+                  ...global.onlineStatusData,
+                  ...saveRes?.data[0],
+                };
+                navigation.navigate('BankingAndMore', {province: province});
+              });
+            }
           }}
         />
         {isProvinceVisible && (
@@ -167,6 +169,18 @@ const Address = props => {
             onSelect={value => {
               setProvince(value);
               setIsProvinceVisible(false);
+            }}
+          />
+        )}
+        {isAddViewVisible && (
+          <SKGGLAddressModel
+            onClose={() => {
+              setIsAddViewVisible(false);
+            }}
+            onSelectAddress={value => {
+              console.log('onSelectAddress', value);
+              setMailingAddress(value);
+              setIsAddViewVisible(false);
             }}
           />
         )}

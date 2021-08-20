@@ -19,20 +19,13 @@ import SKLoader from '../components/SKLoader';
 const MyTaxYear = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentYearIndex, setCurrentYearIndex] = useState(0);
-  const [currentYear, setCurrentYear] = useState();
-  const [buttonTitle, setButtonTitle] = useState('DOCUMENTS')
+  const pageParams = props.route.params;
+  let {pageIndex = 0} = pageParams
+  const selectedYears = global.selectedYears
+  const currentYear = selectedYears[pageIndex]
+  const buttonTitle = selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
+  console.log('currentPage',currentYear,buttonTitle)
 
-  useEffect(() => {
-    setCurrentYear(global.selectedYears && currentYearIndex < global.selectedYears.length  ? global.selectedYears[currentYearIndex] : '2020.');
-    const length = global.selectedYears ? global.selectedYears.length : 0
-    const nextIndex = currentYearIndex + 1
-    if(nextIndex < length){
-        const title = global.selectedYears[nextIndex]
-        // setButtonTitle(title)
-        setButtonTitle('NEXT')
-    }
-  }, [currentYearIndex]);
 
   const [data, setData] = useState([
     {title: 'I WAS EMPLOYED', value: 'I_was_employed', isSelected: false},
@@ -70,7 +63,7 @@ const MyTaxYear = props => {
     let params = {
       User_id: user_id,
       Tax_File_Id: tax_file_id,
-      Year: 2020,
+      Year: currentYear,
       Details_For: flag ? 0 : 1,
     };
     data.map(item => {
@@ -82,6 +75,84 @@ const MyTaxYear = props => {
     });
     return params;
   };
+
+
+  const saveMyAndSpouseInfo =(callback) =>{
+    setIsLoading(true);
+    const params = prepareParams(false);
+    onlineSaveMyYearInfo(params, saveYrRes => {
+      if (saveYrRes?.status == 1) {
+        const params = prepareParams(true);
+        onlineSaveMyYearInfo(params, saveYrRes => {
+          if(saveYrRes?.status == 1){
+            setIsLoading(false);
+            callback({status:1})
+          }else{
+            // callback({status:0})
+            Alert.alert('SukhTax', 'Something wrong');
+          }
+        })                     
+      } else {
+        // callback({status:0})
+        Alert.alert('SukhTax', 'Something wrong');
+      }
+    });
+  }
+
+  const saveMyInfoOnly =(callback) =>{
+    setIsLoading(true);
+    const params = prepareParams(false);
+    onlineSaveMyYearInfo(params, saveYrRes => {
+      setIsLoading(false);
+      if (saveYrRes?.status == 1) {
+        callback({status:1})    
+      } else {
+        // callback({status:0})
+        Alert.alert('SukhTax', 'Something wrong');
+      }
+    });
+  }
+  const saveSpouseInfoOnly =(callback) =>{
+    setIsLoading(true);
+    const params = prepareParams(true);
+    onlineSaveMyYearInfo(params, saveYrRes => {
+      setIsLoading(false);
+      if (saveYrRes?.status == 1) {
+        callback({status:1})    
+      } else {
+        // callback({status:0})
+        Alert.alert('SukhTax', 'Something wrong');
+      }
+    });
+  }
+
+  const decideAndNavigate =(callback) =>{
+    let nextIndex = pageIndex + 1
+    const selObj = global.selectedYears[nextIndex]
+    console.log('selObj',selObj)
+    if(selObj){
+      const newPageIndex = pageIndex + 1
+      navigation.push('MyTaxYear',{pageIndex:newPageIndex});
+    }else{
+      navigation.navigate('OnlineDocuments');
+    }
+}
+
+  const checkFormValidations = () =>{
+    let isValidForm = true;
+    if(mySelf || (spouse && global.isFromSpouseFlow)){
+      const selected = data && data.filter((x) => x.isSelected);
+      if(!selected?.length){
+        isValidForm = false
+        Alert.alert('SukhTax',global.isFromSpouseFlow ?  'Please select atleast one option for MYSELF OR SPOUSE' : 'Please select atleast one option for MYSELF')
+      }
+    }else {
+      isValidForm = false
+      Alert.alert('SukhTax', global.isFromSpouseFlow ? 'Please select one option from MYSELF OR SPOUSE' : 'Please select MYSELF')
+    }
+    console.log('isValidForm',isValidForm)
+    return isValidForm
+  }
 
   return (
     <View
@@ -179,33 +250,23 @@ const MyTaxYear = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={buttonTitle}
           onPress={() => {
-            if(mySelf || (spouse && isFromSpouseFlow)){
-              const selected = data && data.filter((x) => x.isSelected);
-              if(!selected?.length){
-                Alert.alert('SukhTax',global.isFromSpouseFlow ?  'Please select atleast one option for MYSELF OR SPOUSE' : 'Please select atleast one option for MYSELF')
-                return
+            if(checkFormValidations()){
+              if(global.isFromSpouseFlow && spouse){
+                saveMyAndSpouseInfo((res)=>{
+                  console.log('saveMyAndSpouseInfo===>',res )
+                  decideAndNavigate()
+                })
+              }else if(global.isFromSpouseFlow && spouse && !mySelf){
+                saveSpouseInfoOnly((res)=>{
+                  console.log('saveSpouseInfoOnly===>',res )
+                  decideAndNavigate()
+                })
+              }else if(!spouse && mySelf){
+                saveMyInfoOnly((res)=>{
+                  console.log('saveMyInfoOnly===>',res )
+                  decideAndNavigate()
+                })
               }
-              setIsLoading(true);
-              const params = prepareParams(false);
-              onlineSaveMyYearInfo(params, saveYrRes => {
-                if (saveYrRes?.status == 1) {
-                  const params = prepareParams(true);
-                  onlineSaveMyYearInfo(params, saveYrRes => {
-                    setIsLoading(false);
-                    const length = global.selectedYears ? global.selectedYears.length : 0
-                    const nextIndex = currentYearIndex + 1
-                    if (nextIndex < length) {
-                      setCurrentYearIndex(nextIndex);
-                    } else {
-                      navigation.navigate('OnlineDocuments');
-                    }
-                  })                     
-                } else {
-                  Alert.alert('SukhTax', 'Something wrong');
-                }
-              });
-            }else{
-              Alert.alert('SukhTax', global.isFromSpouseFlow ? 'Please select one option from MYSELF OR SPOUSE' : 'Please select MYSELF')
             }
           }}
         />

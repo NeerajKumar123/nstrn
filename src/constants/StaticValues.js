@@ -29,6 +29,7 @@ export const stripekey_live = 'pk_live_51I8rlGBHi8nqbGSxLUoRmQIMdKS2IupbsgiNJert
 export const stripeAccountId = 'acct_1I8rlGBHi8nqbGSx'
 export const stripeAPIVersion = '2020-08-27'
 
+export const Google_Api_key = 'AIzaSyDpdF27ZiuKLmsJXNfLyRbD-7nmlMa4tJw'
 
 
 export const ImageQualityOptions = {

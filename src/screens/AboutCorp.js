@@ -13,6 +13,7 @@ import {incorpGetNatureOfBussiness, incorpSaveAboutCorp} from '../apihelper/Api'
 import * as CustomFonts from '../constants/FontsDefs'
 import TouchableInput from '../components/TouchableInput';
 import SKModel from '../components/SKModel';
+import SKGGLAddressModel from '../components/SKGGLAddressModel';
 
 const AboutCorp = props => {
   const navigation = useNavigation()
@@ -22,6 +23,7 @@ const AboutCorp = props => {
   const [bussAddress, setBussAddress] = useState()
   const [isNOBVisible, setIsNOBVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isAddViewVisible, setIsAddViewVisible] = useState(false);
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -99,17 +101,16 @@ const AboutCorp = props => {
             setIfOther(value)
           }}
         />
-        <SKInput
-          marginBottom={2}
-          maxLength = {15}
-          height = {100}
-          borderColor={Colors.CLR_0065FF}
-          value={bussAddress}
-          placeholder = 'BUSINESS ADDRESS (IF SAME AS INCORPORATOR, PLEASE ENTER SAME ADDRESS)'
-          onEndEditing={value => {
-            setBussAddress(value)
-          }}
-        />
+        <TouchableInput
+            marginBottom={2}
+            maxLength={15}
+            borderColor={Colors.CLR_0065FF}
+            value={bussAddress}
+            placeholder="BUSINESS ADDRESS (IF SAME AS INCORPORATOR, PLEASE ENTER SAME ADDRESS)"
+            onClicked={() => {
+              setIsAddViewVisible(true);
+            }}
+          />
          <SKButton
           fontSize={16}
           marginTop={33}
@@ -152,6 +153,18 @@ const AboutCorp = props => {
           }}
         />
       )}
+      {isAddViewVisible && (
+          <SKGGLAddressModel
+            onClose={() => {
+              setIsAddViewVisible(false);
+            }}
+            onSelectAddress={value => {
+              console.log('onSelectAddress', value);
+              setBussAddress(value);
+              setIsAddViewVisible(false);
+            }}
+          />
+        )}
       </KeyboardAvoidingView>
     </View>
   );
