@@ -76,13 +76,14 @@ const OnlineDocuments = props => {
               key = {item}
                 item={item}
                 onClicked={() => {
+                  console.log('item',item)
                   launchImageLibrary(ImageQualityOptions, res => {
                     if (res?.didCancel) {
                       Alert.alert('SukhTax', 'Image uploading cancelled by user.')
                     }else if (res?.error) {
                       console.log('error', res?.error ?? ERROR_MSG);
                     }else if(res?.assets){
-                      intiateImageUploading(res)
+                      intiateImageUploading(res,item)
                     }
                   });
                 }}

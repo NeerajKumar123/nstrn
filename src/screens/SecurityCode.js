@@ -187,9 +187,9 @@ const SecurityCode = props => {
               Alert.alert('SukhTax', 'Please enter a valid OTP');
             }else{
               const {user_id} = global.userInfo
-              if(userid){
+              if(user_id){
                 setIsLoading(true)
-                const params = {user_id:userid,OTP:otp}
+                const params = {user_id:user_id,OTP:otp}
                 userCheckOtpForLogin(params,()=>{
                   navigation.navigate('Login')  
                   setIsLoading(false)
