@@ -16,14 +16,13 @@ import SKLoader from '../components/SKLoader';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
-import {downloadFileFromUrl}  from '../helpers/BaseUtility';
-
 import {useIsFocused} from '@react-navigation/native';
 import {
   getActiveFileStatusOnLogin,
   getServicePriceList,
   incorpGetIncorpStatus,
-  taxDocsGetTaxDocsStatus
+  taxDocsGetTaxDocsStatus,
+  craLattersGetStatus
 } from '../apihelper/Api';
 
 const data = [
@@ -99,6 +98,15 @@ const Dashboard = props => {
                   if(taxDocsRes?.status){
                     const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
                     global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}  
+                    craLattersGetStatus(params,(craRes)=>{
+                      if(craRes?.status == 1){
+                        const craLattersResData = craRes?.data && craRes?.data.length > 0 ? craRes?.data[0] : undefined
+                        global.craLattersData = craLattersResData ? {...craLattersResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}      
+                      }else{
+                        setIsLoading(false)
+                        Alert.alert('SukhTax', craRes?.message);    
+                      }
+                    })
                   }else{
                     setIsLoading(false)
                     Alert.alert('SukhTax', taxDocsRes?.message);
@@ -174,8 +182,7 @@ const Dashboard = props => {
           reqMoveToPage()
           break;
         case 6:
-          downloadFileFromUrl('http://www.africau.edu/images/default/sample.pdf','test.pdf');
-        // navigation.navigate('CRALanding');
+        navigation.navigate('CRALanding');
         break;        
       default:
         break;

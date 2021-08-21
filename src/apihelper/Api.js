@@ -348,3 +348,12 @@ export const taxDocsGetReqDocs = (params,callback) => {
   const path = `${BaseURL}/Tax_Docs_Get_Requested_Docs`
   API.makePostRequest(path , params, callback);
 };
+
+export const craLattersGetStatus = (params,callback) => {
+  const path = `${BaseURL}/CRA_Letters_Get_Status`
+  API.makePostRequest(path , params, callback);
+};
+export const craLattersGetDetails = (params,callback) => {
+  const path = `${BaseURL}/CRA_Letters_Get_Details`
+  API.makePostRequest(path , params, callback);
+};

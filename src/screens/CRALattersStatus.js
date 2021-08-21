@@ -6,10 +6,20 @@ import AppHeader from '../components/AppHeader';
 import * as CustomFonts from '../constants/FontsDefs';
 import * as Colors from '../constants/ColorDefs';
 import SKButton, {DarkBlueButton} from '../components/SKButton';
+import {craLattersGetDetails} from '../apihelper/Api';
 
 const CRALattersStatus = props => {
   const navigation = useNavigation();
   const status = 3;
+
+  useEffect(() => {
+    const {User_Id, CRA_Letter_Id} = global.craLattersData
+    const params = {User_Id:User_Id,CRA_Letter_Id:CRA_Letter_Id}
+    craLattersGetDetails(params, (detailsRes) =>{
+      console.log('detailsRes',detailsRes)
+    })
+  }, [])
+
 
   return (
     <View

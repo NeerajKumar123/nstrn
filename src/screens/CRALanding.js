@@ -4,8 +4,8 @@ import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
-import LinearGradient from 'react-native-linear-gradient';
 import SKButton from '../components/SKButton';
+
 const CRALanding = props => {
   const [letters, setLetters] = useState([
     {name: 'l1', status: 's1'},
