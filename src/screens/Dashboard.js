@@ -156,7 +156,7 @@ const Dashboard = props => {
     })
   }, [])
 
-  const navigateToScreen = item => {
+  const navigateTosScreen = item => {
     switch (item.id) {
       case 1:
         navigation.navigate('Home');
