@@ -357,3 +357,18 @@ export const craLattersGetDetails = (params,callback) => {
   const path = `${BaseURL}/CRA_Letters_Get_Details`
   API.makePostRequest(path , params, callback);
 };
+
+export const craLattersSaveNewLetter = (params,callback) => {
+  const path = `${BaseURL}/CRA_Letters_Save_new_Letter`
+  API.makePostRequest(path , params, callback);
+};
+
+export const craLattersUploadLetterImage = (params,callback) => {
+  const path = `${BaseURL}/CRA_Letters_Upload_Letter_Base_64`
+  API.makePostRequest(path , params, callback);
+};
+
+export const craLattersFinalizeProcess = (params,callback) => {
+  const path = `${BaseURL}/CRA_Letters_Finalize_Process`
+  API.makePostRequest(path , params, callback);
+};

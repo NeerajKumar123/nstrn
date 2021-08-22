@@ -37,4 +37,5 @@ export const ImageQualityOptions = {
   maxWidth: 20,
   maxHeight: 20,
   includeBase64:true,
+  selectionLimit:0
 };

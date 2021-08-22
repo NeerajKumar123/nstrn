@@ -35,9 +35,9 @@ const OnlineDocuments = props => {
   }
 
   const intiateImageUploading = (res, yr) =>{
-    setIsLoading(true)
     const imgObj = res?.assets?.[0]
     if (!imgObj.base64) Alert.alert('SukhTax','Something went wrong!')
+    setIsLoading(true)
     const params = prepareParams(imgObj.base64,yr)
     uploadDocumentBS64(params,(uploadRes) =>{
       setIsLoading(false)

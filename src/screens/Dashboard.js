@@ -22,7 +22,6 @@ import {
   getServicePriceList,
   incorpGetIncorpStatus,
   taxDocsGetTaxDocsStatus,
-  craLattersGetStatus
 } from '../apihelper/Api';
 
 const data = [
@@ -93,20 +92,11 @@ const Dashboard = props => {
               if(incStatusRes?.status == 1){
                 setIsLoading(false)
                 const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
-                global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
+                global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfos}
                 taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
                   if(taxDocsRes?.status){
                     const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
-                    global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}  
-                    craLattersGetStatus(params,(craRes)=>{
-                      if(craRes?.status == 1){
-                        const craLattersResData = craRes?.data && craRes?.data.length > 0 ? craRes?.data[0] : undefined
-                        global.craLattersData = craLattersResData ? {...craLattersResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}      
-                      }else{
-                        setIsLoading(false)
-                        Alert.alert('SukhTax', craRes?.message);    
-                      }
-                    })
+                    global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...[]}  
                   }else{
                     setIsLoading(false)
                     Alert.alert('SukhTax', taxDocsRes?.message);
@@ -156,7 +146,7 @@ const Dashboard = props => {
     })
   }, [])
 
-  const navigateTosScreen = item => {
+  const navigateToScreen = item => {
     switch (item.id) {
       case 1:
         navigation.navigate('Home');

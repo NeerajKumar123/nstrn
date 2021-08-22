@@ -6,38 +6,48 @@ import SKButton, {UploadDocButton} from '../components/SKButton';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {uploadImage} from '../apihelper/Api'
+import {craLattersSaveNewLetter} from '../apihelper/Api'
 import * as CustomFonts from '../constants/FontsDefs'
 import SKLoader from '../components/SKLoader';
 import {ImageQualityOptions} from '../constants/StaticValues'
 import SKInput from '../components/SKInput';
+import {ST_REGEX} from '../constants/StaticValues'
+import * as Validator from '../helpers/SKTValidator'
 
 const NewCRALatter = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
   const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
-  const [title, setTitle] = useState()
-  const [desc, setDesc] = useState()
-
-  const intiateImageUploading = (res) =>{
-    setIsLoading(true)
-    const imgObj = res?.assets?.[0]
-    if (!imgObj.base64) Alert.alert('SukhTax','Something went wrong!')
-    const params = prepareParams(imgObj.base64)
-    uploadImage(params,(uploadRes) =>{
-      setIsLoading(false)
-      uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
-      setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
-    })
-  }
+  const [title, setTitle] = useState('Title')
+  const [desc, setDesc] = useState('Desc')
+  let attachments = []
 
 
-  const prepareParams = (bs64Image) =>{
-    const year = global?.selectedYears?.[0]
-    const {user_id,tax_file_id} = global.onlineStatusData
-    const params = {User_id:user_id,Tax_File_Id:tax_file_id,Year:year,FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
+  const prepareParams = () =>{
+    const {user_id,cra_letters_id} = global.craLattersData
+    const base64s = attachments.join()
+    console.log('base64s',base64s)
+    const params = {User_id:user_id,Title:title ,Description:desc,CRA_Letters_Id:cra_letters_id,FileNameWithExtension:'cra-document.jpg',Base64String:base64s}
     return params
   }
+
+  const checkFormValidations = () => {
+    const isTitleValid =  Validator.isValidField(title, ST_REGEX.Address)
+    const isDescValid =  Validator.isValidField(desc, ST_REGEX.Address)
+
+    let isValidForm = true;
+    if (!isTitleValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax','Please enter valid title.' );
+    }else if (!isDescValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax','Please enter valid desciption.' );
+    }else if (attachments.length < 1) {
+      isValidForm = false;
+      Alert.alert('SukhTax','Please attach document for CRA Letter.' );
+    }
+    return isValidForm;
+  };
 
   return (
     <View
@@ -83,21 +93,26 @@ const NewCRALatter = props => {
             setDesc(value)
           }}
         />
-        <UploadDocButton  marginTop = {35} title = 'UPLOAD THE DOC HERE' height ={46}
+        <UploadDocButton  marginTop = {35} title = 'UPLOAD THE CRA LETTER' height ={46}
         onClick={() => {
+          console.log('ImageQualityOptions',JSON.stringify(ImageQualityOptions))
           launchImageLibrary(ImageQualityOptions, res => {
+            console.log('res',res)
             if (res?.didCancel) {
               Alert.alert('SukhTax', 'Image uploading cancelled by user.')
             }else if (res?.error) {
               console.log('error', res?.error ?? ERROR_MSG);
             }else if(res?.assets){
-              intiateImageUploading(res)
+              const isMultiple = res?.assets?.length > 1
+              res?.assets?.forEach(element => {
+                console.log('res?.assets',res?.assets)
+                attachments.push(element.base64)
+              });
             }
           });
         }}
         />
         <SKButton
-        //   disable = {!isUploadedSuccessfully}
           marginTop={30}
           fontSize={16}
           rightImage={CustomFonts.right_arrow}
@@ -106,7 +121,19 @@ const NewCRALatter = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'SUBMIT'}
           onPress={() => {
-            navigation.navigate('CRALattersStatus');
+            if(checkFormValidations()){
+              const params = prepareParams()
+              setIsLoading(true)
+              craLattersSaveNewLetter(params,(saveRes)=>{
+                setIsLoading(false)
+                if (saveRes?.status == 1) {
+                  navigation.navigate('CRALattersStatus');
+                }else{
+                  const msg = saveRes?.message ?? 'Something went wront, Please try again later.'
+                  Alert.alert('SukhTax',msg)
+                }
+              })
+            }
           }}
         />
       </ScrollView>
