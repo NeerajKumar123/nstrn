@@ -14,15 +14,16 @@ import AppHeader from '../components/AppHeader';
 import * as CustomFonts from '../constants/FontsDefs';
 import * as Colors from '../constants/ColorDefs';
 import SKButton from '../components/SKButton';
+import DocumentViewer from '../components/DocumentViewer';
 
 const CRAAttachments = props => {
   const navigation = useNavigation();
-  const [attachments, setAttachments] = useState([
-    {name: 'ATTACHMENT1.PDF', id: 1},
-    {name: 'ATTACHMENT1.PDF', id: 1},
-    {name: 'ATTACHMENT1.PDF', id: 1},
-    {name: 'ATTACHMENT1.PDF', id: 1},
-  ]);
+  const pageParams = props.route.params;
+  const [showDoc, setShowDoc] = useState(false);
+  const {attachments, title, cra_letters_status_name} = pageParams;
+  const [selectedItem, setSelectedItem] = useState();
+  console.log('pageParams', attachments, title, cra_letters_status_name);
+
   return (
     <View
       style={{
@@ -40,17 +41,20 @@ const CRAAttachments = props => {
           width: '100%',
           paddingHorizontal: 20,
         }}>
-        <Heading value={'ATTACHMENTS'} marginTop={50} />
+          {attachments && attachments.length > 0 && 
+          <Heading value={'ATTACHMENTS'} marginTop={50} />
+          }
+        
         <Heading
           fontSize={18}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={'TITLE OF LETTER'}
+          value={title.toUpperCase()}
           marginTop={20}
         />
         <KeyValueView
           fontSize={18}
           title={'STATUS OF LETTER : '}
-          value={'RESOLVED'}
+          value={cra_letters_status_name}
           marginTop={20}
           marginBottom = {20}
           titleColor={Colors.APP_BLUE_HEADING_COLOR}
@@ -58,9 +62,15 @@ const CRAAttachments = props => {
         />
         {attachments &&
           attachments.map((item, index) => {
-            return <FileCard />
+            return ( 
+            <FileCard key = {item.document_title}  item ={item} 
+            onClick = {() =>{
+              console.log(item)
+              setSelectedItem(item);
+              setShowDoc(true);
+            }}/>)
           })}
-        <SKButton
+        {/* <SKButton
           marginTop={56}
           fontSize={16}
           width="100%"
@@ -71,13 +81,31 @@ const CRAAttachments = props => {
           onPress={() => {
             navigation.navigate('CRALanding');
           }}
+        /> */}
+        <SKButton
+          marginTop={56}
+          fontSize={16}
+          width="100%"
+          iconcolor={Colors.WHITE}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.SECONDARY_FILL}
+          title={'CRA HOME'}
+          onPress={() => {
+            navigation.navigate('CRALanding');
+          }}
         />
       </View>
+      {showDoc && (
+        <DocumentViewer onClose={() => setShowDoc(false)} item={selectedItem} />
+      )}
     </View>
   );
 };
 
 const FileCard = props => {
+  const {item,onClick}  = props
+  const {document_title} = item
+  console.log('document_title',document_title)
   return (
     <TouchableOpacity
       style={{
@@ -97,8 +125,13 @@ const FileCard = props => {
           fontWeight: '700',
           flex: 1,
         }}>
-        {'ATTACHMENT1.PDF'}
+        {document_title}
       </Text>
+      <Image
+        resizeMode="contain"
+        style={{width: 20, height: 20, marginLeft: 10}}
+        source={CustomFonts.download}
+      />
     </TouchableOpacity>
   );
 };

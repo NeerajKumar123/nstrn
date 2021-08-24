@@ -14,7 +14,8 @@ const Home = props => {
   const {tax_file_status_id =  1 } = global.onlineStatusData
   const {incorporation_status_id =  1 } = global.incStatusData
   const {tax_docs_status_id =  1 } = global.taxDocsStatusData
-  // const {incorporation_status_id =  1 } = global.incStatusData
+  const {cra_letters_status_id =  1 } = global.craLattersData
+
   return (
     <View
       style={{
@@ -78,12 +79,12 @@ const Home = props => {
         <Heading
           fontSize={16}
           status={0}
-          status={1}
+          status={cra_letters_status_id}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="CRA LETTERS"
           onClicked = {()=>{
-            navigation.navigate('CRALattersStatus')
+            navigation.navigate('CRALanding')
           }}
         />
         <View

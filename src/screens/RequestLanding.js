@@ -31,9 +31,9 @@ const RequestLanding = props => {
     setIsLoading(true);
     taxDocsGetTaxDocsType({}, typeRes => {
       if (typeRes?.status == 1) {
-        const docs = typeRes?.data;
-        setDocsTypes(dosc);
         setIsLoading(false);
+        const docs = typeRes?.data;
+        setDocsTypes(docs);
       }
     });
   }, []);
@@ -75,7 +75,7 @@ const RequestLanding = props => {
           docsTypes.map((item, index) => {
             return (
               <DocCard
-                key={item.name}
+                key={item.tax_docs_type}
                 item={item}
                 onSelected={selectedValue => {
                   const newValue = {

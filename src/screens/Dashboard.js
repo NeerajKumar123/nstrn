@@ -22,6 +22,7 @@ import {
   getServicePriceList,
   incorpGetIncorpStatus,
   taxDocsGetTaxDocsStatus,
+  craLattersGetStatus
 } from '../apihelper/Api';
 
 const data = [
@@ -97,6 +98,17 @@ const Dashboard = props => {
                   if(taxDocsRes?.status){
                     const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
                     global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...[]}  
+                    const {user_id} = global.userInfo;
+                    const params = {User_Id: user_id};
+                    craLattersGetStatus(params, craRes => {
+                      if (craRes?.status == 1) {
+                        const craLattersResData = craRes?.data && craRes?.data.length > 0 ? craRes?.data[0] : undefined
+                        global.craLattersData = craLattersResData
+                      } else {
+                        setIsLoading(false);
+                        Alert.alert('SukhTax', craRes?.message);
+                      }
+                    });
                   }else{
                     setIsLoading(false)
                     Alert.alert('SukhTax', taxDocsRes?.message);
@@ -118,25 +130,6 @@ const Dashboard = props => {
 
   useEffect(() => {
     setIsLoading(true);
-      // setTimeout(() => {
-      //   const {user_id} = global.userInfo
-      //   const params = {User_Id:user_id}
-      //   getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
-      //     const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
-      //     global.onlineStatusData = statusData ? statusData : {}
-      //     incorpGetIncorpStatus(params,(incStatusRes) =>{
-      //       if(incStatusRes?.status == 1){
-      //         setIsLoading(false)
-      //         const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
-      //         global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfo}
-      //         taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
-      //           const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
-      //           global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...global.userInfo}
-      //         })
-      //       }
-      //     })  
-      //   })
-      // }, 500);
     getServicePriceList((priceListRes) =>{
       if(priceListRes?.status == 1){
         let onlineTaxFees = priceListRes?.data?.filter(fee => fee.services_fee_id == 1);
@@ -179,8 +172,6 @@ const Dashboard = props => {
     }
   };
   const onlineMoveToPage = props => {
-    navigation.navigate('IncorpDetailsPerc');
-    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -216,8 +207,6 @@ const Dashboard = props => {
     }
   };
   const incorpMoveToPage = props => {
-    navigation.navigate('IncorporationLanding');
-    return
     const {
       hst_registration, // HST
       identification_document_uploaded, // incprtr
@@ -241,8 +230,7 @@ const Dashboard = props => {
     }
   };
   const reqMoveToPage = props => {
-    navigation.navigate('RequestLandiing');
-    
+    navigation.navigate('RequestLanding');
   };
 
   return (

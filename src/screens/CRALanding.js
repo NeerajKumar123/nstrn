@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Alert} from 'react-native';
+import {TouchableOpacity, View, Text, ScrollView, Alert, Touchable} from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
@@ -9,7 +9,7 @@ import SKButton from '../components/SKButton';
 import {craLattersGetStatus} from '../apihelper/Api';
 
 const CRALanding = props => {
-  const [letters, setLetters] = useState();
+  const [letters, setLetters] = useState([]);
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
 
@@ -38,6 +38,8 @@ const CRALanding = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         width: '100%',
+        flex:1,
+        paddingBottom:120,
       }}>
       <AppHeader navigation={navigation} />
       {isLoading && <SKLoader/>}
@@ -45,16 +47,17 @@ const CRALanding = props => {
         style={{width: '100%'}}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          height: '100%',
         }}>
-        <Heading value="CRA LETTERS" marginTop={100} />
+        <Heading value="CRA LETTERS" marginTop={50} />
+        {letters && letters.length > 0 && 
         <KeyValueView
-          title="LETTER"
-          value="STATUS"
-          marginTop={20}
-          titleColor={Colors.APP_RED_SUBHEADING_COLOR}
-          subtitleColor={Colors.APP_RED_SUBHEADING_COLOR}
-        />
+        title="LETTER"
+        value="STATUS"
+        marginTop={20}
+        onClick = {()=>{}}
+        titleColor={Colors.APP_RED_SUBHEADING_COLOR}
+        subtitleColor={Colors.APP_RED_SUBHEADING_COLOR}
+      />}
         <View>
           {letters &&
             letters.map((item, index) => {
@@ -67,6 +70,9 @@ const CRALanding = props => {
                   fontSize={16}
                   titleColor={Colors.APP_BLUE_HEADING_COLOR}
                   subtitleColor={Colors.APP_BLUE_HEADING_COLOR}
+                  onClick = {()=>{
+                    navigation.navigate('CRALattersStatus',{...item});
+                  }}
                 />
               );
             })}
@@ -94,9 +100,13 @@ const KeyValueView = props => {
     titleColor = Colors.APP_BLUE_HEADING_COLOR,
     subtitleColor = Colors.APP_BLUE_HEADING_COLOR,
     fontSize = 20,
+    onClick
   } = props;
   return (
-    <View
+    <TouchableOpacity
+    onPress = {()=>{
+      onClick()
+    }}
       style={{
         width: '100%',
         flexDirection: 'row',
@@ -110,7 +120,7 @@ const KeyValueView = props => {
         style={{fontWeight: '700', fontSize: fontSize, color: subtitleColor}}>
         {props.value}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

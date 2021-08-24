@@ -59,7 +59,7 @@ const SKButton = props => {
         width: width,
       }}
       onPress={() => {
-        !disable  && props.onPress && props.onPress();
+        !disable && props.onPress && props.onPress();
       }}>
       <View
         style={{
@@ -102,7 +102,7 @@ const SKButton = props => {
         {rightImage && isRightLocalPNG && (
           <Image
             resizeMode="contain"
-            style={{width: 15, height: 15,opacity: disable ? 0.5 : 1.0}}
+            style={{width: 15, height: 15, opacity: disable ? 0.5 : 1.0}}
             source={rightImage}
           />
         )}
@@ -111,7 +111,7 @@ const SKButton = props => {
             name={rightImage}
             size={iconsize}
             color={iconcolor}
-            opacity = {disable ? 0.5 : 1.0}
+            opacity={disable ? 0.5 : 1.0}
           />
         )}
       </View>
@@ -160,7 +160,12 @@ export const Link = props => {
 };
 
 export const UploadDocButton = props => {
-  const {marginTop = 30, title = 'UPLOAD', height = 46} = props;
+  const {
+    marginTop = 30,
+    title = 'UPLOAD',
+    height = 46,
+    isAttach = false,
+  } = props;
   return (
     <TouchableOpacity
       onPress={() => {
@@ -182,16 +187,24 @@ export const UploadDocButton = props => {
       <Text style={{fontFamily: CustomFonts.OpenSansRegular, fontSize: 15}}>
         {title}
       </Text>
-      <Image
-        resizeMode="contain"
-        style={{width: 24, height: 24}}
-        source={CustomFonts.upload}
-      />
+      {isAttach ? (
+        <Icon
+          name={'attachment'}
+          size={30}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
+        />
+      ) : (
+        <Image
+          resizeMode="contain"
+          style={{width: 24, height: 24}}
+          source={CustomFonts.upload}
+        />
+      )}
     </TouchableOpacity>
   );
 };
 
-export const DarkBlueButton  = props => {
+export const DarkBlueButton = props => {
   const {marginTop = 30, title = 'UPLOAD', height = 46} = props;
   return (
     <TouchableOpacity
@@ -207,7 +220,12 @@ export const DarkBlueButton  = props => {
         height,
         marginTop: marginTop,
       }}>
-      <Text style={{fontFamily: CustomFonts.OpenSansRegular, fontSize: 18, fontWeight:'bold'}}>
+      <Text
+        style={{
+          fontFamily: CustomFonts.OpenSansRegular,
+          fontSize: 18,
+          fontWeight: 'bold',
+        }}>
         {title}
       </Text>
     </TouchableOpacity>

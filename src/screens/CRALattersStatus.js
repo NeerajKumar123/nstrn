@@ -3,6 +3,7 @@ import {View, Text, ScrollView, Alert, Platform, Linking} from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
+import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
 import * as Colors from '../constants/ColorDefs';
 import SKButton, {DarkBlueButton} from '../components/SKButton';
@@ -10,16 +11,21 @@ import {craLattersGetDetails} from '../apihelper/Api';
 
 const CRALattersStatus = props => {
   const navigation = useNavigation();
+  const pageParams = props.route.params;
   const [status, setStatus] = useState(1)
   const [details, setDetails] = useState()
+  const [isLoading, setIsLoading] = useState(false)
 
 
 
   useEffect(() => {
-    const {user_id, cra_letters_id} = global.craLattersData
+    console.log('pageParams',pageParams)
+    const {user_id, cra_letters_id} = pageParams
     const params = {User_Id:user_id,CRA_Letter_Id:cra_letters_id}
+    setIsLoading(true)
     craLattersGetDetails(params, (detailsRes) =>{
       console.log('detailsRes',detailsRes)
+      setIsLoading(false)
       if (detailsRes?.status == 1) {
         const data = detailsRes?.data?.length > 0 ? detailsRes?.data[0] : {}
         console.log('data',data)
@@ -39,6 +45,7 @@ const CRALattersStatus = props => {
         width: '100%',
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader/>}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -46,9 +53,10 @@ const CRALattersStatus = props => {
           height: '100%',
           paddingBottom: Platform.OS == 'ios' ? 100 : 0,
         }}>
-        {status == 1 && <InProcess details = {details} navigation={navigation} marginTop={25} />}
-        {status == 2 && <Rejected details = {details} navigation={navigation} />}
-        {status == 3 && <Resolved details = {details} navigation={navigation} />}
+          {details && status == 1 && <InProcess details = {details} navigation={navigation} />}
+          {details && status == 2 && <InProcess details = {details} navigation={navigation} marginTop={25} />}
+          {details  && status == 3 && <Resolved details = {details} navigation={navigation} />}
+          {details && status == 4 && <Rejected details = {details} navigation={navigation} />}
       </ScrollView>
     </View>
   );
@@ -70,7 +78,7 @@ const InProcess = props => {
       <Heading
         fontSize={20}
         color={Colors.APP_RED_SUBHEADING_COLOR}
-        value={title}
+        value={title?.toUpperCase()}
         marginTop={20}
       />
       <KeyValueView
@@ -105,7 +113,9 @@ const InProcess = props => {
 };
 
 const Rejected = props => {
-    const {navigation} = props;
+  const {navigation, details} = props;
+  const {cra_letters_status_name,status_description,title} = details
+
     return (
       <View
         style={{
@@ -119,13 +129,13 @@ const Rejected = props => {
         <Heading
           fontSize={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={'LETTER TITLE'}
+          value={title.toUpperCase()}
           marginTop={20}
         />
         <KeyValueView
           fontSize={20}
           title={'STATUS OF LETTER : '}
-          value={'REJECTED'}
+          value={cra_letters_status_name}
           marginTop={20}
           titleColor={Colors.APP_BLUE_HEADING_COLOR}
           subtitleColor={Colors.APP_RED_SUBHEADING_COLOR}
@@ -135,7 +145,7 @@ const Rejected = props => {
           marginTop={12}
           fontWeight="700"
           color={Colors.APP_BLUE_HEADING_COLOR}
-          value={'status_description'}
+          value={status_description}
         />
         <SKButton
           marginTop={56}
@@ -154,7 +164,8 @@ const Rejected = props => {
   };
 
   const Resolved = props => {
-    const {navigation} = props;
+    const {navigation,details} = props;
+    const {cra_letters_status_name,status_description,title} = details
     return (
       <View
         style={{
@@ -168,13 +179,13 @@ const Rejected = props => {
         <Heading
           fontSize={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={'LETTER TITLE'}
+          value={title.toUpperCase()}
           marginTop={20}
         />
         <KeyValueView
           fontSize={20}
           title={'STATUS OF LETTER : '}
-          value={'IN PROCESS'}
+          value={cra_letters_status_name}
           marginTop={20}
           titleColor={Colors.APP_BLUE_HEADING_COLOR}
           subtitleColor={Colors.APP_RED_SUBHEADING_COLOR}
@@ -184,7 +195,7 @@ const Rejected = props => {
           marginTop={12}
           fontWeight="700"
           color={Colors.APP_BLUE_HEADING_COLOR}
-          value={'status_description'}
+          value={status_description}
         />
         <SKButton
           marginTop={56}
@@ -195,7 +206,8 @@ const Rejected = props => {
           borderColor={Colors.SECONDARY_FILL}
           title={'SUKH TAX REPLY'}
           onPress={() => {
-              navigation.navigate('CRAReply')
+              const replies = details?.Sukh_Tax_Reply
+              navigation.navigate('CRAReply',{replies,title, cra_letters_status_name})
           }}
         />
         <SKButton
@@ -207,7 +219,8 @@ const Rejected = props => {
           borderColor={Colors.SECONDARY_FILL}
           title={'ATTACHMENTS'}
           onPress={() => {
-              navigation.navigate('CRAAttachments')
+            const attachments = details?.Attachments
+            navigation.navigate('CRAAttachments',{attachments,title, cra_letters_status_name})
           }}
         />
         <SKButton
