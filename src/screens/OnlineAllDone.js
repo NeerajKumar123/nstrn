@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import SKButton from '../components/SKButton';
-import SKInput from '../components/SKInput';
+import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs'
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OnlineAllDone = props => {
   const navigation = useNavigation()
+  const [isLoading, setIsLoading] = useState(false)
   return (
     <View
       style={{
@@ -21,14 +22,14 @@ const OnlineAllDone = props => {
         width: '100%',
         height:'100%',
       }}>
-          <View style={{marginTop: 110}}>
+        <View style={{marginTop: 110}}>
         <Image
           resizeMode="contain"
           style={{width: 136, height: 150}}
           source={CustomFonts.header_logo}
         />
       </View>
-
+      {isLoading && <SKLoader/>}
       <ScrollView
         style={{width: '100%', marginBottom:100}}
         contentContainerStyle={{
@@ -72,7 +73,9 @@ const OnlineAllDone = props => {
               User_Id: user_id,
               Tax_File_Id: tax_file_id
             };
+            setIsLoading(true)
             finalizeOnlineProcess(params,(finalizeRes) =>{
+              setIsLoading(false)
               navigation.popToTop()
             })
           }}

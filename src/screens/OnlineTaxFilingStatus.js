@@ -613,7 +613,7 @@ const TaxFilingStatusCard = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'NEW FILING'}
           onPress={() => {
-            navigation.popToTop();
+            moveToPage()
           }}
         />
       )}

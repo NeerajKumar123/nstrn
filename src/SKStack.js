@@ -61,6 +61,7 @@ import NewCRALatter from './screens/NewCRALatter';
 import CRALattersStatus from './screens/CRALattersStatus';
 import CRAReply from './screens/CRAReply';
 import CRAAttachments from './screens/CRAAttachments';
+import AnimTest from './screens/AnimTest'
 
 const Stack = createStackNavigator();
 
@@ -119,6 +120,11 @@ const SKStack = () => {
           name="Dashboard"
           component={Dashboard}
           options={{title: 'Dashboard', headerShown: false}}
+        />
+        <Stack.Screen
+          name="AnimTest"
+          component={AnimTest}
+          options={{title: 'AnimTest', headerShown: false}}
         />
         <Stack.Screen
           name="SetupNewPass"

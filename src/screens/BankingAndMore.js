@@ -37,8 +37,8 @@ const BankingAndMore = props => {
   const pageParams = props.route.params;
   const [bank, setBank] = useState('');
   const [banks, setBanks] = useState();
-  const [accountNo, setAccountNo] = useState('7654321');
-  const [branchNo, setBranhcNo] = useState('12345');
+  const [accountNo, setAccountNo] = useState('');
+  const [branchNo, setBranhcNo] = useState('');
   const [residency, setResidency] = useState('');
   const [residencies, setResidencies] = useState();
   const [familyInfo, setFamilyInfo] = useState();
@@ -71,6 +71,7 @@ const BankingAndMore = props => {
   }, []);
 
   const checkFormValidations = () => {
+    console.log('accountNo',accountNo)
     let isValidForm = true;
     const isBankValid = bank?.institution_id > 0
     const isAccValid = accountNo.length > 0
@@ -115,6 +116,11 @@ const BankingAndMore = props => {
       }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation={navigation} />
+      <KeyboardAvoidingView
+        behavior={'position'}
+        enabled={true}
+        style={{flex: 1, width:'100%',paddingBottom:10}}
+        keyboardVerticalOffset={-60}>
       <ScrollView
         style={{
           width: '100%',
@@ -144,7 +150,10 @@ const BankingAndMore = props => {
           borderColor={Colors.CLR_0065FF}
           value={accountNo}
           placeholder="#Enter Account Number"
-          onEndEditing={value => {}}
+          onEndEditing={value => {
+            setAccountNo(value)
+
+          }}
         />
         <SKInput
           marginTop={20}
@@ -153,7 +162,9 @@ const BankingAndMore = props => {
           borderColor={Colors.CLR_0065FF}
           value={branchNo}
           placeholder="#Enter Branch Number"
-          onEndEditing={value => {}}
+          onEndEditing={value => {
+            setBranhcNo(value)
+          }}
         />
         <Heading fontSize={20} marginTop={45} value="WHAT IS YOUR RESIDENCY:" />
         <TouchableInput
@@ -195,6 +206,7 @@ const BankingAndMore = props => {
           }}
         />
       </ScrollView>
+      </KeyboardAvoidingView>
       {isBankVisible && (
         <SKModel
           title="Select"

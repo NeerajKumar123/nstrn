@@ -76,7 +76,7 @@ const BasicInfo = props => {
       <AppHeader navigation={navigation} />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: 32,
+          paddingHorizontal: 20,
           flex: 1,
         }}>
         <Heading value="ABOUT YOU" marginTop={30} />

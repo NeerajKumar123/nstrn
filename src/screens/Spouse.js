@@ -93,37 +93,37 @@ const Spouse = props => {
     const isBranchValid = branchNo.length > 4;
     if (!isValidLastYear) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isValidLastYear');
+      Alert.alert('SukhTax', 'Please select valid year');
     } else if (!isFNameValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid First Name');
+      Alert.alert('SukhTax', 'Please enter valid first name');
     } else if (!isLNameValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isLNameValid');
+      Alert.alert('SukhTax', 'Please enter valid last name');
     } else if (!isDOBValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isDOBValid');
+      Alert.alert('SukhTax', 'Please select valid DOB.');
     } else if (!isGenderValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isGenderValid');
+      Alert.alert('SukhTax', 'Please select valid gender');
     } else if (!isResidencyValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isResidencyValid');
+      Alert.alert('SukhTax', 'Please select valid residency');
     } else if (!isSinValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isSinValid');
+      Alert.alert('SukhTax', 'Please enter valid SIN');
     } else if (!isEnrtyDateValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isEnrtyDateValid');
+      Alert.alert('SukhTax', 'Please select valid Date Of Immigration');
     } else if (!isBankValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isBankValid');
+      Alert.alert('SukhTax', 'Please select a valid bank');
     } else if (!isAccValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isAccValid');
+      Alert.alert('SukhTax', 'Please enter valid account number');
     } else if (!isBranchValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'isBranchValid');
+      Alert.alert('SukhTax', 'Please enter valid branch number');
     }
     return isValidForm;
   };
@@ -167,6 +167,11 @@ const Spouse = props => {
       }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation={navigation} />
+      <KeyboardAvoidingView
+        behavior={'position'}
+        enabled={true}
+        style={{flex: 1, width:'100%',paddingBottom:10}}
+        keyboardVerticalOffset={-50}>
       <ScrollView
         style={{
           width: '100%',
@@ -186,7 +191,7 @@ const Spouse = props => {
           leftAccImage={CustomFonts.Clock}
           rightAccImage={CustomFonts.ChevronDown}
           value={lastTime}
-          placeholder="Select"
+          placeholder="Select Year"
           onClicked={() => {
             setIsLastTimeVisible(true);
           }}
@@ -323,6 +328,7 @@ const Spouse = props => {
           }}
         />
       </ScrollView>
+      </KeyboardAvoidingView>
 
       {isDatePickerVisible && (
         <View

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {Platform} from 'react-native'
+import {Alert, Platform} from 'react-native'
 const setKeyValue = async (key, value, callback) => {
     let valuestring = '';
     if (typeof value === 'object') {
@@ -13,7 +13,8 @@ const setKeyValue = async (key, value, callback) => {
       await AsyncStorage.setItem(key, valuestring)
       callback && callback()
     } catch (e) {
-      alert('Failed to save the data to the storage')
+      // Alert.alert('Failed to save the data to the storage')
+      console.log('Failed to save the data to the storage')
       callback && callback()
     }
   }

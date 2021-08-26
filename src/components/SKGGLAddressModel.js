@@ -23,14 +23,17 @@ const SKGGLAddressModel = props => {
   } = props;
   const [listViewDisplayed, setListViewDisplayed] = useState(null);
   return (
-    <Modal animationType='slide' transparent={false} visible={true}>
+    <Modal
+      animationType='slide'
+      transparent={false}
+      visible={true}>
       <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
           height: '100%',
-          alignSelf: 'center',
+          alignSelf:'center',
           flexDirection: 'column',
           backgroundColor: '#00000080',
         }}>
@@ -82,7 +85,6 @@ const SKGGLAddressModel = props => {
           </View>
           <View
             style={{
-              height: 50,
               marginTop:40,
               zIndex: 1000,
             }}>
@@ -155,7 +157,6 @@ const SKGGLAddressModel = props => {
                 description: {
                   color: Colors.BLACK,
                   fontSize: 15,
-                  backgroundColor:'red'
                 },
                 predefinedPlacesDescription: {
                   color: Colors.BLACK,

@@ -257,7 +257,7 @@ const Dashboard = props => {
         {`Welcome, ${userFullName}`}
       </Text>
       {data && (
-        <FlatLists
+        <FlatList
           contentContainerStyle={{
             backgroundColor: Colors.WHITE,
             marginTop: 10,
