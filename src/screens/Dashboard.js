@@ -145,15 +145,15 @@ const Dashboard = props => {
         navigation.navigate('Home');
         break;
         case 2:
-          let {book_an_appointment_link}  = global.incStatusData
-          if(!book_an_appointment_link){
-            book_an_appointment_link  = global.statusData
-          }
-          if(book_an_appointment_link){
-            navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
-          }else{
-            Alert.alert('SukhTax','Something went wrong.')
-          }
+          // let {book_an_appointment_link}  = global.incStatusData
+          // if(!book_an_appointment_link){
+          //   book_an_appointment_link  = global.statusData
+          // }
+          // if(book_an_appointment_link){
+          //   navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
+          // }else{
+          //   Alert.alert('SukhTax','Something went wrong.')
+          // }
           break;
       case 3:
         onlineMoveToPage()
@@ -165,7 +165,7 @@ const Dashboard = props => {
           reqMoveToPage()
           break;
         case 6:
-        navigation.navigate('CRALanding');
+        // navigation.navigate('CRALanding');
         break;        
       default:
         break;

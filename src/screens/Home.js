@@ -84,7 +84,7 @@ const Home = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="CRA LETTERS"
           onClicked = {()=>{
-            navigation.navigate('CRALanding')
+            navigation.navigate('CRALandiing')
           }}
         />
         <View

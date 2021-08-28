@@ -91,12 +91,11 @@ apply from: "../../node_modules/react-native/react.gradle"
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = false
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -119,6 +118,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  * and the benefits of using Hermes will therefore be sharply reduced.
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
+def enableSeparateBuildPerCPUArchitecture = true
 
 android {
     ndkVersion rootProject.ext.ndkVersion
