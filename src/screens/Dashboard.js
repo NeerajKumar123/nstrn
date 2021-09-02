@@ -76,8 +76,9 @@ const Dashboard = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [taxFilingFee, setTaxFilingFee] = useState(44.99);
   const userFullName = global.userInfo
-    ? `${global.userInfo.firstname} ${global.userInfo.lastname}`
+    ? `${global.userInfo.firstname ? global.userInfo.firstname : ''} ${global.userInfo.lastname ? global.userInfo.lastname : ''}`
     : '';
+
 
   useEffect(() => {
     if(isFocused){
@@ -145,15 +146,15 @@ const Dashboard = props => {
         navigation.navigate('Home');
         break;
         case 2:
-          // let {book_an_appointment_link}  = global.incStatusData
-          // if(!book_an_appointment_link){
-          //   book_an_appointment_link  = global.statusData
-          // }
-          // if(book_an_appointment_link){
-          //   navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
-          // }else{
-          //   Alert.alert('SukhTax','Something went wrong.')
-          // }
+          let {book_an_appointment_link}  = global.incStatusData
+          if(!book_an_appointment_link){
+            book_an_appointment_link  = global.statusData
+          }
+          if(book_an_appointment_link){
+            navigation.navigate('SKWebPage',{pageUrl:book_an_appointment_link})
+          }else{
+            Alert.alert('SukhTax','Something went wrong.')
+          }
           break;
       case 3:
         onlineMoveToPage()
@@ -165,13 +166,15 @@ const Dashboard = props => {
           reqMoveToPage()
           break;
         case 6:
-        // navigation.navigate('CRALanding');
+        navigation.navigate('CRALanding');
         break;        
       default:
         break;
     }
   };
   const onlineMoveToPage = props => {
+    navigation.navigate('OnlineReturnLanding');
+    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -264,8 +267,9 @@ const Dashboard = props => {
             marginBottom: 100,
             justifyContent: 'center',
             alignItems: 'center',
-            paddingBottom: 50,
+            paddingBottom: 50
           }}
+          showsVerticalScrollIndicator = {false}
           alwaysBounceVertical={false}
           keyExtractor={(item, index) => 'key_' + index}
           data={data}
@@ -285,10 +289,11 @@ const Dashboard = props => {
         style={{
           width: '100%',
           position: 'absolute',
-          bottom: Platform.OS == 'ios' ? 20 : 0,
+          bottom: Platform.OS == 'ios' ? 0 : 0,
           justifyContent: 'center',
           alignItems: 'center',
           height: 40,
+          backgroundColor:Colors.WHITE
         }}>
         <TouchableOpacity
           style={{

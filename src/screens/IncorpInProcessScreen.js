@@ -10,6 +10,7 @@ import * as CustomFonts from '../constants/FontsDefs';
 
 const IncorpInProcessScreen = props => {
   const navigation = useNavigation();
+
   const openLink = () => {
     const {company_contact_number} = global.incStatusData
     let finalLink = company_contact_number
@@ -36,8 +37,8 @@ const IncorpInProcessScreen = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
-        paddingHorizontal:20
+        paddingHorizontal:20,
+        flex:1
       }}>
         <Heading value="IN PROCESS" marginTop={100} />
         <Heading

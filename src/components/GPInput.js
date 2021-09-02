@@ -37,15 +37,11 @@ const GPInput = props => {
         enablePoweredByContainer={true}
         listUnderlayColor="lightgrey"
         onPress={(data, details) => {
-          console.log('details', details);
-          console.log('data', data);
           setListViewDisplayed(null);
           onSelectAddress(data.description);
-          console.log('details.description', data.description);
         }}
         textInputProps={{
           onChangeText: text => {
-            console.log('text==>', text);
             setListViewDisplayed('auto');
           },
           style: {

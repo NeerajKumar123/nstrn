@@ -22,7 +22,6 @@ const CRAAttachments = props => {
   const [showDoc, setShowDoc] = useState(false);
   const {attachments, title, cra_letters_status_name} = pageParams;
   const [selectedItem, setSelectedItem] = useState();
-  console.log('pageParams', attachments, title, cra_letters_status_name);
 
   return (
     <View
@@ -65,7 +64,6 @@ const CRAAttachments = props => {
             return ( 
             <FileCard key = {item.document_title}  item ={item} 
             onClick = {() =>{
-              console.log(item)
               setSelectedItem(item);
               setShowDoc(true);
             }}/>)
@@ -105,7 +103,6 @@ const CRAAttachments = props => {
 const FileCard = props => {
   const {item,onClick}  = props
   const {document_title} = item
-  console.log('document_title',document_title)
   return (
     <TouchableOpacity
       style={{

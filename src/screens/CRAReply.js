@@ -11,7 +11,6 @@ const CRAReply = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const {replies, title, cra_letters_status_name} = pageParams;
-  console.log('pageParams', replies, title, cra_letters_status_name);
 
   return (
     <View

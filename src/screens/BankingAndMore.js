@@ -71,7 +71,6 @@ const BankingAndMore = props => {
   }, []);
 
   const checkFormValidations = () => {
-    console.log('accountNo',accountNo)
     let isValidForm = true;
     const isBankValid = bank?.institution_id > 0
     const isAccValid = accountNo.length > 0
@@ -107,25 +106,17 @@ const BankingAndMore = props => {
 
   return (
     <View
-      style={{
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        width: '100%',
-        height: '100%',
-      }}>
+    style={{
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      flex: 1,
+    }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation={navigation} />
-      <KeyboardAvoidingView
-        behavior={'position'}
-        enabled={true}
-        style={{flex: 1, width:'100%',paddingBottom:10}}
-        keyboardVerticalOffset={-60}>
       <ScrollView
-        style={{
-          width: '100%',
+        contentContainerStyle={{
           paddingHorizontal: 20,
-          marginBottom: 30,
         }}>
         <Heading value="BANKING AND MORE" marginTop={26} />
         <Heading
@@ -206,7 +197,6 @@ const BankingAndMore = props => {
           }}
         />
       </ScrollView>
-      </KeyboardAvoidingView>
       {isBankVisible && (
         <SKModel
           title="Select"

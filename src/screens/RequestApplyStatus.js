@@ -82,7 +82,6 @@ const RequestApplyStatus = props => {
             onDocClicked = {(item)=>{
               setSelectedItem(item)
               setShowDoc(true)
-              console.log('onDocClicked',item)
             }}
            onAllDownloadClicked = {()=>{
             console.log('onAllDownloadClicked')
@@ -260,7 +259,6 @@ const InProcess = props => {
         width: '100%',
         paddingHorizontal: 20,
       }}>
-        {console.log('tax_docs_status_name',tax_docs_status_name)}
       <Heading value={tax_docs_status_name} marginTop={100} />
       <Heading
         fontSize={17}

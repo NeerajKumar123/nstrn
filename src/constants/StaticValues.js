@@ -32,10 +32,16 @@ export const stripeAPIVersion = '2020-08-27'
 export const Google_Api_key = 'AIzaSyDpdF27ZiuKLmsJXNfLyRbD-7nmlMa4tJw'
 
 
-export const ImageQualityOptions = {
-  quality: .2,
-  maxWidth: 20,
-  maxHeight: 20,
+export const ImageQualityOptionsWithMultiSelectionSupport = {
+  quality: .5,
+  maxWidth: 300,
+  maxHeight: 400,
   includeBase64:true,
   selectionLimit:0
+};
+export const ImageQualityOptions = {
+  quality: .5,
+  maxWidth: 300,
+  maxHeight: 400,
+  includeBase64:true
 };

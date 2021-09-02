@@ -112,17 +112,17 @@ const IncorpDetails = props => {
         backgroundColor: 'white',
         flex: 1,
       }}>
-      <AppHeader navigation={navigation} />
-      {isLoading && <SKLoader />}
       <KeyboardAvoidingView
-        behavior={'position'}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         enabled={true}
-        style={{backgroundColor: Colors.WHITE, flex: 1}}
-        keyboardVerticalOffset={-150}>
+        style={{flex: 1, width: '100%', paddingBottom: 10}}
+        keyboardVerticalOffset={0}>
+        {isLoading && <SKLoader />}
+        <AppHeader navigation={navigation} />
         <ScrollView
+        style = {{flex: 1}}
           contentContainerStyle={{
-            paddingHorizontal: 20,
-            flex: 1,
+            paddingHorizontal: 20
           }}>
           <Heading value="ABOUT YOU" marginTop={26} />
           <Heading

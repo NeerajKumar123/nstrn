@@ -76,7 +76,6 @@ const OnlineDocuments = props => {
               key = {item}
                 item={item}
                 onClicked={() => {
-                  console.log('item',item)
                   launchImageLibrary(ImageQualityOptions, res => {
                     if (res?.didCancel) {
                       Alert.alert('SukhTax', 'Image uploading cancelled by user.')

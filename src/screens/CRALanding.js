@@ -23,7 +23,6 @@ const CRALanding = props => {
         setLetters(craRes?.data);
         const craLattersResData = craRes?.data && craRes?.data.length > 0 ? craRes?.data[0] : undefined
         global.craLattersData = craLattersResData
-        console.log('global.craLattersData',global.craLattersData)
       } else {
         setIsLoading(false);
         Alert.alert('SukhTax', craRes?.message);
@@ -39,7 +38,6 @@ const CRALanding = props => {
         backgroundColor: 'white',
         width: '100%',
         flex:1,
-        paddingBottom:120,
       }}>
       <AppHeader navigation={navigation} />
       {isLoading && <SKLoader/>}

@@ -117,17 +117,18 @@ const ForgotPassword = props => {
   return (
     <View
       style={{
-        flex: 1,
-        backgroundColor: Colors.WHITE,
         justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        flex: 1,
       }}>
-      {isLoading && <SKLoader />}
-      <AppHeader navigation = {navigation}/>
       <KeyboardAvoidingView
-        behavior={'position'}
-        enabled={true}
-        style={{backgroundColor: Colors.WHITE, flex: 1}}
-        keyboardVerticalOffset={-120}>
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        enabled={codeSentSuccessfully}
+        style={{flex: 1, width: '100%', paddingBottom: 10}}
+        keyboardVerticalOffset={0}>
+        {isLoading && <SKLoader />}
+        <AppHeader navigation={navigation} />
         <ScrollView
           contentContainerStyle={{
             width: '100%',

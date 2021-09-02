@@ -50,13 +50,12 @@ const ManageDocuments = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
-        height: '100%',
+        flex:1
       }}>
       <AppHeader navigation={navigation} />
       {isLoading && <SKLoader />}
       <ScrollView
-        style={{width: '100%'}}
+        style={{width: '100%',flex:1}}
         contentContainerStyle={{
           paddingHorizontal: 20,
           paddingBottom: 10,

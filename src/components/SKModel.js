@@ -41,6 +41,7 @@ const SKModel = props => {
             width: '90%',
             padding:10,
             paddingBottom:20,
+            marginTop:20,
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 8,
@@ -59,6 +60,7 @@ const SKModel = props => {
               width: '100%',
               flexDirection: 'row',
               justifyContent: 'space-between',
+              marginTop:20
             }}>
             <Text
               style={{

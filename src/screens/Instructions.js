@@ -2,8 +2,10 @@ import React from 'react';
 import {TouchableOpacity, View, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
+import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
+
 const Instructions = props => {
   const navigation = useNavigation();
   return (
@@ -17,7 +19,8 @@ const Instructions = props => {
         alignItems: 'center',
         width: '100%',
       }}>
-      <View style={{marginTop: 110}}>
+      <AppHeader navigation={navigation}/>
+      <View style={{marginTop: 50}}>
         <Image
           resizeMode="contain"
           style={{width: 136, height: 150}}
@@ -29,17 +32,20 @@ const Instructions = props => {
           fontSize={25}
           value="FIRST TIME ?"
           marginTop={0}
+          textWidth = '100%'
           textAlign = 'center'
         />
         <Heading
           marginTop={30}
           fontSize={22.31}
+          textWidth = '100%'
           textAlign = 'center'
           value="DONT WORRY WE HAVE GOT YOU COVERED."
         />
         <Heading
           marginTop={38}
           fontSize={22}
+          textWidth = '100%'
           textAlign = 'center'
           value="PLEASE HIT THE NEXT BUTTON TO START WITH SOME BASIC INFORMATION"
         />

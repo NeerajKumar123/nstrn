@@ -19,16 +19,8 @@ const OnlineAllDone = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
-        height:'100%',
+        flex:1
       }}>
-        <View style={{marginTop: 110}}>
-        <Image
-          resizeMode="contain"
-          style={{width: 136, height: 150}}
-          source={CustomFonts.header_logo}
-        />
-      </View>
       {isLoading && <SKLoader/>}
       <ScrollView
         style={{width: '100%', marginBottom:100}}
@@ -36,6 +28,14 @@ const OnlineAllDone = props => {
           paddingHorizontal: 20,
           paddingBottom:10
         }}>
+      <View style={{marginTop: 50, justifyContent:'center', alignItems:'center'}}>
+        <Image
+          resizeMode="contain"
+          style={{width: 136, height: 150}}
+          source={CustomFonts.header_logo}
+        />
+      </View>
+
         <Heading value="WE'RE ALL" marginTop={60} />
         <Heading value="DONE HERE!" marginTop={-10} />
         <Heading

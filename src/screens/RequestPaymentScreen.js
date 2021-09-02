@@ -92,7 +92,6 @@ import {
           if(savePaymentRes?.status == 1){
             const params = {User_Id:user_id,Tax_Docs_Id:tax_docs_id}
             taxDocsFinalizeProcess(params,(finalRes)=>{
-              console.log('finalRes',finalRes)
               if(finalRes?.status == 1){
                 const paramsStatus = {User_Id:user_id}
                 taxDocsGetTaxDocsStatus(paramsStatus,(taxDocsRes) =>{

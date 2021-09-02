@@ -29,10 +29,10 @@ const {width} = Dimensions.get('window');
 
 const BasicInfo = props => {
   const navigation = useNavigation();
-  const [sin, setsin] = useState('123456782');
-  const [gender, setgender] = useState('Male');
-  const [dob, setDOB] = useState(new Date());
-  const [lastTime, setLastTime] = useState('2020');
+  const [sin, setsin] = useState('');
+  const [gender, setgender] = useState('');
+  const [dob, setDOB] = useState(undefined);
+  const [lastTime, setLastTime] = useState('');
   const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -43,7 +43,7 @@ const BasicInfo = props => {
     pickerHeight = iosVersion >= 14 ? 400 : 216
   }
   const checkFormValidations = () => {
-    let isValidForm = true;
+    let isValidForm = false;
     if (sin == undefined || sin.length < 10) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid sin.');
@@ -71,14 +71,14 @@ const BasicInfo = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         flex: 1,
+        backgroundColor:'red'
       }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation={navigation} />
       <ScrollView
+      style = {{flex: 1}}
         contentContainerStyle={{
-          paddingHorizontal: 20,
-          flex: 1,
-        }}>
+          paddingHorizontal: 20}}>
         <Heading value="ABOUT YOU" marginTop={30} />
         <Heading
           fontSize={20}
@@ -140,8 +140,10 @@ const BasicInfo = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'ADDRESS'}
           onPress={() => {
-            const nextPageParams = {sin:sin,gender:gender, dob:dob,lastTime:lastTime }
-            navigation.navigate('Address',{...nextPageParams});
+            if (checkFormValidations()) {
+              const nextPageParams = {sin:sin,gender:gender, dob:dob,lastTime:lastTime }
+              navigation.navigate('Address',{...nextPageParams});  
+            }
           }}
         />
         {isGenderVisible && (

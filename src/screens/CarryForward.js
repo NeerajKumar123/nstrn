@@ -1,53 +1,31 @@
 import React, {useState} from 'react';
 import {
-  TouchableOpacity,
   View,
-  Alert,
   ScrollView,
-  Image,
-  DeviceEventEmitter,
-  Keyboard,
-  Platform,
 } from 'react-native';
-import SKInput from '../components/SKInput';
-import SKButton, {Link} from '../components/SKButton';
+import SKButton from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {login} from '../apihelper/Api';
-import * as SKTStorage from '../helpers/SKTStorage';
-import SKLoader from '../components/SKLoader';
-import * as CustomFonts from '../constants/FontsDefs';
 import AppHeader from '../components/AppHeader';
 const CarryForward = props => {
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const checkFormValidations = () => {
-    let isValidForm = true;
-    if (email == undefined || email.length < 10) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid email.');
-    } else if (pass == undefined || pass.length < 6) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid password.');
-    }
-    return isValidForm;
-  };
   return (
     <View
       style={{
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
+        flex:1
       }}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+      navigation={navigation}
+      />
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
-          paddingHorizontal: 20,
-          height: '100%',
+          paddingHorizontal: 20
         }}>
         <Heading value="CARRY FORWARD" marginTop={86} />
         <Heading

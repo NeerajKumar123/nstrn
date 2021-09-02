@@ -39,15 +39,14 @@ const Login = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
+        flex:1
       }}>
       {isLoading && <SKLoader/>}
       <Header />
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: 32,
-          flex: 1,
+          paddingHorizontal: 20,
        }}>
-             
         <Heading value="LETS LOG IN" marginTop={50} />
         <Heading
           fontSize={16}

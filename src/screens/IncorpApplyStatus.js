@@ -29,16 +29,14 @@ const IncorpApplyStatus = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
-        height:'100%'
+        flex:1,
       }}>
       <AppHeader navigation={navigation} />
       <ScrollView
-        style={{width: '100%'}}
+        style={{width: '100%', flex:1}}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          height: '100%',
-          paddingBottom: Platform.OS == 'ios' ? 100 : 0,
+          paddingBottom: Platform.OS == 'ios' ? 0 : 0,
         }}>
         {incorporation_status_id == 1 && (
           <NotSubmitted

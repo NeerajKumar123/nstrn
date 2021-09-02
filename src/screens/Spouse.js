@@ -161,22 +161,19 @@ const Spouse = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
-        height: '100%',
-        paddingBottom: Platform.OS == 'ios' ? 20 : 0,
+        flex: 1,
       }}>
-      {isLoading && <SKLoader />}
-      <AppHeader navigation={navigation} />
       <KeyboardAvoidingView
-        behavior={'position'}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         enabled={true}
-        style={{flex: 1, width:'100%',paddingBottom:10}}
-        keyboardVerticalOffset={-50}>
-      <ScrollView
-        style={{
-          width: '100%',
-          paddingHorizontal: 20,
-        }}>
+        style={{width:'100%'}}
+        keyboardVerticalOffset={0}>
+        {isLoading && <SKLoader />}
+        <AppHeader navigation={navigation} />
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: 20
+          }}>
         <Heading value="SPOUSE" marginTop={26} />
         <SKSwitch
           fontSize={20}

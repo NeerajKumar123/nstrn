@@ -94,7 +94,6 @@ const OnlineReturnLanding = props => {
               if (isFSelected || isSSelected || isTSelected) {
                 global.selectedYears = undefined
                 global.selectedYears = selectedYears;
-                // navigation.navigate('CarryForward');
                 navigation.navigate('Identification');
               } else {
                 Alert.alert('SukhTax', 'Please select year.');

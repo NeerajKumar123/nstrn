@@ -190,9 +190,17 @@ const SecurityCode = props => {
               if(user_id){
                 setIsLoading(true)
                 const params = {user_id:user_id,OTP:otp}
-                userCheckOtpForLogin(params,()=>{
-                  navigation.navigate('Login')  
+                userCheckOtpForLogin(params,(checkOtpRes)=>{
+                  console.log('checkOtpRes',checkOtpRes)
                   setIsLoading(false)
+                  if (checkOtpRes?.status == 1) {
+                    navigation.navigate('Login')  
+                  }else {
+                    const msg =
+                    checkOtpRes?.message ??
+                      'Something went wront, Please try again later.';
+                    Alert.alert('SukhTax', msg);
+                  }
                 })
               }else{
                 Alert.alert('SukhTax', 'Please retry, We are facing some technical glitch.');

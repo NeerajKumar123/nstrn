@@ -111,7 +111,6 @@ const RequestYears = props => {
                       const params = {User_Id:user_id,Tax_Docs_Id:tax_docs_id}
                       taxDocsFinalizeProcess(params,(finalRes)=>{
                         if(finalRes?.status == 1){
-                          console.log('finalRes',finalRes)
                           const params = {User_Id:user_id}
                           taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
                             setIsLoading(false)

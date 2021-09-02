@@ -81,8 +81,7 @@ const Address = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
-        height: '100%',
+        flex:1
       }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation={navigation} />
@@ -90,11 +89,8 @@ const Address = props => {
         style={{
           width: '100%',
           paddingHorizontal: 20,
+          flex:1
         }}>
-        <KeyboardAvoidingView
-          behavior={'position'}
-          enabled={true}
-          keyboardVerticalOffset={-200}>
           <Heading value="ADDRESS" marginTop={26} />
           <Heading
             fontSize={16}
@@ -130,7 +126,6 @@ const Address = props => {
               setIsProvinceVisible(true);
             }}
           />
-        </KeyboardAvoidingView>
         <SKButton
           marginTop={30}
           fontSize={16}
@@ -178,7 +173,6 @@ const Address = props => {
               setIsAddViewVisible(false);
             }}
             onSelectAddress={value => {
-              console.log('onSelectAddress', value);
               setMailingAddress(value);
               setIsAddViewVisible(false);
             }}

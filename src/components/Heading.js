@@ -14,7 +14,8 @@ const Heading = props => {
     status = 0,
     fontFamily = CustomFonts.OpenSansRegular,
     textAlign = 'left',
-    onClicked = undefined
+    onClicked = undefined,
+    textWidth = undefined
   } = props;
   return (
     <TouchableOpacity
@@ -31,7 +32,7 @@ const Heading = props => {
       onPress = {()=>{
         onClicked && onClicked()
       }}>
-      <Text style={{color, fontSize, fontWeight,fontFamily,textAlign}}>{value}</Text>
+      <Text style={{color, fontSize, fontWeight,fontFamily,textAlign, width:textWidth && textWidth}}>{value}</Text>
       {status ? (
         <Image
           resizeMode="contain"

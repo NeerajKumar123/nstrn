@@ -107,8 +107,12 @@ const SKInput = props => {
           setInitialValue(value);
           props.onTextChange && props.onTextChange(value);
         }}
+        onBlur = {() =>{
+          console.log('onBlur')
+        }}
         onEndEditing={() => {
-          props.onEndEditing && props.onEndEditing(initialValue);
+          const finalValue  = initialValue ? initialValue.trim() : ''
+          props.onEndEditing && props.onEndEditing(finalValue);
         }}
       />
       {rightAccImage && (

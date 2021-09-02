@@ -22,16 +22,14 @@ const Home = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
+        flex:1
       }}>
       <AppHeader navigation = {navigation}/>
       <ScrollView
-        style={{width: '100%'}}
+        style={{width: '100%',flex:1}}
         contentContainerStyle={{
-          paddingHorizontal: 20,
-          height: '100%',
-        }}>
-        <Heading value="Home" marginTop={122} />
+          paddingHorizontal: 20}}>
+        <Heading value="Home" marg æinTop={122} />
         <Heading
           fontSize={16}
           marginTop={5}
@@ -84,7 +82,7 @@ const Home = props => {
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="CRA LETTERS"
           onClicked = {()=>{
-            navigation.navigate('CRALandiing')
+            navigation.navigate('CRALanding')
           }}
         />
         <View

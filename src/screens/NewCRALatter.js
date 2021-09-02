@@ -16,7 +16,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {craLattersSaveNewLetter} from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
 import SKLoader from '../components/SKLoader';
-import {ImageQualityOptions} from '../constants/StaticValues';
+import {ImageQualityOptionsWithMultiSelectionSupport} from '../constants/StaticValues';
 import SKInput from '../components/SKInput';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Validator from '../helpers/SKTValidator';
@@ -25,15 +25,14 @@ const NewCRALatter = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false);
-  const [title, setTitle] = useState('Title');
-  const [desc, setDesc] = useState('Desc');
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
   const [attachments, setAttachments] = useState([]);
   const [attachmentNames, setAttachmentNames] = useState([]);
 
   const prepareParams = () => {
     const {user_id} = global.userInfo;
     const base64s = attachments.join();
-    console.log('base64s', base64s);
     const params = {
       User_id: user_id,
       Title: title,
@@ -47,8 +46,6 @@ const NewCRALatter = props => {
   const checkFormValidations = () => {
     const isTitleValid = Validator.isValidField(title, ST_REGEX.Address);
     const isDescValid = Validator.isValidField(desc, ST_REGEX.Address);
-
-    console.log('attachments',attachments)
     let isValidForm = true;
     if (!isTitleValid) {
       isValidForm = false;
@@ -116,7 +113,6 @@ const NewCRALatter = props => {
           attachmentNames.map((item, index) => {
             return <FileCard key={item} item={item}
             onDeleteClicked = {()=>{
-              console.log('onDeleteClicked',item)
             }}
              />;
           })}
@@ -126,7 +122,7 @@ const NewCRALatter = props => {
           title={attachments && attachments.length > 0 ? 'ATTACH MORE' : 'ATTACH CRA LETTER'}
           height={46}
           onClick={() => {
-            launchImageLibrary(ImageQualityOptions, res => {
+            launchImageLibrary(ImageQualityOptionsWithMultiSelectionSupport, res => {
               if (res?.didCancel) {
                 Alert.alert('SukhTax', 'Image uploading cancelled by user.');
               } else if (res?.error) {

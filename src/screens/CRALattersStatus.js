@@ -19,16 +19,15 @@ const CRALattersStatus = props => {
 
 
   useEffect(() => {
-    console.log('pageParams',pageParams)
     const {user_id, cra_letters_id} = pageParams
     const params = {User_Id:user_id,CRA_Letter_Id:cra_letters_id}
     setIsLoading(true)
     craLattersGetDetails(params, (detailsRes) =>{
-      console.log('detailsRes',detailsRes)
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 100);
       if (detailsRes?.status == 1) {
         const data = detailsRes?.data?.length > 0 ? detailsRes?.data[0] : {}
-        console.log('data',data)
         setDetails(data)
         setStatus(data.cra_letters_status_id)
       }

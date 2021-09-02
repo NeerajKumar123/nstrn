@@ -51,14 +51,13 @@ const IncorpDetailsPerc = props => {
         backgroundColor: 'white',
         flex: 1,
       }}>
-      {isLoading && <SKLoader />}
-      <AppHeader navigation={navigation} />
       <KeyboardAvoidingView
-        behavior={'position'}
-        enabled={false}
-        style={{backgroundColor: Colors.WHITE, flex: 1}}
-        // keyboardVerticalOffset={-150}
-      >
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        enabled={true}
+        style={{flex: 1, width: '100%', paddingBottom: 10}}
+        keyboardVerticalOffset={0}>
+        {isLoading && <SKLoader />}
+        <AppHeader navigation={navigation} />
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: 20,
@@ -149,7 +148,6 @@ const IncorpDetailsPerc = props => {
               setIsAddViewVisible(false);
             }}
             onSelectAddress={value => {
-              console.log('onSelectAddress', value);
               setAddress(value);
               setIsAddViewVisible(false);
             }}

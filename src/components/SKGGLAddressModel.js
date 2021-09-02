@@ -62,7 +62,6 @@ const SKGGLAddressModel = props => {
               width: '100%',
               flexDirection: 'row',
               justifyContent: 'space-between',
-              backgroundColor: 'green',
             }}>
             <TouchableOpacity
               style={{position: 'absolute', right: 0}}
@@ -113,15 +112,11 @@ const SKGGLAddressModel = props => {
                  );
                 }}    
               onPress={(data, details) => {
-                console.log('details', details);
-                console.log('data', data);
                 setListViewDisplayed(null);
                 onSelectAddress(data.description);
-                console.log('details.description', data.description);
               }}
               textInputProps={{
                 onChangeText: text => {
-                  console.log('text==>', text);
                   setListViewDisplayed('auto');
                 },
                 style: {

@@ -123,6 +123,13 @@ const RequestLanding = props => {
                   sels.push(item);
                 }
               });
+              if (sels.length == 0) {
+                Alert.alert(
+                  'SukhTax',
+                  'Please select one type of Tax Document.',
+                );
+                return;
+              }
               global.selectedDocsTypes = sels;
               setIsLoading(true);
               const {user_id} = global.incStatusData;
@@ -190,6 +197,16 @@ const DocCard = props => {
         }}>
         {isStatic ? `${fee}` : `TOTAL COST: ${fee}`}
       </Text>
+      {isStatic && (
+        <View style={{position: 'absolute', top: 25, right: 10}}>
+          <Icon
+            name={CustomFonts.ChevronRight}
+            size={30}
+            color={Colors.APP_RED_SUBHEADING_COLOR}
+            opacity={1.0}
+          />
+        </View>
+      )}
     </TouchableOpacity>
   );
 };

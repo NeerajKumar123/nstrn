@@ -24,8 +24,6 @@ const MyTaxYear = props => {
   const selectedYears = global.selectedYears
   const currentYear = selectedYears[pageIndex]
   const buttonTitle = selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
-  console.log('currentPage',currentYear,buttonTitle)
-
 
   const [data, setData] = useState([
     {title: 'I WAS EMPLOYED', value: 'I_was_employed', isSelected: false},
@@ -129,7 +127,6 @@ const MyTaxYear = props => {
   const decideAndNavigate =(callback) =>{
     let nextIndex = pageIndex + 1
     const selObj = global.selectedYears[nextIndex]
-    console.log('selObj',selObj)
     if(selObj){
       const newPageIndex = pageIndex + 1
       navigation.push('MyTaxYear',{pageIndex:newPageIndex});
@@ -150,7 +147,6 @@ const MyTaxYear = props => {
       isValidForm = false
       Alert.alert('SukhTax', global.isFromSpouseFlow ? 'Please select one option from MYSELF OR SPOUSE' : 'Please select MYSELF')
     }
-    console.log('isValidForm',isValidForm)
     return isValidForm
   }
 
@@ -160,16 +156,14 @@ const MyTaxYear = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
-        height: '100%',
+        flex:1
       }}>
       <AppHeader navigation={navigation} />
       {isLoading && <SKLoader />}
       <ScrollView
-        style={{width: '100%', marginBottom: 50}}
+        style={{width: '100%', flex:1}}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          marginBottom: 50,
         }}>
         <Heading value={`MY TAX YEAR ${currentYear}`} marginTop={60} />
         <Heading
@@ -253,17 +247,14 @@ const MyTaxYear = props => {
             if(checkFormValidations()){
               if(global.isFromSpouseFlow && spouse){
                 saveMyAndSpouseInfo((res)=>{
-                  console.log('saveMyAndSpouseInfo===>',res )
                   decideAndNavigate()
                 })
               }else if(global.isFromSpouseFlow && spouse && !mySelf){
                 saveSpouseInfoOnly((res)=>{
-                  console.log('saveSpouseInfoOnly===>',res )
                   decideAndNavigate()
                 })
               }else if(!spouse && mySelf){
                 saveMyInfoOnly((res)=>{
-                  console.log('saveMyInfoOnly===>',res )
                   decideAndNavigate()
                 })
               }

@@ -42,16 +42,14 @@ const Identification = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
         flex: 1,
       }}>
       <AppHeader navigation={navigation} />
       {isLoading && <SKLoader/>}
       <ScrollView
-        style={{width: '100%'}}
+        style={{width: '100%', flex:1}}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          height: '100%',
         }}>
         <Heading
           fontSize={23}
@@ -106,7 +104,6 @@ const Identification = props => {
             if (res?.didCancel) {
               Alert.alert('SukhTax', 'Image uploading cancelled by user.')
             }else if (res?.error) {
-              console.log('error', res?.error ?? ERROR_MSG);
             }else if(res?.assets){
               intiateImageUploading(res)
             }
