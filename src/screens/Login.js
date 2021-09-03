@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {TouchableOpacity, View, Alert, ScrollView, Image,DeviceEventEmitter, Keyboard,Platform} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton, {Link} from '../components/SKButton';
@@ -11,6 +11,7 @@ import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs'
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
+import messaging from '@react-native-firebase/messaging';
 const Login = props => {
   const navigation = useNavigation();
   // const [email, setemail] = useState('neerajkiet@gmail.com')
@@ -19,6 +20,36 @@ const Login = props => {
   const [pass, setPass] = useState('')
   const [isSecurePass, setIsSecurePass] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    requestUserPermission();
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
+   }, []);
+
+   requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+      getFcmToken()
+    }
+  }
+
+  getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+     console.log(fcmToken);
+     console.log("Your Firebase Token is:", fcmToken);
+    } else {
+     console.log("Failed", "No token received");
+    }
+  }
 
   const checkFormValidations = () => {
     const isEmailValid =  Validator.isValidField(email, ST_REGEX.Email)
