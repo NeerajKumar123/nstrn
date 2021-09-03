@@ -15,7 +15,7 @@ export default function AuthNavigator() {
   useEffect(() => {
     const authSubscriber = DeviceEventEmitter.addListener(
       'user_loggedin',
-      isLogged => {
+      (isLogged) => {
         if(isLogged){
           setIsLoggedIn(true)
         }else{

@@ -71,7 +71,6 @@ const InProcess = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         width: '100%',
-        paddingHorizontal: 20,
       }}>
       <Heading value={'CRA LATTER'} marginTop={50} />
       <Heading
@@ -122,7 +121,6 @@ const Rejected = props => {
           alignItems: 'center',
           backgroundColor: 'white',
           width: '100%',
-          paddingHorizontal: 20,
         }}>
         <Heading value={'CRA LATTER'} marginTop={50} />
         <Heading
@@ -172,7 +170,6 @@ const Rejected = props => {
           alignItems: 'center',
           backgroundColor: 'white',
           width: '100%',
-          paddingHorizontal: 20,
         }}>
         <Heading value={'CRA LATTER'} marginTop={50} />
         <Heading

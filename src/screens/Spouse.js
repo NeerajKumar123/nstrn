@@ -166,13 +166,13 @@ const Spouse = props => {
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         enabled={true}
-        style={{width:'100%'}}
+        style={{flex: 1, width: '100%', paddingBottom: 10}}
         keyboardVerticalOffset={0}>
         {isLoading && <SKLoader />}
         <AppHeader navigation={navigation} />
         <ScrollView
           contentContainerStyle={{
-            paddingHorizontal: 20
+            paddingHorizontal: 20,
           }}>
         <Heading value="SPOUSE" marginTop={26} />
         <SKSwitch
@@ -340,10 +340,10 @@ const Spouse = props => {
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display="inline"
+            display={Platform.OS == 'ios' ? "inline" : 'default'}
             onChange={(event, selectedDate) => {
-              setDOB(selectedDate);
               setIsDatePickerVisible(false);
+              setDOB(selectedDate);
             }}
           />
         </View>
@@ -361,10 +361,10 @@ const Spouse = props => {
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display="inline"
+            display={Platform.OS == 'ios' ? "inline" : 'default'}
             onChange={(event, selectedDate) => {
-              setEnrtyDate(selectedDate);
               setIsImmDatePickerVisible(false);
+              setEnrtyDate(selectedDate);
             }}
           />
         </View>

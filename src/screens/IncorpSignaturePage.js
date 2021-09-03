@@ -82,19 +82,15 @@ const IncorpSignaturePage = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: '100%',
-        height: '100%',
+        flex: 1,
       }}>
-      {isLoading && <SKLoader />}
-      <AppHeader navigation={navigation} />
-      <ScrollView
-      alwaysBounceVertical ={false}
-        contentContainerStyle={{paddingBottom: 10}}
-        style={{
-          width: '100%',
-          paddingHorizontal: 20,
-          marginBottom: 80,
-        }}>
+        {isLoading && <SKLoader />}
+        <AppHeader navigation={navigation} />
+        <ScrollView
+        alwaysBounceVertical = {false}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+          }}>
         <ViewShot
           ref={viewShotRef}
           options={{
@@ -237,18 +233,9 @@ const IncorpSignaturePage = props => {
             </View>
           </View>
         </ViewShot>
-      </ScrollView>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginTop: 10,
-          justifyContent: 'space-between',
-          position: 'absolute',
-          bottom: 30,
-          paddingHorizontal: 20,
-        }}>
         <SKButton
           fontSize={16}
+          marginTop  = {20}
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
@@ -270,7 +257,7 @@ const IncorpSignaturePage = props => {
             }
           }}
         />
-      </View>
+      </ScrollView>
     </View>
   );
 };

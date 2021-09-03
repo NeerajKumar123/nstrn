@@ -57,24 +57,23 @@ const AboutCorp = props => {
 
   return (
     <View
-    style={{
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      backgroundColor: 'white',
-      flex: 1,
-    }}>
-    <KeyboardAvoidingView
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      enabled={true}
-      style={{flex: 1, width: '100%', paddingBottom: 10}}
-      keyboardVerticalOffset={0}>
-      {isLoading && <SKLoader />}
-      <AppHeader navigation={navigation} />
-      <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-          flex: 1,
-        }}>
+      style={{
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        flex: 1,
+      }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        enabled={true}
+        style={{flex: 1, width: '100%', paddingBottom: 10}}
+        keyboardVerticalOffset={0}>
+        {isLoading && <SKLoader />}
+        <AppHeader navigation={navigation} />
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+          }}>
         <Heading value="ABOUT YOUR CORPORATION" marginTop={26} />
         <Heading
           fontSize={16}
@@ -104,6 +103,7 @@ const AboutCorp = props => {
         <TouchableInput
             marginBottom={2}
             maxLength={15}
+            fontSize = {12}
             borderColor={Colors.CLR_0065FF}
             value={bussAddress}
             placeholder="BUSINESS ADDRESS (IF SAME AS INCORPORATOR, PLEASE ENTER SAME ADDRESS)"

@@ -98,6 +98,7 @@ const SKInput = props => {
         autoCapitalize={autoCapitalize}
         autoCompleteType="off"
         autoCorrect={false}
+        placeholderTextColor = {Colors.LIGHTGRAY}
         placeholder={placeholder}
         maxLength={maxLength}
         onFocus={() => {

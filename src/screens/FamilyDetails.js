@@ -268,10 +268,10 @@ const FamilyDetails = props => {
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display="inline"
+            display={Platform.OS == 'ios' ? "inline" : 'default'}
             onChange={(event, selectedDate) => {
-              setMStatusChangedDate(selectedDate);
               setShowDatePicker(false);
+              setMStatusChangedDate(selectedDate);
             }}
           />
         </View>

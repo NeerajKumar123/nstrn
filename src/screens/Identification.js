@@ -15,6 +15,7 @@ const Identification = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
   const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
+  const [uploadImageCount, setUploadImageCount] = useState(0)
 
   const intiateImageUploading = (res) =>{
     const imgObj = res?.assets?.[0]
@@ -25,6 +26,7 @@ const Identification = props => {
       setIsLoading(false)
       uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
       setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
+      uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)
     })
   }
 
@@ -110,6 +112,7 @@ const Identification = props => {
           });
         }}
         />
+        {uploadImageCount ? <UploadedFilesStatus count={uploadImageCount} /> : null}
         <SKButton
           disable = {!isUploadedSuccessfully}
           marginTop={30}
@@ -125,6 +128,36 @@ const Identification = props => {
         />
       </ScrollView>
     </View>
+  );
+};
+
+const UploadedFilesStatus = props => {
+  const {count} = props;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        marginTop: 8,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        height: 40,
+      }}
+      onPress={() => {
+        props.onClicked && props.onClicked();
+      }}>
+      <Text
+        style={{
+          width: '100%',
+          textAlign: 'left',
+          fontFamily:CustomFonts.OpenSansRegular,
+          color: Colors.APP_RED_SUBHEADING_COLOR,
+          fontSize: 15,
+        }}>
+        {` Uploaded Documents : ${count}`}
+      </Text>
+    </TouchableOpacity>
   );
 };
 

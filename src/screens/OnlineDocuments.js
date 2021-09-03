@@ -73,7 +73,7 @@ const OnlineDocuments = props => {
           data.map((item, index) => {
             return (
               <DocCard
-              key = {item}
+                key = {item}
                 item={item}
                 onClicked={() => {
                   launchImageLibrary(ImageQualityOptions, res => {

@@ -120,9 +120,8 @@ const IncorpDetails = props => {
         {isLoading && <SKLoader />}
         <AppHeader navigation={navigation} />
         <ScrollView
-        style = {{flex: 1}}
           contentContainerStyle={{
-            paddingHorizontal: 20
+            paddingHorizontal: 20,
           }}>
           <Heading value="ABOUT YOU" marginTop={26} />
           <Heading

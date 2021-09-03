@@ -62,11 +62,13 @@ import CRALattersStatus from './screens/CRALattersStatus';
 import CRAReply from './screens/CRAReply';
 import CRAAttachments from './screens/CRAAttachments';
 import AnimTest from './screens/AnimTest'
-
+import {SafeAreaView} from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 const Stack = createStackNavigator();
 
 export const AuthStack = () => {
   return (
+    <SafeAreaView style={{flex: 1, backgroundColor:Colors.WHITE}}>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
@@ -108,10 +110,12 @@ export const AuthStack = () => {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaView>
   );
 };
 const SKStack = () => {
   return (
+    <SafeAreaView style={{flex: 1, backgroundColor:Colors.WHITE}}>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
@@ -393,6 +397,7 @@ const SKStack = () => {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaView>
   );
 };
 

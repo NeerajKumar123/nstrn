@@ -22,8 +22,8 @@ const MyTaxYear = props => {
   const pageParams = props.route.params;
   let {pageIndex = 0} = pageParams
   const selectedYears = global.selectedYears
-  const currentYear = selectedYears[pageIndex]
-  const buttonTitle = selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
+  const currentYear = selectedYears && selectedYears[pageIndex]
+  const buttonTitle = selectedYears && selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
 
   const [data, setData] = useState([
     {title: 'I WAS EMPLOYED', value: 'I_was_employed', isSelected: false},

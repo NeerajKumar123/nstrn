@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, View, Alert, ScrollView, Image,DeviceEventEmitter, Keyboard,Platform} from 'react-native';
+import {TouchableOpacity, View, Alert, ScrollView, Image,DeviceEventEmitter, Keyboard,Platform,KeyboardAvoidingView} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
@@ -13,8 +13,6 @@ import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues'
 const Login = props => {
   const navigation = useNavigation();
-  // const [email, setemail] = useState('neerajkiet@gmail.com')
-  // const [pass, setPass] = useState('990099')
   const [email, setemail] = useState('')
   const [pass, setPass] = useState('')
   const [isSecurePass, setIsSecurePass] = useState(true)
@@ -39,14 +37,19 @@ const Login = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        flex:1
+        flex: 1,
       }}>
-      {isLoading && <SKLoader/>}
-      <Header />
-      <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-       }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        enabled={true}
+        style={{flex: 1, width: '100%', paddingBottom: 10}}
+        keyboardVerticalOffset={0}>
+        {isLoading && <SKLoader />}
+        <Header/>
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+          }}>
         <Heading value="LETS LOG IN" marginTop={50} />
         <Heading
           fontSize={16}
@@ -136,6 +139,7 @@ const Login = props => {
             }}
         />
       </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };

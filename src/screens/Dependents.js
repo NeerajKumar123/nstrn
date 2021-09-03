@@ -242,10 +242,10 @@ const Dependents = props => {
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display="inline"
+            display={Platform.OS == 'ios' ? "inline" : 'default'}
             onChange={(event, selectedDate) => {
-              setDOB(selectedDate)
               setIsDatePickerVisible(false);
+              setDOB(selectedDate)
             }}
           />
         </View>

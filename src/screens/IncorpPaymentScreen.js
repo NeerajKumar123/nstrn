@@ -22,7 +22,8 @@ import {
   import {
     incorpGetEphemeralKey,
     incorpSubmitPayment,
-    incorpSavePaymentInfo
+    incorpSavePaymentInfo,
+    incorpGetIncorpStatus
   } from '../apihelper/Api';
   import * as SKTStorage from '../helpers/SKTStorage';
   import * as CustomFonts from '../constants/FontsDefs';

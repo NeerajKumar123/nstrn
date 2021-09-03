@@ -15,7 +15,6 @@ const AppHeader = props => {
       <View
         style={{
           flexDirection: 'row',
-          marginTop: Platform.OS == 'ios' ? 34 : 10,
           alignItems: 'center',
           width: '100%',
           paddingHorizontal: 16,
@@ -59,12 +58,10 @@ export const DashHeader = props => {
     <View
       style={{
         flexDirection: 'row',
-        marginTop: Platform.OS == 'ios' ? 34 : 10,
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: 16,
         backgroundColor: 'white',
-        // paddingVertical: 5,
         justifyContent: 'space-between',
         height:50
       }}>

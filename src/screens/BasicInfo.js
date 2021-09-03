@@ -30,9 +30,9 @@ const {width} = Dimensions.get('window');
 const BasicInfo = props => {
   const navigation = useNavigation();
   const [sin, setsin] = useState('');
-  const [gender, setgender] = useState('');
-  const [dob, setDOB] = useState(undefined);
-  const [lastTime, setLastTime] = useState('');
+  const [gender, setgender] = useState();
+  const [dob, setDOB] = useState();
+  const [lastTime, setLastTime] = useState();
   const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -43,13 +43,19 @@ const BasicInfo = props => {
     pickerHeight = iosVersion >= 14 ? 400 : 216
   }
   const checkFormValidations = () => {
-    let isValidForm = false;
+    let isValidForm = true;
     if (sin == undefined || sin.length < 10) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid sin.');
-    } else if (gender == undefined || gender.length < 6) {
+    } else if (gender == undefined) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid genderword.');
+      Alert.alert('SukhTax', 'Please enter valid gender.');
+    }else if (dob == undefined) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please enter valid DOB.');
+    }else if (lastTime == undefined) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select year when you filed with us.');
     }
     return isValidForm;
   };
@@ -71,7 +77,6 @@ const BasicInfo = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         flex: 1,
-        backgroundColor:'red'
       }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation={navigation} />
@@ -188,8 +193,8 @@ const BasicInfo = props => {
             mode="date"
             display={Platform.OS == 'ios' ? 'inline' : 'default'}
             onChange={(event, selectedDate) => {
-              setDOB(selectedDate)
               setShowDatePicker(false);
+              setDOB(selectedDate)
             }}
           />
         </View>

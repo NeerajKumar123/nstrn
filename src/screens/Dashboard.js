@@ -107,22 +107,26 @@ const Dashboard = props => {
                         global.craLattersData = craLattersResData
                       } else {
                         setIsLoading(false);
-                        Alert.alert('SukhTax', craRes?.message);
+                        const msg = craRes?.message ?? 'Something went wrong,Please try again.'
+                        Alert.alert('SukhTax', msg);                
                       }
                     });
                   }else{
                     setIsLoading(false)
-                    Alert.alert('SukhTax', taxDocsRes?.message);
+                    const msg = taxDocsRes?.message ?? 'Something went wrong,Please try again.'
+                    Alert.alert('SukhTax', msg);                
                   }
                 })
               }else{
                 setIsLoading(false)
-                Alert.alert('SukhTax', incStatusRes?.message);
+                const msg = incStatusRes?.message ?? 'Something went wrong,Please try again.'
+                Alert.alert('SukhTax', msg);                
               }
             })
           }else{
             setIsLoading(false)
-            Alert.alert('SukhTax', fileStatusRes?.message);
+            const msg = fileStatusRes?.message ?? 'Something went wrong,Please try again.'
+            Alert.alert('SukhTax', msg);                
           }
         })
       }, 500);
@@ -136,6 +140,9 @@ const Dashboard = props => {
         let onlineTaxFees = priceListRes?.data?.filter(fee => fee.services_fee_id == 1);
         const feeObj = onlineTaxFees[0]
         setTaxFilingFee(feeObj?.service_fee)
+      }else{
+        const msg = priceListRes?.message ?? 'Something went wrong,Please try again.'
+        Alert.alert('SukhTax', msg);
       }
     })
   }, [])
@@ -173,8 +180,6 @@ const Dashboard = props => {
     }
   };
   const onlineMoveToPage = props => {
-    navigation.navigate('OnlineReturnLanding');
-    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -289,11 +294,11 @@ const Dashboard = props => {
         style={{
           width: '100%',
           position: 'absolute',
-          bottom: Platform.OS == 'ios' ? 0 : 0,
+          bottom: 0,
           justifyContent: 'center',
           alignItems: 'center',
           height: 40,
-          backgroundColor:Colors.WHITE
+          backgroundColor:Colors.WHITE,
         }}>
         <TouchableOpacity
           style={{
@@ -302,7 +307,20 @@ const Dashboard = props => {
             alignItems: 'center',
           }}
           onPress={() => {
-            DeviceEventEmitter.emit('user_loggedin', false);
+            const options = [
+              {
+                text: 'Cancel',
+                onPress: () => {
+                }
+              },
+              {
+                text: 'Yes,Logout',
+                onPress: () => {
+                  DeviceEventEmitter.emit('user_loggedin', false);
+                }
+              }
+            ]
+            Alert.alert('SukhTax','Are you sure you want to logout?',options)
           }}>
           <Image
             resizeMode="contain"

@@ -240,8 +240,8 @@ const BankingAndMore = props => {
             mode="date"
             display={Platform.OS == 'ios' ? "inline" : 'default'}
             onChange={(event, selectedDate) => {
-              setEntryDate(selectedDate);
               setIsDatePickerVisible(false);
+              setEntryDate(selectedDate);
             }}
           />
         </View>
