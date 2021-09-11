@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -24,11 +24,13 @@ import {
   getTaxReturnsDocs,
 } from '../apihelper/Api';
 import SKButton, {UploadDocButton,DarkBlueButton} from '../components/SKButton';
-import {ImageQualityOptions} from '../constants/StaticValues'
+import {LibImageQualityOptions,ImageActionSheetOptions} from '../constants/StaticValues'
+import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
 
 const OnlineTaxFilingStatus = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
+  const actionSheetRef = useRef()
 
   const pageHeading = () => {
     let title = 'ONLINE TAX FILING';
@@ -48,7 +50,9 @@ const OnlineTaxFilingStatus = props => {
     const params = prepareParams(imgObj.base64);
     uploadImage(params, uploadRes => {
       setIsLoading(false);
-      uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+      setTimeout(() => {
+        uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+      }, 100);
     });
   };
 
@@ -89,18 +93,40 @@ const OnlineTaxFilingStatus = props => {
             setIsLoading(loadingStatus);
           }}
           uploadClick={() => {
-            launchImageLibrary(ImageQualityOptions, res => {
-              if (res?.didCancel) {
-                Alert.alert('SukhTax', 'Image uploading cancelled by user.')
-              }else if (res?.error) {
-                console.log('error', res?.error ?? ERROR_MSG);
-              }else if(res?.assets){
-                intiateImageUploading(res)
-              }
-            });
+            actionSheetRef.current.show()
           }}
         />
       </ScrollView>
+      <ActionSheet
+          ref={actionSheetRef}
+          title={<Text style={{color: Colors.GRAY, fontSize: 18}}>Which one do you like?</Text>}
+          options={ImageActionSheetOptions}
+          cancelButtonIndex={0}
+          destructiveButtonIndex={4}
+          onPress={(index) => {
+            setTimeout(() => {
+              if (index == 1) {
+                launchImageLibrary(LibImageQualityOptions, res => {
+                if (res?.didCancel) {
+                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+                }else if (res?.error) {
+                }else if(res?.assets){
+                  intiateImageUploading(res)
+                }
+              });              
+                }else if (index == 2) {
+                launchCamera(LibImageQualityOptions, res => {
+                if (res?.didCancel) {
+                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+                }else if (res?.error) {
+                }else if(res?.assets){
+                  intiateImageUploading(res)
+                }
+              });
+                }
+            }, 100);
+          }}
+        />
     </View>
   );
 };

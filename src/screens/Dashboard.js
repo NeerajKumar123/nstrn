@@ -180,6 +180,8 @@ const Dashboard = props => {
     }
   };
   const onlineMoveToPage = props => {
+    navigation.navigate('OnlineReturnLanding');
+    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -215,6 +217,8 @@ const Dashboard = props => {
     }
   };
   const incorpMoveToPage = props => {
+    navigation.navigate('IncorporationLanding');
+    return
     const {
       hst_registration, // HST
       identification_document_uploaded, // incprtr

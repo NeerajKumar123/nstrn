@@ -1,4 +1,4 @@
-import React ,{useState} from  'react';
+import React ,{useState, useRef} from  'react';
 import {TouchableOpacity, View, Text, ScrollView, Image, Alert} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
@@ -9,13 +9,15 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {uploadImage} from '../apihelper/Api'
 import * as CustomFonts from '../constants/FontsDefs'
 import SKLoader from '../components/SKLoader';
-import {ImageQualityOptions} from '../constants/StaticValues'
+import {LibImageQualityOptions,ImageActionSheetOptions} from '../constants/StaticValues'
+import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
 
 const Identification = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
   const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
   const [uploadImageCount, setUploadImageCount] = useState(0)
+  const actionSheetRef  = useRef()
 
   const intiateImageUploading = (res) =>{
     const imgObj = res?.assets?.[0]
@@ -24,9 +26,11 @@ const Identification = props => {
     const params = prepareParams(imgObj.base64)
     uploadImage(params,(uploadRes) =>{
       setIsLoading(false)
-      uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
-      setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
-      uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)
+      setTimeout(() => {
+        uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
+        setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
+        uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
+      }, 100);
     })
   }
 
@@ -102,14 +106,7 @@ const Identification = props => {
         />
         <UploadDocButton  marginTop = {35} title = 'UPLOAD THE DOC HERE' height ={46}
         onClick={() => {
-          launchImageLibrary(ImageQualityOptions, res => {
-            if (res?.didCancel) {
-              Alert.alert('SukhTax', 'Image uploading cancelled by user.')
-            }else if (res?.error) {
-            }else if(res?.assets){
-              intiateImageUploading(res)
-            }
-          });
+          actionSheetRef.current.show()
         }}
         />
         {uploadImageCount ? <UploadedFilesStatus count={uploadImageCount} /> : null}
@@ -124,6 +121,36 @@ const Identification = props => {
           title={'BASIC INFO'}
           onPress={() => {
             navigation.navigate('BasicInfo');
+          }}
+        />
+         <ActionSheet
+          ref={actionSheetRef}
+          title={<Text style={{color: Colors.GRAY, fontSize: 18}}>Which one do you like?</Text>}
+          options={ImageActionSheetOptions}
+          cancelButtonIndex={0}
+          destructiveButtonIndex={4}
+          onPress={(index) => {
+            setTimeout(() => {
+              if (index == 1) {
+                launchImageLibrary(LibImageQualityOptions, res => {
+                if (res?.didCancel) {
+                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+                }else if (res?.error) {
+                }else if(res?.assets){
+                  intiateImageUploading(res)
+                }
+              });              
+                }else if (index == 2) {
+                launchCamera(LibImageQualityOptions, res => {
+                if (res?.didCancel) {
+                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+                }else if (res?.error) {
+                }else if(res?.assets){
+                  intiateImageUploading(res)
+                }
+              });
+                }
+            }, 100);
           }}
         />
       </ScrollView>

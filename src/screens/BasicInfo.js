@@ -181,7 +181,7 @@ const BasicInfo = props => {
       {showDatePicker && (
         <View
           style={{
-            backgroundColor:'#FFE6E6',
+            backgroundColor: Colors.LIGHTGRAY,
             position: 'absolute',
             bottom: 0,
             height: pickerHeight,

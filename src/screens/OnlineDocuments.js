@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useRef} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -19,7 +19,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SKLoader from '../components/SKLoader';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { uploadDocumentBS64 } from '../apihelper/Api';
-import {ImageQualityOptions} from '../constants/StaticValues'
+import {LibImageQualityOptions,ImageActionSheetOptions} from '../constants/StaticValues'
+import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
 
 const OnlineDocuments = props => {
   const navigation = useNavigation();
@@ -27,6 +28,7 @@ const OnlineDocuments = props => {
   const data = global.selectedYears;
   const [uploadImageCount, setUploadImageCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const actionSheetRef = useRef()
 
   const prepareParams = (bs64Image,yr) =>{
     const {user_id,tax_file_id} = global.onlineStatusData
@@ -41,8 +43,10 @@ const OnlineDocuments = props => {
     const params = prepareParams(imgObj.base64,yr)
     uploadDocumentBS64(params,(uploadRes) =>{
       setIsLoading(false)
-      uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
-      uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)
+      setTimeout(() => {
+        uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
+        uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
+      }, 100);
     })
   }
 
@@ -76,15 +80,7 @@ const OnlineDocuments = props => {
                 key = {item}
                 item={item}
                 onClicked={() => {
-                  launchImageLibrary(ImageQualityOptions, res => {
-                    if (res?.didCancel) {
-                      Alert.alert('SukhTax', 'Image uploading cancelled by user.')
-                    }else if (res?.error) {
-                      console.log('error', res?.error ?? ERROR_MSG);
-                    }else if(res?.assets){
-                      intiateImageUploading(res,item)
-                    }
-                  });
+                  actionSheetRef.current.show()
                 }}
               />
             );
@@ -108,11 +104,36 @@ const OnlineDocuments = props => {
           title={'AUTHORIZATION'}
           onPress={() => {
             navigation.navigate('AuthorizerList');
-            // if(global.isFromSpouseFlow){
-            //   navigation.navigate('AuthorizerList');
-            // }else{
-            //   navigation.navigate('AnyThingElse');
-            // }
+          }}
+        />
+          <ActionSheet
+          ref={actionSheetRef}
+          title={<Text style={{color: Colors.GRAY, fontSize: 18}}>Which one do you like?</Text>}
+          options={ImageActionSheetOptions}
+          cancelButtonIndex={0}
+          destructiveButtonIndex={4}
+          onPress={(index) => {
+            setTimeout(() => {
+              if (index == 1) {
+                launchImageLibrary(LibImageQualityOptions, res => {
+                if (res?.didCancel) {
+                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+                }else if (res?.error) {
+                }else if(res?.assets){
+                  intiateImageUploading(res)
+                }
+              });              
+                }else if (index == 2) {
+                launchCamera(LibImageQualityOptions, res => {
+                if (res?.didCancel) {
+                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+                }else if (res?.error) {
+                }else if(res?.assets){
+                  intiateImageUploading(res)
+                }
+              });
+                }
+            }, 100);
           }}
         />
       </ScrollView>
