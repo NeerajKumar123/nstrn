@@ -27,26 +27,26 @@ const Instructions = props => {
           source={CustomFonts.header_logo}
         />
       </View>
-      <View style={{marginTop: 47, width:'100%', alignItems:'center', paddingHorizontal:20}}>
+      <View style={{marginTop: 47, width:'100%',  paddingHorizontal:20}}>
         <Heading
           fontSize={25}
           value="FIRST TIME ?"
           marginTop={0}
           textWidth = '100%'
-          textAlign = 'center'
+          textAlign = 'left'
         />
         <Heading
           marginTop={30}
           fontSize={22.31}
           textWidth = '100%'
-          textAlign = 'center'
+          textAlign = 'left'
           value="DONT WORRY WE HAVE GOT YOU COVERED."
         />
         <Heading
           marginTop={38}
           fontSize={22}
           textWidth = '100%'
-          textAlign = 'center'
+          textAlign = 'left'
           value="PLEASE HIT THE NEXT BUTTON TO START WITH SOME BASIC INFORMATION"
         />
       </View>

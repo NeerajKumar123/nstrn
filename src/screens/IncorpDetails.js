@@ -83,7 +83,7 @@ const IncorpDetails = props => {
     if (!isFNameValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid First Name');
-    } else if (!isMNameValid) {
+    } else if (!isMNameValid && 0) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Middle Name');
     } else if (!isLNameValid) {

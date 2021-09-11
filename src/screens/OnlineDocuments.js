@@ -29,10 +29,11 @@ const OnlineDocuments = props => {
   const [uploadImageCount, setUploadImageCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const actionSheetRef = useRef()
+  const [selectedYear, setSelectedYear] = useState(2020)
 
-  const prepareParams = (bs64Image,yr) =>{
+  const prepareParams = (bs64Image) =>{
     const {user_id,tax_file_id} = global.onlineStatusData
-    const params = {User_id:user_id,Tax_File_Id:tax_file_id,Year:parseInt(yr),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
+    const params = {User_id:user_id,Tax_File_Id:tax_file_id,Year:parseInt(selectedYear),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
     return params
   }
 
@@ -80,6 +81,7 @@ const OnlineDocuments = props => {
                 key = {item}
                 item={item}
                 onClicked={() => {
+                  setSelectedYear(item)
                   actionSheetRef.current.show()
                 }}
               />

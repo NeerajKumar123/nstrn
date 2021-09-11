@@ -72,7 +72,7 @@ const InProcess = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <Heading value={'CRA LATTER'} marginTop={50} />
+      <Heading value={'CRA LETTER'} marginTop={50} />
       <Heading
         fontSize={20}
         color={Colors.APP_RED_SUBHEADING_COLOR}
@@ -122,7 +122,7 @@ const Rejected = props => {
           backgroundColor: 'white',
           width: '100%',
         }}>
-        <Heading value={'CRA LATTER'} marginTop={50} />
+        <Heading value={'CRA LETTER'} marginTop={50} />
         <Heading
           fontSize={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
@@ -171,7 +171,7 @@ const Rejected = props => {
           backgroundColor: 'white',
           width: '100%',
         }}>
-        <Heading value={'CRA LATTER'} marginTop={50} />
+        <Heading value={'CRA LETTER'} marginTop={50} />
         <Heading
           fontSize={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}

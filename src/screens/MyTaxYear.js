@@ -288,7 +288,9 @@ const User = props => {
         alignItems: 'center',
         width: width,
         height: height,
-        backgroundColor: isSelected ? Colors.PRIMARY_FILL : Colors.CLR_7F7F9F,
+        borderWidth:1,
+        borderColor: Colors.CLR_E77C7E,
+        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
       }}
       onPress={() => {
         props.onSelected && props.onSelected();
@@ -297,7 +299,7 @@ const User = props => {
         style={{
           width: '100%',
           textAlign: 'center',
-          color: Colors.WHITE,
+          color: isSelected ? Colors.WHITE : Colors.CLR_414141,
           fontSize: fontSize,
           fontWeight: '700',
         }}>
@@ -318,6 +320,8 @@ const DocOptionCard = props => {
     onSelected,
   } = props;
 
+  const [isSelected, setIsSelected] = useState(false)
+
   return (
     <TouchableOpacity
       style={{
@@ -330,18 +334,21 @@ const DocOptionCard = props => {
         alignItems: 'center',
         width: width,
         height: height,
-        backgroundColor: item.isSelected ? Colors.PRIMARY_FILL : Colors.CLR_7F7F9F,
+        borderWidth:1,
+        borderColor: Colors.CLR_E77C7E,
+        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
       }}
       onPress={() => {
+        setIsSelected(!isSelected)
         onSelected && onSelected(item);
       }}>
       <Text
         style={{
           width: '100%',
           textAlign: 'center',
-          color: Colors.WHITE,
           fontSize: fontSize,
           fontWeight: '700',
+          color: isSelected ? Colors.WHITE : Colors.CLR_414141,
         }}>
         {item.title}
       </Text>

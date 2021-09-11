@@ -58,15 +58,15 @@ const SignUp = props => {
       isValidForm = false;
       Alert.alert(
         'SukhTax',
-        `Password should be \n1.Minimum of 5\n2.Maximum of 16\n3.Atleast one upper case\n4.Atleast one lower case\n5.Atleast one number\n6.Atleast one special char)`,
+        `Password should be:\nMinimum of 5,Maximum of 16,Atleast one upper case,Atleast one lower case,Atleast one number,Atleast one special char.`,
       );
-    } else if (!isCPassValid) {
+      } else if (!isCPassValid) {
       isValidForm = false;
       Alert.alert(
         'SukhTax',
-        `Password should be \n1.Minimum of 5\n2.Maximum of 16\n3.Atleast one upper case\n4.Atleast one lower case\n5.Atleast one number\n6.Atleast one special char)`,
+        `Password should be:\nMinimum of 5,Maximum of 16,Atleast one upper case,Atleast one lower case,Atleast one number,Atleast one special char.`,
       );
-    } else if (pass != cPass) {
+      } else if (pass != cPass) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Passwords mismatch');
     }

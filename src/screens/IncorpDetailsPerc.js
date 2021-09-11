@@ -33,7 +33,7 @@ const IncorpDetailsPerc = props => {
   const checkFormValidations = () => {
     let isValidForm = true;
     const isMailingAddValid = address?.length > 0
-    const isPercValid = ownershipPerc > 0;
+    const isPercValid = ownershipPerc > 0 && ownershipPerc < 101;
     if (!isMailingAddValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Address.');
@@ -84,6 +84,7 @@ const IncorpDetailsPerc = props => {
             leftAccImage={CustomFonts.Number}
             marginBottom={2}
             maxLength={10}
+            keyboardType = 'number-pad'
             borderColor={Colors.CLR_0065FF}
             value={ownershipPerc}
             placeholder="PERCENTAGE OWNERSHIP(%)"

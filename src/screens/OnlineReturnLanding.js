@@ -120,7 +120,9 @@ const DocCard = props => {
         width: '100%',
         height: 48,
         borderRadius: 6,
-        backgroundColor: isSelected ? Colors.PRIMARY_BORDER : Colors.CLR_7F7F9F,
+        borderWidth:1,
+        borderColor: Colors.CLR_E77C7E,
+        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
       }}
       key={`${Math.random()}`}
       onPress={() => {
@@ -130,7 +132,7 @@ const DocCard = props => {
         style={{
           width: '100%',
           textAlign: 'center',
-          color: Colors.WHITE,
+          color: isSelected ? Colors.WHITE : Colors.CLR_414141,
           fontSize: 17,
           fontWeight: '700',
         }}>

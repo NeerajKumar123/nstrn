@@ -133,7 +133,9 @@ const DocCard = props => {
         width: '100%',
         minHeight:70,
         borderRadius: 6,
-        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.CLR_7F7F9F,
+        borderWidth:1,
+        borderColor: Colors.CLR_E77C7E,
+        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
       }}
       onPress={() => {
         onSelected();
@@ -142,7 +144,7 @@ const DocCard = props => {
         style={{
           width: '100%',
           textAlign: 'left',
-          color: Colors.WHITE,
+          color: isSelected ? Colors.WHITE : Colors.CLR_414141,
           fontSize: 17,
           fontWeight: '700',
         }}>
@@ -154,7 +156,7 @@ const DocCard = props => {
         width: '100%',
         textAlign: 'left',
         marginTop: 3,
-        color: Colors.WHITE,
+        color: isSelected ? Colors.WHITE : Colors.CLR_414141,
         fontSize: 17,
         fontWeight: '700',
       }}>
