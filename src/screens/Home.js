@@ -44,7 +44,7 @@ const Home = props => {
         />
         <Heading
           fontSize={16}
-          status={tax_file_status_id >=13 ? 3 : 2}
+          status={tax_file_status_id >=16 ? 3 : 2}
           marginTop={15}
           color={Colors.APP_RED_SUBHEADING_COLOR}
           value="TAX FILING"

@@ -44,7 +44,7 @@ const SignaturePage = props => {
     let isValidForm = true;
     const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
-    const isSinValid = sinNo.length > 5;
+    const isSinValid = Validator.isValidSIN(sinNo)
 
     if (!isFNameValid) {
       isValidForm = false;

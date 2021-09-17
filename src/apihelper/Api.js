@@ -372,3 +372,8 @@ export const craLattersFinalizeProcess = (params,callback) => {
   const path = `${BaseURL}/CRA_Letters_Finalize_Process`
   API.makePostRequest(path , params, callback);
 };
+
+export const updateDeviceIDAndOS = (params,callback) => {
+  const path = `${BaseURL}/Update_DeviceId_DeviceOS`
+  API.makePostRequest(path , params, callback);
+};

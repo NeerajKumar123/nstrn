@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {TouchableOpacity, View, Alert, ScrollView, Image,DeviceEventEmitter, Keyboard,Platform,KeyboardAvoidingView} from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {login} from '../apihelper/Api'
+import {login, updateDeviceIDAndOS} from '../apihelper/Api'
 import * as SKTStorage from '../helpers/SKTStorage'
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs'
@@ -18,6 +18,7 @@ const Login = props => {
   const [pass, setPass] = useState('')
   const [isSecurePass, setIsSecurePass] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const [token, setToken] = useState('nekotmodnaremos')
 
   useEffect(() => {
     requestUserPermission();
@@ -27,7 +28,7 @@ const Login = props => {
     return unsubscribe;
    }, []);
 
-   requestUserPermission = async () => {
+   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -42,8 +43,8 @@ const Login = props => {
   getFcmToken = async () => {
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
-     console.log(fcmToken);
      console.log("Your Firebase Token is:", fcmToken);
+     setToken(fcmToken)
     } else {
      console.log("Failed", "No token received");
     }
@@ -140,6 +141,12 @@ const Login = props => {
                 setIsLoading(false)
                 if(userRes?.status == 1){
                   const user = userRes && userRes.data[0]
+                  console.log('userRes',userRes)
+                  const {user_id} = user
+                  const devparams  = {user_id:user_id,Device_Id:token,Device_OS:'iOS'}
+                  updateDeviceIDAndOS(devparams, (deres) =>{
+                    console.log('deres',deres)
+                  })
                   SKTStorage.storeUserData(user, (savedRes) =>{
                     global.userInfo = savedRes
                     DeviceEventEmitter.emit('user_loggedin',true)

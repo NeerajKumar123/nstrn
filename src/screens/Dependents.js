@@ -51,7 +51,7 @@ const Dependents = props => {
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
     const isDOBValid = dob
     const isGenderValid = gender
-    const isSinValid = sinNo.length > 5
+    const isSinValid = Validator.isValidSIN(sinNo)
     const isRelationValid = relation
     if (!isFNameValid) {
       isValidForm = false;

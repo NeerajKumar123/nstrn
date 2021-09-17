@@ -19,7 +19,9 @@ const RequestPaymentDetails = props => {
   useEffect(() => {
     const {user_id, tax_docs_id} = global.taxDocsStatusData;
     const params = {User_id: user_id, Tax_Docs_Id: tax_docs_id};
+    setIsLoading(true)
     taxDocsGetPaymentDetails(params, paymentDetailsRes => {
+      setIsLoading(false)
       if (paymentDetailsRes?.status == 1) {
         setPayments(paymentDetailsRes?.data);
         let f = 0;

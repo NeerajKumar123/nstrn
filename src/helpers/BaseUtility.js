@@ -31,7 +31,7 @@ export const getDateFromstring = dateString => {
   return dateObject;
 };
 
-export const isEmpty = (value) => {
+export const isEmpty = value => {
   return typeof value === 'undefined' || value === null || value.length == 0;
 };
 
@@ -53,16 +53,17 @@ export async function downloadFileFromUrl(url, filename) {
     pathToSave = `${dirs.DocumentDir}/${filename}`;
   }
   pathToSave = pathToSave.replace(' ', '');
-  let fileType,filePath = '';
+  let fileType,
+    filePath = '';
 
   RNFetchBlob.fs
     .exists(pathToSave)
-    .then((exist) => {
+    .then(exist => {
       RNFetchBlob.config({
         path: pathToSave,
       })
         .fetch('GET', `${url}`, {})
-        .then((res) => {
+        .then(res => {
           filePath = res.path();
           fileType =
             res.respInfo.headers['content-type'] ||
@@ -72,10 +73,10 @@ export async function downloadFileFromUrl(url, filename) {
           }
 
           if (!filePath) {
-            Alert.alert('SukhTax','No internet connection!');
+            Alert.alert('SukhTax', 'No internet connection!');
             return;
           }
-          Alert.alert('SukhTax','Download completed');
+          Alert.alert('SukhTax', 'Download completed');
 
           if (Platform.OS === 'ios') {
             RNFetchBlob.ios.openDocument(pathToSave);
@@ -95,15 +96,14 @@ export async function downloadFileFromUrl(url, filename) {
           }
         })
         .catch((errorMessage, statusCode) => {
-          Alert.alert('SukhTax','Something went wrong!');
+          Alert.alert('SukhTax', 'Something went wrong!');
         });
     })
-    .catch((error) => {});
+    .catch(error => {});
 }
-
 export default {
   hideLoader,
   showLoader,
   showToast,
-  downloadFileFromUrl
+  downloadFileFromUrl,
 };

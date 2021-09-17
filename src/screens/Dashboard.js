@@ -15,6 +15,7 @@ import DashCard from '../components/DashCard';
 import SKLoader from '../components/SKLoader';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
+
 import * as CustomFonts from '../constants/FontsDefs';
 import {useIsFocused} from '@react-navigation/native';
 import {
@@ -214,7 +215,7 @@ const Dashboard = props => {
       navigation.navigate('Identification');
     } else {
       navigation.navigate('OnlineReturnLanding');
-    }
+    }x
   };
   const incorpMoveToPage = props => {
     navigation.navigate('IncorporationLanding');

@@ -210,8 +210,10 @@ const SignUp = props => {
                   Module_Type_Id: 2,
                 };
                 register(params, regisRes => {
-                  setIsLoading(false);
                   if (regisRes?.status == 1) {
+                    setTimeout(() => {
+                      setIsLoading(false);
+                    }, 100);
                     const data = regisRes?.data;
                     global.userInfo = {...global.userInfo, user_id: data};
                     navigation.navigate('SecurityCode', {

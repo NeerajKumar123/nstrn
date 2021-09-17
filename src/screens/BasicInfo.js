@@ -19,6 +19,7 @@ import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {getAboutInfo} from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs'
+import {isValidSIN} from '../helpers/SKTValidator';
 import * as SKTStorage from '../helpers/SKTStorage';
 import {GENDER_OPTIONS, TIME_OPTIONS} from '../constants/StaticValues';
 import SKLoader from '../components/SKLoader';
@@ -44,7 +45,7 @@ const BasicInfo = props => {
   }
   const checkFormValidations = () => {
     let isValidForm = true;
-    if (sin == undefined || sin.length < 10) {
+    if (!isValidSIN(sin)) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid sin.');
     } else if (gender == undefined) {
