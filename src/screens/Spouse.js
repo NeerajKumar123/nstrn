@@ -86,7 +86,7 @@ const Spouse = props => {
     const isDOBValid = dob;
     const isGenderValid = gender;
     const isResidencyValid = residency?.residency_id > 0;
-    const isSinValid = sinNo.length > 0;
+    const isSinValid = Validator.isValidSIN(sinNo)
     const isEnrtyDateValid = enrtyDate;
     const isBankValid = bank?.institution_id > 0;
     const isAccValid = accountNo.length > 5;
@@ -251,6 +251,7 @@ const Spouse = props => {
           borderColor={Colors.CLR_0065FF}
           value={sinNo}
           placeholder="Enter SIN"
+          keyboardType = 'number-pad'
           onEndEditing={value => {
               setSinNo(value)
           }}
@@ -283,8 +284,10 @@ const Spouse = props => {
           marginBottom={0}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
+          leftAccImage={CustomFonts.Number}
+          keyboardType = 'number-pad'
           value={accountNo}
-          placeholder="#Enter Account Number"
+          placeholder="Enter Account Number"
           onEndEditing={value => {
               setAccountNo(value)
           }}
@@ -295,7 +298,9 @@ const Spouse = props => {
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={branchNo}
-          placeholder="#Enter Branch Number"
+          leftAccImage={CustomFonts.Number}
+          keyboardType = 'number-pad'
+          placeholder="Enter Branch Number"
           onEndEditing={value => {
             setBranhcNo(value)
           }}

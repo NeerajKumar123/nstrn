@@ -33,6 +33,6 @@ export const CLR_F47F7F = '#F47F7F'
 export const CLR_FFECEC = '#FFECEC'
 export const CLR_EBEBEB = '#EBEBEB'
 export const CLR_414141 = '#414141'
-
+export const CLR_DF9A9B = '#DF9A9B'
 
 

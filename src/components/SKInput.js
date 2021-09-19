@@ -21,7 +21,6 @@ const SKInput = props => {
     setIsSecure(isSecurePass);
   }, [isSecurePass]);
   const {
-    autoCapitalize = 'none',
     leftAccImage ,
     rightAccImage ,
     marginTop = 10,
@@ -31,6 +30,7 @@ const SKInput = props => {
     isChatInput = false,
     multiline,
     keyboardType = 'default',
+    autoCapitalize = 'none'
   } = props;
   const isLeftLocalPNG = leftAccImage && typeof leftAccImage == 'number';
   const isRightLocalPNG = rightAccImage && typeof rightAccImage == 'number';

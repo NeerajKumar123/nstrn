@@ -108,9 +108,7 @@ const Home = props => {
 
 const ProfDoccCardView = props => {
   return (
-    <LinearGradient
-      opacity={0.6}
-      colors={[Colors.APP_RED_SUBHEADING_COLOR, Colors.CLR_D72528]}
+    <View
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -119,6 +117,7 @@ const ProfDoccCardView = props => {
         borderRadius: 6,
         width: '48%',
         height: 100,
+        backgroundColor:Colors.PRIMARY_BORDER
       }}>
       <TouchableOpacity
         style={{
@@ -151,16 +150,14 @@ const ProfDoccCardView = props => {
           {props.title}
         </Text>
       </TouchableOpacity>
-    </LinearGradient>
+    </View>
   );
 };
 
 const MessegesView = props => {
   const {new_message_count = 0} = global.onlineStatusData;
   return (
-    <LinearGradient
-      opacity={0.6}
-      colors={[Colors.APP_RED_SUBHEADING_COLOR, Colors.CLR_D72528]}
+    <View
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -170,6 +167,7 @@ const MessegesView = props => {
         borderRadius: 6,
         width: '100%',
         height: 90,
+        backgroundColor:Colors.PRIMARY_BORDER
       }}>
       <TouchableOpacity
         style={{
@@ -216,7 +214,7 @@ const MessegesView = props => {
           source={CustomFonts.messeges}
         />
       </TouchableOpacity>
-    </LinearGradient>
+    </View>
   );
 };
 

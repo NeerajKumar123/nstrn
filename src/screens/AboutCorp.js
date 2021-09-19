@@ -92,7 +92,7 @@ const AboutCorp = props => {
         />
         <SKInput
           marginBottom={2}
-          maxLength = {15}
+          maxLength = {50}
           borderColor={Colors.CLR_0065FF}
           value={ifOther}
           placeholder = 'IF OTHER, PLEASE SPECIFY'

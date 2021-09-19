@@ -101,6 +101,7 @@ const Address = props => {
           <TouchableInput
             rightAccImage={CustomFonts.ChevronDown}
             marginBottom={2}
+            height = {80}
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={mailingAddress}

@@ -89,22 +89,22 @@ const Dashboard = props => {
         const params = {User_Id:user_id}
         getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
           if(fileStatusRes?.status == 1){
-            const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : undefined
+            const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : {}
             global.onlineStatusData = statusData ? statusData : {}
             incorpGetIncorpStatus(params,(incStatusRes) =>{
               if(incStatusRes?.status == 1){
                 setIsLoading(false)
-                const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
+                const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : {}
                 global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfos}
                 taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
                   if(taxDocsRes?.status){
-                    const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
+                    const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : {}
                     global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...[]}  
                     const {user_id} = global.userInfo;
                     const params = {User_Id: user_id};
                     craLattersGetStatus(params, craRes => {
                       if (craRes?.status == 1) {
-                        const craLattersResData = craRes?.data && craRes?.data.length > 0 ? craRes?.data[0] : undefined
+                        const craLattersResData = craRes?.data && craRes?.data.length > 0 ? craRes?.data[0] : {}
                         global.craLattersData = craLattersResData
                       } else {
                         setIsLoading(false);
@@ -181,8 +181,6 @@ const Dashboard = props => {
     }
   };
   const onlineMoveToPage = props => {
-    navigation.navigate('OnlineReturnLanding');
-    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -193,33 +191,36 @@ const Dashboard = props => {
       my_year_info_filled = 0,
       document_uploaded = 0,
       authorization_document_uploaded = 1,
+      Online_Button_Enabled
     } = global?.onlineStatusData;
 
-    if (authorization_document_uploaded) {
-      navigation.navigate('AnyThingElse');
-    } else if (document_uploaded) {
-      navigation.navigate('AuthorizerList');
-    } else if (my_year_info_filled) {
-      navigation.navigate('OnlineDocuments');
-    } else if (spouse_info_filled) {
-      navigation.navigate('Dependents');
-    } else if (dependent_info_filled) {
-      navigation.navigate('MyTaxYear',{pageIndex:0});
-    } else if (banking_family_info_filled) {
-      navigation.navigate('MyTaxYear',{pageIndex:0});
-    } else if (about_info_filled) {
-      navigation.navigate('BankingAndMore');
-    } else if (identification_document_uploaded) {
-      navigation.navigate('BasicInfo');
-    } else if (years_selected) {
-      navigation.navigate('Identification');
-    } else {
-      navigation.navigate('OnlineReturnLanding');
-    }x
+    if (Online_Button_Enabled == 0) {
+      navigation.navigate('OnlineTaxFilingStatus')
+    }else{
+      if (authorization_document_uploaded) {
+        navigation.navigate('AnyThingElse');
+      } else if (document_uploaded) {
+        navigation.navigate('AuthorizerList');
+      } else if (my_year_info_filled) {
+        navigation.navigate('OnlineDocuments');
+      } else if (spouse_info_filled) {
+        navigation.navigate('Dependents');
+      } else if (dependent_info_filled) {
+        navigation.navigate('MyTaxYear',{pageIndex:0});
+      } else if (banking_family_info_filled) {
+        navigation.navigate('MyTaxYear',{pageIndex:0});
+      } else if (about_info_filled) {
+        navigation.navigate('BankingAndMore');
+      } else if (identification_document_uploaded) {
+        navigation.navigate('BasicInfo');
+      } else if (years_selected) {
+        navigation.navigate('Identification');
+      } else {
+        navigation.navigate('OnlineReturnLanding');
+      }
+    }    
   };
   const incorpMoveToPage = props => {
-    navigation.navigate('IncorporationLanding');
-    return
     const {
       hst_registration, // HST
       identification_document_uploaded, // incprtr

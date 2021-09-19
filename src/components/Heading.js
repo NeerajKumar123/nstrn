@@ -27,7 +27,8 @@ const Heading = props => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding:2,
-        width:'100%'
+        width:'100%',
+        alignItems:'center'
       }}
       onPress = {()=>{
         onClicked && onClicked()

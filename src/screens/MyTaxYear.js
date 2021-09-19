@@ -25,6 +25,12 @@ const MyTaxYear = props => {
   const currentYear = selectedYears && selectedYears[pageIndex]
   const buttonTitle = selectedYears && selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
 
+  // const pageParams = {}
+  // let {pageIndex = 0} = pageParams
+  // const selectedYears = ['2020']
+  // const currentYear = selectedYears && selectedYears[pageIndex]
+  // const buttonTitle = selectedYears && selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
+
   const [data, setData] = useState([
     {title: 'I WAS EMPLOYED', value: 'I_was_employed', isSelected: false},
     {
@@ -48,9 +54,32 @@ const MyTaxYear = props => {
       isSelected: false,
     },
   ]);
-  const [mySelf, setMySelf] = useState();
-  const [spouse, setSpouse] = useState();
 
+  const [spouseData, setSpouseData] = useState([
+    {title: 'I WAS EMPLOYED', value: 'I_was_employed', isSelected: false},
+    {
+      title: 'I DROVE UBER/LYFT ETC.',
+      value: 'I_drove_uber_lyft_etc',
+      isSelected: false,
+    },
+    {
+      title: 'I OWNED A RENTAL PROPERTY',
+      value: 'I_owned_a_rental_property',
+      isSelected: false,
+    },
+    {
+      title: 'I HAD OTHER SELF EMPLOYMENT INCOME',
+      value: 'I_had_other_self_employment_income',
+      isSelected: false,
+    },
+    {
+      title: 'I PAID RENT AND HAVE RENT RECEIPTS',
+      value: 'I_paid_rent_and_have_rent_receipts',
+      isSelected: false,
+    },
+  ]);
+  const [isSelfSelected, setIsSelfSelected] = useState(true)
+  const [isSpouseSelected, setIsSpouseSelected] = useState(false)
 
   const prepareParams = (flag) => {
     const {
@@ -137,15 +166,22 @@ const MyTaxYear = props => {
 
   const checkFormValidations = () =>{
     let isValidForm = true;
-    if(mySelf || (spouse && global.isFromSpouseFlow)){
+    console.log('isSelfSelected',isSelfSelected)
+    if (isSelfSelected) {
       const selected = data && data.filter((x) => x.isSelected);
+      console.log('self selected',selected)
       if(!selected?.length){
         isValidForm = false
-        Alert.alert('SukhTax',global.isFromSpouseFlow ?  'Please select atleast one option for MYSELF OR SPOUSE' : 'Please select atleast one option for MYSELF')
+        Alert.alert('SukhTax','Please select atleast one option for MY SELF.')
       }
-    }else {
-      isValidForm = false
-      Alert.alert('SukhTax', global.isFromSpouseFlow ? 'Please select one option from MYSELF OR SPOUSE' : 'Please select MYSELF')
+    }
+    if(isSpouseSelected){
+      const selected = spouseData && spouseData.filter((x) => x.isSelected);
+      console.log('spouse selected',selected)
+      if(!selected?.length){
+        isValidForm = false
+        Alert.alert('SukhTax', 'Please select atleast one option for SPOUSE.')
+      }
     }
     return isValidForm
   }
@@ -183,34 +219,42 @@ const MyTaxYear = props => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginTop: 20,
+            borderRadius:8,
+            overflow:'hidden',
+            borderColor:Colors.PRIMARY_BORDER,
+            borderWidth:1
           }}>
           <User
-            height={50}
+            height={40}
             marginTop={0}
-            width={global.isFromSpouseFlow ? '48%' : '100%' } 
+            width={global.isFromSpouseFlow ? '50%' : '100%' } 
             bgColor={Colors.APP_BLUE_HEADING_COLOR}
             item={{title: 'MY SELF'}}
-            isSelected={mySelf}
+            isSelected={isSelfSelected}
             onSelected={() => {
-              setMySelf(!mySelf);
+              setIsSelfSelected(true)
+              setIsSpouseSelected(false)
             }}
           />
-          {global.isFromSpouseFlow && 
+          {global.isFromSpouseFlow&&  
+          <>
+          <View style = {{backgroundColor:Colors.GRAY, width:1}}/>
           <User
-          height={50}
+          height={40}
           marginTop={0}
-          width="48%"
+          width="50%"
           bgColor={Colors.APP_BLUE_HEADING_COLOR}
           item={{title: 'SPOUSE'}}
-          isSelected={spouse}
+          isSelected={isSpouseSelected}
           onSelected={() => {
-            setSpouse(!spouse);
-          }}
+            setIsSelfSelected(false)
+            setIsSpouseSelected(true)
+      }}
         />
-          }
-          
+        </>
+    }
         </View>
-        {data &&
+        { isSelfSelected &&
           data.map((item, index) => {
             return (
               <DocOptionCard
@@ -221,16 +265,36 @@ const MyTaxYear = props => {
                     ...selectedValue,
                     isSelected: !selectedValue.isSelected,
                   };
+                  console.log('newValue',newValue)
                   const index = data.findIndex(x => x.value === item.value);
+                  console.log('index',index)
                   const old = data;
                   if (index != -1) {
                     old[index] = newValue;
                   }
                   setData([...old]);
-                  if (mySelf) {
+                }}
+              />
+            );
+          })}
+
+          {isSpouseSelected &&
+          spouseData.map((item, index) => {
+            return (
+              <DocOptionCard
+                item={item}
+                key={item.value}
+                onSelected={selectedValue => {
+                  const newValue = {
+                    ...selectedValue,
+                    isSelected: !selectedValue.isSelected,
+                  };
+                  const index = spouseData.findIndex(x => x.value === item.value);
+                  const old = spouseData;
+                  if (index != -1) {
+                    old[index] = newValue;
                   }
-                  if (spouse) {
-                  }
+                  setSpouseData([...old]);
                 }}
               />
             );
@@ -245,15 +309,17 @@ const MyTaxYear = props => {
           title={buttonTitle}
           onPress={() => {
             if(checkFormValidations()){
-              if(global.isFromSpouseFlow && spouse){
+              console.log('checkFormValidations111',global.isFromSpouseFlow,isSpouseSelected,isSelfSelected)
+              if(global.isFromSpouseFlow && isSpouseSelected && isSelfSelected){
                 saveMyAndSpouseInfo((res)=>{
                   decideAndNavigate()
                 })
-              }else if(global.isFromSpouseFlow && spouse && !mySelf){
+              }else if(global.isFromSpouseFlow && !isSelfSelected && isSpouseSelected){
+                console.log('checkFormValidations')
                 saveSpouseInfoOnly((res)=>{
                   decideAndNavigate()
                 })
-              }else if(!spouse && mySelf){
+              }else if(!isSpouseSelected && isSelfSelected){
                 saveMyInfoOnly((res)=>{
                   decideAndNavigate()
                 })
@@ -284,13 +350,10 @@ const User = props => {
         marginTop: marginTop,
         backgroundColor: 'white',
         justifyContent: 'center',
-        borderRadius: 6,
         alignItems: 'center',
         width: width,
         height: height,
-        borderWidth:1,
-        borderColor: Colors.CLR_E77C7E,
-        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
+        backgroundColor: isSelected ? Colors.CLR_DF9A9B : Colors.WHITE,
       }}
       onPress={() => {
         props.onSelected && props.onSelected();
@@ -315,12 +378,11 @@ const DocOptionCard = props => {
     height = 44,
     fontSize = 15,
     width = '100%',
-    marginTop = 15,
-    options,
+    marginTop = 15,    
     onSelected,
   } = props;
+  const {isSelected} = item
 
-  const [isSelected, setIsSelected] = useState(false)
 
   return (
     <TouchableOpacity
@@ -339,7 +401,6 @@ const DocOptionCard = props => {
         backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
       }}
       onPress={() => {
-        setIsSelected(!isSelected)
         onSelected && onSelected(item);
       }}>
       <Text

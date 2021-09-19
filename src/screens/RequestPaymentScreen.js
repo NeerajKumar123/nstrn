@@ -167,7 +167,7 @@ import {
             fontWeight={'normal'}
             backgroundColor={Colors.PRIMARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'PAY NOW HST'}
+            title={'PAY NOW'}
             onPress={() => {
               Keyboard.dismiss();
               if (card?.complete) {

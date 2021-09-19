@@ -74,7 +74,7 @@ const BankingAndMore = props => {
     let isValidForm = true;
     const isBankValid = bank?.institution_id > 0
     const isAccValid = accountNo.length > 0
-    const isBranchValid = branchNo.length > 0
+    const isBranchValid = branchNo.length == 5
     const isResidencyValid = residency?.residency_id > 0
     const isEnrtyDateValid = enrtyDate ? true : false
 
@@ -138,9 +138,11 @@ const BankingAndMore = props => {
           marginTop={20}
           marginBottom={0}
           maxLength={30}
+          leftAccImage={CustomFonts.Number}
           borderColor={Colors.CLR_0065FF}
           value={accountNo}
-          placeholder="#Enter Account Number"
+          keyboardType = 'number-pad'
+          placeholder="Enter Account Number"
           onEndEditing={value => {
             setAccountNo(value)
 
@@ -149,10 +151,12 @@ const BankingAndMore = props => {
         <SKInput
           marginTop={20}
           marginBottom={0}
+          leftAccImage={CustomFonts.Number}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={branchNo}
-          placeholder="#Enter Branch Number"
+          keyboardType = 'number-pad'
+          placeholder="Enter Branch Number"
           onEndEditing={value => {
             setBranhcNo(value)
           }}

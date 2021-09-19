@@ -22,7 +22,8 @@ const TouchableInput = props => {
     marginTop = 10,
     marginBottom = 10,
     placeholder = 'Select value',
-    fontSize = 15
+    fontSize = 15,
+    height = 60
   } = props;
   return (
     <TouchableOpacity
@@ -31,7 +32,7 @@ const TouchableInput = props => {
       }}
       style={{
         width: '100%',
-        height: 60,
+        height: height,
         padding: 3,
         paddingHorizontal: 20,
         borderColor: Colors.GRAY,

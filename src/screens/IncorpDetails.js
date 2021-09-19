@@ -72,7 +72,7 @@ const IncorpDetails = props => {
   const checkFormValidations = () => {
     let isValidForm = true;
     const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
-    const isMNameValid = Validator.isValidField(mName, ST_REGEX.LName);
+    const isMNameValid = true // Validator.isValidField(mName, ST_REGEX.LName);
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
@@ -136,6 +136,7 @@ const IncorpDetails = props => {
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={fName}
+            autoCapitalize = 'words'
             placeholder="First Name"
             onEndEditing={value => {
               setFName(value);
@@ -147,6 +148,7 @@ const IncorpDetails = props => {
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={mName}
+            autoCapitalize = 'words'
             placeholder="Middle Name"
             onEndEditing={value => {
               setMName(value);
@@ -158,6 +160,7 @@ const IncorpDetails = props => {
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={lName}
+            autoCapitalize = 'words'
             placeholder="Last Name"
             onEndEditing={value => {
               setLName(value);
@@ -180,6 +183,7 @@ const IncorpDetails = props => {
             maxLength={10}
             borderColor={Colors.CLR_0065FF}
             value={mobile}
+            keyboardType = 'number-pad'
             placeholder="Phone Number"
             onEndEditing={value => {
               setMobile(value);
@@ -191,6 +195,7 @@ const IncorpDetails = props => {
             maxLength={10}
             borderColor={Colors.CLR_0065FF}
             value={altMobile}
+            keyboardType = 'number-pad'
             placeholder="Alternate Phone Number"
             onEndEditing={value => {
               setAltMobile(value);
@@ -202,6 +207,7 @@ const IncorpDetails = props => {
             maxLength={10}
             borderColor={Colors.CLR_0065FF}
             value={sin}
+            keyboardType = 'number-pad'
             placeholder="SIN Number"
             onEndEditing={value => {
               setSin(value);
@@ -223,7 +229,7 @@ const IncorpDetails = props => {
                   User_id: user_id,
                   Incorporation_Id: incorporation_id,
                   First_Name: fName,
-                  Middle_Name: mName,
+                  Middle_Name: mName || '',
                   Last_Name: lName,
                   Email: email,
                   Phone_No: mobile,

@@ -20,8 +20,10 @@ const IncorpApplyStatus = props => {
     incorporation_status_name = 'File not Submitted',
     status_description = 'Looks like you have to complete your registration and upload document still!',
     new_message_count = 0,
-    incorporation_status_id,
+    incorporation_status_id = 1,
   } = global.incStatusData;
+
+  console.log('global.incStatusData',global.incStatusData, incorporation_status_id, incorporation_status_name, status_description)
 
   return (
     <View
@@ -77,11 +79,12 @@ const NotSubmitted = props => {
   } = props;
 
   const incorpMoveToPage = props => {
+    console.log('IncorporationLanding',incorporation_status_id)
     const {
       hst_registration, // HST
       identification_document_uploaded, // incprtr
       authorization_document_uploaded, // HST
-      incorporation_status_id,
+      incorporation_status_id = 1,
     } = global.incStatusData;
     if (incorporation_status_id == 1) {
       if (hst_registration || authorization_document_uploaded) {
@@ -89,7 +92,7 @@ const NotSubmitted = props => {
       } else if (identification_document_uploaded) {
         navigation.navigate('IncorporatorsList');
       } else {
-        navigation.navigate('OnlineReturnLanding');
+        navigation.navigate('IncorporationLanding');
       }
     } else if (incorporation_status_id == 2) {
       navigation.navigate('IncorpInProcessScreen');

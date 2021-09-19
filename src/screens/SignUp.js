@@ -141,6 +141,7 @@ const SignUp = props => {
             maxLength={10}
             borderColor={Colors.CLR_0065FF}
             value={mobile}
+            keyboardType = 'number-pad'
             placeholder="Phone Number"
             onEndEditing={value => {
               setMobile(value);

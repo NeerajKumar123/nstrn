@@ -41,17 +41,24 @@ export const stripeAPIVersion = '2020-08-27';
 
 export const Google_Api_key = 'AIzaSyDpdF27ZiuKLmsJXNfLyRbD-7nmlMa4tJw';
 
+// const width = 300
+// const height = 400
+// const quality = .8
+const width = 10
+const height = 10
+const quality = .2
+
 export const LibImageQualityOptionsWithMultiSelectionSupport = {
-  quality: 0.5,
-  maxWidth: 10,
-  maxHeight: 10,
+  quality: quality,
+  maxWidth: width,
+  maxHeight: height,
   includeBase64: true,
   selectionLimit: 0,
 };
 export const LibImageQualityOptions = {
-  quality: 0.5,
-  maxWidth: 10,
-  maxHeight: 10,
+  quality: quality,
+  maxWidth: width,
+  maxHeight: height,
   includeBase64: true,
 };
 

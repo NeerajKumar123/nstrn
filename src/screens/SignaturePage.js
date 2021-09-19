@@ -145,6 +145,7 @@ const SignaturePage = props => {
             borderColor={Colors.CLR_0065FF}
             value={sinNo}
             placeholder="SIN Number"
+            keyboardType = 'number-pad'
             onEndEditing={value => {
               setSinNo(value);
             }}

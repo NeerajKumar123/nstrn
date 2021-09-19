@@ -99,7 +99,6 @@ const SetupNewPass = props => {
                 resetPassword(params, (res) =>{
                 setIsLoading(false)
                 if(res?.status == 1){
-                  navigation.navigate('Login')
                   const msg = res?.message ?? 'Password reset successfully.'
                   Alert.alert('SukhTax',msg)
                 }else{

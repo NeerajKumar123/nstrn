@@ -83,7 +83,7 @@ const IncorpDetailsPerc = props => {
           <SKInput
             leftAccImage={CustomFonts.Number}
             marginBottom={2}
-            maxLength={10}
+            maxLength={2}
             keyboardType = 'number-pad'
             borderColor={Colors.CLR_0065FF}
             value={ownershipPerc}

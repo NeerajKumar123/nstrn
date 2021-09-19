@@ -74,8 +74,9 @@ const FamilyDetails = props => {
 
   const prepareParams = () =>{
     const {accountNo,bank,branchNo,enrtyDate,residency, province} = pageParams
-    const {user_id,Year_Wise_Records} = global.onlineStatusData
-    const {tax_file_id,tax_file_year_id,year} = Year_Wise_Records?.[0]
+    const {user_id,Year_Wise_Records,tax_file_id} = global.onlineStatusData
+    const record = Year_Wise_Records?.[0]
+    const {tax_file_year_id,year} = record
     const params = {
       User_id:user_id,
       Tax_File_Id:tax_file_id,
@@ -131,7 +132,7 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="DID YOUR MARITAL STATUS CHANGED IN 2020?"
+          value="DID YOUR MARITAL STATUS CHANGE IN 2020?"
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}

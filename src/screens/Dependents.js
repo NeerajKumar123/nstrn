@@ -152,6 +152,7 @@ const Dependents = props => {
           borderColor={Colors.CLR_0065FF}
           value={sinNo}
           placeholder="Enter SIN"
+          keyboardType = 'number-pad'
           onEndEditing={value => {
             setSinNo(value)
           }}

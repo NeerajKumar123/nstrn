@@ -1,4 +1,4 @@
-package com.sukhtax;
+package com.ushatek.sukhtax;
 
 import com.facebook.react.ReactActivity;
 

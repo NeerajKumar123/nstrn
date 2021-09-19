@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1033024583650",
+    "project_id": "sukhtax-5fb97",
+    "storage_bucket": "sukhtax-5fb97.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033024583650:android:994ac59f7b5a62a905abbb",
+        "android_client_info": {
+          "package_name": "com.ushatek.sukhtax"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033024583650-vtj01dvgkdsmh5ivujei31n5ogpi0f8r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0Ebmsif25H3bY6jYkcpwsmhe-TkNTxi4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033024583650-vtj01dvgkdsmh5ivujei31n5ogpi0f8r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1033024583650-3852fjdagdtfk6s8ejhj69ofrp4588p1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ushatek.sukhtax.SukhTax"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

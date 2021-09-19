@@ -90,7 +90,7 @@ const Identification = props => {
           fontSize={16}
           marginTop={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="-PROVINCIAL ID CARD"
+          value="- PROVINCIAL ID CARD"
         />
         <Heading
           fontSize={16}

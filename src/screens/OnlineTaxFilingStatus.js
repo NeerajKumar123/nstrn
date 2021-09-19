@@ -650,9 +650,7 @@ const TaxFilingStatusCard = props => {
 const MessegesView = props => {
   const {count} = props;
   return (
-    <LinearGradient
-      opacity={0.6}
-      colors={[Colors.APP_RED_SUBHEADING_COLOR, Colors.CLR_D72528]}
+    <View
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -662,6 +660,7 @@ const MessegesView = props => {
         borderRadius: 6,
         width: '100%',
         height: 90,
+        backgroundColor:Colors.PRIMARY_BORDER
       }}>
       <TouchableOpacity
         style={{
@@ -706,7 +705,7 @@ const MessegesView = props => {
           source={CustomFonts.messeges}
         />
       </TouchableOpacity>
-    </LinearGradient>
+    </View>
   );
 };
 
