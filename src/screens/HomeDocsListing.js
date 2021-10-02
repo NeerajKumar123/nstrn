@@ -133,7 +133,7 @@ const TaxReturnCard = props => {
         </TouchableOpacity>
       </View>
       {isExpanded &&
-        data.map((item, index) => {
+        data?.map((item, index) => {
           return (
             <FileCard
               key = {item.document_title}

@@ -23,6 +23,8 @@ import SKModel from '../components/SKModel';
 import SKGGLAddressModel from '../components/SKGGLAddressModel';
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
+import * as SKTStorage from '../helpers/SKTStorage';
+
 const Address = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
@@ -32,6 +34,8 @@ const Address = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [isProvinceVisible, setIsProvinceVisible] = useState(false);
   const [isAddViewVisible, setIsAddViewVisible] = useState(false);
+
+  console.log('global.selectedYears',global.selectedYears)
 
   useEffect(() => {
     setIsLoading(true);
@@ -46,7 +50,6 @@ const Address = props => {
     let isValidForm = true;
     const isMailingAddValid = mailingAddress?.length > 0;
     const isProvinceValid = province?.state_id;
-
     if (!isMailingAddValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Mailing address');
@@ -114,7 +117,7 @@ const Address = props => {
             fontSize={16}
             marginTop={45}
             color={Colors.APP_RED_SUBHEADING_COLOR}
-            value="WHICH PROVOINCE DID YOU LINE IN ON DECEMBER 31, 2020?"
+            value={`WHICH PROVINCE DID YOU LIVE IN ON DECEMBER 31, ${global.lastTime}?`}
           />
           <TouchableInput
             rightAccImage={CustomFonts.ChevronDown}
@@ -149,7 +152,9 @@ const Address = props => {
                   ...global.onlineStatusData,
                   ...saveRes?.data[0],
                 };
-                navigation.navigate('BankingAndMore', {province: province});
+                SKTStorage.setKeyValue('province',province, ()=>{
+                  navigation.navigate('BankingAndMore', {province: province});
+                })
               });
             }
           }}

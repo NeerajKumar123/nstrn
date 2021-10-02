@@ -215,7 +215,7 @@ const ForgotPassword = props => {
               justifyContent: 'space-between',
               paddingVertical: 10,
             }}>
-            {inputs.map((i, j) => (
+            {inputs?.map((i, j) => (
               <TextInput
                 key={`${j}_Input_Key`}
                 ref={getRef(j)}

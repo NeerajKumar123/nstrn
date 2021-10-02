@@ -96,7 +96,7 @@ const RequestYears = props => {
               let nextIndex = pageIndex + 1
               const selObj = global.selectedDocsTypes[nextIndex]
               let selYrs = []
-              years.map(item => {
+              years?.map(item => {
                 if (item.isSelected) {
                   selYrs.push(item.year)
                 }

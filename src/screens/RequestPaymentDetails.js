@@ -25,7 +25,7 @@ const RequestPaymentDetails = props => {
       if (paymentDetailsRes?.status == 1) {
         setPayments(paymentDetailsRes?.data);
         let f = 0;
-        paymentDetailsRes?.data.map(item => {
+        paymentDetailsRes?.data?.map(item => {
           f = f + (item.amount != null ? item.amount : 0);
         });
         setTotal(f);
@@ -60,7 +60,7 @@ const RequestPaymentDetails = props => {
           marginTop={12}
           fontWeight="700"
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="PLEASE COMPLETE THE BELOW PAYMENT TO FINALIZE YOUR REGISTRATION REQUEST:"
+          value="PLEASE COMPLETE THE BELOW PAYMENT TO SUBMIT YOUR REQUEST:"
         />
         {payments &&
           payments.map((item, index) => {
@@ -112,7 +112,7 @@ const RequestPaymentDetails = props => {
               fontSize: 12,
               fontFamily: CustomFonts.OpenSansRegular,
             }}>
-            DONT WORRY ALL PAYMENTS ARE SECURED
+            DON'T WORRY ALL PAYMENTS ARE SECURED
           </Text>
           <Icon
             name={'shield-alert-outline'}

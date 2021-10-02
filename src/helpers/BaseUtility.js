@@ -35,7 +35,7 @@ export const isEmpty = value => {
   return typeof value === 'undefined' || value === null || value.length == 0;
 };
 
-export async function downloadFileFromUrl(url, filename) {
+export async function downloadFileFromUrl(url, filename, callback) {
   if (Platform.OS === 'android') {
     const granted = await checkPermission(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -77,26 +77,30 @@ export async function downloadFileFromUrl(url, filename) {
             return;
           }
           Alert.alert('SukhTax', 'Download completed');
+          callback(pathToSave)
 
-          if (Platform.OS === 'ios') {
-            RNFetchBlob.ios.openDocument(pathToSave);
-          } else {
-            RNFetchBlob.android.actionViewIntent(filePath, fileType);
-            RNFetchBlob.android
-              .addCompleteDownload({
-                title: filename,
-                description: 'Download Complete',
-                path: filePath,
-                mime: fileType,
-                showNotification: true,
-              })
-              .then(() =>
-                RNFetchBlob.fs.scanFile([{path: filePath, mime: fileType}]),
-              );
-          }
+          // if (Platform.OS === 'ios') {
+          //   RNFetchBlob.ios.openDocument(pathToSave)
+          //   .catch((errorMessage, statusCode) => {
+          //     Alert.alert('SukhTax', 'Something went wrong!');
+          //   });;
+          // } else {
+          //   RNFetchBlob.android.actionViewIntent(filePath, fileType);
+          //   RNFetchBlob.android
+          //     .addCompleteDownload({
+          //       title: filename,
+          //       description: 'Download Complete',
+          //       path: filePath,
+          //       mime: fileType,
+          //       showNotification: true,
+          //     })
+          //     .then(() =>
+          //       RNFetchBlob.fs.scanFile([{path: filePath, mime: fileType}]),
+          //     );
+          // }
         })
         .catch((errorMessage, statusCode) => {
-          Alert.alert('SukhTax', 'Something went wrong!');
+          Alert.alert('SukhTax', errorMessage, statusCode);
         });
     })
     .catch(error => {});

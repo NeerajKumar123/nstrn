@@ -82,12 +82,12 @@ const Login = props => {
           contentContainerStyle={{
             paddingHorizontal: 20,
           }}>
-        <Heading value="LETS LOG IN" marginTop={50} />
+        <Heading value="LET'S LOG IN" marginTop={50} />
         <Heading
           fontSize={16}
           marginTop={45}
           color={Colors.BLACK}
-          value="IF YOU ALREADY HAVE REGISTERED,WELCOME BACK"
+          value="IF YOU HAVE ALREADY REGISTERED,WELCOME BACK"
         />
         <SKInput
           marginTop={48}
@@ -120,7 +120,7 @@ const Login = props => {
         />
         <Link
           marginTop={19}
-          title="Forgot Password ?"
+          title="Forgot password ?"
           onPress={() => {
             navigation.navigate('ForgotPassword', {pagetitle:'FORGOT PASSWORD?', pagesubs:'WE HAVE SENT A SECURITY CODE TO YOUR PHONE. PLEASE ENTER BELOW:', preScreen:undefined})
           }}
@@ -161,7 +161,7 @@ const Login = props => {
         />
         <Link
           marginTop={69}
-          title="Dont have An Account ? Register Here"
+          title="Don't have An Account ? Register Here"
           disable={true}
           alignment="center"
         />

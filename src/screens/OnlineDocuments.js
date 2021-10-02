@@ -75,7 +75,7 @@ const OnlineDocuments = props => {
           value="THIS IS WHERE YOU CAN MANAGE ALL DOCUMENTS UPLOADED TO SUKHTAX:"
         />
         {data &&
-          data.map((item, index) => {
+          data?.map((item, index) => {
             return (
               <DocCard
                 key = {item}

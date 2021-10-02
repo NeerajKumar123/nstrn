@@ -40,7 +40,7 @@ const Instructions = props => {
           fontSize={22.31}
           textWidth = '100%'
           textAlign = 'left'
-          value="DONT WORRY WE HAVE GOT YOU COVERED."
+          value="DON'T WORRY WE HAVE GOT YOU COVERED."
         />
         <Heading
           marginTop={38}
@@ -52,7 +52,7 @@ const Instructions = props => {
       </View>
       <TouchableOpacity
       onPress = {() =>{
-        navigation.navigate('SignUp')
+      navigation.navigate('SignUp')
       }}
         style={{
           backgroundColor: Colors.APP_RED_SUBHEADING_COLOR,

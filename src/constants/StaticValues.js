@@ -73,6 +73,7 @@ export const ImageActionSheetOptions = [
       Cancel
     </Text>
   </View>,
+
   <View style={{flexDirection: 'row'}}>
     <Text style={{fontFamily: CustomFonts.OpenSansRegular, fontSize: 20}}>
       Library
@@ -84,6 +85,7 @@ export const ImageActionSheetOptions = [
       color={'skyblue'}
     />
   </View>,
+  
   <View style={{flexDirection: 'row'}}>
     <Text style={{fontFamily: CustomFonts.OpenSansRegular, fontSize: 20}}>
       Camera

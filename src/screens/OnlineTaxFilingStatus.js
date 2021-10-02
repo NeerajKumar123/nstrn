@@ -629,7 +629,7 @@ const TaxFilingStatusCard = props => {
           />
         </View>
       )}
-      {(tax_file_status_id == 16 || tax_file_status_id == 0) && (
+      {(tax_file_status_id == 16 || tax_file_status_id == 0) || 1 && (
         <SKButton
           fontSize={16}
           marginTop={30}

@@ -92,12 +92,12 @@ const SignUp = props => {
           contentContainerStyle={{
             paddingHorizontal: 20,
           }}>
-          <Heading value="LETS SIGN UP" marginTop={26} />
+          <Heading value="LET'S SIGN UP" marginTop={26} />
           <Heading
             fontSize={16}
             marginTop={45}
             color={Colors.BLACK}
-            value="LETS GET TO KNOW YOU BETTER"
+            value="LET'S GET TO KNOW YOU BETTER"
           />
           <SKInput
             leftAccImage={CustomFonts.UserIcon}
@@ -212,9 +212,6 @@ const SignUp = props => {
                 };
                 register(params, regisRes => {
                   if (regisRes?.status == 1) {
-                    setTimeout(() => {
-                      setIsLoading(false);
-                    }, 100);
                     const data = regisRes?.data;
                     global.userInfo = {...global.userInfo, user_id: data};
                     navigation.navigate('SecurityCode', {
@@ -229,6 +226,9 @@ const SignUp = props => {
                       'Something went wront, Please try again later.';
                     Alert.alert('SukhTax', msg);
                   }
+                  setTimeout(() => {
+                    setIsLoading(false);
+                  }, 300);
                 });
               }
             }}

@@ -38,6 +38,7 @@ import * as CustomFonts from '../constants/FontsDefs';
 const {width} = Dimensions.get('window');
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns';
+import * as SKTStorage from '../helpers/SKTStorage';
 
 const Spouse = props => {
   const navigation = useNavigation();
@@ -112,7 +113,7 @@ const Spouse = props => {
     } else if (!isSinValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid SIN');
-    } else if (!isEnrtyDateValid) {
+    } else if (false && !isEnrtyDateValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select valid Date Of Immigration');
     } else if (!isBankValid) {
@@ -320,8 +321,9 @@ const Spouse = props => {
               saveSpouseInfo(params, spouseRes => {
                 setIsLoading(false)
                 if (spouseRes?.status == 1) {
-                  global.isFromSpouseFlow = true
-                  navigation.push('Dependents', {depCount:1});
+                  SKTStorage.setKeyValue('isFromSpouseFlow',true, ()=>{
+                    navigation.push('Dependents', {depCount:1});
+                  })
                 } else {
                   Alert.alert('SukhTax', 'Something went wrong!');
                 }

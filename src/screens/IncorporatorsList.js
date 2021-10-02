@@ -32,14 +32,19 @@ const IncorporatorsList = props => {
   useEffect(() => {
     if(isFocused){
       setIsLoading(true)
-      const {incorporation_id, user_id} = global.incStatusData
-      const params = {User_id:user_id,Incorporation_Id:incorporation_id}
-      incorpGetIncorporatorList(params, (incoproratorsRes) =>{
-        setIsLoading(false)
-        if(incoproratorsRes?.status == 1){
-          setIncorporators(incoproratorsRes?.data)
-        }
-      })
+      setTimeout(() => {
+        const {incorporation_id, user_id} = global.incStatusData
+        const params = {User_id:user_id,Incorporation_Id:incorporation_id}
+        incorpGetIncorporatorList(params, (incoproratorsRes) =>{
+          if(incoproratorsRes?.status == 1){
+            setIncorporators(incoproratorsRes?.data)
+          }
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 200);
+        })
+      }, 500);
+
     }
   }, [isFocused]);
 

@@ -7,12 +7,16 @@ import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
 import SKButton from '../components/SKButton';
 import {craLattersGetStatus} from '../apihelper/Api';
+import {useIsFocused} from '@react-navigation/native';
+
 
 const CRALanding = props => {
   const [letters, setLetters] = useState([]);
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false)
+  const isFocused = useIsFocused();
 
+  console.log('isFocused',isFocused)
   useEffect(() => {
     const {user_id} = global.userInfo;
     const params = {User_Id: user_id};
@@ -28,7 +32,7 @@ const CRALanding = props => {
         Alert.alert('SukhTax', craRes?.message);
       }
     });
-  }, []);
+  }, [isFocused]);
 
   return (
     <View

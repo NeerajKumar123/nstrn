@@ -26,6 +26,8 @@ import {getMaritalStatusList,saveBankingAndFamilyInfoByYear} from '../apihelper/
 import * as CustomFonts from '../constants/FontsDefs';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns';
+import * as SKTStorage from '../helpers/SKTStorage';
+
 const {width} = Dimensions.get('window');
 
 const FamilyDetails = props => {
@@ -118,7 +120,7 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="MARITAL STATUS ON DECEMBER 31, 2020"
+          value={`MARITAL STATUS ON DECEMBER 31, ${global.lastTime}`}
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}
@@ -132,7 +134,7 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="DID YOUR MARITAL STATUS CHANGE IN 2020?"
+          value={`DID YOUR MARITAL STATUS CHANGE IN ${global.lastTime}?`}
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}
@@ -158,7 +160,7 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="ANY DEPENDENTS IN 2020?"
+          value={`ANY DEPENDENTS IN ${global.lastTime}?`}
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}
@@ -183,14 +185,15 @@ const FamilyDetails = props => {
               saveBankingAndFamilyInfoByYear(params, (saveBankingRes) =>{
                 setIsLoading(false)
                 if(saveBankingRes?.status == 1){
-                  global.isFromSpouseFlow = false
-                  if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
-                    navigation.navigate('Spouse',{dependentOption:dependentOption.id});
-                  }else if (dependentOption.id  == 1){
-                    navigation.push('Dependents', {depCount:1});
-                  }else {
-                    navigation.navigate('MyTaxYear',{pageIndex:0});
-                  }
+                  SKTStorage.setKeyValue('isFromSpouseFlow',true,()=>{
+                    if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
+                      navigation.navigate('Spouse',{dependentOption:dependentOption.id});
+                    }else if (dependentOption.id  == 1){
+                      navigation.push('Dependents', {depCount:1});
+                    }else {
+                      navigation.navigate('MyTaxYear',{pageIndex:0});
+                    }
+                  })
                 }else{
                   Alert.alert('SukhTax','Something went wrong.')
                   return

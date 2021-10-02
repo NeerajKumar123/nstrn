@@ -118,7 +118,7 @@ const RequestLanding = props => {
             title={'NEXT'}
             onPress={() => {
               let sels = [];
-              docsTypes.map(item => {
+              docsTypes?.map(item => {
                 if (item.isSelected) {
                   sels.push(item);
                 }

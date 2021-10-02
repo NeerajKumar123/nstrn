@@ -59,8 +59,7 @@ const CRAAttachments = props => {
           titleColor={Colors.APP_BLUE_HEADING_COLOR}
           subtitleColor={Colors.APP_RED_SUBHEADING_COLOR}
         />
-        {attachments &&
-          attachments.map((item, index) => {
+        {attachments?.map((item, index) => {
             return ( 
             <FileCard key = {item.document_title}  item ={item} 
             onClick = {() =>{

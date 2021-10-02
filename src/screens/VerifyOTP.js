@@ -120,7 +120,7 @@ const VerifyOTP = props => {
       <ScrollView
       contentContainerStyle = {{width:'100%', paddingHorizontal:30}}
       >
-        <Heading value="LETS LOG IN" marginTop={86} />
+        <Heading value="LET'S LOG IN" marginTop={86} />
         <Heading
           fontSize={16}
           marginTop={55}
@@ -135,7 +135,7 @@ const VerifyOTP = props => {
             justifyContent: 'space-between',
             paddingVertical:10,
           }}>
-          {inputs.map((i, j) => (
+          {inputs?.map((i, j) => (
             <TextInput
               key={`${j}_Input_Key`}
               ref={getRef(j)}

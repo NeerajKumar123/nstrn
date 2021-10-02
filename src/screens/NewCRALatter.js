@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -20,6 +20,8 @@ import {ImageQualityOptionsWithMultiSelectionSupport} from '../constants/StaticV
 import SKInput from '../components/SKInput';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Validator from '../helpers/SKTValidator';
+import {LibImageQualityOptions,ImageActionSheetOptions} from '../constants/StaticValues'
+import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
 
 const NewCRALatter = props => {
   const navigation = useNavigation();
@@ -29,10 +31,12 @@ const NewCRALatter = props => {
   const [desc, setDesc] = useState('');
   const [attachments, setAttachments] = useState([]);
   const [attachmentNames, setAttachmentNames] = useState([]);
+  const actionSheetRef  = useRef()
 
   const prepareParams = () => {
     const {user_id} = global.userInfo;
     const base64s = attachments.join();
+    console.log('attachments',attachments,base64s)
     const params = {
       User_id: user_id,
       Title: title,
@@ -44,8 +48,8 @@ const NewCRALatter = props => {
   };
 
   const checkFormValidations = () => {
-    const isTitleValid = Validator.isValidField(title, ST_REGEX.Address);
-    const isDescValid = Validator.isValidField(desc, ST_REGEX.Address);
+    const isTitleValid = title?.length
+    const isDescValid = desc?.length
     let isValidForm = true;
     if (!isTitleValid) {
       isValidForm = false;
@@ -81,7 +85,7 @@ const NewCRALatter = props => {
         <SKInput
           marginBottom={2}
           marginTop={30}
-          maxLength={16}
+          maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={title}
           placeholder="Enter title"
@@ -92,11 +96,16 @@ const NewCRALatter = props => {
         <SKInput
           marginBottom={2}
           marginTop={30}
-          maxLength={16}
+          height = {100}
+          maxLength={300}
+          multiline={true}
+          returnKeyType="done"
+          blurOnSubmit={true}
           borderColor={Colors.CLR_0065FF}
           value={desc}
           placeholder="Enter description"
           onEndEditing={value => {
+            console.log('value', value)
             setDesc(value);
           }}
         />
@@ -122,23 +131,7 @@ const NewCRALatter = props => {
           title={attachments && attachments.length > 0 ? 'ATTACH MORE' : 'ATTACH CRA LETTER'}
           height={46}
           onClick={() => {
-            launchImageLibrary(ImageQualityOptionsWithMultiSelectionSupport, res => {
-              if (res?.didCancel) {
-                Alert.alert('SukhTax', 'Image uploading cancelled by user.');
-              } else if (res?.error) {
-                console.log('error', res?.error ?? ERROR_MSG);
-              } else if (res?.assets) {
-                const isMultiple = res?.assets?.length > 1;
-                let names = [];
-                let attachs = [];
-                res?.assets?.forEach(element => {
-                  attachs.push(element.base64);
-                  names.push(element.fileName);
-                });
-                setAttachmentNames([...attachmentNames, ...names]);
-                setAttachments([...attachs,...attachments])
-              }
-            });
+            actionSheetRef.current.show()
           }}
         />
         <SKButton
@@ -165,6 +158,54 @@ const NewCRALatter = props => {
                 }
               });
             }
+          }}
+        />
+        <ActionSheet
+          ref={actionSheetRef}
+          title={<Text style={{color: Colors.GRAY, fontSize: 18}}>Which one do you like?</Text>}
+          options={ImageActionSheetOptions}
+          cancelButtonIndex={0}
+          onPress={(index) => {
+            setTimeout(() => {
+              if (index == 1) {
+                launchImageLibrary(LibImageQualityOptions, res => {
+                  if (res?.didCancel) {
+                    Alert.alert('SukhTax', 'Image uploading cancelled by user.');
+                  } else if (res?.error) {
+                    console.log('error', res?.error ?? ERROR_MSG);
+                  } else if (res?.assets) {
+                    const isMultiple = res?.assets?.length > 1;
+                    let names = [];
+                    let attachs = [];
+                    console.log('res?.assets',res?.assets)
+                    res?.assets?.forEach(element => {
+                      attachs.push(element.base64);
+                      names.push(element.fileName);
+                    });
+                    setAttachmentNames([...attachmentNames, ...names]);
+                    setAttachments([...attachs,...attachments])
+                  }
+                });              
+                }else if (index == 2) {
+                launchCamera(LibImageQualityOptions, res => {
+                  if (res?.didCancel) {
+                    Alert.alert('SukhTax', 'Image uploading cancelled by user.');
+                  } else if (res?.error) {
+                    console.log('error', res?.error ?? ERROR_MSG);
+                  } else if (res?.assets) {
+                    const isMultiple = res?.assets?.length > 1;
+                    let names = [];
+                    let attachs = [];
+                    res?.assets?.forEach(element => {
+                      attachs.push(element.base64);
+                      names.push(element.fileName);
+                    });
+                    setAttachmentNames([...attachmentNames, ...names]);
+                    setAttachments([...attachs,...attachments])
+                  }
+              });
+                }
+            }, 100);
           }}
         />
       </ScrollView>

@@ -14,7 +14,7 @@ export const isValidField = (value, regex) => {
 
 
   export const isValidSIN = (sin) => {
-    console.log('sin', sin);
+    console.log('sin 123456782', sin);
     const isEmpty = typeof sin === 'undefined' || sin === null || sin.length == 0;
     if (isEmpty) return false
     const eightDigits = sin.substring(0, 8); //Grabs 8 first 8 digits

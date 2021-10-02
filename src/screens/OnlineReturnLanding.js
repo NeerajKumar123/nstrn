@@ -94,7 +94,9 @@ const OnlineReturnLanding = props => {
               if (isFSelected || isSSelected || isTSelected) {
                 global.selectedYears = undefined
                 global.selectedYears = selectedYears;
-                navigation.navigate('Identification');
+                SKTStorage.setKeyValue('selectedYears',selectedYears,()=>{
+                  navigation.navigate('Identification');
+                })
               } else {
                 Alert.alert('SukhTax', 'Please select year.');
               }

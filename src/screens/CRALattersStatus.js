@@ -23,14 +23,14 @@ const CRALattersStatus = props => {
     const params = {User_Id:user_id,CRA_Letter_Id:cra_letters_id}
     setIsLoading(true)
     craLattersGetDetails(params, (detailsRes) =>{
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 100);
       if (detailsRes?.status == 1) {
         const data = detailsRes?.data?.length > 0 ? detailsRes?.data[0] : {}
         setDetails(data)
         setStatus(data.cra_letters_status_id)
       }
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 300);
     })
   }, [])
 

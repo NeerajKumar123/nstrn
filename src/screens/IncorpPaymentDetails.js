@@ -27,7 +27,7 @@ const IncorpPaymentDetails = props => {
       if(paymentDetailsRes?.status == 1){
         setPayments(paymentDetailsRes?.data)
         let f = 0
-        paymentDetailsRes?.data.map((item) =>{
+        paymentDetailsRes?.data?.map((item) =>{
           f = f + (item.amount != null ? item.amount : 0)
         })
         setTotal(f)
@@ -108,7 +108,7 @@ const IncorpPaymentDetails = props => {
               fontSize: 12,
               fontFamily: CustomFonts.OpenSansRegular,
             }}>
-            DONT WORRY ALL PAYMENTS ARE SECURED
+            DON'T WORRY ALL PAYMENTS ARE SECURED
           </Text>
         </View>
     </ScrollView>

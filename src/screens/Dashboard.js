@@ -15,6 +15,8 @@ import DashCard from '../components/DashCard';
 import SKLoader from '../components/SKLoader';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
+import {downloadFileFromUrl} from '../helpers/BaseUtility'
+import * as SKTStorage from '../helpers/SKTStorage';
 
 import * as CustomFonts from '../constants/FontsDefs';
 import {useIsFocused} from '@react-navigation/native';
@@ -26,48 +28,93 @@ import {
   craLattersGetStatus
 } from '../apihelper/Api';
 
+// const data = [
+//   {
+//     id: 1,
+//     name: 'HOME',
+//     desc: 'STATUS PROFILE MY DOCUMENTS',
+//     image: CustomFonts.home,
+//     colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
+//   },
+//   {
+//     id: 2,
+//     name: 'VISIT US',
+//     desc: 'BOOK AN APPOINTMENT',
+//     image: CustomFonts.visit_us,
+//     colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
+//   },
+//   {
+//     id: 3,
+//     name: 'ONLINE TAX RETURN',
+//     desc: 'STARTING FROM $44.99',
+//     image: CustomFonts.online,
+//     colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
+//   },
+//   {
+//     id: 4,
+//     name: 'INCORPORATION',
+//     desc: 'OPEN A CORPORATION',
+//     image: CustomFonts.incorporation,
+//     colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
+//   },
+//   {
+//     id: 5,
+//     name: 'REQUEST TAX DOCS',
+//     desc: 'NOA, T1,GENERAL, etc.',
+//     image: CustomFonts.request,
+//     colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
+//   },
+//   {
+//     id: 6,
+//     name: 'CRA LATTERS',
+//     desc: 'CORRESPONDENCE',
+//     image: CustomFonts.cra_latters,
+//     colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
+//   },
+// ];
+
 const data = [
   {
     id: 1,
     name: 'HOME',
     desc: 'STATUS PROFILE MY DOCUMENTS',
     image: CustomFonts.home,
-    colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
+    colors: [Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR],
   },
   {
     id: 2,
     name: 'VISIT US',
     desc: 'BOOK AN APPOINTMENT',
     image: CustomFonts.visit_us,
-    colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
+    colors: [Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR],
   },
   {
     id: 3,
     name: 'ONLINE TAX RETURN',
     desc: 'STARTING FROM $44.99',
     image: CustomFonts.online,
-    colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
+    colors: [Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR],
   },
   {
     id: 4,
     name: 'INCORPORATION',
     desc: 'OPEN A CORPORATION',
     image: CustomFonts.incorporation,
-    colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
+    colors: [Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR],
   },
   {
     id: 5,
     name: 'REQUEST TAX DOCS',
     desc: 'NOA, T1,GENERAL, etc.',
     image: CustomFonts.request,
-    colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
+    colors: [Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR],
   },
   {
     id: 6,
     name: 'CRA LATTERS',
     desc: 'CORRESPONDENCE',
     image: CustomFonts.cra_latters,
-    colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
+    colors: [Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR],
   },
 ];
 
@@ -81,12 +128,18 @@ const Dashboard = props => {
     : '';
 
 
-  useEffect(() => {
-    if(isFocused){
-      setIsLoading(true);
-      setTimeout(() => {
-        const {user_id} = global.userInfo
-        const params = {User_Id:user_id}
+    const loadIntialData =()=>{
+      const {user_id} = global.userInfo
+      const params = {User_Id:user_id}
+      SKTStorage.loadLastSavedData((res)=>{
+        const [selectedYears,isFromSpouseFlow,province] = res
+        const [keyYear, valueYear] = selectedYears
+        global[keyYear] = JSON.parse(valueYear) 
+        const [keySpouse, valueSpouse] = isFromSpouseFlow
+        global[keySpouse] = valueSpouse 
+        const [keyProvince, valueProvince] = province
+        global[keyProvince] = valueProvince 
+        console.log(typeof selectedYears)
         getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
           if(fileStatusRes?.status == 1){
             const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : {}
@@ -109,30 +162,40 @@ const Dashboard = props => {
                       } else {
                         setIsLoading(false);
                         const msg = craRes?.message ?? 'Something went wrong,Please try again.'
-                        Alert.alert('SukhTax', msg);                
+                        Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
                       }
                     });
                   }else{
                     setIsLoading(false)
                     const msg = taxDocsRes?.message ?? 'Something went wrong,Please try again.'
-                    Alert.alert('SukhTax', msg);                
+                    Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
                   }
                 })
               }else{
                 setIsLoading(false)
                 const msg = incStatusRes?.message ?? 'Something went wrong,Please try again.'
-                Alert.alert('SukhTax', msg);                
+                Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
               }
             })
           }else{
             setIsLoading(false)
             const msg = fileStatusRes?.message ?? 'Something went wrong,Please try again.'
-            Alert.alert('SukhTax', msg);                
+            Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
           }
         })
+      })
+    }
+
+  useEffect(() => {
+    if(isFocused){
+      setIsLoading(true);
+      setTimeout(() => {
+        loadIntialData()
       }, 500);
     }
   }, [isFocused])
+
+  
 
   useEffect(() => {
     setIsLoading(true);
@@ -181,6 +244,8 @@ const Dashboard = props => {
     }
   };
   const onlineMoveToPage = props => {
+    navigation.navigate('OnlineReturnLanding');
+    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -192,7 +257,7 @@ const Dashboard = props => {
       document_uploaded = 0,
       authorization_document_uploaded = 1,
       Online_Button_Enabled
-    } = global?.onlineStatusData;
+    } = global?.onlineStatusData ?? {};
 
     if (Online_Button_Enabled == 0) {
       navigation.navigate('OnlineTaxFilingStatus')
@@ -221,6 +286,8 @@ const Dashboard = props => {
     }    
   };
   const incorpMoveToPage = props => {
+    navigation.navigate('IncorporationLanding');
+return
     const {
       hst_registration, // HST
       identification_document_uploaded, // incprtr

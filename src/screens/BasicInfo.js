@@ -126,7 +126,7 @@ const BasicInfo = props => {
           fontSize={20}
           marginTop={30}
           color={Colors.RED}
-          value="WHEN THE LAST TIME YOU FILED WITH US?"
+          value="WHEN WAS THE LAST TIME YOU FILED WITH US?"
         />
         <TouchableInput
           leftAccImage={CustomFonts.Clock}
@@ -147,8 +147,10 @@ const BasicInfo = props => {
           title={'ADDRESS'}
           onPress={() => {
             if (checkFormValidations()) {
-              const nextPageParams = {sin:sin,gender:gender, dob:dob,lastTime:lastTime }
-              navigation.navigate('Address',{...nextPageParams});  
+              SKTStorage.setKeyValue('lastTime',lastTime,()=>{
+                const nextPageParams = {sin:sin,gender:gender, dob:dob,lastTime:lastTime }
+                navigation.navigate('Address',{...nextPageParams});    
+              })
             }
           }}
         />
@@ -192,7 +194,7 @@ const BasicInfo = props => {
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display={Platform.OS == 'ios' ? 'inline' : 'default'}
+            display={Platform.OS == 'ios' ? 'spinner' : 'default'}
             onChange={(event, selectedDate) => {
               setShowDatePicker(false);
               setDOB(selectedDate)

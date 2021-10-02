@@ -125,7 +125,7 @@ const IncorporationLanding = props => {
               fontSize: 12,
               fontFamily: CustomFonts.OpenSansRegular,
             }}>
-            DONT WORRY! ALL OUR FEES ALREADY INCLUDE GOVT. CHARGES
+            DON'T WORRY! ALL OUR FEES ALREADY INCLUDE GOVT. CHARGES
           </Text>
         </View>
       </ScrollView>
@@ -158,7 +158,7 @@ const DocCard = props => {
         style={{
           width: '100%',
           textAlign: 'left',
-          color: Colors.WHITE,
+          color: isSelected ? Colors.WHITE : Colors.CLR_414141,
           fontSize: 17,
           fontWeight: '700',
         }}>

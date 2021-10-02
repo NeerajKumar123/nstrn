@@ -103,10 +103,10 @@ const AboutCorp = props => {
         <TouchableInput
             marginBottom={2}
             maxLength={15}
-            fontSize = {12}
             borderColor={Colors.CLR_0065FF}
             value={bussAddress}
-            placeholder="BUSINESS ADDRESS (IF SAME AS INCORPORATOR, PLEASE ENTER SAME ADDRESS)"
+            // placeholder="BUSINESS ADDRESS (IF SAME AS INCORPORATOR, PLEASE ENTER SAME ADDRESS)"
+            placeholder="BUSINESS ADDRESS"
             onClicked={() => {
               setIsAddViewVisible(true);
             }}

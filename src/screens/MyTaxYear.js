@@ -25,12 +25,6 @@ const MyTaxYear = props => {
   const currentYear = selectedYears && selectedYears[pageIndex]
   const buttonTitle = selectedYears && selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
 
-  // const pageParams = {}
-  // let {pageIndex = 0} = pageParams
-  // const selectedYears = ['2020']
-  // const currentYear = selectedYears && selectedYears[pageIndex]
-  // const buttonTitle = selectedYears && selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
-
   const [data, setData] = useState([
     {title: 'I WAS EMPLOYED', value: 'I_was_employed', isSelected: false},
     {
@@ -93,7 +87,7 @@ const MyTaxYear = props => {
       Year: currentYear,
       Details_For: flag ? 0 : 1,
     };
-    data.map(item => {
+    data?.map(item => {
       if (item.isSelected) {
         params[item.value] = 1;
       } else {
@@ -206,7 +200,7 @@ const MyTaxYear = props => {
           fontSize={20}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={`LETS HAVE A LOOK AT HOW YOUR TAX YEAR ${currentYear} WENT!`}
+          value={`LET'S HAVE A LOOK AT HOW YOUR TAX YEAR ${currentYear} WENT!`}
         />
         <Heading
           fontSize={20}
@@ -255,7 +249,7 @@ const MyTaxYear = props => {
     }
         </View>
         { isSelfSelected &&
-          data.map((item, index) => {
+          data?.map((item, index) => {
             return (
               <DocOptionCard
                 item={item}
@@ -279,7 +273,7 @@ const MyTaxYear = props => {
           })}
 
           {isSpouseSelected &&
-          spouseData.map((item, index) => {
+          spouseData?.map((item, index) => {
             return (
               <DocOptionCard
                 item={item}
@@ -309,13 +303,11 @@ const MyTaxYear = props => {
           title={buttonTitle}
           onPress={() => {
             if(checkFormValidations()){
-              console.log('checkFormValidations111',global.isFromSpouseFlow,isSpouseSelected,isSelfSelected)
               if(global.isFromSpouseFlow && isSpouseSelected && isSelfSelected){
                 saveMyAndSpouseInfo((res)=>{
                   decideAndNavigate()
                 })
               }else if(global.isFromSpouseFlow && !isSelfSelected && isSpouseSelected){
-                console.log('checkFormValidations')
                 saveSpouseInfoOnly((res)=>{
                   decideAndNavigate()
                 })

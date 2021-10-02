@@ -92,7 +92,7 @@ const BankingAndMore = props => {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select valid residency type.');
     }
-    else if (!isEnrtyDateValid) {
+    else if (false && !isEnrtyDateValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select valid date of immigration.');
     }
@@ -100,7 +100,7 @@ const BankingAndMore = props => {
   };
 
   const prepareParams = () =>{
-    const params = {bank:bank, accountNo:accountNo, branchNo:branchNo, residency:residency,enrtyDate:enrtyDate, province:pageParams.province}
+    const params = {bank:bank, accountNo:accountNo, branchNo:branchNo, residency:residency,enrtyDate:enrtyDate , province:pageParams.province}
     return params
   }
 
@@ -175,7 +175,7 @@ const BankingAndMore = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="DATE OF ENTRY INTO CANADA(IF IMMIGRATED)"
+          value="DATE OF ENTRY INTO CANADA (IF IMMIGRATED)"
         />
         <TouchableInput
           leftAccImage={CustomFonts.Calender}

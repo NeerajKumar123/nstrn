@@ -25,12 +25,15 @@ const SKInput = props => {
     rightAccImage ,
     marginTop = 10,
     marginBottom = 10,
+    height,
     placeholder = 'Enter value',
     maxLength = 30,
     isChatInput = false,
     multiline,
     keyboardType = 'default',
-    autoCapitalize = 'none'
+    autoCapitalize = 'none',
+    returnKeyType ,
+    blurOnSubmit
   } = props;
   const isLeftLocalPNG = leftAccImage && typeof leftAccImage == 'number';
   const isRightLocalPNG = rightAccImage && typeof rightAccImage == 'number';
@@ -38,11 +41,11 @@ const SKInput = props => {
     <View
       style={{
         width: '100%',
-        height: 57,
+        height: height ? height + 2 :  57,
         padding: 3,
         paddingHorizontal: 20,
         borderColor: props.borderColor ? props.borderColor : Colors.GRAY,
-        borderRadius: 30,
+        borderRadius: height ? 8 : 30,
         flexDirection: 'row',
         alignItems: 'center',
         elevation: 2,
@@ -83,7 +86,7 @@ const SKInput = props => {
           fontSize: 18,
           fontFamily: CustomFonts.OpenSansRegular,
           fontWeight: props.fontSize ? props.fontSize : '400',
-          height: 56,
+          height: height ? height :  56,
           flex: 1,
           backgroundColor: props.backgroundColor
             ? props.backgroundColor
@@ -101,6 +104,8 @@ const SKInput = props => {
         placeholderTextColor = {Colors.LIGHTGRAY}
         placeholder={placeholder}
         maxLength={maxLength}
+        returnKeyType = {returnKeyType}
+        blurOnSubmit = {blurOnSubmit}
         onFocus={() => {
           onFocused && onFocused();
         }}
