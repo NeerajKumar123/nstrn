@@ -91,7 +91,7 @@ const FamilyDetails = props => {
       Residency:residency?.residency_name,
       Immigration_Date:enrtyDate && format(enrtyDate, 'yyyy-MM-dd'),
       Marital_Status_Id:maritalStatus?.marital_status_id,
-      Marital_Status_Change:mChangeOpton.id,
+      Marital_Status_Change:mChangeOpton?.id,
       Marital_Status_Change_Date:mStatusChangedDate && format(mStatusChangedDate, 'yyyy-MM-dd'),
       Dependents:0,
       Spouse_Residency:0,
@@ -120,7 +120,7 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={`MARITAL STATUS ON DECEMBER 31, ${global.lastTime}`}
+          value={`MARITAL STATUS ON DECEMBER 31, ${global.mostRecentYear}`}
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}
@@ -134,7 +134,7 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={`DID YOUR MARITAL STATUS CHANGE IN ${global.lastTime}?`}
+          value={`DID YOUR MARITAL STATUS CHANGE IN ${global.mostRecentYear}?`}
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}
@@ -160,7 +160,7 @@ const FamilyDetails = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={`ANY DEPENDENTS IN ${global.lastTime}?`}
+          value={`ANY DEPENDENTS IN ${global.mostRecentYear}?`}
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}

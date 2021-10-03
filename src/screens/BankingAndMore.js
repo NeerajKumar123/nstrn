@@ -100,7 +100,7 @@ const BankingAndMore = props => {
   };
 
   const prepareParams = () =>{
-    const params = {bank:bank, accountNo:accountNo, branchNo:branchNo, residency:residency,enrtyDate:enrtyDate , province:pageParams.province}
+    const params = {bank:bank, accountNo:accountNo, branchNo:branchNo, residency:residency,enrtyDate:enrtyDate , province:global?.province}
     return params
   }
 

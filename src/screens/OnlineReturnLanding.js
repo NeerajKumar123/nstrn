@@ -94,6 +94,10 @@ const OnlineReturnLanding = props => {
               if (isFSelected || isSSelected || isTSelected) {
                 global.selectedYears = undefined
                 global.selectedYears = selectedYears;
+                const arr =   selectedYears?.sort(function(a, b) {
+                  return parseInt(b) - parseInt(a);
+                });
+                global.mostRecentYear = arr?.[0] ?? '2020'        
                 SKTStorage.setKeyValue('selectedYears',selectedYears,()=>{
                   navigation.navigate('Identification');
                 })

@@ -140,6 +140,10 @@ const Dashboard = props => {
         const [keyProvince, valueProvince] = province
         global[keyProvince] = valueProvince 
         console.log(typeof selectedYears)
+        const arr =   JSON.parse(valueYear)?.sort(function(a, b) {
+          return parseInt(b) - parseInt(a);
+        });
+        global.mostRecentYear = arr?.[0] ?? '2020'
         getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
           if(fileStatusRes?.status == 1){
             const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : {}

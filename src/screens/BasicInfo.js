@@ -194,7 +194,7 @@ const BasicInfo = props => {
             testID="dateTimePicker"
             value={new Date()}
             mode="date"
-            display={Platform.OS == 'ios' ? 'spinner' : 'default'}
+            display={Platform.OS == 'ios' ? 'inline' : 'default'}
             onChange={(event, selectedDate) => {
               setShowDatePicker(false);
               setDOB(selectedDate)

@@ -9,6 +9,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {uploadImage} from '../apihelper/Api'
 import * as CustomFonts from '../constants/FontsDefs'
 import SKLoader from '../components/SKLoader';
+
 import {LibImageQualityOptions,ImageActionSheetOptions} from '../constants/StaticValues'
 import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
 
@@ -123,7 +124,7 @@ const Identification = props => {
             navigation.navigate('BasicInfo');
           }}
         />
-         <ActionSheet
+        <ActionSheet
           ref={actionSheetRef}
           title={<Text style={{color: Colors.GRAY, fontSize: 18}}>Which one do you like?</Text>}
           options={ImageActionSheetOptions}
