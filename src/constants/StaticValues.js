@@ -41,12 +41,12 @@ export const stripeAPIVersion = '2020-08-27';
 
 export const Google_Api_key = 'AIzaSyDpdF27ZiuKLmsJXNfLyRbD-7nmlMa4tJw';
 
-// const width = 300
-// const height = 400
-// const quality = .8
-const width = 10
-const height = 10
-const quality = .2
+const width = 300
+const height = 400
+const quality = .8
+// const width = 10
+// const height = 10
+// const quality = .2
 
 export const LibImageQualityOptionsWithMultiSelectionSupport = {
   quality: quality,
@@ -63,16 +63,6 @@ export const LibImageQualityOptions = {
 };
 
 export const ImageActionSheetOptions = [
-  <View style={{flexDirection: 'row'}}>
-    <Text
-      style={{
-        fontFamily: CustomFonts.OpenSansRegular,
-        fontSize: 20,
-        color: Colors.APP_RED_SUBHEADING_COLOR,
-      }}>
-      Cancel
-    </Text>
-  </View>,
 
   <View style={{flexDirection: 'row'}}>
     <Text style={{fontFamily: CustomFonts.OpenSansRegular, fontSize: 20}}>
@@ -97,4 +87,15 @@ export const ImageActionSheetOptions = [
       color={Colors.APP_BLUE_HEADING_COLOR}
     />
   </View>,
+   <View style={{flexDirection: 'row', height:50, justifyContent:'center', alignItems:'center'}}>
+    <Text
+      style={{
+        fontFamily: CustomFonts.OpenSansRegular,
+        fontSize: 20,
+        color: Colors.APP_RED_SUBHEADING_COLOR,
+      }}>
+      Cancel
+    </Text>
+  </View>,
+  <View style={{flexDirection: 'row', height:30}}/>,
 ];

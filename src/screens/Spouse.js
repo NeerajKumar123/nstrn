@@ -83,8 +83,8 @@ const Spouse = props => {
     const isSinValid = Validator.isValidSIN(sinNo)
     const isEnrtyDateValid = enrtyDate;
     const isBankValid = bank?.institution_id > 0;
-    const isAccValid = accountNo.length > 5;
-    const isBranchValid = branchNo.length > 4;
+    const isAccValid = accountNo.length > 0
+    const isBranchValid = branchNo.length == 5
     if (!isValidLastYear) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select valid year');
@@ -109,13 +109,13 @@ const Spouse = props => {
     } else if (false && !isEnrtyDateValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select valid Date Of Immigration');
-    } else if (!isBankValid) {
+    } else if (isFillingForWife && !isBankValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select a valid bank');
-    } else if (!isAccValid) {
+    } else if (isFillingForWife && !isAccValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid account number');
-    } else if (!isBranchValid) {
+    } else if (isFillingForWife && !isBranchValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid branch number');
     }
@@ -258,7 +258,9 @@ const Spouse = props => {
             setIsImmDatePickerVisible(true);
           }}
         />
-        <Heading
+        {isFillingForWife && 
+        <>
+         <Heading
           fontSize={20}
           marginTop={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
@@ -299,6 +301,8 @@ const Spouse = props => {
             setBranhcNo(value)
           }}
         />
+        </>
+        }
         <SKButton
           marginTop={30}
           fontSize={16}

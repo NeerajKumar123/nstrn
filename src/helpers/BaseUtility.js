@@ -125,7 +125,6 @@ export const loadIntialData =(callback)=>{
     global[keySpouse] = valueSpouse 
     const [keyProvince, valueProvince] = province
     global[keyProvince] = valueProvince 
-    console.log(typeof selectedYears)
     const arr =   JSON.parse(valueYear)?.sort(function(a, b) {
       return parseInt(b) - parseInt(a);
     });

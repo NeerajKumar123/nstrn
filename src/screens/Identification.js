@@ -128,11 +128,9 @@ const Identification = props => {
           ref={actionSheetRef}
           title={<Text style={{color: Colors.GRAY, fontSize: 18}}>Which one do you like?</Text>}
           options={ImageActionSheetOptions}
-          cancelButtonIndex={0}
-          destructiveButtonIndex={4}
           onPress={(index) => {
             setTimeout(() => {
-              if (index == 1) {
+              if (index == 0) {
                 launchImageLibrary(LibImageQualityOptions, res => {
                 if (res?.didCancel) {
                   Alert.alert('SukhTax', 'Image uploading cancelled by user.')
@@ -141,7 +139,7 @@ const Identification = props => {
                   intiateImageUploading(res)
                 }
               });              
-                }else if (index == 2) {
+                }else if (index == 1) {
                 launchCamera(LibImageQualityOptions, res => {
                 if (res?.didCancel) {
                   Alert.alert('SukhTax', 'Image uploading cancelled by user.')
