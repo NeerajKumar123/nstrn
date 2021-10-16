@@ -19,6 +19,7 @@ import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import SKModel from '../components/SKModel';
 import AppHeader from '../components/AppHeader';
+import SKDatePicker from '../components/SKDatePicker';
 import {GENDER_OPTIONS,RELATIONS} from '../constants/StaticValues';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
@@ -231,25 +232,18 @@ const Dependents = props => {
         />
       </ScrollView>
       {isDatePickerVisible && (
-        <View
-          style={{
-            backgroundColor: Colors.LIGHTGRAY,
-            position: 'absolute',
-            bottom: 0,
-            height: Platform.OS == 'ios' ? 400 : 0,
-            width: width,
-          }}>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={new Date()}
-            mode="date"
-            display={Platform.OS == 'ios' ? "inline" : 'default'}
-            onChange={(event, selectedDate) => {
-              setIsDatePickerVisible(false);
-              setDOB(selectedDate)
-            }}
-          />
-        </View>
+        <SKDatePicker
+        originalDate = {new Date()}
+        title = {'Select date'}
+        onCancelPressed = {(date)=>{
+          setIsDatePickerVisible(false)
+          setDOB(date);
+        }}
+        onDonePressed = {(date)=>{
+          setDOB(date);
+          setIsDatePickerVisible(false)
+        }}
+        />
       )}
       {isGenderVisible && (
           <SKModel

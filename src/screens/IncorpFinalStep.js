@@ -114,9 +114,10 @@ const IncorpFinalStep = props => {
 
 const DocCard = props => {
   const {item} = props;
-  const {Column1,incorporator_id} = item
+  const {incorporator_name,incorporator_id} = item
   const {incorpAuthIds = []} = global.incStatusData
   const isAuthorized = incorpAuthIds.includes(incorporator_id)
+  if (!incorporator_name) return null
  
   return (
     <TouchableOpacity
@@ -143,7 +144,7 @@ const DocCard = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {Column1}
+        {incorporator_name?.toUpperCase()}
       </Text>
       <Icon
         style={{position: 'absolute', right: 20}}

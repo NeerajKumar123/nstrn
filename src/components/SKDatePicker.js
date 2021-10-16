@@ -2,59 +2,102 @@ import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
-  TextInput,
-  Image,
   StyleSheet,
   TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
-import * as CustomFonts from '../constants/FontsDefs'
+import DateTimePicker from '@react-native-community/datetimepicker';
+const {width} = Dimensions.get('window');
+
 const SKDatePicker = props => {
-  const {value,onFocused} = props;
-  const [initialValue, setInitialValue] = useState(value);
-  useEffect(() => {
-    setInitialValue(value);
-  }, [value]);
   const {
-    rightAccImage,
-    marginTop = 10,
-    marginBottom = 10,
-    placeholder = 'Select Date',
+    onCancelPressed = () => {},
+    onDonePressed = () => {},
+    originalDate = new Date(),
+    title = 'Select Date',
   } = props;
+
+  const [selectedDate, setSelectedDate] = useState(originalDate);
+
   return (
-    <TouchableOpacity
+    <View
       style={{
-        width: '100%',
-        height: 60,
-        padding: 3,
-        paddingHorizontal: 33,
-        borderColor: Colors.GRAY,
-        borderRadius: 30,
-        flexDirection: 'row',
-        alignItems: 'center',
-        elevation:2,
-        backgroundColor: Colors.WHITE,
-        shadowColor: Colors.LIGHTGRAY,
-        shadowOffset: {
-          width: 2,
-          height: 2,
-        },
-        shadowRadius: 3,
-        shadowOpacity: 0.8,
-        marginTop,
-        marginBottom,
+        backgroundColor: Colors.CLR_EEEEEE,
+        position: 'absolute',
+        bottom: 0,
+        height: Platform.OS == 'ios' ? 216 : 0,
+        width: width,
       }}>
-          <Text>
-              {value || placeholder}
-        </Text>
-      {rightAccImage && (
-          <Image
-          resizeMode="contain"
-          style={{width: isChatInput ?  20 : 15, height: isChatInput ?  20 : 15}}
-          source={rightAccImage}
-        />
-      )}
-    </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingVertical: 10,
+          paddingHorizontal: 10,
+          alignItems:'center'
+        }}>
+        <TouchableOpacity
+          style={{
+            borderRadius: 6,
+            borderColor: Colors.APP_RED_SUBHEADING_COLOR,
+            borderWidth: 1,
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+          }}
+          onPress={() => {
+            onCancelPressed(originalDate);
+          }}>
+          <Text
+            style={{
+              color: Colors.APP_RED_SUBHEADING_COLOR,
+              fontSize: 14,
+              fontWeight: '500',
+            }}>
+            Cancel
+          </Text>
+        </TouchableOpacity>
+
+        <Text
+            style={{
+              color: Colors.BLACK,
+              fontSize: 15,
+              fontWeight: '500',
+            }}>
+            {title}
+          </Text>
+        <TouchableOpacity
+          style={{
+            borderRadius: 6,
+            borderColor: Colors.APP_BLUE_HEADING_COLOR,
+            borderWidth: 1,
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+          }}
+          onPress={() => {
+            onDonePressed(selectedDate);
+          }}>
+          <Text
+            style={{
+              color: Colors.APP_BLUE_HEADING_COLOR,
+              fontSize: 14,
+              fontWeight: '500',
+            }}>
+            Done
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <DateTimePicker
+        style={{backgroundColor: 'white'}}
+        testID="dateTimePicker"
+        value={selectedDate}
+        mode="date"
+        display={Platform.OS == 'ios' ? 'spinner' : 'default'}
+        onChange={(event, date) => {
+          setSelectedDate(date);
+        }}
+      />
+    </View>
   );
 };
 

@@ -31,7 +31,7 @@ const Identification = props => {
         uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
         setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
         uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
-      }, 100);
+      }, 300);
     })
   }
 

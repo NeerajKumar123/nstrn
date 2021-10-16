@@ -18,7 +18,8 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
 import {
-  uploadImage,
+  uploadDocumentBS64,
+  finalizeOnlineProcess,
   getOnlinePaymentDetails,
   onlineSubmitFiling,
   getTaxReturnsDocs,
@@ -48,11 +49,30 @@ const OnlineTaxFilingStatus = props => {
     if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
     setIsLoading(true);
     const params = prepareParams(imgObj.base64);
-    uploadImage(params, uploadRes => {
-      setIsLoading(false);
-      setTimeout(() => {
-        uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
-      }, 100);
+    uploadDocumentBS64(params, uploadRes => {
+      if(uploadRes?.status == 1){
+        const {user_id,tax_file_id} = global.onlineStatusData
+        const params = {User_Id: user_id,Tax_File_Id: tax_file_id};
+        finalizeOnlineProcess(params,(finalizeRes) =>{
+          if (finalizeRes?.status == 1) {
+            setIsLoading(false)
+            finalizeRes?.message && Alert.alert('SukhTax', finalizeRes?.message);
+            setTimeout(() => {
+              navigation.popToTop()
+            }, 300);  
+          }else{
+            setIsLoading(false);
+            setTimeout(() => {
+              finalizeRes?.message && Alert.alert('SukhTax', finalizeRes?.message);
+            }, 300);      
+          }
+        })  
+      }else{
+        setIsLoading(false);
+        setTimeout(() => {
+          uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+        }, 300);  
+      }
     });
   };
 
@@ -79,10 +99,9 @@ const OnlineTaxFilingStatus = props => {
       <AppHeader navigation={navigation} />
       {isLoading && <SKLoader />}
       <ScrollView
-        style={{width: '100%'}}
+        style={{width: '100%', height:'100%'}}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          height: '100%',
           paddingBottom:Platform.OS == 'ios' ? 100 : 0
         }}>
         <Heading value={pageHeading()} marginTop={124} />
@@ -300,7 +319,7 @@ const TaxFilingStatusCard = props => {
         value={tax_file_status_name}
         marginTop={2}
       />
-      {tax_file_status_id == 10 && (
+      {tax_file_status_id == 10 && false && ( // Made change asbug filed....
         <Heading
           fontSize={21}
           marginTop={20}
@@ -629,7 +648,7 @@ const TaxFilingStatusCard = props => {
           />
         </View>
       )}
-      {(tax_file_status_id == 16 || tax_file_status_id == 0) || 1 && (
+      {(tax_file_status_id == 16 || tax_file_status_id == 0) && (
         <SKButton
           fontSize={16}
           marginTop={30}

@@ -1,15 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {
-  TouchableOpacity,
   View,
   Alert,
   ScrollView,
-  Image,
-  TextInput,
-  Keyboard,
   Platform,
   KeyboardAvoidingView,
-  Dimensions,
 } from 'react-native';
 import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
@@ -19,6 +14,7 @@ import Heading from '../components/Heading';
 import SKSwitch from '../components/SKSwitch';
 import SKLoader from '../components/SKLoader';
 import SKModel from '../components/SKModel';
+import SKDatePicker from '../components/SKDatePicker';
 import AppHeader from '../components/AppHeader';
 import {
   GENDER_OPTIONS,
@@ -33,10 +29,7 @@ import {
   getInstitutionList,
   saveSpouseInfo,
 } from '../apihelper/Api';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
-const {width} = Dimensions.get('window');
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns';
 import * as SKTStorage from '../helpers/SKTStorage';
 
@@ -333,49 +326,37 @@ const Spouse = props => {
         />
       </ScrollView>
       </KeyboardAvoidingView>
-
       {isDatePickerVisible && (
-        <View
-          style={{
-            backgroundColor: Colors.LIGHTGRAY,
-            position: 'absolute',
-            bottom: 0,
-            height: Platform.OS == 'ios' ? 400 : 0,
-            width: width,
-          }}>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={new Date()}
-            mode="date"
-            display={Platform.OS == 'ios' ? "inline" : 'default'}
-            onChange={(event, selectedDate) => {
-              setIsDatePickerVisible(false);
-              setDOB(selectedDate);
-            }}
-          />
-        </View>
-      )}
+        <SKDatePicker
+        originalDate = {new Date()}
+        title = {'Select date'}
+        onCancelPressed = {(date)=>{
+          setIsDatePickerVisible(false)
+          setDOB(date);
+        }}
+        onDonePressed = {(date)=>{
+          setDOB(date);
+          setIsDatePickerVisible(false)
+        }}
+        />
+      )
+      }
+
       {isImmDatePickerVisible && (
-        <View
-          style={{
-            backgroundColor: Colors.LIGHTGRAY,
-            position: 'absolute',
-            bottom: 0,
-            height: Platform.OS == 'ios' ? 400 : 0,
-            width: width,
-          }}>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={new Date()}
-            mode="date"
-            display={Platform.OS == 'ios' ? "inline" : 'default'}
-            onChange={(event, selectedDate) => {
-              setIsImmDatePickerVisible(false);
-              setEnrtyDate(selectedDate);
-            }}
-          />
-        </View>
-      )}
+        <SKDatePicker
+        originalDate = {new Date()}
+        title = {'Select date'}
+        onCancelPressed = {(date)=>{
+          setIsImmDatePickerVisible(false)
+          setEnrtyDate(date);
+        }}
+        onDonePressed = {(date)=>{
+          setEnrtyDate(date);
+          setIsImmDatePickerVisible(false)
+        }}
+        />
+      )
+      }
       {isLastTimeVisible && (
         <SKModel
           title="Select"

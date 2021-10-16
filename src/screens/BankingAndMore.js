@@ -10,6 +10,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Dimensions,
+  Text,
 } from 'react-native';
 import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
@@ -19,6 +20,7 @@ import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import AppHeader from '../components/AppHeader';
+import SKDatePicker from '../components/SKDatePicker';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
@@ -29,9 +31,7 @@ import {
 } from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns';
-const {width} = Dimensions.get('window');
 const BankingAndMore = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
@@ -230,25 +230,18 @@ const BankingAndMore = props => {
         />
       )}
       {isDatePickerVisible && (
-        <View
-          style={{
-            backgroundColor: Colors.LIGHTGRAY,
-            position: 'absolute',
-            bottom: 0,
-            height: Platform.OS == 'ios' ? 400 : 0,
-            width: width,
-          }}>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={new Date()}
-            mode="date"
-            display={Platform.OS == 'ios' ? "inline" : 'default'}
-            onChange={(event, selectedDate) => {
-              setIsDatePickerVisible(false);
-              setEntryDate(selectedDate);
-            }}
-          />
-        </View>
+        <SKDatePicker
+        originalDate = {new Date()}
+        title = {'Select date'}
+        onCancelPressed = {(date)=>{
+          setIsDatePickerVisible(false)
+          setEntryDate(date);
+        }}
+        onDonePressed = {(date)=>{
+          setEntryDate(date);
+          setIsDatePickerVisible(false)
+        }}
+        />
       )}
     </View>
   );

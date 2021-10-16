@@ -84,15 +84,22 @@ const OnlinePaymentScreen = props => {
       Alert.alert('SukhTax', 'We are facing some techinical glitch , Please try again.');
     } else if (paymentIntent) {
       setIsLoading(false);
-      Alert.alert('SukhTax', 'Payment done successfully!');
       const {id,status} = paymentIntent
       const {user_id,tax_file_id} = global.onlineStatusData;
       const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Payment_Intent_id:id,Payment_Status:status,Additional_Payment:pageParams?.additional_payment_required ? pageParams?.additional_payment_required : 0 }
       onlineSavePaymentInfo(params, (savePaymentRes)=>{
-        navigation.popToTop();
-        // if(savePaymentRes?.status == 1){
-        //   navigation.popToTop();
-        // }
+        if(savePaymentRes?.status == 1){
+          navigation.popToTop();
+          setTimeout(() => {
+            const msg = savePaymentRes?.message ? savePaymentRes?.message : 'Payment done successfully.'
+            Alert.alert('SukhTax', msg);  
+          }, 200);
+        }else{
+          setTimeout(() => {
+            const errormsg = savePaymentRes?.message ? savePaymentRes?.message : 'We are facing some techinical glitch , Please try again.'
+            Alert.alert('SukhTax', errormsg);
+            }, 200);
+        }
       })
     }
   };

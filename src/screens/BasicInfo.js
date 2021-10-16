@@ -25,6 +25,7 @@ import {GENDER_OPTIONS, TIME_OPTIONS} from '../constants/StaticValues';
 import SKLoader from '../components/SKLoader';
 import SKModel from '../components/SKModel';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import SKDatePicker from '../components/SKDatePicker';
 import {format } from 'date-fns'
 const {width} = Dimensions.get('window');
 
@@ -182,25 +183,18 @@ const BasicInfo = props => {
         )}
       </ScrollView>
       {showDatePicker && (
-        <View
-          style={{
-            backgroundColor: Colors.LIGHTGRAY,
-            position: 'absolute',
-            bottom: 0,
-            height: pickerHeight,
-            width: width,
-          }}>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={new Date()}
-            mode="date"
-            display={Platform.OS == 'ios' ? 'inline' : 'default'}
-            onChange={(event, selectedDate) => {
-              setShowDatePicker(false);
-              setDOB(selectedDate)
-            }}
-          />
-        </View>
+        <SKDatePicker
+        originalDate = {new Date()}
+        title = {'Select date'}
+        onCancelPressed = {(date)=>{
+          setShowDatePicker(false)
+          setDOB(date);
+        }}
+        onDonePressed = {(date)=>{
+          setDOB(date);
+          setShowDatePicker(false)
+        }}
+        />
       )}
     </View>
   );

@@ -15,7 +15,7 @@ import DashCard from '../components/DashCard';
 import SKLoader from '../components/SKLoader';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
-import {downloadFileFromUrl} from '../helpers/BaseUtility'
+import {loadIntialData} from '../helpers/BaseUtility'
 import * as SKTStorage from '../helpers/SKTStorage';
 
 import * as CustomFonts from '../constants/FontsDefs';
@@ -27,51 +27,6 @@ import {
   taxDocsGetTaxDocsStatus,
   craLattersGetStatus
 } from '../apihelper/Api';
-
-// const data = [
-//   {
-//     id: 1,
-//     name: 'HOME',
-//     desc: 'STATUS PROFILE MY DOCUMENTS',
-//     image: CustomFonts.home,
-//     colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
-//   },
-//   {
-//     id: 2,
-//     name: 'VISIT US',
-//     desc: 'BOOK AN APPOINTMENT',
-//     image: CustomFonts.visit_us,
-//     colors: [Colors.CLR_7F7F9F, Colors.CLR_E77C7E],
-//   },
-//   {
-//     id: 3,
-//     name: 'ONLINE TAX RETURN',
-//     desc: 'STARTING FROM $44.99',
-//     image: CustomFonts.online,
-//     colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
-//   },
-//   {
-//     id: 4,
-//     name: 'INCORPORATION',
-//     desc: 'OPEN A CORPORATION',
-//     image: CustomFonts.incorporation,
-//     colors: [Colors.CLR_E77C7E, Colors.CLR_E77C7E],
-//   },
-//   {
-//     id: 5,
-//     name: 'REQUEST TAX DOCS',
-//     desc: 'NOA, T1,GENERAL, etc.',
-//     image: CustomFonts.request,
-//     colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
-//   },
-//   {
-//     id: 6,
-//     name: 'CRA LATTERS',
-//     desc: 'CORRESPONDENCE',
-//     image: CustomFonts.cra_latters,
-//     colors: [Colors.CLR_E77C7E, Colors.CLR_7F7F9F],
-//   },
-// ];
 
 const data = [
   {
@@ -111,7 +66,7 @@ const data = [
   },
   {
     id: 6,
-    name: 'CRA LATTERS',
+    name: 'CRA LETTERS',
     desc: 'CORRESPONDENCE',
     image: CustomFonts.cra_latters,
     colors: [Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR],
@@ -127,74 +82,15 @@ const Dashboard = props => {
     ? `${global.userInfo.firstname ? global.userInfo.firstname : ''} ${global.userInfo.lastname ? global.userInfo.lastname : ''}`
     : '';
 
-
-    const loadIntialData =()=>{
-      const {user_id} = global.userInfo
-      const params = {User_Id:user_id}
-      SKTStorage.loadLastSavedData((res)=>{
-        const [selectedYears,isFromSpouseFlow,province] = res
-        const [keyYear, valueYear] = selectedYears
-        global[keyYear] = JSON.parse(valueYear) 
-        const [keySpouse, valueSpouse] = isFromSpouseFlow
-        global[keySpouse] = valueSpouse 
-        const [keyProvince, valueProvince] = province
-        global[keyProvince] = valueProvince 
-        console.log(typeof selectedYears)
-        const arr =   JSON.parse(valueYear)?.sort(function(a, b) {
-          return parseInt(b) - parseInt(a);
-        });
-        global.mostRecentYear = arr?.[0] ?? '2020'
-        getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
-          if(fileStatusRes?.status == 1){
-            const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : {}
-            global.onlineStatusData = statusData ? statusData : {}
-            incorpGetIncorpStatus(params,(incStatusRes) =>{
-              if(incStatusRes?.status == 1){
-                setIsLoading(false)
-                const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : {}
-                global.incStatusData = incStatusData ? {...incStatusData,...global.userInfo} : {...global.onlineStatusData,...global.userInfos}
-                taxDocsGetTaxDocsStatus(params,(taxDocsRes) =>{
-                  if(taxDocsRes?.status){
-                    const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : {}
-                    global.taxDocsStatusData = taxDocsResData ? {...taxDocsResData,...global.userInfo} : {...global.taxDocsResData,...[]}  
-                    const {user_id} = global.userInfo;
-                    const params = {User_Id: user_id};
-                    craLattersGetStatus(params, craRes => {
-                      if (craRes?.status == 1) {
-                        const craLattersResData = craRes?.data && craRes?.data.length > 0 ? craRes?.data[0] : {}
-                        global.craLattersData = craLattersResData
-                      } else {
-                        setIsLoading(false);
-                        const msg = craRes?.message ?? 'Something went wrong,Please try again.'
-                        Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
-                      }
-                    });
-                  }else{
-                    setIsLoading(false)
-                    const msg = taxDocsRes?.message ?? 'Something went wrong,Please try again.'
-                    Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
-                  }
-                })
-              }else{
-                setIsLoading(false)
-                const msg = incStatusRes?.message ?? 'Something went wrong,Please try again.'
-                Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
-              }
-            })
-          }else{
-            setIsLoading(false)
-            const msg = fileStatusRes?.message ?? 'Something went wrong,Please try again.'
-            Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
-          }
-        })
-      })
-    }
-
   useEffect(() => {
     if(isFocused){
       setIsLoading(true);
       setTimeout(() => {
-        loadIntialData()
+        loadIntialData((res)=>{
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 100);
+        })
       }, 500);
     }
   }, [isFocused])
@@ -241,15 +137,13 @@ const Dashboard = props => {
           reqMoveToPage()
           break;
         case 6:
-        navigation.navigate('CRALanding');
+          craMoveToPage()
         break;        
       default:
         break;
     }
   };
   const onlineMoveToPage = props => {
-    navigation.navigate('OnlineReturnLanding');
-    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -290,8 +184,6 @@ const Dashboard = props => {
     }    
   };
   const incorpMoveToPage = props => {
-    navigation.navigate('IncorporationLanding');
-return
     const {
       hst_registration, // HST
       identification_document_uploaded, // incprtr
@@ -316,6 +208,10 @@ return
   };
   const reqMoveToPage = props => {
     navigation.navigate('RequestLanding');
+  };
+
+  const craMoveToPage = props => {
+    navigation.navigate('CRALanding');
   };
 
   return (

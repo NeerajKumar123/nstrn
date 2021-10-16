@@ -47,7 +47,7 @@ const OnlineDocuments = props => {
       setTimeout(() => {
         uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
         uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
-      }, 100);
+      }, 300);
     })
   }
 

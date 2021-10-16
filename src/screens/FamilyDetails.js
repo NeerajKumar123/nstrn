@@ -19,6 +19,7 @@ import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import SKModel from '../components/SKModel';
 import AppHeader from '../components/AppHeader';
+import SKDatePicker from '../components/SKDatePicker';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
@@ -78,7 +79,7 @@ const FamilyDetails = props => {
     const {accountNo,bank,branchNo,enrtyDate,residency, province} = pageParams
     const {user_id,Year_Wise_Records,tax_file_id} = global.onlineStatusData
     const record = Year_Wise_Records?.[0]
-    const {tax_file_year_id,year} = record
+    const {tax_file_year_id = 0,year = 2020} = record
     const params = {
       User_id:user_id,
       Tax_File_Id:tax_file_id,
@@ -260,25 +261,18 @@ const FamilyDetails = props => {
         />
       )}
       {showDatePicker && (
-        <View
-          style={{
-            backgroundColor: '#FFE6E6',
-            position: 'absolute',
-            bottom: 0,
-            height: pickerHeight,
-            width: width,
-          }}>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={new Date()}
-            mode="date"
-            display={Platform.OS == 'ios' ? "inline" : 'default'}
-            onChange={(event, selectedDate) => {
-              setShowDatePicker(false);
-              setMStatusChangedDate(selectedDate);
-            }}
-          />
-        </View>
+        <SKDatePicker
+        originalDate = {new Date()}
+        title = {'Select date'}
+        onCancelPressed = {(date)=>{
+          setShowDatePicker(false)
+          setMStatusChangedDate(date);
+        }}
+        onDonePressed = {(date)=>{
+          setMStatusChangedDate(date);
+          setShowDatePicker(false)
+        }}
+        />
       )}
     </View>
   );

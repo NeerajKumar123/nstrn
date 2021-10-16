@@ -30,7 +30,7 @@ const CRALattersStatus = props => {
       }
       setTimeout(() => {
         setIsLoading(false)
-      }, 300);
+      }, 500);
     })
   }, [])
 

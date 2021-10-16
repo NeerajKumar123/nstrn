@@ -135,7 +135,8 @@ const IncorporatorsList = props => {
 
 const DocCard = props => {
   const {item, isSelected} = props;
-  const {Column1} = item
+  const {incorporator_name} = item
+  if (!incorporator_name) return null
   return (
     <TouchableOpacity
       style={{
@@ -161,7 +162,7 @@ const DocCard = props => {
           fontWeight: '700',
           marginLeft: 23,
         }}>
-        {Column1.toUpperCase()}
+        {incorporator_name?.toUpperCase()}
       </Text>
     </TouchableOpacity>
   );
