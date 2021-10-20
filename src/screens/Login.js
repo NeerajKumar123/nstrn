@@ -18,7 +18,7 @@ const Login = props => {
   const [pass, setPass] = useState('')
   const [isSecurePass, setIsSecurePass] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const [token, setToken] = useState('nekotmodnaremos')
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     requestUserPermission();
@@ -40,7 +40,7 @@ const Login = props => {
     }
   }
 
-  getFcmToken = async () => {
+  const getFcmToken = async () => {
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
      console.log("Your Firebase Token is:", fcmToken);
@@ -143,7 +143,7 @@ const Login = props => {
                   const user = userRes && userRes.data[0]
                   console.log('userRes',userRes)
                   const {user_id} = user
-                  const devparams  = {user_id:user_id,Device_Id:token,Device_OS:'iOS'}
+                  const devparams  = {user_id:user_id,Device_Id:token,Device_OS:Platform.OS == 'ios' ? 'iOS' : 'Android'}
                   updateDeviceIDAndOS(devparams, (deres) =>{
                     console.log('deres',deres)
                   })

@@ -219,6 +219,18 @@ const AllSet = props => {
           );
         }}
       />
+      <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'NEW REQUEST'}
+          onPress={() => {
+            navigation.navigate('RequestLanding')
+          }}
+        />
       <DarkBlueButton
         title={'RETURN TO DASHBOARD'}
         onClick={() => {

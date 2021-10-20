@@ -6,9 +6,13 @@ import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
 import {useNavigation} from '@react-navigation/native';
+import {loadIntialData} from '../helpers/BaseUtility'
+import {useIsFocused} from '@react-navigation/native';
 
 const Home = props => {
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
   const userFullName = global.userInfo
     ? `${global.userInfo.firstname} ${global.userInfo.lastname}`
     : '';
@@ -16,6 +20,42 @@ const Home = props => {
   const {incorporation_status_id = 0} = global?.incStatusData;
   const {tax_docs_status_id = 0} = global?.taxDocsStatusData;
   const {cra_letters_status_id = 0} = global?.craLattersData;
+
+  // inprogress circular loader
+  // all set green tick
+  // rejected red/white cross
+  let taxStatus = 3
+   if (tax_file_status_id == 16) {
+    taxStatus = 1
+   }
+
+   let incropStatus = 3
+   if (incorporation_status_id == 3) {
+    incropStatus = 1
+   }
+   let taxDocStatus = 3
+   if (tax_docs_status_id == 3) {
+    taxDocStatus = 1
+   }
+   let craStatus = 3
+   if (cra_letters_status_id == 3) {
+    craStatus = 1
+   }else if (cra_letters_status_id == 4) {
+    craStatus = 2
+   }
+
+   useEffect(() => {
+    if(isFocused){
+      setIsLoading(true);
+      setTimeout(() => {
+        loadIntialData((res)=>{
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 100);
+        })
+      }, 500);
+    }
+  }, [isFocused])
 
   return (
     <View
@@ -26,6 +66,7 @@ const Home = props => {
         flex: 1,
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader />}
       <ScrollView
         style={{width: '100%', flex: 1}}
         contentContainerStyle={{
@@ -59,7 +100,7 @@ const Home = props => {
         {tax_file_status_id ? (
           <Heading
             fontSize={16}
-            status={tax_file_status_id >= 16 ? 3 : 2}
+            status={taxStatus}
             marginTop={15}
             color={Colors.APP_RED_SUBHEADING_COLOR}
             value="TAX FILING"
@@ -72,7 +113,7 @@ const Home = props => {
           <Heading
             fontSize={16}
             status={0}
-            status={incorporation_status_id}
+            status={incropStatus}
             marginTop={5}
             color={Colors.APP_RED_SUBHEADING_COLOR}
             value="INCORPORATION"
@@ -86,7 +127,7 @@ const Home = props => {
           <Heading
             fontSize={16}
             status={0}
-            status={tax_docs_status_id}
+            status={taxDocStatus}
             marginTop={5}
             color={Colors.APP_RED_SUBHEADING_COLOR}
             value="TAX DOCUMENTS"
@@ -100,7 +141,7 @@ const Home = props => {
           <Heading
             fontSize={16}
             status={0}
-            status={cra_letters_status_id}
+            status={craStatus}
             marginTop={5}
             color={Colors.APP_RED_SUBHEADING_COLOR}
             value="CRA LETTERS"

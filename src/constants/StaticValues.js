@@ -41,9 +41,9 @@ export const stripeAPIVersion = '2020-08-27';
 
 export const Google_Api_key = 'AIzaSyDpdF27ZiuKLmsJXNfLyRbD-7nmlMa4tJw';
 
-const width = 300
-const height = 400
-const quality = .8
+const width = 800
+const height = 1000
+const quality = 1.0
 // const width = 10
 // const height = 10
 // const quality = .2

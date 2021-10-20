@@ -105,7 +105,6 @@ const AboutCorp = props => {
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={bussAddress}
-            // placeholder="BUSINESS ADDRESS (IF SAME AS INCORPORATOR, PLEASE ENTER SAME ADDRESS)"
             placeholder="BUSINESS ADDRESS"
             onClicked={() => {
               setIsAddViewVisible(true);

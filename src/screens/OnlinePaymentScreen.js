@@ -83,13 +83,12 @@ const OnlinePaymentScreen = props => {
       setIsLoading(false);
       Alert.alert('SukhTax', 'We are facing some techinical glitch , Please try again.');
     } else if (paymentIntent) {
-      setIsLoading(false);
       const {id,status} = paymentIntent
       const {user_id,tax_file_id} = global.onlineStatusData;
       const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Payment_Intent_id:id,Payment_Status:status,Additional_Payment:pageParams?.additional_payment_required ? pageParams?.additional_payment_required : 0 }
       onlineSavePaymentInfo(params, (savePaymentRes)=>{
         if(savePaymentRes?.status == 1){
-          navigation.popToTop();
+          navigation.navigate('Home');
           setTimeout(() => {
             const msg = savePaymentRes?.message ? savePaymentRes?.message : 'Payment done successfully.'
             Alert.alert('SukhTax', msg);  

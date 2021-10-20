@@ -207,7 +207,12 @@ const Dashboard = props => {
     }
   };
   const reqMoveToPage = props => {
-    navigation.navigate('RequestLanding');
+    const {tax_docs_status_id = 1} = global?.taxDocsStatusData
+    if (tax_docs_status_id == 2) { // inprogrees
+      navigation.navigate('RequestApplyStatus');
+    }else{
+      navigation.navigate('RequestLanding');
+    }
   };
 
   const craMoveToPage = props => {

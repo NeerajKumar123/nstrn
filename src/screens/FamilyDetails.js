@@ -78,7 +78,7 @@ const FamilyDetails = props => {
   const prepareParams = () =>{
     const {accountNo,bank,branchNo,enrtyDate,residency, province} = pageParams
     const {user_id,Year_Wise_Records,tax_file_id} = global.onlineStatusData
-    const record = Year_Wise_Records?.[0]
+    const record =Year_Wise_Records && Year_Wise_Records.length > 0 ? Year_Wise_Records?.[0] :{}
     const {tax_file_year_id = 0,year = 2020} = record
     const params = {
       User_id:user_id,

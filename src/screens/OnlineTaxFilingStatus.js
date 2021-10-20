@@ -32,7 +32,7 @@ const OnlineTaxFilingStatus = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const actionSheetRef = useRef()
-
+  const [uploadImageCount, setUploadImageCount] = useState(0)
   const pageHeading = () => {
     let title = 'ONLINE TAX FILING';
     const {tax_file_status_id} = global.onlineStatusData;
@@ -51,15 +51,15 @@ const OnlineTaxFilingStatus = props => {
     const params = prepareParams(imgObj.base64);
     uploadDocumentBS64(params, uploadRes => {
       if(uploadRes?.status == 1){
+        setUploadImageCount(uploadImageCount + 1)  
         const {user_id,tax_file_id} = global.onlineStatusData
         const params = {User_Id: user_id,Tax_File_Id: tax_file_id};
         finalizeOnlineProcess(params,(finalizeRes) =>{
           if (finalizeRes?.status == 1) {
             setIsLoading(false)
-            finalizeRes?.message && Alert.alert('SukhTax', finalizeRes?.message);
             setTimeout(() => {
-              navigation.popToTop()
-            }, 300);  
+              finalizeRes?.message && Alert.alert('SukhTax', finalizeRes?.message);
+            }, 350);
           }else{
             setIsLoading(false);
             setTimeout(() => {
@@ -108,6 +108,7 @@ const OnlineTaxFilingStatus = props => {
         <TaxFilingStatusCard
           navigation={navigation}
           marginTop={25}
+          uploadImageCount  ={uploadImageCount}
           updateLoadingStatus={loadingStatus => {
             setIsLoading(loadingStatus);
           }}
@@ -149,7 +150,7 @@ const OnlineTaxFilingStatus = props => {
 };
 
 const PaymentFinalCard = props => {
-  const {details} = props;
+  const {details,navigation} = props;
   const totalAmount =
     (details &&
       details.reduce(function (sum, obj) {
@@ -157,6 +158,8 @@ const PaymentFinalCard = props => {
         return updatedSum;
       }, 0)) ||
     0;
+  const obj = details?.[0]  
+  const isAddPyment = obj?.additional_payment
   return (
     <View
       style={{
@@ -203,7 +206,7 @@ const PaymentFinalCard = props => {
         borderColor={Colors.PRIMARY_BORDER}
         title={'PAYNOW'}
         onPress={() => {
-          const nextPageParams = {payment_required:totalAmount,additional_payment_required:0}
+          const nextPageParams = {payment_required:totalAmount,additional_payment_required:isAddPyment}
           navigation.navigate('OnlinePaymentScreen',{...nextPageParams})    
         }}
       />
@@ -240,7 +243,7 @@ const KeyValueView = props => {
 };
 
 const TaxFilingStatusCard = props => {
-  const {uploadClick, navigation, updateLoadingStatus} = props;
+  const {uploadClick, navigation, updateLoadingStatus,uploadImageCount} = props;
   const [paymentDetails, setPaymentDetails] = useState();
   const [isDetailsClicked, setIsDetailsClicked] = useState(false);
   const {
@@ -248,8 +251,8 @@ const TaxFilingStatusCard = props => {
     status_description = 'Looks like you have to complete your registration and upload document still!',
     new_message_count = 0,
     can_edit_documents = 0,
-    payment_required = 100,
-    additional_payment_required = 20,
+    payment_required = 0,
+    additional_payment_required = 0,
     book_now_url,
     spouse_info_filled,
     tax_file_status_id,
@@ -294,7 +297,7 @@ const TaxFilingStatusCard = props => {
     (tax_file_status_id == 10 || tax_file_status_id == 12) &&
     isDetailsClicked
   ) {
-    return <PaymentFinalCard details={paymentDetails} />;
+    return <PaymentFinalCard details={paymentDetails} navigation = {navigation}/>;
   }
   return (
     <View
@@ -328,15 +331,6 @@ const TaxFilingStatusCard = props => {
           }$`}
         />
       )}
-      {tax_file_status_id == 12 && (
-        <Heading
-          fontSize={21}
-          marginTop={20}
-          fontWeight="700"
-          color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={`ADDITIONAL PAYMENT : ${additional_payment_required}$`}
-        />
-      )}
       <Text
         style={{
           textAlign: 'left',
@@ -358,6 +352,16 @@ const TaxFilingStatusCard = props => {
           }}
         />
       )}
+      {tax_file_status_id == 9 && uploadImageCount ? <UploadedFilesStatus count={uploadImageCount} /> : null}
+      {tax_file_status_id == 9 &&
+        <ManageDocButton
+        grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
+        title="MANAGE DOCUMENTS"
+        onClicked={() => {
+          navigation.navigate('ManageDocuments', {isDocAdded:uploadImageCount, showFooterBtn:false});
+        }}
+      />
+      }
       {tax_file_status_id == 16 && (
         <SKButton
           fontSize={16}
@@ -646,7 +650,7 @@ const TaxFilingStatusCard = props => {
           />
         </View>
       )}
-      {(tax_file_status_id == 16 || tax_file_status_id == 0) && (
+      {tax_file_status_id == 16 && (
         <SKButton
           fontSize={16}
           marginTop={30}
@@ -723,6 +727,76 @@ const MessegesView = props => {
         />
       </TouchableOpacity>
     </View>
+  );
+};
+
+const UploadedFilesStatus = props => {
+  const {count} = props;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        marginTop: 8,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        height: 40,
+      }}
+      onPress={() => {
+        props.onClicked && props.onClicked();
+      }}>
+      <Text
+        style={{
+          width: '100%',
+          textAlign: 'left',
+          fontFamily:CustomFonts.OpenSansRegular,
+          color: Colors.APP_RED_SUBHEADING_COLOR,
+          fontSize: 15,
+        }}>
+        {` Uploaded Documents : ${count}`}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
+const ManageDocButton = props => {
+  return (
+    <LinearGradient
+      opacity={0.8}
+      colors={props.grads}
+      style={{
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        marginTop: 25,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        borderRadius: 6,
+        width: '100%',
+        height: 56,
+      }}>
+      <TouchableOpacity
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onPress={() => {
+          props.onClicked && props.onClicked();
+        }}>
+        <Text
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            color: Colors.WHITE,
+            fontSize: 17,
+            fontWeight: '700',
+          }}>
+          {props.title}
+        </Text>
+      </TouchableOpacity>
+    </LinearGradient>
   );
 };
 

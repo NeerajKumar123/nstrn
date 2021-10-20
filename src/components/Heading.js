@@ -17,6 +17,12 @@ const Heading = props => {
     onClicked = undefined,
     textWidth = undefined
   } = props;
+  let statusImage = CustomFonts.status_gray
+  if (status == 1) { // all set
+    statusImage = CustomFonts.green_tick
+  }else if (status == 2) {
+    statusImage = CustomFonts.red_cross
+  }
   return (
     <TouchableOpacity
       disabled = {!onClicked}
@@ -38,7 +44,7 @@ const Heading = props => {
         <Image
           resizeMode="contain"
           style={{width: 20, height: 20}}
-          source={status > 2 ? CustomFonts.green_tick : CustomFonts.status_gray}
+          source={statusImage}
         />
       ) : null}
     </TouchableOpacity>

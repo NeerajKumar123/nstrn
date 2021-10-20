@@ -345,7 +345,7 @@ export const taxDocsFinalizeProcess = (params,callback) => {
 };
 
 export const taxDocsGetReqDocs = (params,callback) => {
-  const path = `${BaseURL}/Tax_Docs_Get_Requested_Docs`
+  const path = `${BaseURL}/Tax_Docs_Get_Requested_Documents`
   API.makePostRequest(path , params, callback);
 };
 

@@ -22,7 +22,7 @@ const MyTaxYear = props => {
   const pageParams = props.route.params;
   let {pageIndex = 0} = pageParams
   const selectedYears = global.selectedYears
-  const currentYear = selectedYears && selectedYears[pageIndex]
+  const currentYear = selectedYears && selectedYears[pageIndex] ? selectedYears[pageIndex] : global.mostRecentYear
   const buttonTitle = selectedYears && selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
 
   const [data, setData] = useState([
@@ -104,18 +104,16 @@ const MyTaxYear = props => {
     onlineSaveMyYearInfo(params, saveYrRes => {
       if (saveYrRes?.status == 1) {
         const params = prepareParams(true);
-        onlineSaveMyYearInfo(params, saveYrRes => {
-          if(saveYrRes?.status == 1){
+        onlineSaveMyYearInfo(params, saveYrResInner => {
+          if(saveYrResInner?.status == 1){
             setIsLoading(false);
             callback({status:1})
           }else{
-            // callback({status:0})
             Alert.alert('SukhTax', 'Something wrong');
           }
         })                     
       } else {
-        // callback({status:0})
-        Alert.alert('SukhTax', 'Something wrong');
+        Alert.alert('SukhTax', 'Something wrong2');
       }
     });
   }
@@ -149,7 +147,7 @@ const MyTaxYear = props => {
 
   const decideAndNavigate =(callback) =>{
     let nextIndex = pageIndex + 1
-    const selObj = global.selectedYears[nextIndex]
+    const selObj = global.selectedYears && global.selectedYears.length > nextIndex  ? global.selectedYears[nextIndex] : undefined
     if(selObj){
       const newPageIndex = pageIndex + 1
       navigation.push('MyTaxYear',{pageIndex:newPageIndex});

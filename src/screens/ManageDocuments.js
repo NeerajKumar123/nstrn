@@ -118,7 +118,7 @@ const ManageDocuments = props => {
               />
             );
           })}
-        {docs && docs.length > 0 && (
+        {pageParams.showFooterBtn && docs && docs.length > 0 && (
           <SKButton
             disable={!pageParams.isDocAdded}
             fontSize={16}
@@ -150,7 +150,6 @@ const ManageDocCard = props => {
     <View
       style={{
         flexDirection: 'row',
-        paddingHorizontal: 16,
         marginTop: 15,
         paddingVertical: 5,
         backgroundColor: 'white',
@@ -169,6 +168,7 @@ const ManageDocCard = props => {
         },
         shadowRadius: 3,
         shadowOpacity: 0.8,
+        paddingHorizontal: 16,
       }}>
       <TouchableOpacity
         onPress={() => {
@@ -182,16 +182,16 @@ const ManageDocCard = props => {
             fontWeight: '500',
             fontFamily: CustomFonts.OpenSansRegular,
           }}>
-          {item.document_file_name}
+          {item.document_title}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={{width: 40, height: '100%', alignItems: 'flex-end'}}
+        style={{ position:'absolute', right:10, width: 40, height: '100%', alignItems: 'flex-end'}}
         onPress={() => {
           onDelete && onDelete();
         }}>
         <Icon
-          style={{marginRight: 0}}
+          style={{right: 10, position:'absolute'}}
           name={'close-circle-outline'}
           size={30}
           color={Colors.RED}

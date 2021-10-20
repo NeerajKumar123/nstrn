@@ -59,4 +59,5 @@ export const username = require('../../assets/username.png');
 export const visit_us = require('../../assets/visit_us.png');
 export const toggle_on = require('../../assets/toggle_on.png');
 export const toggle_off = require('../../assets/toggle_off.png');
+export const red_cross = require('../../assets/red_cross.png');
 export const add_filled_circle = require('../../assets/add_filled_circle.png');

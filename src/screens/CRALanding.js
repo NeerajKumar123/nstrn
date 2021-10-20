@@ -16,7 +16,6 @@ const CRALanding = props => {
   const [isLoading, setIsLoading] = useState(false)
   const isFocused = useIsFocused();
 
-  console.log('isFocused',isFocused)
   useEffect(() => {
     const {user_id} = global.userInfo;
     const params = {User_Id: user_id};

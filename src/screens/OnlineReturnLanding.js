@@ -14,7 +14,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {login} from '../apihelper/Api';
+import {getTaxReturnsDocs} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
@@ -24,6 +24,7 @@ import AppHeader from '../components/AppHeader';
 const OnlineReturnLanding = props => {
   const selectedYears = [];
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
   const [isFSelected, setIsFSelected] = useState(global.selectedYears && global.selectedYears.includes('2019'));
   const [isSSelected, setIsSSelected] = useState(global.selectedYears && global.selectedYears.includes('2020'));
   const [isTSelected, setIsTSelected] = useState(global.selectedYears && global.selectedYears.includes('2021'));
@@ -37,6 +38,7 @@ const OnlineReturnLanding = props => {
         width: '100%',
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader />}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -74,6 +76,27 @@ const OnlineReturnLanding = props => {
             setIsFSelected(!isFSelected);
           }}
         />
+        <SKButton
+            fontSize={16}
+            marginTop = {30}
+            fontWeight={'normal'}
+            backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+            borderColor={Colors.APP_BLUE_HEADING_COLOR}
+            title={'PREVIOUS TAX DOCS'}
+            onPress = {()=>{
+              setIsLoading(true)
+              const {user_id} = global.onlineStatusData
+              const params = {User_Id:user_id}
+              getTaxReturnsDocs(params,(taxReturnDocsRes) =>{
+                setIsLoading(false)
+                if(taxReturnDocsRes?.data?.length){
+                  navigation.navigate('HomeDocsListing',{page_id:1,page_title:'TAX RETURNS', docs:taxReturnDocsRes?.data})
+                }else{
+                  Alert.alert('Sukhtax','There is no document.')
+                }
+              })
+            }}
+          />
         <View
           style={{
             width: '100%',

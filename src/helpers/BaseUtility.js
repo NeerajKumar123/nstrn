@@ -129,6 +129,9 @@ export const loadIntialData =(callback)=>{
       return parseInt(b) - parseInt(a);
     });
     global.mostRecentYear = arr?.[0] ?? '2020'
+    if (!global.selectedYears) {
+      global.selectedYears = ['2020']
+    }
     getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
       if(fileStatusRes?.status == 1){
         const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : {}

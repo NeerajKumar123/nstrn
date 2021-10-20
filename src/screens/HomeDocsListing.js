@@ -96,7 +96,10 @@ const TaxReturnCard = props => {
   const {title, data} = props.item;
   const [isExpanded, setIsExpanded] = useState();
   return (
-    <View
+    <TouchableOpacity
+    onPress={() => {
+      setIsExpanded(!isExpanded);
+    }}
       style={{
         width: '100%',
         paddingVertical: 11,
@@ -120,7 +123,7 @@ const TaxReturnCard = props => {
           }}>
           {title}
         </Text>
-        <TouchableOpacity
+        <View
           onPress={() => {
             setIsExpanded(!isExpanded);
           }}>
@@ -130,13 +133,13 @@ const TaxReturnCard = props => {
             size={30}
             color={Colors.PRIMARY_FILL}
           />
-        </TouchableOpacity>
+        </View>
       </View>
       {isExpanded &&
         data?.map((item, index) => {
           return (
             <FileCard
-              key = {item.document_title}
+              key = {item.document_file_name}
               item={item}
               onClick={() => {
                 props.onDocClicked(item);
@@ -144,7 +147,7 @@ const TaxReturnCard = props => {
             />
           );
         })}
-    </View>
+    </TouchableOpacity>
   );
 };
 

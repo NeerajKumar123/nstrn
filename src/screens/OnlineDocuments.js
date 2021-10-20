@@ -44,10 +44,7 @@ const OnlineDocuments = props => {
     const params = prepareParams(imgObj.base64,yr)
     uploadDocumentBS64(params,(uploadRes) =>{
       setIsLoading(false)
-      setTimeout(() => {
-        uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
-        uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
-      }, 300);
+      uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
     })
   }
 
@@ -92,7 +89,7 @@ const OnlineDocuments = props => {
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title="MANAGE DOCUMENTS"
           onClicked={() => {
-            navigation.navigate('ManageDocuments', {isDocAdded:uploadImageCount});
+            navigation.navigate('ManageDocuments', {isDocAdded:uploadImageCount, showFooterBtn:true});
           }}
         />
         <SKButton
@@ -149,7 +146,7 @@ const ManageDocButton = props => {
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
-        marginTop: 15,
+        marginTop: 20,
         backgroundColor: 'white',
         justifyContent: 'center',
         borderRadius: 6,
