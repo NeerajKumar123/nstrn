@@ -61,7 +61,7 @@ const PaymentFinalCard = props => {
         marginTop={12}
         fontWeight="700"
         color={Colors.APP_RED_SUBHEADING_COLOR}
-        value="BASED ON YOUR REQUIREMENTS, WE HAVE ASSESSED YOUR FEE TO "
+        value="BASED ON YOUR REQUIREMENTS, WE HAVE ASSESSED YOUR FEE TO BE:"
       />
       <KeyValueView marginTop={54} title="2020 TAX RETURN" value="$45" />
       <KeyValueView marginTop={12} title="T-SLIPS x 5" value="$25" />

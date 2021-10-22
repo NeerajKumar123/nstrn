@@ -24,11 +24,15 @@ import AppHeader from '../components/AppHeader';
 const OnlineReturnLanding = props => {
   const selectedYears = [];
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);  
   const [isFSelected, setIsFSelected] = useState(global.selectedYears && global.selectedYears.includes('2019'));
   const [isSSelected, setIsSSelected] = useState(global.selectedYears && global.selectedYears.includes('2020'));
   const [isTSelected, setIsTSelected] = useState(global.selectedYears && global.selectedYears.includes('2021'));
 
+  const years = global?.alreadyFliedYears
+  const isFAlreadyFlied =  years && years.includes('2019')
+  const isSAlreadyFlied = years && years.includes('2020')
+  const isTAlreadyFlied = years && years.includes('2021')
   return (
     <View
       style={{
@@ -56,13 +60,15 @@ const OnlineReturnLanding = props => {
         />
         <DocCard
           title={'2019'}
-          isSelected={isTSelected}
+          isFiled = {isFAlreadyFlied}
+          isSelected={isFSelected}
           onSelected={() => {
-            setIsTSelected(!isTSelected);
+            setIsFSelected(!isFSelected);
           }}
         />
         <DocCard
           title={'2020'}
+          isFiled = {isSAlreadyFlied}
           isSelected={isSSelected}
           onSelected={() => {
             setIsSSelected(!isSSelected);
@@ -71,9 +77,10 @@ const OnlineReturnLanding = props => {
        
          <DocCard
           title={'2021'}
-          isSelected={isFSelected}
+          isFiled = {isTAlreadyFlied}
+          isSelected={isTSelected}
           onSelected={() => {
-            setIsFSelected(!isFSelected);
+            setIsTSelected(!isTSelected);
           }}
         />
         <SKButton
@@ -111,16 +118,16 @@ const OnlineReturnLanding = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'IDENTIFICATION'}
             onPress={() => {
-              if (isFSelected) selectedYears.push('2021');
-              if (isSSelected) selectedYears.push('2020');
-              if (isTSelected) selectedYears.push('2019');
-              if (isFSelected || isSSelected || isTSelected) {
-                global.selectedYears = undefined
-                global.selectedYears = selectedYears;
-                const arr =   selectedYears?.sort(function(a, b) {
-                  return parseInt(b) - parseInt(a);
-                });
-                global.mostRecentYear = arr?.[0] ?? '2020'        
+              if (isFSelected && !isFAlreadyFlied) selectedYears.push('2019');
+              if (isSSelected && !isSAlreadyFlied) selectedYears.push('2020');
+              if (isTSelected && !isTAlreadyFlied) selectedYears.push('2021');
+              global.selectedYears = undefined
+              global.selectedYears = selectedYears;
+              const arr =   selectedYears?.sort(function(a, b) {
+                return parseInt(b) - parseInt(a);
+              });
+              global.mostRecentYear = arr?.[0] ?? '2021'        
+              if (global?.selectedYears?.length > 0) {
                 SKTStorage.setKeyValue('selectedYears',selectedYears,()=>{
                   navigation.navigate('Identification');
                 })
@@ -136,9 +143,10 @@ const OnlineReturnLanding = props => {
 };
 
 const DocCard = props => {
-  const {title, isSelected = false, onSelected} = props;
+  const {title, isSelected = false,isFiled = false, onSelected = ()=>{}} = props;
   return (
     <TouchableOpacity
+      disabled = {isFiled}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -148,20 +156,21 @@ const DocCard = props => {
         justifyContent: 'center',
         width: '100%',
         height: 48,
+        opacity: isFiled ?  .8 : 1,
         borderRadius: 6,
         borderWidth:1,
-        borderColor: Colors.CLR_E77C7E,
-        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
+        borderColor:isFiled ? Colors.LIGHTGRAY: Colors.CLR_E77C7E,
+        backgroundColor:isFiled ? Colors.WHITE :  isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
       }}
       key={`${Math.random()}`}
       onPress={() => {
-        props.onSelected && props.onSelected();
+        onSelected();
       }}>
       <Text
         style={{
           width: '100%',
           textAlign: 'center',
-          color: isSelected ? Colors.WHITE : Colors.CLR_414141,
+          color: isFiled ?Colors.CLR_414141 : isSelected ? Colors.WHITE : Colors.CLR_414141,
           fontSize: 17,
           fontWeight: '700',
         }}>

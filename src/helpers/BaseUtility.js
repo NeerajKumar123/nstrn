@@ -114,6 +114,18 @@ export async function downloadFileFromUrl(url, filename, callback) {
     .catch(error => {});
 }
 
+const updateSelectionData = (res) =>{
+  const allYearsData = res?.data
+  const allFiledYearsData =  allYearsData?.filter(element => element?.tax_file_status_id == 16);
+
+  let lastSelectedYearsString =  ''
+  allFiledYearsData?.map((element) =>{
+    lastSelectedYearsString = lastSelectedYearsString + element?.years_selected
+  })
+  const years = lastSelectedYearsString.split(',')
+  global.alreadyFliedYears = years
+}
+
 export const loadIntialData =(callback)=>{
   const {user_id} = global.userInfo
   const params = {User_Id:user_id}
@@ -136,6 +148,7 @@ export const loadIntialData =(callback)=>{
       if(fileStatusRes?.status == 1){
         const statusData = fileStatusRes?.data && fileStatusRes?.data.length > 0 ? fileStatusRes?.data[0] : {}
         global.onlineStatusData = statusData ? statusData : {}
+        updateSelectionData(fileStatusRes)
         incorpGetIncorpStatus(params,(incStatusRes) =>{
           if(incStatusRes?.status == 1){
             const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : {}

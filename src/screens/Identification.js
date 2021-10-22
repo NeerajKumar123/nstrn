@@ -26,11 +26,10 @@ const Identification = props => {
     setIsLoading(true)
     const params = prepareParams(imgObj.base64)
     uploadImage(params,(uploadRes) =>{
-      setIsLoading(false)
+      setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
+      uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
       setTimeout(() => {
-        uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
-        setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
-        uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
+        setIsLoading(false)
       }, 300);
     })
   }

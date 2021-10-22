@@ -51,7 +51,8 @@ const FamilyDetails = props => {
   const [isMChangeVisible, setIsMChangeVisible] = useState();
   const [isDepOptionVisible, setIsDepOptionVisible] = useState();
   const [nextButtonTitle, setNextButtonTitle] = useState('MY TAX YEAR')
-
+  let maxDate = new Date(); 
+  maxDate.setFullYear(global?.mostRecentYear);
   useEffect(() => {
     setIsLoading(true)
     getMaritalStatusList({}, maritalRes => {
@@ -263,6 +264,7 @@ const FamilyDetails = props => {
       {showDatePicker && (
         <SKDatePicker
         originalDate = {new Date()}
+        maximumDate = {maxDate}
         title = {'Select date'}
         onCancelPressed = {(date)=>{
           setShowDatePicker(false)

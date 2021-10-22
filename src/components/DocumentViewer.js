@@ -19,7 +19,9 @@ const DocumentViewer = props => {
   const {item, onClose} = props;
   const [isReady, setIsReady] = useState(false);
   const isPDF = item?.document_file_name?.includes('.pdf');
-  const source = {uri: item?.document_file_name || '', cache: true};
+  let uri = item?.document_file_name || ''
+  uri = uri.replace(" " ,"%20")
+  let source = {uri: uri, cache: true};
   return (
     <Modal
       visible={true}

@@ -333,6 +333,7 @@ const Spouse = props => {
       {isDatePickerVisible && (
         <SKDatePicker
         originalDate = {new Date()}
+        maximumDate = {new Date()}
         title = {'Select date'}
         onCancelPressed = {(date)=>{
           setIsDatePickerVisible(false)
@@ -350,6 +351,7 @@ const Spouse = props => {
         <SKDatePicker
         originalDate = {new Date()}
         title = {'Select date'}
+        maximumDate = {new Date()}
         onCancelPressed = {(date)=>{
           setIsImmDatePickerVisible(false)
           setEnrtyDate(date);

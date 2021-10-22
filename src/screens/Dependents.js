@@ -234,6 +234,7 @@ const Dependents = props => {
       {isDatePickerVisible && (
         <SKDatePicker
         originalDate = {new Date()}
+        maximumDate = {new Date()}
         title = {'Select date'}
         onCancelPressed = {(date)=>{
           setIsDatePickerVisible(false)

@@ -176,7 +176,7 @@ const PaymentFinalCard = props => {
         marginTop={12}
         fontWeight="700"
         color={Colors.APP_RED_SUBHEADING_COLOR}
-        value="BASED ON YOUR REQUIREMENTS, WE HAVE ASSESSED YOUR FEE TO "
+        value="BASED ON YOUR REQUIREMENTS, WE HAVE ASSESSED YOUR FEE TO BE:"
       />
       {details &&
         details.map((obj, index) => {
@@ -204,7 +204,7 @@ const PaymentFinalCard = props => {
         fontWeight={'normal'}
         backgroundColor={Colors.PRIMARY_FILL}
         borderColor={Colors.PRIMARY_BORDER}
-        title={'PAYNOW'}
+        title={'PAY NOW'}
         onPress={() => {
           const nextPageParams = {payment_required:totalAmount,additional_payment_required:isAddPyment}
           navigation.navigate('OnlinePaymentScreen',{...nextPageParams})    
@@ -255,8 +255,9 @@ const TaxFilingStatusCard = props => {
     additional_payment_required = 0,
     book_now_url,
     spouse_info_filled,
-    tax_file_status_id,
+    // tax_file_status_id,
   } = global.onlineStatusData;
+  const tax_file_status_id = 16
 
   const moveToPage = props => {
     const {
@@ -660,7 +661,8 @@ const TaxFilingStatusCard = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'NEW FILING'}
           onPress={() => {
-            moveToPage()
+            global.selectedYears = undefined
+            navigation.navigate('OnlineReturnLanding');
           }}
         />
       )}

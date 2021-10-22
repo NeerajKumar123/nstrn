@@ -185,6 +185,7 @@ const BasicInfo = props => {
       {showDatePicker && (
         <SKDatePicker
         originalDate = {new Date()}
+        maximumDate = {new Date()}
         title = {'Select date'}
         onCancelPressed = {(date)=>{
           setShowDatePicker(false)

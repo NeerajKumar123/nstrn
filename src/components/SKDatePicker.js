@@ -16,6 +16,7 @@ const SKDatePicker = props => {
     onDonePressed = () => {},
     originalDate = new Date(),
     title = 'Select Date',
+    maximumDate = new Date()
   } = props;
 
   const [selectedDate, setSelectedDate] = useState(originalDate);
@@ -91,6 +92,7 @@ const SKDatePicker = props => {
         style={{backgroundColor: 'white'}}
         testID="dateTimePicker"
         value={selectedDate}
+        maximumDate = {maximumDate}
         mode="date"
         display={Platform.OS == 'ios' ? 'spinner' : 'default'}
         onChange={(event, date) => {

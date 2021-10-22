@@ -43,8 +43,10 @@ const OnlineDocuments = props => {
     setIsLoading(true)
     const params = prepareParams(imgObj.base64,yr)
     uploadDocumentBS64(params,(uploadRes) =>{
-      setIsLoading(false)
       uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 300);
     })
   }
 
