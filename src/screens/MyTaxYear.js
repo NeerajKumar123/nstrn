@@ -24,6 +24,7 @@ const MyTaxYear = props => {
   const selectedYears = global.selectedYears
   const currentYear = selectedYears && selectedYears[pageIndex] ? selectedYears[pageIndex] : global.mostRecentYear
   const buttonTitle = selectedYears && selectedYears[pageIndex + 1] ? selectedYears[pageIndex + 1] : 'DOCUMENTS'
+  const [currentSeledtedTag ,setCurrentSeledtedTag] = useState(1)
 
   const [data, setData] = useState([
     {title: 'I WAS EMPLOYED', value: 'I_was_employed', isSelected: false},
@@ -85,25 +86,34 @@ const MyTaxYear = props => {
       User_id: user_id,
       Tax_File_Id: tax_file_id,
       Year: currentYear,
-      Details_For: flag ? 0 : 1,
+      Details_For: flag
     };
-    data?.map(item => {
-      if (item.isSelected) {
-        params[item.value] = 1;
-      } else {
-        params[item.value] = 0;
-      }
-    });
+    if (flag == 1) {
+      data?.map(item => {
+        if (item.isSelected) {
+          params[item.value] = 1;
+        } else {
+          params[item.value] = 0;
+        }
+      });
+    }else{
+      spouseData?.map(item => {
+        if (item.isSelected) {
+          params[item.value] = 1;
+        } else {
+          params[item.value] = 0;
+        }
+      });
+    }
     return params;
   };
 
-
   const saveMyAndSpouseInfo =(callback) =>{
     setIsLoading(true);
-    const params = prepareParams(false);
+    const params = prepareParams(1);
     onlineSaveMyYearInfo(params, saveYrRes => {
       if (saveYrRes?.status == 1) {
-        const params = prepareParams(true);
+        const params = prepareParams(0);
         onlineSaveMyYearInfo(params, saveYrResInner => {
           if(saveYrResInner?.status == 1){
             setIsLoading(false);
@@ -120,7 +130,7 @@ const MyTaxYear = props => {
 
   const saveMyInfoOnly =(callback) =>{
     setIsLoading(true);
-    const params = prepareParams(false);
+    const params = prepareParams(1);
     onlineSaveMyYearInfo(params, saveYrRes => {
       setIsLoading(false);
       if (saveYrRes?.status == 1) {
@@ -133,7 +143,7 @@ const MyTaxYear = props => {
   }
   const saveSpouseInfoOnly =(callback) =>{
     setIsLoading(true);
-    const params = prepareParams(true);
+    const params = prepareParams(0);
     onlineSaveMyYearInfo(params, saveYrRes => {
       setIsLoading(false);
       if (saveYrRes?.status == 1) {
@@ -156,12 +166,20 @@ const MyTaxYear = props => {
     }
 }
 
+// const decideAndNavigate =(callback) =>{
+//   let nextIndex = pageIndex + 1
+//   const selObj = global.selectedYears && global.selectedYears.length > nextIndex  ? global.selectedYears[nextIndex] : undefined
+//   if(selObj){
+//     const newPageIndex = pageIndex + 1
+//     navigation.push('AddressInsideTaxYear',{pageTaxYrIndex:newPageIndex, year:selObj});
+//   }else{
+//     navigation.navigate('OnlineDocuments');
+//   }
+// }
   const checkFormValidations = () =>{
     let isValidForm = true;
-    console.log('isSelfSelected',isSelfSelected)
     if (isSelfSelected) {
       const selected = data && data.filter((x) => x.isSelected);
-      console.log('self selected',selected)
       if(!selected?.length){
         isValidForm = false
         Alert.alert('SukhTax','Please select atleast one option for MY SELF.')
@@ -169,7 +187,6 @@ const MyTaxYear = props => {
     }
     if(isSpouseSelected){
       const selected = spouseData && spouseData.filter((x) => x.isSelected);
-      console.log('spouse selected',selected)
       if(!selected?.length){
         isValidForm = false
         Alert.alert('SukhTax', 'Please select atleast one option for SPOUSE.')
@@ -222,10 +239,10 @@ const MyTaxYear = props => {
             width={global.isFromSpouseFlow ? '50%' : '100%' } 
             bgColor={Colors.APP_BLUE_HEADING_COLOR}
             item={{title: 'MY SELF'}}
-            isSelected={isSelfSelected}
+            isSelected={currentSeledtedTag == 1 ? true : false}
             onSelected={() => {
+              setCurrentSeledtedTag(1)
               setIsSelfSelected(true)
-              setIsSpouseSelected(false)
             }}
           />
           {global.isFromSpouseFlow&&  
@@ -237,16 +254,16 @@ const MyTaxYear = props => {
           width="50%"
           bgColor={Colors.APP_BLUE_HEADING_COLOR}
           item={{title: 'SPOUSE'}}
-          isSelected={isSpouseSelected}
+          isSelected={currentSeledtedTag == 2 ? true : false}
           onSelected={() => {
-            setIsSelfSelected(false)
             setIsSpouseSelected(true)
+            setCurrentSeledtedTag(2)
       }}
         />
         </>
     }
         </View>
-        { isSelfSelected &&
+        { currentSeledtedTag == 1 &&
           data?.map((item, index) => {
             return (
               <DocOptionCard
@@ -257,20 +274,18 @@ const MyTaxYear = props => {
                     ...selectedValue,
                     isSelected: !selectedValue.isSelected,
                   };
-                  console.log('newValue',newValue)
                   const index = data.findIndex(x => x.value === item.value);
-                  console.log('index',index)
-                  const old = data;
+                  let  selfOld = data;
                   if (index != -1) {
-                    old[index] = newValue;
+                    selfOld[index] = newValue;
                   }
-                  setData([...old]);
+                  setData([...selfOld]);
                 }}
               />
             );
           })}
 
-          {isSpouseSelected &&
+          {currentSeledtedTag == 2 &&
           spouseData?.map((item, index) => {
             return (
               <DocOptionCard
@@ -282,11 +297,11 @@ const MyTaxYear = props => {
                     isSelected: !selectedValue.isSelected,
                   };
                   const index = spouseData.findIndex(x => x.value === item.value);
-                  const old = spouseData;
+                  let spouseOld = spouseData;
                   if (index != -1) {
-                    old[index] = newValue;
+                    spouseOld[index] = newValue;
                   }
-                  setSpouseData([...old]);
+                  setSpouseData([...spouseOld]);
                 }}
               />
             );

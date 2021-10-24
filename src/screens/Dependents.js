@@ -44,7 +44,8 @@ const Dependents = props => {
   const [isGenderVisible, setIsGenderVisible] = useState()
   const [isDatePickerVisible, setIsDatePickerVisible] = useState()
   const [isRelationVisible, setIsRelationVisible] = useState()
-  const [depCount, setDepCount] = useState(pageParams?.depCount)
+  const depCount = pageParams?.depCount
+  let dependents = pageParams?.alreadyAddedDependents ? pageParams?.alreadyAddedDependents : []
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -184,52 +185,74 @@ const Dependents = props => {
             setIsRelationVisible(true);
           }}
         />
+        {dependents && dependents.length > 0 ?
+        <>
         <SKButton
-          marginTop={30}
-          fontSize={15}
-          height = {40}
-          fontWeight = "bold"
-          iconName="plus-circle-outline"
-          iconsize={20}
-          iconcolor={Colors.WHITE}
-          width="100%"
-          backgroundColor={Colors.SECONDARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'ADD ANOTHER DEPENDENT'}
-          onPress={() => {
-            if(depCount < 5){
-              if(checkFormValidations()){
-                setIsLoading(true)
-                const params = prepareParams()
-                onlineSaveDependentInfo(params, (depRes) =>{
-                  setIsLoading(false)
-                  navigation.push('Dependents', {depCount:depCount+1});
-                })
-              }
-            }else{
-              Alert.alert('SukhTax', 'You are not allowed to add more than 4 dependents.')
-            }
-          }}
-        />
-         <SKButton
-          marginTop ={30}
-          fontSize={16}
-          rightImage={CustomFonts.right_arrow}
-          fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'MY TAX YEAR'}
-          onPress={() => {
+        marginTop={30}
+        fontSize={15}
+        height = {40}
+        fontWeight = "bold"
+        iconName="plus-circle-outline"
+        iconsize={20}
+        iconcolor={Colors.WHITE}
+        width="100%"
+        backgroundColor={Colors.SECONDARY_FILL}
+        borderColor={Colors.PRIMARY_BORDER}
+        title={'ADD ANOTHER DEPENDENT'}
+        onPress={() => {
+          if(depCount < 5){
             if(checkFormValidations()){
-              setIsLoading(true)
               const params = prepareParams()
+              dependents.push(params)
+              navigation.push('Dependents', {depCount:depCount+1,alreadyAddedDependents:dependents});
+            }
+          }else{
+            Alert.alert('SukhTax', 'You are not allowed to add more than 4 dependents.')
+          }
+        }}
+      />
+       <SKButton
+        marginTop ={30}
+        fontSize={16}
+        rightImage={CustomFonts.right_arrow}
+        fontWeight={'normal'}
+        backgroundColor={Colors.PRIMARY_FILL}
+        borderColor={Colors.PRIMARY_BORDER}
+        title={'MY TAX YEAR'}
+        onPress={() => {
+          if(dependents && dependents.length > 0){
+            setIsLoading(true)
+            dependents.forEach(params =>{
               onlineSaveDependentInfo(params, (depRes) =>{
                 setIsLoading(false)
                 navigation.navigate('MyTaxYear',{pageIndex:0});
-              })
-            }
-          }}
-        />
+              })  
+            })
+          }else{
+            Alert.alert('Sukhtax','Please add at least dependent.')
+          }
+        }}
+      />
+      </>
+      :
+      <SKButton
+      marginTop ={30}
+      fontSize={16}
+      rightImage={CustomFonts.right_arrow}
+      fontWeight={'normal'}
+      backgroundColor={Colors.PRIMARY_FILL}
+      borderColor={Colors.PRIMARY_BORDER}
+      title={'ADD DEPENDENT'}
+      onPress={() => {
+        if(checkFormValidations()){
+          const params = prepareParams()
+          dependents.push(params)
+          navigation.push('Dependents', {depCount:depCount+1,alreadyAddedDependents:dependents});
+        }
+      }}
+    />
+      }
+        
       </ScrollView>
       {isDatePickerVisible && (
         <SKDatePicker

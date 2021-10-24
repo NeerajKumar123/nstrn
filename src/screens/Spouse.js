@@ -126,14 +126,14 @@ const Spouse = props => {
     const {
       user_id,
       tax_file_id,
-      Year_Wise_Records
+      tax_file_year_id
     } = global.onlineStatusData;
-    const {year,tax_file_year_id} = Year_Wise_Records?.[0]
+
     const params = {
       User_id: user_id,
       Tax_File_Id: tax_file_id || Tax_File_Id,
       Tax_File_Year_Id: tax_file_year_id,
-      Last_Year_Tax_Filed: year,
+      Last_Year_Tax_Filed: lastTime,
       First_Name: fName,
       Last_Name: lName,
       DOB: dob && format(dob, 'yyyy-MM-dd'),

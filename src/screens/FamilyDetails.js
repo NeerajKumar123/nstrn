@@ -23,7 +23,7 @@ import SKDatePicker from '../components/SKDatePicker';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import {getMaritalStatusList,saveBankingAndFamilyInfoByYear} from '../apihelper/Api';
+import {getMaritalStatusList,updateBankingAndFamilyInfoByYear} from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {format} from 'date-fns';
@@ -78,14 +78,13 @@ const FamilyDetails = props => {
 
   const prepareParams = () =>{
     const {accountNo,bank,branchNo,enrtyDate,residency, province} = pageParams
-    const {user_id,Year_Wise_Records,tax_file_id} = global.onlineStatusData
+    const {user_id,Year_Wise_Records,tax_file_id,tax_file_year_id} = global.onlineStatusData
     const record =Year_Wise_Records && Year_Wise_Records.length > 0 ? Year_Wise_Records?.[0] :{}
-    const {tax_file_year_id = 0,year = 2020} = record
     const params = {
       User_id:user_id,
       Tax_File_Id:tax_file_id,
       Tax_File_Year_Id:tax_file_year_id,
-      Year:year,
+      Year:global?.mostRecentYear,
       Province_Lived_In:province?.state_name,
       Institution_Id:bank?.institution_id,
       Branch:branchNo,
@@ -95,7 +94,7 @@ const FamilyDetails = props => {
       Marital_Status_Id:maritalStatus?.marital_status_id,
       Marital_Status_Change:mChangeOpton?.id,
       Marital_Status_Change_Date:mStatusChangedDate && format(mStatusChangedDate, 'yyyy-MM-dd'),
-      Dependents:0,
+      Dependents:dependentOption?.id,
       Spouse_Residency:0,
     }
     return params
@@ -184,7 +183,7 @@ const FamilyDetails = props => {
             if(checkFormValidations()){
               setIsLoading(true)
               const params = prepareParams()
-              saveBankingAndFamilyInfoByYear(params, (saveBankingRes) =>{
+              updateBankingAndFamilyInfoByYear(params, (saveBankingRes) =>{
                 setIsLoading(false)
                 if(saveBankingRes?.status == 1){
                   SKTStorage.setKeyValue('isFromSpouseFlow',true,()=>{

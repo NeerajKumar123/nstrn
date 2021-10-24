@@ -112,6 +112,10 @@ export const saveBankingAndFamilyInfoByYear = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const updateBankingAndFamilyInfoByYear = (params,callback) => {
+  const path = `${BaseURL}/Update_Banking_and_Family_Info_By_Year`
+  API.makePostRequest(path , params, callback);
+};
 export const saveSpouseInfo = (params,callback) => {
   const path = `${BaseURL}/Save_Spouse_Info`
   API.makePostRequest(path , params, callback);

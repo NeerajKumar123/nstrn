@@ -71,7 +71,7 @@ const Address = props => {
       DOB: dob,
       Last_Year_Tax_Filed: pageParams.lastTime,
       Mailing_Address: mailingAddress,
-      Year: 2020,
+      Year: global?.mostRecentYear,
       Module_Type_Id: 2,
       Years_Selected: commaSepYrs,
     };
