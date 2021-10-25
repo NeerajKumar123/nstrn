@@ -18,7 +18,7 @@ import Messages from './screens/Messages';
 import Identification from './screens/Identification';
 import BasicInfo from './screens/BasicInfo';
 import Address from './screens/Address';
-import AddressInsideTaxYear from './screens/AddressInsideTaxYear';
+import RemainedDetailsTaxYrFlow from './screens/RemainedDetailsTaxYrFlow';
 import BankingAndMore from './screens/BankingAndMore';
 import FamilyDetails from './screens/FamilyDetails';
 import Dependents from './screens/Dependents';
@@ -187,9 +187,9 @@ const SKStack = () => {
           options={{title: 'Address', headerShown: false}}
         />
         <Stack.Screen
-          name="AddressInsideTaxYear"
-          component={AddressInsideTaxYear}
-          options={{title: 'AddressInsideTaxYear', headerShown: false}}
+          name="RemainedDetailsTaxYrFlow"
+          component={RemainedDetailsTaxYrFlow}
+          options={{title: 'RemainedDetailsTaxYrFlow', headerShown: false}}
         />
         <Stack.Screen
           name="BankingAndMore"

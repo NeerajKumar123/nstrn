@@ -32,7 +32,7 @@ import {format} from 'date-fns';
 import * as SKTStorage from '../helpers/SKTStorage';
 import {YES_NO} from '../constants/StaticValues';
 
-const AddressInsideTaxYear = props => {
+const RemainedDetailsTaxYrFlow = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const [mailingAddress, setMailingAddress] = useState();
@@ -226,7 +226,7 @@ const AddressInsideTaxYear = props => {
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'BANKING'}
+          title={'Button title'}
           onPress={() => {
             if (checkFormValidations()) {
               setIsLoading(true);
@@ -358,4 +358,4 @@ const AddressInsideTaxYear = props => {
   );
 };
 
-export default AddressInsideTaxYear;
+export default RemainedDetailsTaxYrFlow;

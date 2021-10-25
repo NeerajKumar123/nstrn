@@ -171,7 +171,7 @@ const MyTaxYear = props => {
 //   const selObj = global.selectedYears && global.selectedYears.length > nextIndex  ? global.selectedYears[nextIndex] : undefined
 //   if(selObj){
 //     const newPageIndex = pageIndex + 1
-//     navigation.push('AddressInsideTaxYear',{pageTaxYrIndex:newPageIndex, year:selObj});
+//     navigation.push('RemainedDetailsTaxYrFlow',{pageTaxYrIndex:newPageIndex, year:selObj});
 //   }else{
 //     navigation.navigate('OnlineDocuments');
 //   }
