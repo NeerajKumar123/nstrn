@@ -255,9 +255,8 @@ const TaxFilingStatusCard = props => {
     additional_payment_required = 0,
     book_now_url,
     spouse_info_filled,
-    // tax_file_status_id,
+    tax_file_status_id
   } = global.onlineStatusData;
-  const tax_file_status_id = 16
 
   const moveToPage = props => {
     const {

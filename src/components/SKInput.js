@@ -33,7 +33,8 @@ const SKInput = props => {
     keyboardType = 'default',
     autoCapitalize = 'none',
     returnKeyType ,
-    blurOnSubmit
+    blurOnSubmit,
+    editable = true
   } = props;
   const isLeftLocalPNG = leftAccImage && typeof leftAccImage == 'number';
   const isRightLocalPNG = rightAccImage && typeof rightAccImage == 'number';
@@ -82,6 +83,7 @@ const SKInput = props => {
         />
       )}
       <TextInput
+        editable = {editable}
         style={{
           fontSize: 18,
           fontFamily: CustomFonts.OpenSansRegular,
@@ -128,7 +130,7 @@ const SKInput = props => {
             width: isChatInput ? 40 : 40,
             justifyContent: 'center',
             alignItems: isChatInput ? 'center' : 'flex-end',
-            backgroundColor: isChatInput ? 'blue' : Colors.TRANS,
+            backgroundColor: isChatInput ? Colors.APP_RED_SUBHEADING_COLOR : Colors.TRANS,
             borderRadius: isChatInput ? 6 : 0,
           }}
           onPress={() => {

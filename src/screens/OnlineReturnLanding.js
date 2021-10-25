@@ -117,6 +117,7 @@ const OnlineReturnLanding = props => {
             backgroundColor={Colors.PRIMARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
             title={'IDENTIFICATION'}
+            rightImage={CustomFonts.right_arrow}
             onPress={() => {
               if (isFSelected && !isFAlreadyFlied) selectedYears.push('2019');
               if (isSSelected && !isSAlreadyFlied) selectedYears.push('2020');

@@ -128,7 +128,7 @@ const RemainedDetailsTaxYrFlow = props => {
           fontSize={16}
           marginTop={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={`WHICH PROVINCE DID YOU LIVE IN ON DECEMBER 31, ${pageParams.year}?`}
+          value={`WHICH PROVINCE DID YOU LIVE IN ON DECEMBER 31, ${pageParams?.year}?`}
         />
         <TouchableInput
           rightAccImage={CustomFonts.ChevronDown}

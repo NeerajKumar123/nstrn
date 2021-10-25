@@ -241,7 +241,7 @@ const UploadedFilesStatus = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {` DOC UPLOADED :${count} FILE${count > 1 ? 'S' : ''}`}
+        {` DOC UPLOADED : ${count} FILE${count > 1 ? 'S' : ''}`}
       </Text>
     </TouchableOpacity>
   );

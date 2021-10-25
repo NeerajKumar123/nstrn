@@ -38,8 +38,8 @@ const data = [
   },
   {
     id: 2,
-    name: 'VISIT US',
-    desc: 'BOOK AN APPOINTMENT',
+    name: 'BOOK AN',
+    desc: 'APPOINTMENT',
     image: CustomFonts.visit_us,
     colors: [Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR],
   },
@@ -81,6 +81,7 @@ const Dashboard = props => {
   const userFullName = global.userInfo
     ? `${global.userInfo.firstname ? global.userInfo.firstname : ''} ${global.userInfo.lastname ? global.userInfo.lastname : ''}`
     : '';
+  // const book_an_appointment_link = global.userInfo
 
   useEffect(() => {
     if(isFocused){
@@ -144,6 +145,8 @@ const Dashboard = props => {
     }
   };
   const onlineMoveToPage = props => {
+    navigation.navigate('OnlineReturnLanding');
+    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,

@@ -20,6 +20,7 @@ import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
 import {register} from '../apihelper/Api';
+import {isValidSIN} from '../helpers/SKTValidator';
 
 const SignUp = props => {
   const navigation = useNavigation();
@@ -27,6 +28,7 @@ const SignUp = props => {
   const [lName, setLName] = useState('');
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
+  const [sin, setSin] = useState('');
   const [pass, setPass] = useState('');
   const [cPass, setCPass] = useState('');
   const [isSecurePass, setIsSecurePass] = useState(true);
@@ -35,7 +37,7 @@ const SignUp = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
+    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FullName);
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
@@ -48,7 +50,10 @@ const SignUp = props => {
     } else if (!isLNameValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Last Name');
-    } else if (!isEmailValid) {
+    } else if (!isValidSIN(sin)) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please enter valid sin.');
+    }else if (!isEmailValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Email Address');
     } else if (!isMobileValid) {
@@ -125,7 +130,8 @@ const SignUp = props => {
             }}
           />
           <SKInput
-            leftAccImage={CustomFonts.Email}
+            leftAccImage={CustomFonts.Number}
+            editable = {false}
             marginBottom={2}
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
@@ -133,6 +139,18 @@ const SignUp = props => {
             placeholder="Email Address"
             onEndEditing={value => {
               setEmail(value);
+            }}
+          />
+           <SKInput
+            leftAccImage={CustomFonts.Number}
+            marginBottom={2}
+            maxLength={30}
+            borderColor={Colors.CLR_0065FF}
+            value={sin}
+            keyboardType = 'number-pad'
+            placeholder="SIN Number"
+            onEndEditing={value => {
+              setSin(value);
             }}
           />
           <SKInput
@@ -209,6 +227,7 @@ const SignUp = props => {
                   Device_Token: testDeviceToken,
                   Device_OS: 'iOS',
                   Module_Type_Id: 2,
+                  sin:sin
                 };
                 register(params, regisRes => {
                   if (regisRes?.status == 1) {

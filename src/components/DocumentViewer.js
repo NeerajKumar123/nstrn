@@ -72,7 +72,7 @@ const CloseButtonHeader = props => {
         alignItems: 'center',
         justifyContent: 'space-between',
         marginHorizontal: 20,
-        marginTop: 64,
+        marginTop: Platform.OS == 'ios' ?  64 : 10 ,
         marginBottom: 5,
       }}>
       <Text

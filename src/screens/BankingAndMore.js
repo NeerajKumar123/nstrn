@@ -123,7 +123,7 @@ const BankingAndMore = props => {
           fontSize={20}
           marginTop={45}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="PLEASE ENTER YOUR DIRECT DIPOSIT INFORMATION"
+          value="PLEASE ENTER YOUR DIRECT DEPOSIT INFORMATION"
         />
         <TouchableInput
           leftAccImage={CustomFonts.Bank}

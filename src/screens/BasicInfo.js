@@ -190,11 +190,11 @@ const BasicInfo = props => {
         onCancelPressed = {(date)=>{
           setShowDatePicker(false)
           setDOB(date);
-        }}
+    }}
         onDonePressed = {(date)=>{
           setDOB(date);
           setShowDatePicker(false)
-        }}
+      }}
         />
       )}
     </View>

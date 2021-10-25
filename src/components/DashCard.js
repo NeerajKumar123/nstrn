@@ -18,6 +18,8 @@ const DashCard = props => {
   let displayDesc = name
   if(id == 3){
     displayDesc = `STARTING FROM $${fee}`
+  }else if (id == 2) {
+    displayDesc = desc
   }
   return (
     <TouchableOpacity

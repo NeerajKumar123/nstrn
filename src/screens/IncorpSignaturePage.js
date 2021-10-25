@@ -60,7 +60,7 @@ const IncorpSignaturePage = props => {
       Alert.alert('SukhTax', 'Please authorize us by selecting checkobox');
     } else if (!isSignSaved) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please do sign.');
+      Alert.alert('SukhTax', 'You need to sign and save.');
     }
     return isValidForm;
   };

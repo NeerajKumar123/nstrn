@@ -173,7 +173,7 @@ const Spouse = props => {
           fontSize={20}
           marginTop={20}
           isOn={isFillingForWife}
-          value="ARE YOU FILLING FOR YOUR SPOUSE?"
+          value="ARE YOU FILING FOR YOUR SPOUSE?"
           onToggle={status => {
             setIsFillingForWife(!isFillingForWife);
           }}
@@ -190,7 +190,6 @@ const Spouse = props => {
         <SKInput
           leftAccImage={CustomFonts.UserIcon}
           marginTop={20}
-          marginBottom={0}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={fName}
@@ -202,7 +201,6 @@ const Spouse = props => {
         <SKInput
           leftAccImage={CustomFonts.UserIcon}
           marginTop={20}
-          marginBottom={0}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={lName}

@@ -4,7 +4,8 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import * as Colors from '../constants/ColorDefs';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -58,7 +59,6 @@ const SKDatePicker = props => {
             Cancel
           </Text>
         </TouchableOpacity>
-
         <Text
             style={{
               color: Colors.BLACK,
@@ -94,9 +94,13 @@ const SKDatePicker = props => {
         value={selectedDate}
         maximumDate = {maximumDate}
         mode="date"
-        display={Platform.OS == 'ios' ? 'spinner' : 'default'}
+        display={Platform.OS == 'ios' ? 'spinner' : 'spinner'}
         onChange={(event, date) => {
-          setSelectedDate(date);
+          if (event?.type != 'dismissed') {
+            Platform.OS == 'ios' ? setSelectedDate(date) : onDonePressed(date);
+          }else{
+            Platform.OS == 'ios' ? setSelectedDate(date) : onCancelPressed(originalDate);
+          }
         }}
       />
     </View>
