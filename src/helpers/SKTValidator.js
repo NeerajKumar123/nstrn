@@ -15,8 +15,10 @@ export const isValidField = (value, regex) => {
 
   export const isValidSIN = (sin) => {
     console.log('sin 123456782', sin);
-    const isEmpty = typeof sin === 'undefined' || sin === null || sin.length == 0;
+    const isEmpty = typeof sin === 'undefined' || sin === null || sin.length == 0 || sin.length < 8;
     if (isEmpty) return false
+    const isZero = parseInt(sin) == 0;
+    if (isZero) return false
     const eightDigits = sin.substring(0, 8); //Grabs 8 first 8 digits
     const checkDigit = sin.substring(8); //Grabs the 9th digit
     console.log('The first eight digits are: ' + eightDigits);

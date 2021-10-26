@@ -99,15 +99,11 @@ const Dashboard = props => {
   
 
   useEffect(() => {
-    setIsLoading(true);
     getServicePriceList((priceListRes) =>{
       if(priceListRes?.status == 1){
         let onlineTaxFees = priceListRes?.data?.filter(fee => fee.services_fee_id == 1);
         const feeObj = onlineTaxFees[0]
         setTaxFilingFee(feeObj?.service_fee)
-      }else{
-        const msg = priceListRes?.message ?? 'Something went wrong,Please try again.'
-        Alert.alert('SukhTax', msg);
       }
     })
   }, [])

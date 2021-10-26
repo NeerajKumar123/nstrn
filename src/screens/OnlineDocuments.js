@@ -1,4 +1,4 @@
-import React,{useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -14,12 +14,13 @@ import SKButton from '../components/SKButton';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SKLoader from '../components/SKLoader';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { SKModelImageTitle } from '../components/SKModel';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { uploadDocumentBS64 } from '../apihelper/Api';
-import {LibImageQualityOptions,ImageActionSheetOptions} from '../constants/StaticValues'
+import { LibImageQualityOptions, ImageActionSheetOptions } from '../constants/StaticValues'
 import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
 
 const OnlineDocuments = props => {
@@ -30,20 +31,31 @@ const OnlineDocuments = props => {
   const [isLoading, setIsLoading] = useState(false)
   const actionSheetRef = useRef()
   const [selectedYear, setSelectedYear] = useState(2020)
+  const [imageToBeUpload, setImageToBeUpload] = useState(undefined)
+  const [isImageTitleVisible, setIsImageTitleVisible] = useState(false)
+  const [imageTitle, setImageTitle] = useState('')
 
-  const prepareParams = (bs64Image) =>{
-    const {user_id,tax_file_id} = global.onlineStatusData
-    const params = {User_id:user_id,Tax_File_Id:tax_file_id,Year:parseInt(selectedYear),FileNameWithExtension:'identification-document.jpg',Base64String:bs64Image}
+  const prepareParams = (bs64Image, title) => {
+    const { user_id , tax_file_id } = global.onlineStatusData
+    const params = { User_id: user_id, Tax_File_Id: tax_file_id, Year: parseInt(selectedYear), FileNameWithExtension: `${title}.jpg`, Base64String: bs64Image }
     return params
   }
 
-  const intiateImageUploading = (res, yr) =>{
+  const saveImageDataAndShowTitleField = (res) => {
     const imgObj = res?.assets?.[0]
-    if (!imgObj.base64) Alert.alert('SukhTax','Something went wrong!')
+    if (imgObj.base64) {
+      setImageToBeUpload(imgObj.base64)
+      setIsImageTitleVisible(true)
+    } else {
+      Alert.alert('SukhTax', 'Something went wrong!')
+    }
+  }
+
+  const intiateImageUploading = () => {
     setIsLoading(true)
-    const params = prepareParams(imgObj.base64,yr)
-    uploadDocumentBS64(params,(uploadRes) =>{
-      uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
+    const params = prepareParams(imageToBeUpload, imageTitle)
+    uploadDocumentBS64(params, (uploadRes) => {
+      uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)
       setTimeout(() => {
         setIsLoading(false)
       }, 300);
@@ -60,9 +72,9 @@ const OnlineDocuments = props => {
         height: '100%',
       }}>
       <AppHeader navigation={navigation} />
-      {isLoading && <SKLoader/>}
+      {isLoading && <SKLoader />}
       <ScrollView
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         contentContainerStyle={{
           paddingHorizontal: 20,
         }}>
@@ -77,7 +89,7 @@ const OnlineDocuments = props => {
           data?.map((item, index) => {
             return (
               <DocCard
-                key = {item}
+                key={item}
                 item={item}
                 onClicked={() => {
                   setSelectedYear(item)
@@ -91,12 +103,12 @@ const OnlineDocuments = props => {
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title="MANAGE DOCUMENTS"
           onClicked={() => {
-            navigation.navigate('ManageDocuments', {isDocAdded:uploadImageCount, showFooterBtn:true});
+            navigation.navigate('ManageDocuments', { isDocAdded: uploadImageCount, showFooterBtn: true });
           }}
         />
         <SKButton
           marginTop={30}
-          disable = {uploadImageCount < 1}
+          // disable={uploadImageCount < 1}
           fontSize={16}
           rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
@@ -107,34 +119,48 @@ const OnlineDocuments = props => {
             navigation.navigate('AuthorizerList');
           }}
         />
-          <ActionSheet
+        <ActionSheet
           ref={actionSheetRef}
-          title={<Text style={{color: Colors.GRAY, fontSize: 18}}>Which one do you like?</Text>}
+          title={<Text style={{ color: Colors.GRAY, fontSize: 18 }}>Which one do you like?</Text>}
           options={ImageActionSheetOptions}
           onPress={(index) => {
             setTimeout(() => {
               if (index == 0) {
                 launchImageLibrary(LibImageQualityOptions, res => {
-                if (res?.didCancel) {
-                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
-                }else if (res?.error) {
-                }else if(res?.assets){
-                  intiateImageUploading(res)
-                }
-              });              
-                }else if (index == 1) {
+                  if (res?.didCancel) {
+                    Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+                  } else if (res?.error) {
+                  } else if (res?.assets) {
+                    saveImageDataAndShowTitleField(res)
+                  }
+                });
+              } else if (index == 1) {
                 launchCamera(LibImageQualityOptions, res => {
-                if (res?.didCancel) {
-                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
-                }else if (res?.error) {
-                }else if(res?.assets){
-                  intiateImageUploading(res)
-                }
-              });
-                }
+                  if (res?.didCancel) {
+                    Alert.alert('SukhTax', 'Image uploading cancelled by user.')
+                  } else if (res?.error) {
+                  } else if (res?.assets) {
+                    saveImageDataAndShowTitleField(res)
+                  }
+                });
+              }
             }, 100);
           }}
         />
+        {isImageTitleVisible && (
+          <SKModelImageTitle
+            title="Select"
+            onClose={() => {
+              setIsImageTitleVisible(false);
+            }}
+            onTitleEntered={value => {
+              console.log('value', value)
+              setIsImageTitleVisible(false);
+              setImageTitle(value)
+              intiateImageUploading()
+            }}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -181,12 +207,11 @@ const ManageDocButton = props => {
 };
 
 const DocCard = props => {
-  const {item} = props;
+  const { item } = props;
   return (
     <TouchableOpacity
       style={{
         flexDirection: 'row',
-        paddingHorizontal: 16,
         marginTop: 8,
         backgroundColor: 'white',
         alignItems: 'center',
@@ -199,7 +224,6 @@ const DocCard = props => {
       }}>
       <Text
         style={{
-          width: '100%',
           textAlign: 'left',
           color: Colors.APP_BLUE_HEADING_COLOR,
           fontSize: 17,
@@ -209,7 +233,7 @@ const DocCard = props => {
       </Text>
       <Image
         resizeMode="contain"
-        style={{width: 24, height: 24}}
+        style={{ width: 24, height: 24 }}
         source={CustomFonts.upload}
       />
     </TouchableOpacity>
@@ -217,12 +241,11 @@ const DocCard = props => {
 };
 
 const UploadedFilesStatus = props => {
-  const {count} = props;
+  const { count } = props;
   return (
     <TouchableOpacity
       style={{
         flexDirection: 'row',
-        paddingHorizontal: 16,
         marginTop: 8,
         backgroundColor: 'white',
         alignItems: 'center',

@@ -13,11 +13,11 @@ const API = {
       .get(path)
       .then(res => {
         const resData = res && res.data;
-        callback(resData);
+        callback && callback(resData);
       })
       .catch(error => {
         extractError(error);
-        callback({status:0});
+        callback && callback({status:0});
       });
   },
 
@@ -36,11 +36,11 @@ const API = {
       .then(res => {
         const resData = res && res.data;
         console.log('Response=====>',path, JSON.stringify(resData))
-        callback(resData);
+        callback && callback(resData);
       })
       .catch(error => {
         extractError(error, path);
-        callback({status:0});
+        callback && callback({status:0});
       });
   },
 };
