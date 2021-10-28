@@ -149,7 +149,7 @@ const Dependents = props => {
         <SKInput
           leftAccImage={CustomFonts.Number}
           marginTop={20}
-          marginBottom={0}
+          marginBottom={10}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={sinNo}

@@ -97,7 +97,7 @@ const BasicInfo = props => {
           marginTop={48}
           marginBottom={0}
           leftAccImage={CustomFonts.Number}
-          maxLength={30}
+          maxLength={9}
           borderColor={Colors.CLR_0065FF}
           value={sin}
           keyboardType = 'number-pad'

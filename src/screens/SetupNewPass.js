@@ -101,6 +101,7 @@ const SetupNewPass = props => {
                 if(res?.status == 1){
                   const msg = res?.message ?? 'Password reset successfully.'
                   Alert.alert('SukhTax',msg)
+                  navigation.popToTop()
                 }else{
                   const msg = res?.message ?? 'Something went wront, Please try again later.'
                   Alert.alert('SukhTax',msg)

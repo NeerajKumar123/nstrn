@@ -37,7 +37,7 @@ const SignUp = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FullName);
+    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
@@ -131,7 +131,6 @@ const SignUp = props => {
           />
           <SKInput
             leftAccImage={CustomFonts.Number}
-            editable = {false}
             marginBottom={2}
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
@@ -144,7 +143,7 @@ const SignUp = props => {
            <SKInput
             leftAccImage={CustomFonts.Number}
             marginBottom={2}
-            maxLength={30}
+            maxLength={9}
             borderColor={Colors.CLR_0065FF}
             value={sin}
             keyboardType = 'number-pad'
@@ -227,7 +226,7 @@ const SignUp = props => {
                   Device_Token: testDeviceToken,
                   Device_OS: 'iOS',
                   Module_Type_Id: 2,
-                  sin:sin
+                  SIN_Number:sin
                 };
                 register(params, regisRes => {
                   if (regisRes?.status == 1) {

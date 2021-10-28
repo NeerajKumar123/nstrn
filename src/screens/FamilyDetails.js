@@ -100,6 +100,16 @@ const FamilyDetails = props => {
     return params
   }
 
+  useEffect(() => {
+    if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
+      setNextButtonTitle('SPOUSE')
+    }else if(dependentOption?.id == 1){
+      setNextButtonTitle('DEPENDENTS')
+    }else{
+      setNextButtonTitle('MY TAX YEAR')
+    }
+  }, [maritalStatus,dependentOption])
+
   return (
     <View
       style={{
@@ -215,13 +225,6 @@ const FamilyDetails = props => {
           onSelect={value => {
             setMaritalStatus(value);
             setIsMVisible(false);
-            if(value.marital_status_id == 2 || value.marital_status_id == 3){
-              setNextButtonTitle('SPOUSE')
-            }else if(dependentOption.id == 1){
-              setNextButtonTitle('DEPENDENTS')
-            }else{
-              setNextButtonTitle('MY TAX YEAR')
-            }
           }}
         />
       )}
@@ -250,13 +253,6 @@ const FamilyDetails = props => {
           onSelect={value => {
             setDependentOption(value);
             setIsDepOptionVisible(false);
-            if(value.marital_status_id == 2 || value.marital_status_id == 3){
-              setNextButtonTitle('SPOUSE')
-            }else if(value.id == 1){
-              setNextButtonTitle('DEPENDENTS')
-            }else{
-              setNextButtonTitle('MY TAX YEAR')
-            }
           }}
         />
       )}

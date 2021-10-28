@@ -29,7 +29,7 @@ const Profile = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
+    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FullName);
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
@@ -108,6 +108,7 @@ const Profile = props => {
           }}
         />
         <SKInput
+          editable = {false}
           leftAccImage={CustomFonts.Email}
           marginBottom={0}
           maxLength={30}
@@ -155,7 +156,17 @@ const Profile = props => {
                 Mobile_No: mobile
               };
               updateUserProfile(params, updateRes => {
-                setIsLoading(false);
+                console.log('updateRes',updateRes)
+                setTimeout(() => {
+                  setIsLoading(false)
+                }, 1000);
+                
+                if (updateRes?.status == 1) {
+                  navigation.goBack()
+                  Alert.alert('Sukhtax',updateRes.message ? updateRes.message : '' )  
+                }else{
+                  Alert.alert('Sukhtax','Something went wrong.')  
+                }
               });
             }
           }}

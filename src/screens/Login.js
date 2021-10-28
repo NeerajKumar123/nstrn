@@ -87,7 +87,7 @@ const Login = props => {
           fontSize={16}
           marginTop={45}
           color={Colors.BLACK}
-          value="IF YOU HAVE ALREADY REGISTERED,WELCOME BACK"
+          value="IF YOU HAVE ALREADY REGISTERED, WELCOME BACK"
         />
         <SKInput
           marginTop={48}

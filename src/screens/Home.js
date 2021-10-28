@@ -14,8 +14,9 @@ const Home = props => {
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
   const userFullName = global.userInfo
-    ? `${global.userInfo.firstname} ${global.userInfo.lastname}`
-    : '';
+  ? `${global.userInfo.firstname ? global.userInfo.firstname : ''} ${global.userInfo.lastname ? global.userInfo.lastname : ''}`
+  : '';
+
   const {tax_file_status_id = 0} = global?.onlineStatusData;
   const {incorporation_status_id = 0} = global?.incStatusData;
   const {tax_docs_status_id = 0} = global?.taxDocsStatusData;

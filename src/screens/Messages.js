@@ -30,8 +30,8 @@ const Messages = props => {
 
   const getUpdatedMsgList = isloader => {
     setIsLoading(isloader);
-    const {tax_file_id,user_id} = global.onlineStatusData
-    const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
+    const {user_id} = global.onlineStatusData
+    const params = {User_Id: user_id};
     getMessages(params, msgRes => {
       setIsLoading(false);
       if (msgRes && msgRes.status == 1) {
@@ -103,7 +103,6 @@ const Messages = props => {
             const {tax_file_id,user_id} = global.onlineStatusData
             const params = {
               User_Id: user_id,
-              Tax_File_Id: tax_file_id,
               Message: chatText,
             };
             saveMessage(params, saveMsgRes => {

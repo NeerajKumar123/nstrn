@@ -141,7 +141,7 @@ const IncorpSignaturePage = props => {
             leftAccImage={CustomFonts.Number}
             marginTop={20}
             marginBottom={0}
-            maxLength={30}
+            maxLength={9}
             borderColor={Colors.CLR_0065FF}
             value={sinNo}
             keyboardType = 'number-pad'

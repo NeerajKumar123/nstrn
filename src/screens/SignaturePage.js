@@ -141,7 +141,7 @@ const SignaturePage = props => {
             leftAccImage={CustomFonts.Number}
             marginTop={20}
             marginBottom={0}
-            maxLength={30}
+            maxLength={9}
             borderColor={Colors.CLR_0065FF}
             value={sinNo}
             placeholder="SIN Number"

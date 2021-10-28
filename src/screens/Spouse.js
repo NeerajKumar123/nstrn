@@ -189,7 +189,6 @@ const Spouse = props => {
         />
         <SKInput
           leftAccImage={CustomFonts.UserIcon}
-          marginTop={20}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={fName}
@@ -200,7 +199,6 @@ const Spouse = props => {
         />
         <SKInput
           leftAccImage={CustomFonts.UserIcon}
-          marginTop={20}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}
           value={lName}
@@ -274,7 +272,6 @@ const Spouse = props => {
           }}
         />
         <SKInput
-          marginTop={20}
           marginBottom={0}
           maxLength={30}
           borderColor={Colors.CLR_0065FF}

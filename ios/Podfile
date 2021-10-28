@@ -5,6 +5,9 @@ platform :ios, '12.1'
 
 target 'SukhTax' do
   config = use_native_modules!
+    # Pods for ReactPushNotifications - Add these lines
+    pod 'Firebase/Core'
+    pod 'Firebase/Messaging'
 
   use_react_native!(
     :path => config[:reactNativePath],

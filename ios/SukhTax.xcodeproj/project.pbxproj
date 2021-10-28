@@ -19,8 +19,8 @@
 		071766D32694CD0A002D2719 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 071766C82694CD0A002D2719 /* OpenSans-Light.ttf */; };
 		071766D42694CD0A002D2719 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 071766C92694CD0A002D2719 /* OpenSans-SemiBold.ttf */; };
 		071766D52694CD0A002D2719 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 071766CA2694CD0A002D2719 /* OpenSans-Regular.ttf */; };
+		071ACB6E2729233D00D1CCEC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 071ACB6D2729233D00D1CCEC /* GoogleService-Info.plist */; };
 		0794553826B7C37000306053 /* Fix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794553726B7C37000306053 /* Fix.swift */; };
-		07A9E73926E0A76B0059ECCA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07A9E73826E0A76B0059ECCA /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -54,11 +54,11 @@
 		071766C82694CD0A002D2719 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		071766C92694CD0A002D2719 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		071766CA2694CD0A002D2719 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		071ACB6D2729233D00D1CCEC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		076CB2A3269AE7F5007C2602 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		0794553626B7C37000306053 /* SukhTax-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SukhTax-Bridging-Header.h"; sourceTree = "<group>"; };
 		0794553726B7C37000306053 /* Fix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fix.swift; sourceTree = "<group>"; };
 		07A9E73726E0A4B80059ECCA /* SukhTaxDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SukhTaxDebug.entitlements; path = SukhTax/SukhTaxDebug.entitlements; sourceTree = "<group>"; };
-		07A9E73826E0A76B0059ECCA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		11676856C125B666E23B02B3 /* Pods-SukhTax-SukhTaxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SukhTax-SukhTaxTests.release.xcconfig"; path = "Target Support Files/Pods-SukhTax-SukhTaxTests/Pods-SukhTax-SukhTaxTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* SukhTax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SukhTax.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SukhTax/AppDelegate.h; sourceTree = "<group>"; };
@@ -165,7 +165,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				07A9E73826E0A76B0059ECCA /* GoogleService-Info.plist */,
+				071ACB6D2729233D00D1CCEC /* GoogleService-Info.plist */,
 				0794553726B7C37000306053 /* Fix.swift */,
 				071766AD2694CCE9002D2719 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* SukhTax */,
@@ -309,7 +309,7 @@
 				071766D32694CD0A002D2719 /* OpenSans-Light.ttf in Resources */,
 				071766D52694CD0A002D2719 /* OpenSans-Regular.ttf in Resources */,
 				071766D12694CD0A002D2719 /* OpenSans-LightItalic.ttf in Resources */,
-				07A9E73926E0A76B0059ECCA /* GoogleService-Info.plist in Resources */,
+				071ACB6E2729233D00D1CCEC /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,9 +566,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SukhTax/SukhTaxDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development: Sukhwinder Canth (5GVAQX227X)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 883NZQKRVA;
+				DEVELOPMENT_TEAM = 53UH8C74JD;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SukhTax/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -581,9 +582,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sukhtax.SukhTax;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sukhtaxservices.sukhtax;
 				PRODUCT_NAME = SukhTax;
-				PROVISIONING_PROFILE_SPECIFIER = SukhTax_Dev_03Aug21;
+				PROVISIONING_PROFILE_SPECIFIER = skt_dev_27oct;
 				SWIFT_OBJC_BRIDGING_HEADER = "SukhTax-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -597,9 +598,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SukhTax/SukhTaxDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development: Sukhwinder Canth (5GVAQX227X)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 883NZQKRVA;
+				DEVELOPMENT_TEAM = 53UH8C74JD;
 				INFOPLIST_FILE = SukhTax/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -611,9 +614,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sukhtax.SukhTax;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sukhtaxservices.sukhtax;
 				PRODUCT_NAME = SukhTax;
-				PROVISIONING_PROFILE_SPECIFIER = SukhTax_Dev_03Aug21;
+				PROVISIONING_PROFILE_SPECIFIER = skt_dev_27oct;
 				SWIFT_OBJC_BRIDGING_HEADER = "SukhTax-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

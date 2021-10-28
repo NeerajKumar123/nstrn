@@ -7,9 +7,20 @@
  */
 
 import React from 'react';
+import {LogBox} from 'react-native'
 import AuthNavigator from './src/AuthNavigator';
 import {StripeProvider} from '@stripe/stripe-react-native';
 import {stripekey_test} from './src/constants/StaticValues';
+
+LogBox.ignoreLogs([
+  'Animated: `useNativeDriver`',
+  'VirtualizedLists should never be nested inside',
+  'componentWillUpdate has been renamed',
+  'componentWillReceiveProps has been renamed',
+  'DatePickerIOS has been merged with DatePickerAndroid',
+  'Require cycle',
+  'Each child in a list should have a unique "key" prop',
+]);
 
 const App = () => {
   return (
