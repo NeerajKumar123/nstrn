@@ -61,3 +61,4 @@ export const toggle_on = require('../../assets/toggle_on.png');
 export const toggle_off = require('../../assets/toggle_off.png');
 export const red_cross = require('../../assets/red_cross.png');
 export const add_filled_circle = require('../../assets/add_filled_circle.png');
+export const black_plus = require('../../assets/black_plus.png');

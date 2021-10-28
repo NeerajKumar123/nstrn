@@ -155,27 +155,16 @@ const MyTaxYear = props => {
     });
   }
 
-  const decideAndNavigate =(callback) =>{
-    let nextIndex = pageIndex + 1
-    const selObj = global.selectedYears && global.selectedYears.length > nextIndex  ? global.selectedYears[nextIndex] : undefined
-    if(selObj){
-      const newPageIndex = pageIndex + 1
-      navigation.push('MyTaxYear',{pageIndex:newPageIndex});
-    }else{
-      navigation.navigate('OnlineDocuments');
-    }
+const decideAndNavigate =(callback) =>{
+  let nextIndex = pageIndex + 1
+  const selObj = global.selectedYears && global.selectedYears.length > nextIndex  ? global.selectedYears[nextIndex] : undefined
+  if(selObj){
+    const newPageIndex = pageIndex + 1
+    navigation.push('RemainedDetailsTaxYrFlow',{pageTaxYrIndex:newPageIndex, year:selObj});
+  }else{
+    navigation.navigate('OnlineDocuments');
+  }
 }
-
-// const decideAndNavigate =(callback) =>{
-//   let nextIndex = pageIndex + 1
-//   const selObj = global.selectedYears && global.selectedYears.length > nextIndex  ? global.selectedYears[nextIndex] : undefined
-//   if(selObj){
-//     const newPageIndex = pageIndex + 1
-//     navigation.push('RemainedDetailsTaxYrFlow',{pageTaxYrIndex:newPageIndex, year:selObj});
-//   }else{
-//     navigation.navigate('OnlineDocuments');
-//   }
-// }
   const checkFormValidations = () =>{
     let isValidForm = true;
     if (isSelfSelected) {

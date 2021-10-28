@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -19,9 +19,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SKLoader from '../components/SKLoader';
 import { SKModelImageTitle } from '../components/SKModel';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { uploadDocumentBS64 } from '../apihelper/Api';
+import { uploadDocumentBS64, getUserDocuments } from '../apihelper/Api';
 import { LibImageQualityOptions, ImageActionSheetOptions } from '../constants/StaticValues'
 import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
+import {useIsFocused} from '@react-navigation/native';
 
 const OnlineDocuments = props => {
   const navigation = useNavigation();
@@ -34,12 +35,33 @@ const OnlineDocuments = props => {
   const [imageToBeUpload, setImageToBeUpload] = useState(undefined)
   const [isImageTitleVisible, setIsImageTitleVisible] = useState(false)
   const [imageTitle, setImageTitle] = useState('')
+  const [docs, setDocs] = useState();
+  const isFocused = useIsFocused();
 
   const prepareParams = (bs64Image, title) => {
     const { user_id , tax_file_id } = global.onlineStatusData
-    const params = { User_id: user_id, Tax_File_Id: tax_file_id, Year: parseInt(selectedYear), FileNameWithExtension: `${title}.jpg`, Base64String: bs64Image }
+    const dashedTitle = title.replace(/ /g, "-");
+    const params = { User_id: user_id, Tax_File_Id: tax_file_id, Year: parseInt(selectedYear), FileNameWithExtension: `${dashedTitle}.jpg`, Base64String: bs64Image }
     return params
   }
+
+  useEffect(() => {
+    getDocs();
+  }, [isFocused,uploadImageCount]);
+
+  const getDocs = () => {
+    setIsLoading(true);
+    const {tax_file_id,user_id} = global.onlineStatusData
+    const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
+    getUserDocuments(params, docsRes => {
+      setIsLoading(false);
+      if (docsRes?.status == 1) {
+        setDocs(docsRes.data);
+      } else {
+        Alert.alert('SukhTax', 'Something went wrong.');
+      }
+    });
+  };
 
   const saveImageDataAndShowTitleField = (res) => {
     const imgObj = res?.assets?.[0]
@@ -51,9 +73,9 @@ const OnlineDocuments = props => {
     }
   }
 
-  const intiateImageUploading = () => {
+  const intiateImageUploading = (title) => {
     setIsLoading(true)
-    const params = prepareParams(imageToBeUpload, imageTitle)
+    const params = prepareParams(imageToBeUpload, title)
     uploadDocumentBS64(params, (uploadRes) => {
       uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)
       setTimeout(() => {
@@ -98,17 +120,17 @@ const OnlineDocuments = props => {
               />
             );
           })}
-        <UploadedFilesStatus count={uploadImageCount} />
+        <UploadedFilesStatus count={docs?.length} />
         <ManageDocButton
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title="MANAGE DOCUMENTS"
           onClicked={() => {
-            navigation.navigate('ManageDocuments', { isDocAdded: uploadImageCount, showFooterBtn: true });
+            navigation.navigate('ManageDocuments', { isDocAdded: docs?.length > 0 ? true : false, showFooterBtn: true });
           }}
         />
         <SKButton
           marginTop={30}
-          // disable={uploadImageCount < 1}
+          disable={docs?.length > 0 ? false : true}
           fontSize={16}
           rightImage={CustomFonts.right_arrow}
           fontWeight={'normal'}
@@ -157,7 +179,7 @@ const OnlineDocuments = props => {
               console.log('value', value)
               setIsImageTitleVisible(false);
               setImageTitle(value)
-              intiateImageUploading()
+              intiateImageUploading(value)
             }}
           />
         )}

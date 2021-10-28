@@ -153,7 +153,6 @@ const ManageDocCard = props => {
         marginTop: 15,
         paddingVertical: 5,
         backgroundColor: 'white',
-        justifyContent: 'center',
         borderRadius: 6,
         alignItems: 'center',
         width: '100%',

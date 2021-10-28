@@ -138,7 +138,7 @@ export const SKModelImageTitle = props => {
           height: '100%',
           alignSelf: 'center',
           flexDirection: 'column',
-          backgroundColor: '#00000080',
+          backgroundColor: '#00000070',
         }}>
         <View
           style={{

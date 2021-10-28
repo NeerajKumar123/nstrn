@@ -101,7 +101,6 @@ const Dependents = props => {
         backgroundColor: 'white',
         width: '100%',
         height: '100%',
-        paddingBottom:Platform.OS == 'ios' ? 30 : 0
       }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation = {navigation}/>
@@ -187,18 +186,16 @@ const Dependents = props => {
         />
         {dependents && dependents.length > 0 ?
         <>
-        <SKButton
-        marginTop={30}
-        fontSize={15}
-        height = {40}
-        fontWeight = "bold"
-        iconName="plus-circle-outline"
-        iconsize={20}
-        iconcolor={Colors.WHITE}
-        width="100%"
-        backgroundColor={Colors.SECONDARY_FILL}
-        borderColor={Colors.PRIMARY_BORDER}
-        title={'ADD ANOTHER DEPENDENT'}
+      <SKButton
+      marginTop ={30}
+      fontSize={16}
+      borderWidth = {1}
+      leftImage = {CustomFonts.black_plus}
+      fontWeight={'normal'}
+      titleColor = {Colors.PRIMARY_BORDER}
+      backgroundColor={Colors.WHITE}
+      borderColor={Colors.PRIMARY_BORDER}
+      title={'ADD ANOTHER DEPENDENT'}
         onPress={() => {
           if(depCount < 5){
             if(checkFormValidations()){
@@ -235,12 +232,15 @@ const Dependents = props => {
       />
       </>
       :
+      <>
       <SKButton
       marginTop ={30}
       fontSize={16}
-      rightImage={CustomFonts.right_arrow}
+      borderWidth = {1}
+      leftImage = {CustomFonts.black_plus}
       fontWeight={'normal'}
-      backgroundColor={Colors.PRIMARY_FILL}
+      titleColor = {Colors.PRIMARY_BORDER}
+      backgroundColor={Colors.WHITE}
       borderColor={Colors.PRIMARY_BORDER}
       title={'ADD DEPENDENT'}
       onPress={() => {
@@ -251,8 +251,27 @@ const Dependents = props => {
         }
       }}
     />
+    <SKButton
+        marginTop ={15}
+        fontSize={16}
+        rightImage={CustomFonts.right_arrow}
+        fontWeight={'normal'}
+        backgroundColor={Colors.PRIMARY_FILL}
+        borderColor={Colors.PRIMARY_BORDER}
+        title={'MY TAX YEAR'}
+        onPress={() => {
+          if(checkFormValidations()){
+            const params = prepareParams()
+            setIsLoading(true)
+            onlineSaveDependentInfo(params, (depRes) =>{
+              setIsLoading(false)
+              navigation.navigate('MyTaxYear',{pageIndex:0});
+            })  
+          }
+        }}
+      />
+      </>
       }
-        
       </ScrollView>
       {isDatePickerVisible && (
         <SKDatePicker

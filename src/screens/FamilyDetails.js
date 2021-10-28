@@ -53,6 +53,7 @@ const FamilyDetails = props => {
   const [nextButtonTitle, setNextButtonTitle] = useState('MY TAX YEAR')
   let maxDate = new Date(); 
   maxDate.setFullYear(global?.mostRecentYear);
+  
   useEffect(() => {
     setIsLoading(true)
     getMaritalStatusList({}, maritalRes => {

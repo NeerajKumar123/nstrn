@@ -30,6 +30,7 @@ const SKButton = props => {
     title = 'Button title',
     disable = false,
     borderColor,
+    borderWidth = 4,
     leftImage,
     rightImage,
     marginTop = 0,
@@ -54,7 +55,7 @@ const SKButton = props => {
         borderRadius: height / 2,
         height,
         borderColor,
-        borderWidth: 4,
+        borderWidth: borderWidth,
         marginTop,
         width: width,
       }}

@@ -20,7 +20,7 @@ import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import {
   getCanadaProvinceList,
-  saveAboutInfo,
+  saveBankingAndFamilyInfoByYear,
   getResidencyList,
   getMaritalStatusList,
 } from '../apihelper/Api';
@@ -42,7 +42,9 @@ const RemainedDetailsTaxYrFlow = props => {
   const [isProvinceVisible, setIsProvinceVisible] = useState(false);
   const [isAddViewVisible, setIsAddViewVisible] = useState(false);
   const [isResidenceVisible, setIsResidenceVisible] = useState(false);
+  const [isSpouseResidenceVisible, setIsSpouseResidenceVisible] = useState(false);
   const [residency, setResidency] = useState('');
+  const [spouseResidency, setSpouseResidency] = useState('');
   const [residencies, setResidencies] = useState();
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [maritalStatus, setMaritalStatus] = useState();
@@ -55,58 +57,60 @@ const RemainedDetailsTaxYrFlow = props => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dependentOption, setDependentOption] = useState(YES_NO[1]);
   let maxDate = new Date();
-  maxDate.setFullYear(global?.mostRecentYear);
+  maxDate.setFullYear(pageParams?.year);
 
   useEffect(() => {
     setIsLoading(true);
     const params = {};
     getCanadaProvinceList(params, provinceRes => {
-      setIsLoading(false);
       setProvinces(provinceRes?.data);
       getResidencyList({}, resdencyRes => {
         setResidencies(resdencyRes?.data);
         setResidency(resdencyRes?.data?.[0]);
-        setIsLoading(false);
       });
       getMaritalStatusList({}, maritalRes => {
         setMaritalStatuses(maritalRes?.data);
         setMaritalStatus(maritalRes?.data?.[0]);
-        setIsLoading(false);
       });
+
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1500);
     });
   }, []);
 
+
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isMailingAddValid = mailingAddress?.length > 0;
     const isProvinceValid = province?.state_id;
-    if (!isMailingAddValid) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid Mailing address');
-    } else if (!isProvinceValid) {
+     if (!isProvinceValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid province');
     }
     return isValidForm;
   };
-
-  const prepareParams = () => {
-    const {user_id} = global.onlineStatusData;
-    const commaSepYrs = global.selectedYears && global.selectedYears.join();
-    const dob = pageParams.dob && format(pageParams.dob, 'yyyy-MM-dd');
+  const prepareParams = () =>{
+    const {user_id,tax_file_id} = global.onlineStatusData
     const params = {
-      User_Id: user_id,
-      SIN_Number: pageParams.sin,
-      Gender: pageParams.gender,
-      DOB: dob,
-      Last_Year_Tax_Filed: pageParams.lastTime,
-      Mailing_Address: mailingAddress,
-      Year: global?.mostRecentYear,
-      Module_Type_Id: 2,
-      Years_Selected: commaSepYrs,
-    };
-    return params;
-  };
+      User_id:user_id,
+      Tax_File_Id:tax_file_id,
+      Year:pageParams?.year,
+      Province_Lived_In:province?.state_name,
+      Residency:residency?.residency_name,
+      Spouse_Residency:spouseResidency?.residency_name,
+      Marital_Status_Id:maritalStatus?.marital_status_id,
+      Marital_Status_Change:mChangeOpton?.id,
+      Marital_Status_Change_Date:(mChangeOpton?.id == 1 && mStatusChangedDate) ? format(mStatusChangedDate, 'yyyy-MM-dd') : '',
+      Dependents:dependentOption?.id,
+      Tax_File_Year_Id:0,
+      Immigration_Date:'',
+      Institution_Id:0,
+      Branch:'',
+      Account_No:'',
+    }
+    return params
+  }
+
 
   return (
     <View
@@ -160,9 +164,9 @@ const RemainedDetailsTaxYrFlow = props => {
           leftAccImage={CustomFonts.Home}
           rightAccImage={CustomFonts.ChevronDown}
           placeholder="Select Spouse Residency"
-          value={residency?.residency_name}
+          value={spouseResidency?.residency_name}
           onClicked={() => {
-            setIsResidenceVisible(true);
+            setIsSpouseResidenceVisible(true);
           }}
         />
         <Heading
@@ -226,24 +230,25 @@ const RemainedDetailsTaxYrFlow = props => {
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'Button title'}
+          title={`${pageParams?.year} MY TAX YEAR`}
           onPress={() => {
             if (checkFormValidations()) {
               setIsLoading(true);
-              const params = prepareParams();
-              saveAboutInfo(params, saveRes => {
+              const params = prepareParams()
+              saveBankingAndFamilyInfoByYear(params, (saveBankingRes) =>{
                 setIsLoading(false);
-                if (saveRes?.status == -1) {
-                  Alert.alert('SukhTax', 'Something went wrong');
-                  return;
+                if (saveBankingRes?.status == 1) {
+                  const isSpouceFlow = maritalStatus.id == 2 || maritalStatus.id == 3
+                  SKTStorage.setKeyValue('isFromSpouseFlow',isSpouceFlow, ()=>{
+                    global.onlineStatusData = {
+                      ...global.onlineStatusData,
+                      ...saveBankingRes?.data[0],
+                    };
+                    navigation.push('MyTaxYear',{pageIndex:pageParams?.pageTaxYrIndex});
+                  })
+                }else{
+                  Alert.alert('SukhTax', saveBankingRes.message || 'Something went wrong');
                 }
-                global.onlineStatusData = {
-                  ...global.onlineStatusData,
-                  ...saveRes?.data[0],
-                };
-                SKTStorage.setKeyValue('province', province, () => {
-                  navigation.navigate('BankingAndMore', {province: province});
-                });
               });
             }
           }}
@@ -263,6 +268,20 @@ const RemainedDetailsTaxYrFlow = props => {
             }}
           />
         )}
+        {isSpouseResidenceVisible && (
+          <SKModel
+            title="Select"
+            data={residencies}
+            keyLabel="residency_name"
+            onClose={() => {
+              setIsSpouseResidenceVisible(false);
+            }}
+            onSelect={value => {
+              setSpouseResidency(value);
+              setIsSpouseResidenceVisible(false);
+            }}
+          />
+        )}
         {isMVisible && (
           <SKModel
             title="Select Gender"
@@ -274,16 +293,6 @@ const RemainedDetailsTaxYrFlow = props => {
             onSelect={value => {
               setMaritalStatus(value);
               setIsMVisible(false);
-              if (
-                value.marital_status_id == 2 ||
-                value.marital_status_id == 3
-              ) {
-                //   setNextButtonTitle('SPOUSE')
-              } else if (dependentOption.id == 1) {
-                //   setNextButtonTitle('DEPENDENTS')
-              } else {
-                //   setNextButtonTitle('MY TAX YEAR')
-              }
             }}
           />
         )}
@@ -296,6 +305,7 @@ const RemainedDetailsTaxYrFlow = props => {
               setIsMChangeVisible(false);
             }}
             onSelect={value => {
+              console.log('mChangeOpton?.id',value)
               setMChangeOpton(value);
               setIsMChangeVisible(false);
             }}
