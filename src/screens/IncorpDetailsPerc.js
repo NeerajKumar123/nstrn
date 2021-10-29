@@ -71,7 +71,6 @@ const IncorpDetailsPerc = props => {
             value="INCORPORATORS' DETAILS :"
           />
          <TouchableInput
-            marginBottom={2}
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={address}
@@ -82,7 +81,6 @@ const IncorpDetailsPerc = props => {
           />
           <SKInput
             leftAccImage={CustomFonts.Number}
-            marginBottom={2}
             maxLength={30}
             keyboardType = 'number-pad'
             borderColor={Colors.CLR_0065FF}

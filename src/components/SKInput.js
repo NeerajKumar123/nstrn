@@ -23,7 +23,7 @@ const SKInput = props => {
   const {
     leftAccImage ,
     rightAccImage ,
-    marginTop = 10,
+    marginTop = 15,
     marginBottom = 10,
     height,
     placeholder = 'Enter value',
@@ -60,7 +60,7 @@ const SKInput = props => {
         },
         shadowRadius: 3,
         shadowOpacity: 0.8,
-        marginTop,
+        marginTop : marginTop,
         marginBottom,
       }}>
       {leftAccImage && isLeftLocalPNG && (
