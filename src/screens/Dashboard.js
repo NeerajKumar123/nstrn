@@ -118,7 +118,7 @@ const Dashboard = props => {
       }
     })
   }, [])
-
+// this is new page of dashboard 
   const navigateToScreen = item => {
     switch (item.id) {
       case 1:
@@ -177,7 +177,7 @@ const Dashboard = props => {
       } else if (spouse_info_filled) {
         navigation.navigate('DependentsList');
       } else if (dependent_info_filled) {
-        navigation.navigate('MyTaxYear',{pageIndex:0});
+        navigation.navigate('MyTaxYear',{pageIndex:0}); 
       } else if (banking_family_info_filled) {
         navigation.navigate('MyTaxYear',{pageIndex:0});
       } else if (about_info_filled) {

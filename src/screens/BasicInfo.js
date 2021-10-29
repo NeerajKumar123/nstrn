@@ -159,7 +159,6 @@ const BasicInfo = props => {
             />
             <SKInput
               marginTop={48}
-              marginBottom={0}
               leftAccImage={CustomFonts.Number}
               maxLength={9}
               borderColor={Colors.CLR_0065FF}
@@ -171,6 +170,7 @@ const BasicInfo = props => {
               }}
             />
             <TouchableInput
+              marginTop = {10}
               leftAccImage={CustomFonts.Gender}
               rightAccImage={CustomFonts.ChevronDown}
               value={gender}

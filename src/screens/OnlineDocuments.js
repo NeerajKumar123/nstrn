@@ -261,7 +261,7 @@ const DocCard = props => {
 };
 
 const UploadedFilesStatus = props => {
-  const { count } = props;
+  const { count = 0 } = props;
   return (
     <TouchableOpacity
       style={{
@@ -284,7 +284,7 @@ const UploadedFilesStatus = props => {
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {` DOC UPLOADED : ${count} FILE${count > 1 ? 'S' : ''}`}
+        {` DOC UPLOADED : ${count ? count : 0} FILE${count > 1 ? 'S' : ''}`}
       </Text>
     </TouchableOpacity>
   );

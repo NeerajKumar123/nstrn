@@ -28,16 +28,16 @@ const SKDatePicker = props => {
         backgroundColor: Colors.CLR_EEEEEE,
         position: 'absolute',
         bottom: 0,
-        height: Platform.OS == 'ios' ? 216 : 0,
+        height: Platform.OS == 'ios' ? 256 : 0,
         width: width,
       }}>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          paddingVertical: 10,
-          paddingHorizontal: 10,
-          alignItems:'center'
+          height:50,
+          paddingHorizontal:10,
+          alignItems:'center',
         }}>
         <TouchableOpacity
           style={{
@@ -56,7 +56,7 @@ const SKDatePicker = props => {
               fontSize: 14,
               fontWeight: '500',
             }}>
-            Cancel
+            CANCEL
           </Text>
         </TouchableOpacity>
         <Text
@@ -65,7 +65,7 @@ const SKDatePicker = props => {
               fontSize: 15,
               fontWeight: '500',
             }}>
-            {title}
+            {title.toUpperCase()}
           </Text>
         <TouchableOpacity
           style={{
@@ -84,7 +84,7 @@ const SKDatePicker = props => {
               fontSize: 14,
               fontWeight: '500',
             }}>
-            Done
+            DONE
           </Text>
         </TouchableOpacity>
       </View>

@@ -215,8 +215,7 @@ const BankingAndMore = props => {
               }}
             />
             <SKInput
-              marginTop={20}
-              marginBottom={0}
+              marginTop={10}
               maxLength={30}
               leftAccImage={CustomFonts.Number}
               borderColor={Colors.CLR_0065FF}
@@ -228,7 +227,7 @@ const BankingAndMore = props => {
               }}
             />
             <SKInput
-              marginTop={20}
+              marginTop={10}
               marginBottom={0}
               leftAccImage={CustomFonts.Number}
               maxLength={30}
