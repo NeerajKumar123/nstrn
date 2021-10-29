@@ -42,8 +42,8 @@ const SignaturePage = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = fName.length > 0 
-    const isLNameValid = lName.length > 0 
+    const isFNameValid = Validator.isValidField(fName,ST_REGEX.FullName)
+    const isLNameValid = Validator.isValidField(lName,ST_REGEX.FullName)
     const isSinValid = Validator.isValidSIN(sinNo)
 
     if (!isFNameValid) {
@@ -118,7 +118,6 @@ const SignaturePage = props => {
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={fName}
-            autoCapitalize = 'words'
             placeholder="First Name"
             onEndEditing={value => {
               setFName(value);
@@ -131,7 +130,6 @@ const SignaturePage = props => {
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={lName}
-            autoCapitalize = 'words'
             placeholder="Last Name"
             onEndEditing={value => {
               setLName(value);

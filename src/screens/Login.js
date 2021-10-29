@@ -97,6 +97,7 @@ const Login = props => {
           borderColor={Colors.CLR_0065FF}
           value={email}
           placeholder = 'Email'
+          autoCapitalize = 'none'
           onEndEditing={value => {
             setemail(value)
           }}
