@@ -191,6 +191,8 @@ const Dashboard = props => {
       }
     }    
   };
+
+  // This is neeraj....
   const incorpMoveToPage = props => {
     const {
       hst_registration, // HST
