@@ -34,7 +34,6 @@ const IncorporationLanding = props => {
       if(typeRes?.status == 1){
         const incoprs = typeRes?.data
         setIncorpTypes(incoprs)
-        setSelectedCorp(incoprs[2])
         setIsLoading(false)
       }
     })

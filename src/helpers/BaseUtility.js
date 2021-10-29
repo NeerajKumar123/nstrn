@@ -142,7 +142,7 @@ export const loadIntialData = (callback) => {
     });
     global.mostRecentYear = arr?.[0] ?? '2020'
     if (!global.selectedYears) {
-      global.selectedYears = ['2020']
+      global.selectedYears = []
     }
     getActiveFileStatusOnLogin(params, (fileStatusRes) =>{
       if(fileStatusRes?.status == 1){

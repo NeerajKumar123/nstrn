@@ -197,7 +197,8 @@ const FamilyDetails = props => {
               updateBankingAndFamilyInfoByYear(params, (saveBankingRes) =>{
                 setIsLoading(false)
                 if(saveBankingRes?.status == 1){
-                  SKTStorage.setKeyValue('isFromSpouseFlow',true,()=>{
+                  const check = (maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3) ? true : false
+                  SKTStorage.setKeyValue('isFromSpouseFlow',check,()=>{
                     if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
                       navigation.navigate('Spouse',{dependentOption:dependentOption.id});
                     }else if (dependentOption.id  == 1){

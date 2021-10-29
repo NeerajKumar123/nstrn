@@ -21,16 +21,16 @@ import {getUserProfileDetails, updateUserProfile} from '../apihelper/Api';
 
 const Profile = props => {
   const navigation = useNavigation();
-  const [fName, setFName] = useState();
-  const [lName, setLName] = useState();
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
   const [email, setEmail] = useState();
   const [mobile, setMobile] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FullName);
-    const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
+    const isFNameValid = fName.length > 0 
+    const isLNameValid = lName.length > 0 
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
 

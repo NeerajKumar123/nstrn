@@ -35,8 +35,6 @@ const Address = props => {
   const [isProvinceVisible, setIsProvinceVisible] = useState(false);
   const [isAddViewVisible, setIsAddViewVisible] = useState(false);
 
-  console.log('global.selectedYears',global.selectedYears)
-
   useEffect(() => {
     setIsLoading(true);
     const params = {};

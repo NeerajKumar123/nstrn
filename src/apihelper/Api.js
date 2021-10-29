@@ -381,3 +381,24 @@ export const updateDeviceIDAndOS = (params,callback) => {
   const path = `${BaseURL}/Update_DeviceId_DeviceOS`
   API.makePostRequest(path , params, callback);
 };
+
+//// Last year filed users.../.
+export const onlineGetAboutInfoByYear = (params,callback) => {
+  const path = `${BaseURL}/Online_Get_About_Info_By_User`
+  API.makePostRequest(path , params, callback);
+};
+export const onlineGetBankingInfoByUser = (params,callback) => {
+  const path = `${BaseURL}/Online_Get_Banking_And_Family_Info_By_User`
+  API.makePostRequest(path , params, callback);
+};
+
+
+export const onlineGetSpouseInfoByYear = (params,callback) => {
+  const path = `${BaseURL}/Online_Get_Spouse_Info_By_User_Id`
+  API.makePostRequest(path , params, callback);
+};
+
+export const onlineGetDependentInfoByUserId = (params,callback) => {
+  const path = `${BaseURL}/Online_Get_Dependent_Info_By_User_Id`
+  API.makePostRequest(path , params, callback);
+};

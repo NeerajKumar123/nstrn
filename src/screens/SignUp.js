@@ -37,8 +37,8 @@ const SignUp = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
-    const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
+    const isFNameValid = fName.length > 0 
+    const isLNameValid = lName.length > 0 
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
     const isPassValid = Validator.isValidField(pass, ST_REGEX.Password);

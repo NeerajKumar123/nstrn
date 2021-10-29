@@ -8,14 +8,13 @@ import * as CustomFonts from '../constants/FontsDefs';
 import {useNavigation} from '@react-navigation/native';
 import {loadIntialData} from '../helpers/BaseUtility'
 import {useIsFocused} from '@react-navigation/native';
+import {getUserProfileDetails} from '../apihelper/Api';
 
 const Home = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
-  const userFullName = global.userInfo
-  ? `${global.userInfo.firstname ? global.userInfo.firstname : ''} ${global.userInfo.lastname ? global.userInfo.lastname : ''}`
-  : '';
+  const [userFullName, setUserFullName] = useState('')
 
   const {tax_file_status_id = 0} = global?.onlineStatusData;
   const {incorporation_status_id = 0} = global?.incStatusData;
@@ -56,6 +55,15 @@ const Home = props => {
         })
       }, 500);
     }
+    const {user_id = 0} = global?.userInfo ? global?.userInfo : {}
+    getUserProfileDetails({user_id:user_id},(userDetailsRes)=>{
+      if (userDetailsRes.status == 1) {
+        const user = userDetailsRes?.data?.[0]
+        const fName = user?.firstname ?? ''
+        const lName = user?.lastname ?? ''
+        setUserFullName(fName + ' ' + lName )
+      }
+    })
   }, [isFocused])
 
   return (

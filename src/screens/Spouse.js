@@ -58,6 +58,9 @@ const Spouse = props => {
   const [isRelationVisible, setIsRelationVisible] = useState();
   const [isResidenceVisible, setIsResidenceVisible] = useState();
   const [isBankVisible, setIsBankVisible] = useState();
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  // const { Tax_Filed_With_Sukhtax } = global.onlineStatusData;
+  const Tax_Filed_With_Sukhtax = 1;
 
   useEffect(() => {
     setIsLoading(true);
@@ -75,16 +78,16 @@ const Spouse = props => {
   const checkFormValidations = () => {
     let isValidForm = true;
     const isValidLastYear = lastTime;
-    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
-    const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
+    const isFNameValid = fName.length > 0;
+    const isLNameValid = lName.length > 0;
     const isDOBValid = dob;
     const isGenderValid = gender;
     const isResidencyValid = residency?.residency_id > 0;
-    const isSinValid = Validator.isValidSIN(sinNo)
+    const isSinValid = Validator.isValidSIN(sinNo);
     const isEnrtyDateValid = enrtyDate;
     const isBankValid = bank?.institution_id > 0;
-    const isAccValid = accountNo.length > 0
-    const isBranchValid = branchNo.length == 5
+    const isAccValid = accountNo.length > 0;
+    const isBranchValid = branchNo.length == 5;
     if (!isValidLastYear) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select valid year');
@@ -123,11 +126,7 @@ const Spouse = props => {
   };
 
   const prepareParams = () => {
-    const {
-      user_id,
-      tax_file_id,
-      tax_file_year_id
-    } = global.onlineStatusData;
+    const {user_id, tax_file_id, tax_file_year_id} = global.onlineStatusData;
 
     const params = {
       User_id: user_id,
@@ -168,196 +167,301 @@ const Spouse = props => {
           contentContainerStyle={{
             paddingHorizontal: 20,
           }}>
-        <Heading value="SPOUSE" marginTop={26} />
-        <SKSwitch
-          fontSize={20}
-          marginTop={20}
-          isOn={isFillingForWife}
-          value="ARE YOU FILING FOR YOUR SPOUSE?"
-          onToggle={status => {
-            setIsFillingForWife(!isFillingForWife);
-          }}
-        />
-        <TouchableInput
-          leftAccImage={CustomFonts.Clock}
-          rightAccImage={CustomFonts.ChevronDown}
-          value={lastTime}
-          placeholder="Select Year"
-          onClicked={() => {
-            setIsLastTimeVisible(true);
-          }}
-        />
-        <SKInput
-          leftAccImage={CustomFonts.UserIcon}
-          maxLength={30}
-          borderColor={Colors.CLR_0065FF}
-          value={fName}
-          placeholder="Enter First Name"
-          onEndEditing={value => {
-            setFName(value)
-          }}
-        />
-        <SKInput
-          leftAccImage={CustomFonts.UserIcon}
-          maxLength={30}
-          borderColor={Colors.CLR_0065FF}
-          value={lName}
-          placeholder="Enter Last Name"
-          onEndEditing={value => {
-            setLName(value)
-          }}
-        />
-        <TouchableInput
-          leftAccImage={CustomFonts.Calender}
-          value={dob && format(dob, 'dd/MM/yyyy')}
-          placeholder="Date of Birth (DD/MM/YYYY)"
-          onClicked={() => {
-            setIsDatePickerVisible(true);
-          }}
-        />
-        <TouchableInput
-          leftAccImage={CustomFonts.Gender}
-          rightAccImage={CustomFonts.ChevronDown}
-          value={gender}
-          placeholder="Select Gender"
-          onClicked={() => {
-            setIsGenderVisible(true);
-          }}
-        />
-        <TouchableInput
-          leftAccImage={CustomFonts.Home}
-          rightAccImage={CustomFonts.ChevronDown}
-          placeholder="Select Residency"
-          value={residency?.residency_name}
-          onClicked={() => {
-            setIsResidenceVisible(true);
-          }}
-        />
-        <SKInput
-          leftAccImage={CustomFonts.Number}
-          marginTop={20}
-          marginBottom={0}
-          maxLength={30}
-          borderColor={Colors.CLR_0065FF}
-          value={sinNo}
-          placeholder="Enter SIN"
-          keyboardType = 'number-pad'
-          onEndEditing={value => {
-              setSinNo(value)
-          }}
-        />
-        <TouchableInput
-          leftAccImage={CustomFonts.Calender}
-          value={enrtyDate && format(enrtyDate, 'dd/MM/yyyy')}
-          placeholder="Date of Immigration (DD/MM/YYYY)"
-          onClicked={() => {
-            setIsImmDatePickerVisible(true);
-          }}
-        />
-        {isFillingForWife && 
-        <>
-         <Heading
-          fontSize={20}
-          marginTop={20}
-          color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="BANKING INFORMATION"
-        />
-        <TouchableInput
-          leftAccImage={CustomFonts.Bank}
-          rightAccImage={CustomFonts.ChevronDown}
-          placeholder="Select Bank"
-          value={bank?.institution_name}
-          onClicked={() => {
-            setIsBankVisible(true);
-          }}
-        />
-        <SKInput
-          marginBottom={0}
-          maxLength={30}
-          borderColor={Colors.CLR_0065FF}
-          leftAccImage={CustomFonts.Number}
-          keyboardType = 'number-pad'
-          value={accountNo}
-          placeholder="Enter Account Number"
-          onEndEditing={value => {
-              setAccountNo(value)
-          }}
-        />
-        <SKInput
-          marginTop={20}
-          marginBottom={0}
-          maxLength={30}
-          borderColor={Colors.CLR_0065FF}
-          value={branchNo}
-          leftAccImage={CustomFonts.Number}
-          keyboardType = 'number-pad'
-          placeholder="Enter Branch Number"
-          onEndEditing={value => {
-            setBranhcNo(value)
-          }}
-        />
-        </>
-        }
-        <SKButton
-          marginTop={30}
-          fontSize={16}
-          rightImage={CustomFonts.right_arrow}
-          fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'DEPENDENTS'}
-          onPress={() => {
-            if (checkFormValidations()) {
-              setIsLoading(true)
-              const params = prepareParams();
-              saveSpouseInfo(params, spouseRes => {
-                setIsLoading(false)
-                if (spouseRes?.status == 1) {
-                  SKTStorage.setKeyValue('isFromSpouseFlow',true, ()=>{
-                    navigation.push('Dependents', {depCount:1});
-                  })
-                } else {
-                  Alert.alert('SukhTax', 'Something went wrong!');
-                }
-              });
-            }
-          }}
-        />
-      </ScrollView>
+          <Heading value="SPOUSE" marginTop={26} />
+          {Tax_Filed_With_Sukhtax && !isConfirmed ? (
+            <>
+              <Heading
+                fontSize={20}
+                marginTop={30}
+                color={Colors.RED}
+                value="BANKING INFO SAME AS LAST YEAR?"
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 30,
+                }}>
+                <SKButton
+                  width={'48%'}
+                  fontSize={16}
+                  fontWeight={'normal'}
+                  backgroundColor={Colors.CLR_7F7F9F}
+                  borderColor={Colors.CLR_D3D3D9}
+                  title={'NO'}
+                  onPress={() => {
+                    console.log('NO clicked');
+                    setIsLoading(true);
+                    const {user_id} = global.onlineStatusData;
+                    onlineGetAboutInfoByYear({User_Id: user_id}, infoRes => {
+                      if (infoRes.status == 1) {
+                        const details = infoRes.data[0];
+                        setsin(details.SIN_number);
+                        setgender(details.gender);
+                        setDOB(new Date(details.DOB));
+                        setIsSinChanged(true);
+                        setTimeout(() => {
+                          setIsLoading(false);
+                        }, 500);
+                      }
+                    });
+                  }}
+                />
+                <SKButton
+                  fontSize={16}
+                  width={'48%'}
+                  fontWeight={'normal'}
+                  backgroundColor={Colors.PRIMARY_BORDER}
+                  borderColor={Colors.PRIMARY_FILL}
+                  title={'YES'}
+                  onPress={() => {
+                    console.log('YES clicked');
+                    setIsSinChanged(true);
+                  }}
+                />
+              </View>
+              <Heading
+                fontSize={20}
+                marginTop={30}
+                color={Colors.RED}
+                value="SIN NUMBER SAME AS LAST YEAR?"
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 30,
+                }}>
+                <SKButton
+                  width={'48%'}
+                  fontSize={16}
+                  fontWeight={'normal'}
+                  backgroundColor={Colors.CLR_7F7F9F}
+                  borderColor={Colors.CLR_D3D3D9}
+                  title={'NO'}
+                  onPress={() => {
+                    console.log('NO clicked');
+                    setIsLoading(true);
+                    const {user_id} = global.onlineStatusData;
+                    onlineGetAboutInfoByYear({User_Id: user_id}, infoRes => {
+                      if (infoRes.status == 1) {
+                        const details = infoRes.data[0];
+                        setsin(details.SIN_number);
+                        setgender(details.gender);
+                        setDOB(new Date(details.DOB));
+                        setIsSinChanged(true);
+                        setTimeout(() => {
+                          setIsLoading(false);
+                        }, 500);
+                      }
+                    });
+                  }}
+                />
+                <SKButton
+                  fontSize={16}
+                  width={'48%'}
+                  fontWeight={'normal'}
+                  backgroundColor={Colors.PRIMARY_BORDER}
+                  borderColor={Colors.PRIMARY_FILL}
+                  title={'YES'}
+                  onPress={() => {
+                    console.log('YES clicked');
+                    setIsSinChanged(true);
+                  }}
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <SKSwitch
+                fontSize={20}
+                marginTop={20}
+                isOn={isFillingForWife}
+                value="ARE YOU FILING FOR YOUR SPOUSE?"
+                onToggle={status => {
+                  setIsFillingForWife(!isFillingForWife);
+                }}
+              />
+              <TouchableInput
+                leftAccImage={CustomFonts.Clock}
+                rightAccImage={CustomFonts.ChevronDown}
+                value={lastTime}
+                placeholder="Select Year"
+                onClicked={() => {
+                  setIsLastTimeVisible(true);
+                }}
+              />
+              <SKInput
+                leftAccImage={CustomFonts.UserIcon}
+                maxLength={30}
+                borderColor={Colors.CLR_0065FF}
+                value={fName}
+                placeholder="Enter First Name"
+                onEndEditing={value => {
+                  setFName(value);
+                }}
+              />
+              <SKInput
+                leftAccImage={CustomFonts.UserIcon}
+                maxLength={30}
+                borderColor={Colors.CLR_0065FF}
+                value={lName}
+                placeholder="Enter Last Name"
+                onEndEditing={value => {
+                  setLName(value);
+                }}
+              />
+              <TouchableInput
+                leftAccImage={CustomFonts.Calender}
+                value={dob && format(dob, 'dd/MM/yyyy')}
+                placeholder="Date of Birth (DD/MM/YYYY)"
+                onClicked={() => {
+                  setIsDatePickerVisible(true);
+                }}
+              />
+              <TouchableInput
+                leftAccImage={CustomFonts.Gender}
+                rightAccImage={CustomFonts.ChevronDown}
+                value={gender}
+                placeholder="Select Gender"
+                onClicked={() => {
+                  setIsGenderVisible(true);
+                }}
+              />
+              <TouchableInput
+                leftAccImage={CustomFonts.Home}
+                rightAccImage={CustomFonts.ChevronDown}
+                placeholder="Select Residency"
+                value={residency?.residency_name}
+                onClicked={() => {
+                  setIsResidenceVisible(true);
+                }}
+              />
+              <SKInput
+                leftAccImage={CustomFonts.Number}
+                marginTop={20}
+                marginBottom={0}
+                maxLength={30}
+                borderColor={Colors.CLR_0065FF}
+                value={sinNo}
+                placeholder="Enter SIN"
+                keyboardType="number-pad"
+                onEndEditing={value => {
+                  setSinNo(value);
+                }}
+              />
+              <TouchableInput
+                leftAccImage={CustomFonts.Calender}
+                value={enrtyDate && format(enrtyDate, 'dd/MM/yyyy')}
+                placeholder="Date of Immigration (DD/MM/YYYY)"
+                onClicked={() => {
+                  setIsImmDatePickerVisible(true);
+                }}
+              />
+              {isFillingForWife && (
+                <>
+                  <Heading
+                    fontSize={20}
+                    marginTop={20}
+                    color={Colors.APP_RED_SUBHEADING_COLOR}
+                    value="BANKING INFORMATION"
+                  />
+                  <TouchableInput
+                    leftAccImage={CustomFonts.Bank}
+                    rightAccImage={CustomFonts.ChevronDown}
+                    placeholder="Select Bank"
+                    value={bank?.institution_name}
+                    onClicked={() => {
+                      setIsBankVisible(true);
+                    }}
+                  />
+                  <SKInput
+                    marginBottom={0}
+                    maxLength={30}
+                    borderColor={Colors.CLR_0065FF}
+                    leftAccImage={CustomFonts.Number}
+                    keyboardType="number-pad"
+                    value={accountNo}
+                    placeholder="Enter Account Number"
+                    onEndEditing={value => {
+                      setAccountNo(value);
+                    }}
+                  />
+                  <SKInput
+                    marginTop={20}
+                    marginBottom={0}
+                    maxLength={30}
+                    borderColor={Colors.CLR_0065FF}
+                    value={branchNo}
+                    leftAccImage={CustomFonts.Number}
+                    keyboardType="number-pad"
+                    placeholder="Enter Branch Number"
+                    onEndEditing={value => {
+                      setBranhcNo(value);
+                    }}
+                  />
+                </>
+              )}
+              <SKButton
+                marginTop={30}
+                fontSize={16}
+                rightImage={CustomFonts.right_arrow}
+                fontWeight={'normal'}
+                backgroundColor={Colors.PRIMARY_FILL}
+                borderColor={Colors.PRIMARY_BORDER}
+                title={'DEPENDENTS'}
+                onPress={() => {
+                  if (checkFormValidations()) {
+                    setIsLoading(true);
+                    const params = prepareParams();
+                    saveSpouseInfo(params, spouseRes => {
+                      setIsLoading(false);
+                      if (spouseRes?.status == 1) {
+                        SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
+                          navigation.push('Dependents', {depCount: 1});
+                        });
+                      } else {
+                        Alert.alert('SukhTax', 'Something went wrong!');
+                      }
+                    });
+                  }
+                }}
+              />
+            </>
+          )}
+        </ScrollView>
       </KeyboardAvoidingView>
       {isDatePickerVisible && (
         <SKDatePicker
-        originalDate = {new Date()}
-        maximumDate = {new Date()}
-        title = {'Select date'}
-        onCancelPressed = {(date)=>{
-          setIsDatePickerVisible(false)
-          setDOB(date);
-        }}
-        onDonePressed = {(date)=>{
-          setDOB(date);
-          setIsDatePickerVisible(false)
-        }}
+          originalDate={new Date()}
+          maximumDate={new Date()}
+          title={'Select date'}
+          onCancelPressed={date => {
+            setIsDatePickerVisible(false);
+            setDOB(date);
+          }}
+          onDonePressed={date => {
+            setDOB(date);
+            setIsDatePickerVisible(false);
+          }}
         />
-      )
-      }
+      )}
 
       {isImmDatePickerVisible && (
         <SKDatePicker
-        originalDate = {new Date()}
-        title = {'Select date'}
-        maximumDate = {new Date()}
-        onCancelPressed = {(date)=>{
-          setIsImmDatePickerVisible(false)
-          setEnrtyDate(date);
-        }}
-        onDonePressed = {(date)=>{
-          setEnrtyDate(date);
-          setIsImmDatePickerVisible(false)
-        }}
+          originalDate={new Date()}
+          title={'Select date'}
+          maximumDate={new Date()}
+          onCancelPressed={date => {
+            setIsImmDatePickerVisible(false);
+            setEnrtyDate(date);
+          }}
+          onDonePressed={date => {
+            setEnrtyDate(date);
+            setIsImmDatePickerVisible(false);
+          }}
         />
-      )
-      }
+      )}
       {isLastTimeVisible && (
         <SKModel
           title="Select"

@@ -42,8 +42,8 @@ const IncorpSignaturePage = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
-    const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
+    const isFNameValid = fName.length > 0 
+    const isLNameValid = lName.length > 0 
     const isSinValid = Validator.isValidSIN(sinNo)
 
     if (!isFNameValid) {
@@ -117,7 +117,7 @@ const IncorpSignaturePage = props => {
             marginBottom={0}
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
-            value={lName}
+            value={fName}
             autoCapitalize = 'words'
             placeholder="First Name"
             onEndEditing={value => {

@@ -31,7 +31,7 @@ const SKInput = props => {
     isChatInput = false,
     multiline,
     keyboardType = 'default',
-    autoCapitalize = 'none',
+    autoCapitalize = 'words',
     returnKeyType ,
     blurOnSubmit,
     editable = true

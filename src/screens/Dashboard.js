@@ -25,7 +25,8 @@ import {
   getServicePriceList,
   incorpGetIncorpStatus,
   taxDocsGetTaxDocsStatus,
-  craLattersGetStatus
+  craLattersGetStatus,
+  getUserProfileDetails
 } from '../apihelper/Api';
 
 const data = [
@@ -78,9 +79,7 @@ const Dashboard = props => {
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
   const [taxFilingFee, setTaxFilingFee] = useState(44.99);
-  const userFullName = global.userInfo
-    ? `${global.userInfo.firstname ? global.userInfo.firstname : ''} ${global.userInfo.lastname ? global.userInfo.lastname : ''}`
-    : '';
+  const [userFullName, setUserFullName] = useState('')
   // const book_an_appointment_link = global.userInfo
 
   useEffect(() => {
@@ -93,6 +92,18 @@ const Dashboard = props => {
           }, 100);
         })
       }, 500);
+      const {user_id = 0} = global?.userInfo ? global?.userInfo : {}
+      if (user_id) {
+        getUserProfileDetails({user_id:user_id},(userDetailsRes)=>{
+          if (userDetailsRes.status == 1) {
+            const user = userDetailsRes?.data?.[0]
+            const fName = user?.firstname ?? ''
+            const lName = user?.lastname ?? ''
+            setUserFullName(fName + ' ' + lName )
+          }
+        })
+      }
+
     }
   }, [isFocused])
 

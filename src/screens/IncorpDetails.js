@@ -71,9 +71,9 @@ const IncorpDetails = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FName);
+    const isFNameValid = fName.length > 0 
+    const isLNameValid = lName.length > 0 
     const isMNameValid = true // Validator.isValidField(mName, ST_REGEX.LName);
-    const isLNameValid = Validator.isValidField(lName, ST_REGEX.LName);
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
     const isAltMobileValid = Validator.isValidField(altMobile, ST_REGEX.Mobile);
