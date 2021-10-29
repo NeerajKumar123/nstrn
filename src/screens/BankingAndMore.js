@@ -41,7 +41,7 @@ const BankingAndMore = props => {
   const [accountNo, setAccountNo] = useState('');
   const [branchNo, setBranhcNo] = useState('');
   const [residency, setResidency] = useState('');
-  const [residencies, setResidencies] = useState();
+  const [residencies, setResidencies] = useState([]);
   const [familyInfo, setFamilyInfo] = useState();
   const [enrtyDate, setEntryDate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -160,18 +160,17 @@ const BankingAndMore = props => {
                     {User_Id: user_id},
                     byUserInfoRes => {
                       setIsBankingInfoChanged(true);
-                      console.log('byUserInfoRes', byUserInfoRes);
                       if (byUserInfoRes.status == 1) {
                         const details = byUserInfoRes.data[0];
+                        console.log('details',details)
                         setBank({
                           institution_name: details.institution_name,
                           institution_id: details.institution_id,
                         });
                         setAccountNo(details.account_no);
-                        const filtered = residencies.filter(element => {
+                        const filtered = residencies?.filter(element => {
                           return element.residency_name == details.residency;
                         });
-                        console.log('filtered', filtered);
                         setResidency(filtered[0]);
                         setBranhcNo(details.branch);
                         setEntryDate(new Date(details.immigration_date));

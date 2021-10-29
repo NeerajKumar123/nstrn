@@ -137,7 +137,7 @@ export const loadIntialData = (callback) => {
     const [keySpouse, valueSpouse] = isFromSpouseFlow
     global[keySpouse] = valueSpouse 
     const [keyProvince, valueProvince] = province
-    global[keyProvince] = valueProvince 
+    global[keyProvince] =valueProvince ? JSON.parse(valueProvince) : {"state_id":51,"state_name":"Alberta","short_name":"AB"}
     const arr =   JSON.parse(valueYear)?.sort(function(a, b) {
       return parseInt(b) - parseInt(a);
     });

@@ -406,3 +406,13 @@ export const onlineGetDependentInfoByTaxFileID = (params,callback) => {
   const path = `${BaseURL}/Online_Get_Dependent_Info`
   API.makePostRequest(path , params, callback);
 };
+
+export const onlineDeteleDependent = (params,callback) => {
+  const path = `${BaseURL}/Online_Delete_Dependent_Info`
+  API.makePostRequest(path , params, callback);
+};
+
+export const onlineGetMyYearInfo = (params,callback) => {
+  const path = `${BaseURL}/Online_Get_My_Year_Info`
+  API.makePostRequest(path , params, callback);
+};

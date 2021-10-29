@@ -66,20 +66,6 @@ const BasicInfo = props => {
     return isValidForm;
   };
 
-  useEffect(() => {
-    const { tax_file_id, user_id,about_info_filled } = global.onlineStatusData;
-    console.log('about_info_filled',global.onlineStatusData)
-    const year = global.mostRecentYear && parseInt(global.mostRecentYear) 
-    const params = { User_Id: user_id, Tax_File_Id: tax_file_id, Year: year };
-    if (about_info_filled) {
-      setIsLoading(true);
-       getAboutInfo(params, aboutRes => {
-        global.aboutRes = aboutRes;
-        setIsLoading(false);
-      });  
-    }
-  }, []);
-
   return (
     <View
       style={{

@@ -51,6 +51,11 @@ const FamilyDetails = props => {
   const [isMChangeVisible, setIsMChangeVisible] = useState();
   const [isDepOptionVisible, setIsDepOptionVisible] = useState();
   const [nextButtonTitle, setNextButtonTitle] = useState('MY TAX YEAR')
+  let tax_file_year_id = 0
+  SKTStorage.getValue('tax_file_year_id', (id)=>{
+    tax_file_year_id = id
+  })
+
   let maxDate = new Date(); 
   maxDate.setFullYear(global?.mostRecentYear);
   
@@ -79,7 +84,7 @@ const FamilyDetails = props => {
 
   const prepareParams = () =>{
     const {accountNo,bank,branchNo,enrtyDate,residency, province} = pageParams
-    const {user_id,Year_Wise_Records,tax_file_id,tax_file_year_id} = global.onlineStatusData
+    const {user_id,Year_Wise_Records,tax_file_id} = global.onlineStatusData
     const record =Year_Wise_Records && Year_Wise_Records.length > 0 ? Year_Wise_Records?.[0] :{}
     const params = {
       User_id:user_id,
@@ -94,7 +99,7 @@ const FamilyDetails = props => {
       Immigration_Date:enrtyDate && format(enrtyDate, 'yyyy-MM-dd'),
       Marital_Status_Id:maritalStatus?.marital_status_id,
       Marital_Status_Change:mChangeOpton?.id,
-      Marital_Status_Change_Date:mStatusChangedDate && format(mStatusChangedDate, 'yyyy-MM-dd'),
+      Marital_Status_Change_Date:mStatusChangedDate && format(mStatusChangedDate, 'yyyy-MM-dd') || '',
       Dependents:dependentOption?.id,
       Spouse_Residency:0,
     }

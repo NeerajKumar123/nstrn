@@ -150,6 +150,9 @@ const Address = props => {
                   ...global.onlineStatusData,
                   ...saveRes?.data[0],
                 };
+                const data = saveRes?.data[0]
+                SKTStorage.setKeyValue('tax_file_year_id',data?.tax_file_year_id, ()=>{})
+                SKTStorage.setKeyValue('tax_file_id',data?.tax_file_id, ()=>{})
                 SKTStorage.setKeyValue('province',province, ()=>{
                   navigation.navigate('BankingAndMore', {province: province});
                 })

@@ -116,7 +116,6 @@ const SKInput = props => {
           props.onTextChange && props.onTextChange(value);
         }}
         onBlur = {() =>{
-          console.log('onBlur')
         }}
         onEndEditing={() => {
           const finalValue  = initialValue ? initialValue.trim() : ''

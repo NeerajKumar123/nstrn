@@ -19,7 +19,7 @@ const TouchableInput = props => {
   const {
     leftAccImage,
     rightAccImage,
-    marginTop = 10,
+    marginTop = 15,
     marginBottom = 10,
     placeholder = 'Select value',
     fontSize = 15,
@@ -48,7 +48,7 @@ const TouchableInput = props => {
         },
         shadowRadius: 3,
         shadowOpacity: 0.8,
-        marginTop,
+        marginTop : marginTop,
         marginBottom,
       }}>
       {leftAccImage && (

@@ -61,6 +61,11 @@ const Spouse = props => {
   const [isBankVisible, setIsBankVisible] = useState();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const { Tax_Filed_With_Sukhtax } = global.onlineStatusData;
+  let tax_file_year_id = 0
+  SKTStorage.getValue('tax_file_year_id', (id)=>{
+    tax_file_year_id = id
+  })
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -126,7 +131,7 @@ const Spouse = props => {
   };
 
   const prepareParams = () => {
-    const {user_id, tax_file_id, tax_file_year_id} = global.onlineStatusData;
+    const {user_id, tax_file_id} = global.onlineStatusData;
 
     const params = {
       User_id: user_id,
@@ -161,7 +166,7 @@ const Spouse = props => {
         setGender(details.gender)
         setSinNo(details.SIN_Number)
         setEnrtyDate(new Date(details.DOE_Canada))
-        const filtered = residencies.filter(element => {
+        const filtered = residencies?.filter(element => {
           return element.residency_name == details.residency;
         });
         setResidency(filtered[0]);
@@ -258,7 +263,6 @@ const Spouse = props => {
                   borderColor={Colors.CLR_D3D3D9}
                   title={'NO'}
                   onPress={() => {
-                    console.log('NO')
                     setIsConfirmed(true);
                   }}
                 />
@@ -317,6 +321,7 @@ const Spouse = props => {
                 }}
               />
               <TouchableInput
+                marginTop = {15}
                 leftAccImage={CustomFonts.Calender}
                 value={dob && format(dob, 'dd/MM/yyyy')}
                 placeholder="Date of Birth (DD/MM/YYYY)"
@@ -325,6 +330,7 @@ const Spouse = props => {
                 }}
               />
               <TouchableInput
+                marginTop = {15}
                 leftAccImage={CustomFonts.Gender}
                 rightAccImage={CustomFonts.ChevronDown}
                 value={gender}
@@ -334,6 +340,7 @@ const Spouse = props => {
                 }}
               />
               <TouchableInput
+                marginTop = {15}
                 leftAccImage={CustomFonts.Home}
                 rightAccImage={CustomFonts.ChevronDown}
                 placeholder="Select Residency"
@@ -344,8 +351,7 @@ const Spouse = props => {
               />
               <SKInput
                 leftAccImage={CustomFonts.Number}
-                marginTop={20}
-                marginBottom={0}
+                marginTop={15}
                 maxLength={30}
                 borderColor={Colors.CLR_0065FF}
                 value={sinNo}
@@ -356,6 +362,7 @@ const Spouse = props => {
                 }}
               />
               <TouchableInput
+                marginTop = {15}
                 leftAccImage={CustomFonts.Calender}
                 value={enrtyDate && format(enrtyDate, 'dd/MM/yyyy')}
                 placeholder="Date of Immigration (DD/MM/YYYY)"
