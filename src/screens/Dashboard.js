@@ -118,7 +118,7 @@ const Dashboard = props => {
       }
     })
   }, [])
-
+// this is new page of dashboard 
   const navigateToScreen = item => {
     switch (item.id) {
       case 1:
