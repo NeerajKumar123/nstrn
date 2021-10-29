@@ -67,7 +67,7 @@ import {SafeAreaView} from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 const Stack = createStackNavigator();
 
-export const AuthStack = () => {
+export const AuthStack = () => { /// This is before login stack
   return (
     <SafeAreaView style={{flex: 1, backgroundColor:Colors.WHITE}}>
     <NavigationContainer>
@@ -114,7 +114,7 @@ export const AuthStack = () => {
     </SafeAreaView>
   );
 };
-const SKStack = () => {
+const SKStack = () => { /// This is After login stack
   return (
     <SafeAreaView style={{flex: 1, backgroundColor:Colors.WHITE}}>
     <NavigationContainer>

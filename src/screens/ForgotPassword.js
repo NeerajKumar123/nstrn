@@ -156,6 +156,7 @@ const ForgotPassword = props => {
             borderColor={Colors.CLR_0065FF}
             value={email}
             placeholder="Email"
+            autoCapitalize = 'none'
             onEndEditing={value => {
               setEmail(value);
             }}

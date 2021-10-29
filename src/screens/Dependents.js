@@ -52,8 +52,8 @@ const Dependents = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = fName.length > 0 
-    const isLNameValid = lName.length > 0 
+    const isFNameValid = Validator.isValidField(fName,ST_REGEX.FullName)
+    const isLNameValid = Validator.isValidField(lName,ST_REGEX.FullName)
     const isDOBValid = dob
     const isGenderValid = gender
     const isSinValid = Validator.isValidSIN(sinNo)

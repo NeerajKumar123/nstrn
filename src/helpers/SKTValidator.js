@@ -14,7 +14,6 @@ export const isValidField = (value, regex) => {
 
 
   export const isValidSIN = (sin) => {
-    console.log('sin 123456782', sin);
     const isEmpty = typeof sin === 'undefined' || sin === null || sin.length == 0 || sin.length < 8;
     if (isEmpty) return false
     const isZero = parseInt(sin) == 0;

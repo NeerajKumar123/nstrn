@@ -29,8 +29,8 @@ const Profile = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = fName.length > 0 
-    const isLNameValid = lName.length > 0 
+    const isFNameValid = Validator.isValidField(fName,ST_REGEX.FullName)
+    const isLNameValid = Validator.isValidField(lName,ST_REGEX.FullName)
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
 
@@ -112,6 +112,7 @@ const Profile = props => {
           leftAccImage={CustomFonts.Email}
           marginBottom={0}
           maxLength={30}
+          autoCapitalize = 'none'
           onRightPressed={() => {
           }}
           borderColor={Colors.CLR_0065FF}

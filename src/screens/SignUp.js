@@ -37,8 +37,8 @@ const SignUp = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = fName.length > 0 
-    const isLNameValid = lName.length > 0 
+    const isFNameValid = Validator.isValidField(fName,ST_REGEX.FullName)
+    const isLNameValid = Validator.isValidField(lName,ST_REGEX.FullName)
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
     const isPassValid = Validator.isValidField(pass, ST_REGEX.Password);
@@ -50,12 +50,12 @@ const SignUp = props => {
     } else if (!isLNameValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Last Name');
-    } else if (!isValidSIN(sin)) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid sin.');
     }else if (!isEmailValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Email Address');
+    } else if (!isValidSIN(sin)) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please enter valid sin.');
     } else if (!isMobileValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Phone Number');
@@ -108,7 +108,6 @@ const SignUp = props => {
             leftAccImage={CustomFonts.UserIcon}
             marginTop={26}
             marginBottom={2}
-            autoCapitalize="words"
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={''}
@@ -124,14 +123,14 @@ const SignUp = props => {
             borderColor={Colors.CLR_0065FF}
             value={lName}
             placeholder="Last Name"
-            autoCapitalize="words"
             onEndEditing={value => {
               setLName(value);
             }}
           />
           <SKInput
-            leftAccImage={CustomFonts.Number}
+            leftAccImage={CustomFonts.Email}
             marginBottom={2}
+            autoCapitalize = 'none'
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={email}

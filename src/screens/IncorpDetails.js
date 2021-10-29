@@ -71,8 +71,8 @@ const IncorpDetails = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = fName.length > 0 
-    const isLNameValid = lName.length > 0 
+    const isFNameValid = Validator.isValidField(fName,ST_REGEX.FullName)
+    const isLNameValid = Validator.isValidField(lName,ST_REGEX.FullName)
     const isMNameValid = true // Validator.isValidField(mName, ST_REGEX.LName);
     const isEmailValid = Validator.isValidField(email, ST_REGEX.Email);
     const isMobileValid = Validator.isValidField(mobile, ST_REGEX.Mobile);
@@ -136,7 +136,6 @@ const IncorpDetails = props => {
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={fName}
-            autoCapitalize = 'words'
             placeholder="First Name"
             onEndEditing={value => {
               setFName(value);
@@ -148,7 +147,6 @@ const IncorpDetails = props => {
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={mName}
-            autoCapitalize = 'words'
             placeholder="Middle Name"
             onEndEditing={value => {
               setMName(value);
@@ -160,7 +158,6 @@ const IncorpDetails = props => {
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={lName}
-            autoCapitalize = 'words'
             placeholder="Last Name"
             onEndEditing={value => {
               setLName(value);
@@ -170,6 +167,7 @@ const IncorpDetails = props => {
             leftAccImage={CustomFonts.Email}
             marginBottom={2}
             maxLength={30}
+            autoCapitalize = 'none'
             borderColor={Colors.CLR_0065FF}
             value={email}
             placeholder="Email Address"

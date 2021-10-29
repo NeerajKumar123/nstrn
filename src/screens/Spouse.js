@@ -78,8 +78,8 @@ const Spouse = props => {
   const checkFormValidations = () => {
     let isValidForm = true;
     const isValidLastYear = lastTime;
-    const isFNameValid = fName.length > 0;
-    const isLNameValid = lName.length > 0;
+    const isFNameValid = Validator.isValidField(fName,ST_REGEX.FullName)
+    const isLNameValid = Validator.isValidField(lName,ST_REGEX.FullName)
     const isDOBValid = dob;
     const isGenderValid = gender;
     const isResidencyValid = residency?.residency_id > 0;
