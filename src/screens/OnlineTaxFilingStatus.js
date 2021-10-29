@@ -258,6 +258,7 @@ const TaxFilingStatusCard = props => {
     tax_file_status_id
   } = global.onlineStatusData;
 
+
   const moveToPage = props => {
     const {
       years_selected = 0,
@@ -390,22 +391,18 @@ const TaxFilingStatusCard = props => {
           }}
         />
       )}
-
-      {tax_file_status_id == 16  &&  (
+      {tax_file_status_id == 16 && (
         <SKButton
           fontSize={16}
           marginTop={30}
           width="100%"
           fontWeight={'normal'}
-          backgroundColor={Colors.SECONDARY_FILL}
+          backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'RATE US'}
+          title={'NEW FILING'}
           onPress={() => {
-            //MOVE FOR RATING..
-            const appLink = Platform.OS == 'ios' ? 'https://apps.apple.com/ca/app/sukh-tax/id1551644082' : 'https://play.google.com/store/apps/details?id=com.ushatek.sukhtax&hl=en_US&gl=US'
-            Linking.canOpenURL(appLink).then(supported => {
-              supported && Linking.openURL(appLink);
-          }, (err) => console.log(err));      
+            global.selectedYears = undefined
+            navigation.navigate('OnlineReturnLanding');
           }}
         />
       )}
@@ -650,21 +647,26 @@ const TaxFilingStatusCard = props => {
           />
         </View>
       )}
-      {tax_file_status_id == 16 && (
+
+      {tax_file_status_id == 16  &&  (
         <SKButton
           fontSize={16}
           marginTop={30}
           width="100%"
           fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
+          backgroundColor={Colors.SECONDARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'NEW FILING'}
+          title={'RATE US'}
           onPress={() => {
-            global.selectedYears = undefined
-            navigation.navigate('OnlineReturnLanding');
+            //MOVE FOR RATING..
+            const appLink = Platform.OS == 'ios' ? 'https://apps.apple.com/ca/app/sukh-tax/id1551644082' : 'https://play.google.com/store/apps/details?id=com.ushatek.sukhtax&hl=en_US&gl=US'
+            Linking.canOpenURL(appLink).then(supported => {
+              supported && Linking.openURL(appLink);
+          }, (err) => console.log(err));      
           }}
         />
       )}
+      
     </View>
   );
 };

@@ -28,6 +28,7 @@ import {
   getResidencyList,
   getInstitutionList,
   saveSpouseInfo,
+  onlineGetSpouseInfoByUserId
 } from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
@@ -59,8 +60,7 @@ const Spouse = props => {
   const [isResidenceVisible, setIsResidenceVisible] = useState();
   const [isBankVisible, setIsBankVisible] = useState();
   const [isConfirmed, setIsConfirmed] = useState(false);
-  // const { Tax_Filed_With_Sukhtax } = global.onlineStatusData;
-  const Tax_Filed_With_Sukhtax = 1;
+  const { Tax_Filed_With_Sukhtax } = global.onlineStatusData;
 
   useEffect(() => {
     setIsLoading(true);
@@ -148,6 +148,37 @@ const Spouse = props => {
     return params;
   };
 
+  const getLastYearData = () =>{
+    setIsLoading(true)
+    const {user_id} = global.onlineStatusData
+    onlineGetSpouseInfoByUserId({ User_Id: user_id }, spouseInfoRes => {
+      if (spouseInfoRes.status == 1) {
+        const details = spouseInfoRes?.data[0] || {}
+        setLastTime(details.last_year_filed)
+        setFName(details.first_name)
+        setLName(details.last_name)
+        setDOB(new Date(details.DOB))
+        setGender(details.gender)
+        setSinNo(details.SIN_Number)
+        setEnrtyDate(new Date(details.DOE_Canada))
+        const filtered = residencies.filter(element => {
+          return element.residency_name == details.residency;
+        });
+        setResidency(filtered[0]);
+        setBank({
+          institution_name: details.institution_name,
+          institution_id: details.institution_id,
+        });
+        setAccountNo(details.account_no)
+        setBranhcNo(details.branch)
+        setIsConfirmed(true)
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 300);
+      }
+    })
+  }
+
   return (
     <View
       style={{
@@ -190,21 +221,8 @@ const Spouse = props => {
                   borderColor={Colors.CLR_D3D3D9}
                   title={'NO'}
                   onPress={() => {
-                    console.log('NO clicked');
-                    setIsLoading(true);
-                    const {user_id} = global.onlineStatusData;
-                    onlineGetAboutInfoByYear({User_Id: user_id}, infoRes => {
-                      if (infoRes.status == 1) {
-                        const details = infoRes.data[0];
-                        setsin(details.SIN_number);
-                        setgender(details.gender);
-                        setDOB(new Date(details.DOB));
-                        setIsSinChanged(true);
-                        setTimeout(() => {
-                          setIsLoading(false);
-                        }, 500);
-                      }
-                    });
+                    console.log('NO')
+                    setIsConfirmed(true);
                   }}
                 />
                 <SKButton
@@ -215,8 +233,8 @@ const Spouse = props => {
                   borderColor={Colors.PRIMARY_FILL}
                   title={'YES'}
                   onPress={() => {
-                    console.log('YES clicked');
-                    setIsSinChanged(true);
+                    console.log('YES')
+                    getLastYearData()
                   }}
                 />
               </View>
@@ -240,21 +258,8 @@ const Spouse = props => {
                   borderColor={Colors.CLR_D3D3D9}
                   title={'NO'}
                   onPress={() => {
-                    console.log('NO clicked');
-                    setIsLoading(true);
-                    const {user_id} = global.onlineStatusData;
-                    onlineGetAboutInfoByYear({User_Id: user_id}, infoRes => {
-                      if (infoRes.status == 1) {
-                        const details = infoRes.data[0];
-                        setsin(details.SIN_number);
-                        setgender(details.gender);
-                        setDOB(new Date(details.DOB));
-                        setIsSinChanged(true);
-                        setTimeout(() => {
-                          setIsLoading(false);
-                        }, 500);
-                      }
-                    });
+                    console.log('NO')
+                    setIsConfirmed(true);
                   }}
                 />
                 <SKButton
@@ -265,8 +270,8 @@ const Spouse = props => {
                   borderColor={Colors.PRIMARY_FILL}
                   title={'YES'}
                   onPress={() => {
-                    console.log('YES clicked');
-                    setIsSinChanged(true);
+                    console.log('YES')
+                    getLastYearData()
                   }}
                 />
               </View>

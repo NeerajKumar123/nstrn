@@ -393,7 +393,7 @@ export const onlineGetBankingInfoByUser = (params,callback) => {
 };
 
 
-export const onlineGetSpouseInfoByYear = (params,callback) => {
+export const onlineGetSpouseInfoByUserId = (params,callback) => {
   const path = `${BaseURL}/Online_Get_Spouse_Info_By_User_Id`
   API.makePostRequest(path , params, callback);
 };
