@@ -202,7 +202,7 @@ const FamilyDetails = props => {
                     if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
                       navigation.navigate('Spouse',{dependentOption:dependentOption.id});
                     }else if (dependentOption.id  == 1){
-                      navigation.push('Dependents', {depCount:1});
+                      navigation.push('DependentsList', {depCount:1});
                     }else {
                       navigation.navigate('MyTaxYear',{pageIndex:0});
                     }

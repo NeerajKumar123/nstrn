@@ -10,7 +10,6 @@ import {
   craLattersGetStatus
 } from '../apihelper/Api';
 
-
 export const rpLoaderRef = React.createRef();
 
 export const showToast = msg => {
@@ -84,34 +83,36 @@ export async function downloadFileFromUrl(url, filename, callback) {
             Alert.alert('SukhTax', 'No internet connection!');
             return;
           }
-          Alert.alert('SukhTax', 'Download completed');
+          Alert.alert('SukhTax', 'Download completed',pathToSave);
           callback(pathToSave)
-
-          // if (Platform.OS === 'ios') {
-          //   RNFetchBlob.ios.openDocument(pathToSave)
-          //   .catch((errorMessage, statusCode) => {
-          //     Alert.alert('SukhTax', 'Something went wrong!');
-          //   });;
-          // } else {
-          //   RNFetchBlob.android.actionViewIntent(filePath, fileType);
-          //   RNFetchBlob.android
-          //     .addCompleteDownload({
-          //       title: filename,
-          //       description: 'Download Complete',
-          //       path: filePath,
-          //       mime: fileType,
-          //       showNotification: true,
-          //     })
-          //     .then(() =>
-          //       RNFetchBlob.fs.scanFile([{path: filePath, mime: fileType}]),
-          //     );
-          // }
+          if (Platform.OS === 'ios') {
+            RNFetchBlob.ios.openDocument(pathToSave)
+            .catch((errorMessage, statusCode) => {
+              Alert.alert('SukhTax', 'Something went wrong!');
+            });;
+          } else {
+            RNFetchBlob.android.actionViewIntent(filePath, fileType);
+            RNFetchBlob.android
+              .addCompleteDownload({
+                title: filename,
+                description: 'Download Complete',
+                path: filePath,
+                mime: fileType,
+                showNotification: true,
+              })
+              .then(() =>
+                RNFetchBlob.fs.scanFile([{path: filePath, mime: fileType}]),
+              );
+          }
         })
         .catch((errorMessage, statusCode) => {
+          console.log('errorMessage',errorMessage,statusCode )
           Alert.alert('SukhTax', errorMessage, statusCode);
         });
     })
-    .catch(error => {});
+    .catch(error => {
+      console.log('error',error)
+    });
 }
 
 const updateSelectionData = (res) =>{

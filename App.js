@@ -10,7 +10,7 @@ import React from 'react';
 import {LogBox} from 'react-native'
 import AuthNavigator from './src/AuthNavigator';
 import {StripeProvider} from '@stripe/stripe-react-native';
-import {stripekey_test} from './src/constants/StaticValues';
+import {stripekey_live,stripekey_test} from './src/constants/StaticValues';
 
 LogBox.ignoreLogs([
   'Animated: `useNativeDriver`',

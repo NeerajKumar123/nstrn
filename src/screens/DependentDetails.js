@@ -26,15 +26,14 @@ import { GENDER_OPTIONS, RELATIONS } from '../constants/StaticValues';
 import * as Validator from '../helpers/SKTValidator';
 import { ST_REGEX } from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import { onlineSaveDependentInfo, onlineUpdateDependentInfo, onlineGetDependentInfoByUserId } from '../apihelper/Api';
+import { onlineSaveDependentInfo } from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 const { width } = Dimensions.get('window');
 import { format } from 'date-fns'
 
-const Dependents = props => {
+const DependentDetails = props => {
   const navigation = useNavigation();
-  const pageParams = props.route.params;
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [dob, setDOB] = useState('');
@@ -45,10 +44,6 @@ const Dependents = props => {
   const [isGenderVisible, setIsGenderVisible] = useState()
   const [isDatePickerVisible, setIsDatePickerVisible] = useState()
   const [isRelationVisible, setIsRelationVisible] = useState()
-  const [dependents, setDependents] = useState(pageParams?.alreadyAddedDependents || [])
-  const [isDependentFetched, setIsDependentFetched] = useState(pageParams?.isFetched)
-  const {Tax_Filed_With_Sukhtax,user_id} = global.onlineStatusData;
-
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -80,7 +75,7 @@ const Dependents = props => {
     return isValidForm;
   };
 
-  const prepareParamsForSave = () => {
+  const prepareParams = () => {
     const { user_id, tax_file_id } = global.onlineStatusData
     const params = {
       User_id: user_id,
@@ -91,46 +86,10 @@ const Dependents = props => {
       Relationship: relation,
       First_Name: fName,
       Last_Name: lName,
-      isLocallyAdded:true
     }
     return params
   }
 
-  const prepareParams= (obj) => {
-    console.log('obj',obj)
-    const { user_id, tax_file_id } = global.onlineStatusData
-   let params = {}
-   params.User_id = user_id
-   params.Tax_File_Id = tax_file_id
-   params.DOB = obj.DOB
-   params.SIN_Number = obj.SIN_Number
-
-   if (obj.isLocallyAdded) {
-    params.Relationship = obj.Relationship
-    params.First_Name = obj.First_Name
-    params.Last_Name = obj.Last_Name
-    params.Gender = obj.Gender
-   }else{
-    params.Relationship = obj.Relationship
-    params.First_Name = obj.first_name
-    params.Last_Name = obj.last_name
-    params.Gender = obj.gender
-   }
-    return params
-  }
-
-  useEffect(() => {
-    if (Tax_Filed_With_Sukhtax && !isDependentFetched) {
-      onlineGetDependentInfoByUserId({ User_Id: user_id }, lastdepRes => {
-        if (lastdepRes.status == 1) {
-          const deps = [...dependents,...lastdepRes.data]
-          setDependents(deps)
-          setIsDependentFetched(true)
-        }
-      })
-    }
-    
-  }, [])
   return (
     <View
       style={{
@@ -147,18 +106,11 @@ const Dependents = props => {
           width: '100%',
           paddingHorizontal: 20,
         }}>
-        <Heading
-          value="THIS IS SOMEONE WHO RELIES ON YOU FOR FINANCIAL SUPPORT"
-          marginTop={20}
-          fontSize={20}
-          color={Colors.APP_RED_SUBHEADING_COLOR}
-        />
-        {Tax_Filed_With_Sukhtax == 1 && dependents.length > 0 && <AddedDependentView data={dependents} />}
-        <Heading
+         <Heading
           fontSize={20}
           marginTop={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value={`DEPENDENT ${dependents?.length + 1}`}
+          value={'DEPENDENT DETAILS'}
         />
         <SKInput
           leftAccImage={CustomFonts.UserIcon}
@@ -223,103 +175,27 @@ const Dependents = props => {
             setIsRelationVisible(true);
           }}
         />
-        {dependents && dependents.length > 0 ?
-          <>
-            <SKButton
-              marginTop={30}
-              fontSize={16}
-              borderWidth={1}
-              leftImage={CustomFonts.black_plus}
-              fontWeight={'normal'}
-              titleColor={Colors.PRIMARY_BORDER}
-              backgroundColor={Colors.WHITE}
-              borderColor={Colors.PRIMARY_BORDER}
-              title={'ADD ANOTHER DEPENDENT'}
+        <SKButton
+            fontSize={16}
+            width="100%"
+            marginTop={20}
+            fontWeight={'normal'}
+            backgroundColor={Colors.PRIMARY_FILL}
+            borderColor={Colors.PRIMARY_BORDER}
+            title={'Continue'}
               onPress={() => {
-                if (dependents?.length < 20) {
-                  if (checkFormValidations()) {
-                    const params = prepareParamsForSave()
-                    dependents.push(params)
-                    navigation.push('Dependents', {isFetched :isDependentFetched, alreadyAddedDependents: dependents });
-                  }
-                } else {
-                  Alert.alert('SukhTax', 'You are not allowed to add more than 10 dependents.')
-                }
-              }}
-            />
-            <SKButton
-              marginTop={30}
-              fontSize={16}
-              rightImage={CustomFonts.right_arrow}
-              fontWeight={'normal'}
-              backgroundColor={Colors.PRIMARY_FILL}
-              borderColor={Colors.PRIMARY_BORDER}
-              title={'MY TAX YEAR'}
-              onPress={() => {
-                if (dependents && dependents.length > 0) {
-                  setIsLoading(true)
-                  dependents.forEach(params => {
-                    const update = prepareParams(params)
-                    onlineSaveDependentInfo(update, (depRes) => {
-                      setIsLoading(false)
-                      navigation.navigate('MyTaxYear', { pageIndex: 0 });
-                    })
-                  })
-                } else {
-                  Alert.alert('Sukhtax', 'Please add at least dependent.')
-                }
-              }}
-            />
-          </>
-          :
-          <>
-            <SKButton
-              marginTop={30}
-              fontSize={16}
-              borderWidth={1}
-              leftImage={CustomFonts.black_plus}
-              fontWeight={'normal'}
-              titleColor={Colors.PRIMARY_BORDER}
-              backgroundColor={Colors.WHITE}
-              borderColor={Colors.PRIMARY_BORDER}
-              title={'ADD THIS DEPENDENT'}
-              onPress={() => {
+                setIsLoading(true)
                 if (checkFormValidations()) {
-                  const params = prepareParamsForSave()
-                  dependents.push(params)
-                  navigation.push('Dependents', {isFetched:isDependentFetched, alreadyAddedDependents: dependents });
-                }
-              }}
-            />
-            <SKButton
-              marginTop={15}
-              fontSize={16}
-              rightImage={CustomFonts.right_arrow}
-              fontWeight={'normal'}
-              backgroundColor={Colors.PRIMARY_FILL}
-              borderColor={Colors.PRIMARY_BORDER}
-              title={'MY TAX YEAR'}
-              onPress={() => {
-                if (dependents && dependents.length > 0) {
-                  setIsLoading(true)
-                  dependents.forEach(params => {
-                    const update = prepareParams(params)
-                    onlineSaveDependentInfo(update, (depRes) => {
-                      if (depRes.status == 1) {
-                        setIsLoading(false)
-                        navigation.navigate('MyTaxYear', { pageIndex: 0 });  
-                      } else {
-                        Alert.alert('Sukhtax', 'Something went wrong.')
-                      }
-                    })
+                  const params = prepareParams()
+                  onlineSaveDependentInfo(params, (depRes) => {
+                    setIsLoading(false)
+                    if (depRes.status == 1) {
+                      navigation.goBack();
+                    }
                   })
-                } else {
-                  Alert.alert('Sukhtax', 'Please add at least dependent.')
                 }
               }}
             />
-          </>
-        }
       </ScrollView>
       {isDatePickerVisible && (
         <SKDatePicker
@@ -450,4 +326,4 @@ const AddedDependentView = (props) => {
   )
 }
 
-export default Dependents;
+export default DependentDetails;

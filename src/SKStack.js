@@ -21,7 +21,8 @@ import Address from './screens/Address';
 import RemainedDetailsTaxYrFlow from './screens/RemainedDetailsTaxYrFlow';
 import BankingAndMore from './screens/BankingAndMore';
 import FamilyDetails from './screens/FamilyDetails';
-import Dependents from './screens/Dependents';
+import DependentsList from './screens/DependentsList';
+import DependentDetails from './screens/DependentDetails';
 import OnlineDocuments from './screens/OnlineDocuments';
 import MyTaxYear from './screens/MyTaxYear';
 import ManageDocuments from './screens/ManageDocuments';
@@ -202,9 +203,14 @@ const SKStack = () => { /// This is After login stack
           options={{title: 'FamilyDetails', headerShown: false}}
         />
         <Stack.Screen
-          name="Dependents"
-          component={Dependents}
-          options={{title: 'Dependents', headerShown: false}}
+          name="DependentsList"
+          component={DependentsList}
+          options={{title: 'DependentsList', headerShown: false}}
+        />
+        <Stack.Screen
+          name="DependentDetails"
+          component={DependentDetails}
+          options={{title: 'DependentDetails', headerShown: false}}
         />
         <Stack.Screen
           name="OnlineDocuments"

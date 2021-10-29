@@ -85,7 +85,7 @@ const IncorpDetailsPerc = props => {
             keyboardType = 'number-pad'
             borderColor={Colors.CLR_0065FF}
             value={ownershipPerc}
-            placeholder="OWNERSHIP(%)"
+            placeholder="Ownership(%)"
             onEndEditing={value => {
               setOwnershipPerc(value);
             }}
