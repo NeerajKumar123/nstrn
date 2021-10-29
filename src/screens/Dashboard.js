@@ -175,7 +175,7 @@ const Dashboard = props => {
       } else if (my_year_info_filled) {
         navigation.navigate('OnlineDocuments');
       } else if (spouse_info_filled) {
-        navigation.navigate('Dependents');
+        navigation.navigate('DependentsList');
       } else if (dependent_info_filled) {
         navigation.navigate('MyTaxYear',{pageIndex:0});
       } else if (banking_family_info_filled) {

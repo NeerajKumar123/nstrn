@@ -95,7 +95,7 @@ const AboutCorp = props => {
           maxLength = {50}
           borderColor={Colors.CLR_0065FF}
           value={ifOther}
-          placeholder = 'IF OTHER, PLEASE SPECIFY'
+          placeholder = 'If other, please specify'
           onEndEditing={value => {
             setIfOther(value)
           }}
@@ -105,7 +105,7 @@ const AboutCorp = props => {
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={bussAddress}
-            placeholder="BUSINESS ADDRESS"
+            placeholder="Business address"
             onClicked={() => {
               setIsAddViewVisible(true);
             }}

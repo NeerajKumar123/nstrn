@@ -423,7 +423,7 @@ const Spouse = props => {
                       setIsLoading(false);
                       if (spouseRes?.status == 1) {
                         SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
-                          navigation.push('Dependents', {depCount: 1});
+                          navigation.push('DependentsList', {depCount: 1});
                         });
                       } else {
                         Alert.alert('SukhTax', 'Something went wrong!');

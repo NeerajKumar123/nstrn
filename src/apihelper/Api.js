@@ -402,3 +402,7 @@ export const onlineGetDependentInfoByUserId = (params,callback) => {
   const path = `${BaseURL}/Online_Get_Dependent_Info_By_User_Id`
   API.makePostRequest(path , params, callback);
 };
+export const onlineGetDependentInfoByTaxFileID = (params,callback) => {
+  const path = `${BaseURL}/Online_Get_Dependent_Info`
+  API.makePostRequest(path , params, callback);
+};
