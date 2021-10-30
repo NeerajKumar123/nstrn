@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -33,6 +33,10 @@ const OnlineReturnLanding = props => {
   const isFAlreadyFlied =  years && years.includes('2019')
   const isSAlreadyFlied = years && years.includes('2020')
   const isTAlreadyFlied = years && years.includes('2021')
+
+  useEffect(() => {
+    SKTStorage.setKeyValue('isLastDepHit',false, ()=>{})
+  }, [])
   return (
     <View
       style={{

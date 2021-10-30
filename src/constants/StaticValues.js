@@ -40,12 +40,12 @@ export const stripeAPIVersion = '2020-08-27';
 
 export const Google_Api_key = 'AIzaSyDpdF27ZiuKLmsJXNfLyRbD-7nmlMa4tJw';
 
-// const width = 1200
-// const height = 1600
-// const quality = 1.0
-const width = 50
-const height = 50
-const quality = .2
+const width = 1200
+const height = 1600
+const quality = 1.0
+// const width = 50
+// const height = 50
+// const quality = .2
 
 export const LibImageQualityOptionsWithMultiSelectionSupport = {
   quality: quality,
@@ -98,3 +98,42 @@ export const ImageActionSheetOptions = [
   </View>,
   <View style={{flexDirection: 'row', height:30}}/>,
 ];
+
+export const LocalInstsList = [{"residency_id":1,"residency_name":"Citizen","status":1,"added_on":"2020-12-10T06:47:04.197","added_by":1},{"residency_id":2,"residency_name":"Permanent Resident","status":1,"added_on":"2020-12-10T06:47:17.437","added_by":1},{"residency_id":3,"residency_name":"Work Permit","status":1,"added_on":"2020-12-10T06:47:30.667","added_by":1},{"residency_id":4,"residency_name":"Student Visa","status":1,"added_on":"2020-12-10T06:47:41.39","added_by":1},{"residency_id":6,"residency_name":"Other","status":1,"added_on":"2020-12-10T06:48:01.533","added_by":1}]
+export const LocalResidencyList = [
+  {
+    "residency_id": 1,
+    "residency_name": "Citizen",
+    "status": 1,
+    "added_on": "2020-12-10T06:47:04.197",
+    "added_by": 1
+  },
+  {
+    "residency_id": 2,
+    "residency_name": "Permanent Resident",
+    "status": 1,
+    "added_on": "2020-12-10T06:47:17.437",
+    "added_by": 1
+  },
+  {
+    "residency_id": 3,
+    "residency_name": "Work Permit",
+    "status": 1,
+    "added_on": "2020-12-10T06:47:30.667",
+    "added_by": 1
+  },
+  {
+    "residency_id": 4,
+    "residency_name": "Student Visa",
+    "status": 1,
+    "added_on": "2020-12-10T06:47:41.39",
+    "added_by": 1
+  },
+  {
+    "residency_id": 6,
+    "residency_name": "Other",
+    "status": 1,
+    "added_on": "2020-12-10T06:48:01.533",
+    "added_by": 1
+  }
+]

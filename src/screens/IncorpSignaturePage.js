@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -21,7 +21,7 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import {incorpUploadAuthImage} from '../apihelper/Api';
+import {incorpUploadAuthImage, incorpGetIncorporatorDetails} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 import SignatureCapture from 'react-native-signature-capture';
@@ -31,8 +31,15 @@ const IncorpSignaturePage = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const [fName, setFName] = useState('');
+  const [mName, setMName] = useState();
   const [lName, setLName] = useState('');
+  const [address, setAddress] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [altMobile, setAltMobile] = useState('');
+  const [email, setEmail] = useState('');
   const [sinNo, setSinNo] = useState('');
+  const [authName, setAuthName] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(true);
   const [isSignStart, setIsSignStart] = useState(false);
@@ -42,28 +49,50 @@ const IncorpSignaturePage = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isFNameValid = Validator.isValidField(fName,ST_REGEX.FullName)
-    const isLNameValid = Validator.isValidField(lName,ST_REGEX.FullName)
-    const isSinValid = Validator.isValidSIN(sinNo)
-
-    if (!isFNameValid) {
+    const isAuthNameValid = Validator.isValidField(authName,ST_REGEX.FullName)
+     if (!isAuthNameValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid First name');
-    } else if (!isLNameValid) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid Last name');
-    }else if (!isSinValid) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid SIN.');
-    } else if (!isAuthChecked) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please authorize us by selecting checkobox');
+      Alert.alert('SukhTax', 'Please enter valid authorizer name.');
     } else if (!isSignSaved) {
       isValidForm = false;
       Alert.alert('SukhTax', 'You need to sign and save.');
-    }
+    } 
     return isValidForm;
   };
+
+  useEffect(() => {
+    const {user_id, incorporation_id, incorporator_id} = pageParams;
+      const params = {
+        User_Id: user_id,
+        Incorporation_Id: incorporation_id,
+        Incorporator_Id: incorporator_id,
+      };
+      incorpGetIncorporatorDetails(params, detailsRes => {
+        console.log('detailsRes',detailsRes)
+        setIsLoading(false);
+        if (detailsRes?.status == 1) {
+          const data = detailsRes?.data?.[0];
+          const {
+            first_name,
+            middle_name,
+            last_name,
+            phone_number,
+            alt_phone_number,
+            SIN_number,
+            email,
+            address
+          } = data;
+          setFName(first_name);
+          setLName(last_name);
+          setMName(middle_name);
+          setAddress(address)
+          setEmail(email);
+          setMobile(phone_number);
+          setAltMobile(alt_phone_number);
+          setSinNo(SIN_number);
+        }
+      });
+  }, [])
 
   const prepareParams = (image) => {
     const {incorporation_id,incorporator_id, user_id} = pageParams
@@ -76,6 +105,8 @@ const IncorpSignaturePage = props => {
     };
     return params;
   };
+
+  
   return (
     <View
       style={{
@@ -84,10 +115,14 @@ const IncorpSignaturePage = props => {
         backgroundColor: 'white',
         flex: 1,
       }}>
+        <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        enabled={true}
+        style={{flex: 1, width: '100%', paddingBottom: 10}}
+        keyboardVerticalOffset={0}>
         {isLoading && <SKLoader />}
         <AppHeader navigation={navigation} />
         <ScrollView
-        alwaysBounceVertical = {false}
           contentContainerStyle={{
             paddingHorizontal: 20,
           }}>
@@ -107,11 +142,28 @@ const IncorpSignaturePage = props => {
           />
           <Heading
             fontSize={16}
-            marginTop={45}
+            marginTop={20} 
             color={Colors.APP_RED_SUBHEADING_COLOR}
-            value="TAX PAYER INFORMATION"
+            value="INCORPORATION DETAILS:"
+          />
+          <Heading
+            fontSize={14}
+            color={Colors.APP_BLUE_HEADING_COLOR}
+            value={global.selectedCorp.incorporation_type}
+          />
+           <Heading
+            fontSize={14}
+            color={Colors.APP_BLUE_HEADING_COLOR}
+            value={global.selectedCategory.incorporation_category}
+          />
+          <Heading
+            fontSize={16}
+            marginTop={20} 
+            color={Colors.APP_RED_SUBHEADING_COLOR}
+            value="INCORPORATOR'S DETAILS"
           />
           <SKInput
+            editable = {false}
             leftAccImage={CustomFonts.UserIcon}
             marginTop={20}
             marginBottom={0}
@@ -123,7 +175,20 @@ const IncorpSignaturePage = props => {
               setFName(value);
             }}
           />
+           <SKInput
+            editable = {false}
+            leftAccImage={CustomFonts.UserIcon}
+            marginBottom={2}
+            maxLength={15}
+            borderColor={Colors.CLR_0065FF}
+            value={mName}
+            placeholder="Middle Name"
+            onEndEditing={value => {
+              setMName(value);
+            }}
+          />
           <SKInput
+            editable = {false}
             leftAccImage={CustomFonts.UserIcon}
             marginTop={20}
             marginBottom={0}
@@ -135,7 +200,67 @@ const IncorpSignaturePage = props => {
               setLName(value);
             }}
           />
+
           <SKInput
+          editable = {false}
+          leftAccImage={CustomFonts.Home}
+          marginTop={20}
+          height = {100}
+          multiline={true}
+          returnKeyType="done"
+          blurOnSubmit={true}
+          borderColor={Colors.CLR_0065FF}
+          value={address}
+          placeholder="Address"
+          onEndEditing={value => {
+            console.log('value', value)
+            setAddress(value);
+          }}
+        />
+
+          <SKInput
+            editable = {false}
+            leftAccImage={CustomFonts.Phone}
+            marginBottom={2}
+            maxLength={10}
+            borderColor={Colors.CLR_0065FF}
+            value={mobile}
+            keyboardType = 'number-pad'
+            placeholder="Phone Number"
+            onEndEditing={value => {
+              setMobile(value);
+            }}
+          />
+
+          <SKInput
+            editable = {false}
+            leftAccImage={CustomFonts.Phone}
+            marginBottom={2}
+            maxLength={10}
+            borderColor={Colors.CLR_0065FF}
+            value={altMobile}
+            keyboardType = 'number-pad'
+            placeholder="Alternate Phone Number"
+            onEndEditing={value => {
+              setAltMobile(value);
+            }}
+          />
+          <SKInput
+            editable = {false}
+            leftAccImage={CustomFonts.Email}
+            marginBottom={2}
+            maxLength={30}
+            autoCapitalize = 'none'
+            borderColor={Colors.CLR_0065FF}
+            value={email}
+            placeholder="Email Address"
+            onEndEditing={value => {
+              setEmail(value);
+            }}
+          />
+
+          <SKInput
+            editable = {false}
             leftAccImage={CustomFonts.Number}
             marginTop={20}
             marginBottom={0}
@@ -154,16 +279,27 @@ const IncorpSignaturePage = props => {
               setIsAuthChecked(!isAuthChecked);
             }}
           />
-          <Heading
-            fontSize={12}
-            marginTop={10}
-            color={Colors.APP_RED_SUBHEADING_COLOR}
-            value="BY SIGNING AND DATING THIS PAGE, YOU AUTHORIZE THE CANADA REVENUE AGENCY TO INTRACT WITH SUKH TAX AND FINANCIAL SERVICES, WITH REF ID H6YX7GS,GROUP ID:G, UNDER LEVEL 2 OF AUTHORIZATION, WHERE SUKHTAX AND FINANCIAL SERVICES HAS THE ABILITY TO DISCLOSE AND REQUEST. I AGREE TO NO EXPIRY DATE ON THIS AUTHORIZARION, AND UNDERSTAND THAT I CAN CONTACT THE CANADA REVENUE AGENCY DIRECTLY AT A LATER TIME TO RECIND THIS AUTHORIZARION"
+           <Heading
+            fontSize={13}
+            value="AUTHORIZER"
+            marginTop={20}
+          />
+           <SKInput
+            leftAccImage={CustomFonts.UserIcon}
+            marginBottom={2}
+            maxLength={30}
+            autoCapitalize = 'none'
+            borderColor={Colors.CLR_0065FF}
+            value={authName}
+            placeholder="Email Authorizer name"
+            onEndEditing={value => {
+              setAuthName(value);
+            }}
           />
           <Heading
             fontSize={13}
-            value="SIGNATURE OF TAXPAYER OR LEGAL REPRESENTATIVE"
-            marginTop={26}
+            value="SIGNATURE"
+            marginTop={20}
           />
           <View
             style={{
@@ -231,6 +367,7 @@ const IncorpSignaturePage = props => {
               )}
             </View>
           </View>
+         
         </ViewShot>
         <SKButton
           fontSize={16}
@@ -257,6 +394,7 @@ const IncorpSignaturePage = props => {
           }}
         />
       </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -280,7 +418,7 @@ const SKCheckbox = props => {
         color={Colors.GRAY}
       />
       <Text style={{color: Colors.APP_BLUE_HEADING_COLOR, marginLeft: 10, flex: 1}}>
-        I authorize SukhTax and Financial Services as per below.
+      I authorize you to open my corporation
       </Text>
     </TouchableOpacity>
   );

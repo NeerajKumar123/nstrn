@@ -416,3 +416,8 @@ export const onlineGetMyYearInfo = (params,callback) => {
   const path = `${BaseURL}/Online_Get_My_Year_Info`
   API.makePostRequest(path , params, callback);
 };
+
+export const onlineFinalizeAuthorization = (params,callback) => {
+  const path = `${BaseURL}/Online_Finalize_Authorization`
+  API.makePostRequest(path , params, callback);
+};

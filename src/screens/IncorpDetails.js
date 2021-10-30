@@ -37,7 +37,7 @@ const IncorpDetails = props => {
   useEffect(() => {
     if (pageParams) {
       setIsLoading(true);
-      const {user_id, incorporation_id, incorporator_id} = pageParams.params;
+      const {user_id, incorporation_id, incorporator_id} = pageParams;
       const params = {
         User_Id: user_id,
         Incorporation_Id: incorporation_id,

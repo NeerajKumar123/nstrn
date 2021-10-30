@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   FlatList,
+  Alert,
 } from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
@@ -13,6 +14,7 @@ import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import * as CustomFonts from '../constants/FontsDefs';
 const download = require('../../assets/download.png');
+import {downloadFileFromUrl} from  '../helpers/BaseUtility';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DocumentViewer from '../components/DocumentViewer';
 const HomeDocsListing = props => {
@@ -67,7 +69,8 @@ const HomeDocsListing = props => {
           value="PLEASE SEE LIST BELOW :"
         />
         {groupedDocs && groupedDocs.length > 0 && (
-          <FlatList
+          <View>
+        <FlatList
             style={{width: '100%', marginTop: 20}}
             data={groupedDocs}
             keyExtractor={(item, index) => 'key_' + index}
@@ -77,12 +80,29 @@ const HomeDocsListing = props => {
                 key = {item.document_file_name}
                 marginTop={23}
                 onDocClicked={doc => {
-                  setSelectedItem(doc);
-                  setShowDoc(true);
+                  const docUrl = doc?.document_file_name
+                  if (docUrl?.includes('.pdf')) {
+                    let fileName =  doc?.document_title ?? 'sukhtax.pdf'
+                    fileName = fileName.replace(/ /g, '');
+                    if (!fileName.includes('.pdf')) {
+                      fileName = fileName +  '.pdf'
+                    }
+                    downloadFileFromUrl(doc?.document_file_name, 'fileName.png' , ()=>{
+                      console.log('document_file_name', doc)
+                    })
+                  }else if (docUrl?.includes('.jpeg') || docUrl?.includes('.png') || docUrl?.includes('.jpg')){
+                    setSelectedItem(doc);
+                    setShowDoc(true);  
+                  }
+                  else{
+                    Alert.alert('Sukhtax','Dodument not supported.')
+                  }
                 }}
               />
             )}
           />
+            </View>
+          
         )}
       </ScrollView>
       {showDoc && (

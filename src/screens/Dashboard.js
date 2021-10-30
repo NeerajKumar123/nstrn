@@ -179,7 +179,23 @@ const Dashboard = props => {
       } else if (dependent_info_filled) {
         navigation.navigate('MyTaxYear',{pageIndex:0}); 
       } else if (banking_family_info_filled) {
-        navigation.navigate('MyTaxYear',{pageIndex:0});
+        const yrwiseRecords = global?.onlineStatusData?.Year_Wise_Records
+        let firstYearData = yrwiseRecords?.[0] || {}
+        let isMarried = false
+        let isDepSel = false
+        if (firstYearData?.marital_status_id == 2 || firstYearData?.marital_status_id == 3) {
+          isMarried = true
+        }
+        if (firstYearData?.dependents) {
+          isDepSel = true
+        }
+        if (isMarried) {
+          navigation.navigate('Spouse');
+        }else if (isDepSel){
+          navigation.navigate('DependentsList');
+        }else{
+          navigation.navigate('MyTaxYear',{pageIndex:0});
+        }
       } else if (about_info_filled) {
         navigation.navigate('BankingAndMore');
       } else if (identification_document_uploaded) {

@@ -70,6 +70,7 @@ const IncorporationLanding = props => {
                 item={item}
                 selectedCorp = {selectedCorp}
                 onSelected={() => {
+                  global.selectedCorp = item
                   setSelectedCorp(item);
                 }}
               />

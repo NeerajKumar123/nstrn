@@ -22,7 +22,7 @@ import SKLoader from '../components/SKLoader';
 import AppHeader from '../components/AppHeader';
 import SKDatePicker from '../components/SKDatePicker';
 import * as Validator from '../helpers/SKTValidator';
-import {ST_REGEX} from '../constants/StaticValues';
+import {LocalInstsList, LocalResidencyList} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import {
   getInstitutionList,
@@ -73,7 +73,13 @@ const BankingAndMore = props => {
     }
 
     getResidencyList({}, resdencyRes => {
-      setResidencies(resdencyRes?.data);
+      if (resdencyRes.status == 1) {
+        setResidencies(resdencyRes?.data);
+        setResidency(resdencyRes?.data?.[0])
+      }else{
+        setResidencies(LocalResidencyList);
+        setResidency(LocalResidencyList[0])
+      }
     });
   }, []);
 

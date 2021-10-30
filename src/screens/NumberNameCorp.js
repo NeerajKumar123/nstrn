@@ -100,6 +100,7 @@ const NumberNameCorp = props => {
                 incorpRegisterCorp(params, (regisRes) =>{
                   setIsLoading(false)
                   if(regisRes?.status == 1){
+                    global.selectedCategory = selectedCategory
                     global.incStatusData = {...global.incStatusData,...regisRes?.data[0]}
                     navigation.navigate('UploadCorp');
                   }else{

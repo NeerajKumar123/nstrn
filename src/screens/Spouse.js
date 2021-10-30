@@ -33,6 +33,7 @@ import {
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
 import * as SKTStorage from '../helpers/SKTStorage';
+import {LocalInstsList, LocalResidencyList} from '../constants/StaticValues';
 
 const Spouse = props => {
   const navigation = useNavigation();
@@ -73,9 +74,16 @@ const Spouse = props => {
       setBanks(instRes?.data);
       setBank(instRes?.data?.[0]);
       getResidencyList({}, resdencyRes => {
-        setResidencies(resdencyRes?.data);
-        setResidency(resdencyRes?.data?.[0]);
-        setIsLoading(false);
+        if (resdencyRes.status == 1) {
+          setResidencies(resdencyRes?.data);
+          setResidency(resdencyRes?.data?.[0]);  
+        }else{
+          setResidencies(LocalResidencyList);
+          setResidency(LocalResidencyList[0]);  
+        }
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
       });
     });
   }, []);

@@ -186,7 +186,6 @@ export const SKModelImageTitle = props => {
             value={imageTitle}
             placeholder="Enter image title"
             onTextChange={value => {
-              console.log('onChangeText', imageTitle);
               setImageTitle(value);
             }}
           />

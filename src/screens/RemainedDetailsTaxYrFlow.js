@@ -10,6 +10,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
+import {LocalInstsList, LocalResidencyList} from '../constants/StaticValues';
 import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
 import SKInput from '../components/SKInput';
@@ -65,8 +66,13 @@ const RemainedDetailsTaxYrFlow = props => {
     getCanadaProvinceList(params, provinceRes => {
       setProvinces(provinceRes?.data);
       getResidencyList({}, resdencyRes => {
-        setResidencies(resdencyRes?.data);
-        setResidency(resdencyRes?.data?.[0]);
+        if (resdencyRes.status == 1) {
+          setResidencies(resdencyRes?.data);
+          setResidency(resdencyRes?.data?.[0]);  
+        }else{
+          setResidencies(LocalResidencyList);
+          setResidency(LocalResidencyList[0]);  
+        }
       });
       getMaritalStatusList({}, maritalRes => {
         setMaritalStatuses(maritalRes?.data);

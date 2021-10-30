@@ -259,7 +259,7 @@ const TaxFilingStatusCard = props => {
   } = global.onlineStatusData;
 
 
-  const moveToPage = props => {
+  const onlineMoveToPage = props => {
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -269,29 +269,52 @@ const TaxFilingStatusCard = props => {
       spouse_info_filled = 0,
       my_year_info_filled = 0,
       document_uploaded = 0,
-      authorization_document_uploaded = 0,
-    } = global.onlineStatusData;
-    if (authorization_document_uploaded) {
-      navigation.navigate('AnyThingElse');
-    } else if (document_uploaded) {
-      navigation.navigate('AuthorizerList');
-    } else if (my_year_info_filled) {
-      navigation.navigate('OnlineDocuments');
-    } else if (spouse_info_filled) {
-      navigation.navigate('DependentsList');
-    } else if (dependent_info_filled) {
-      navigation.navigate('MyTaxYear',{pageIndex:0});
-    } else if (banking_family_info_filled) {
-      navigation.navigate('MyTaxYear',{pageIndex:0});
-    } else if (about_info_filled) {
-      navigation.navigate('BankingAndMore');
-    } else if (identification_document_uploaded) {
-      navigation.navigate('BasicInfo');
-    } else if (years_selected) {
-      navigation.navigate('Identification');
-    } else {
-      navigation.navigate('OnlineReturnLanding');
-    }
+      authorization_document_uploaded = 1,
+      Online_Button_Enabled
+    } = global?.onlineStatusData ?? {};
+
+    if (Online_Button_Enabled == 0) {
+      navigation.navigate('OnlineTaxFilingStatus')
+    }else{
+      if (authorization_document_uploaded) {
+        navigation.navigate('AnyThingElse');
+      } else if (document_uploaded) {
+        navigation.navigate('AuthorizerList');
+      } else if (my_year_info_filled) {
+        navigation.navigate('OnlineDocuments');
+      } else if (spouse_info_filled) {
+        navigation.navigate('DependentsList');
+      } else if (dependent_info_filled) {
+        navigation.navigate('MyTaxYear',{pageIndex:0}); 
+      } else if (banking_family_info_filled) {
+        const yrwiseRecords = global?.onlineStatusData?.Year_Wise_Records
+        let firstYearData = yrwiseRecords?.[0] || {}
+        console.log('firstYearData',firstYearData)
+        let isMarried = false
+        let isDepSel = false
+        if (firstYearData?.marital_status_id == 2 || firstYearData?.marital_status_id == 3) {
+          isMarried = true
+        }
+        if (firstYearData?.dependents) {
+          isDepSel = true
+        }
+        if (isMarried) {
+          navigation.navigate('Spouse');
+        }else if (isDepSel){
+          navigation.navigate('DependentsList');
+        }else{
+          navigation.navigate('MyTaxYear',{pageIndex:0});
+        }
+      } else if (about_info_filled) {
+        navigation.navigate('BankingAndMore');
+      } else if (identification_document_uploaded) {
+        navigation.navigate('BasicInfo');
+      } else if (years_selected) {
+        navigation.navigate('Identification');
+      } else {
+        navigation.navigate('OnlineReturnLanding');
+      }
+    }    
   };
 
   if (
@@ -422,7 +445,7 @@ const TaxFilingStatusCard = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'EDIT INFO'}
           onPress={() => {
-            moveToPage();
+            onlineMoveToPage();
           }}
         />
       )}
@@ -470,7 +493,7 @@ const TaxFilingStatusCard = props => {
                 if (tax_file_status_id == 8) {
                   navigation.popToTop();
                 } else {
-                  moveToPage();
+                  onlineMoveToPage();
                 }
               }}
             />

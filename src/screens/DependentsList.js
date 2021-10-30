@@ -56,58 +56,58 @@ const DependentsList = props => {
   useEffect(() => {
     console.log('isFocused', isFocused,global.isLastDepHit,Tax_Filed_With_Sukhtax)
     if (!isFocused) return
-    if (Tax_Filed_With_Sukhtax && global.isLastDepHit == undefined) {
-      setIsLoading(true);
-      onlineGetDependentInfoByUserId({ User_Id: user_id }, lastdepRes => {
-        global.isLastDepHit = true;
-        if (lastdepRes.status == 1 && lastdepRes.data?.length > 0) {
-          lastdepRes.data?.forEach((obj,index) => {
-            const params = prepareParams(obj);
-            onlineSaveDependentInfo(params, saveRes => {
-              if (index == lastdepRes.data.length - 1) {
-                setIsLoading(true);
-                onlineGetDependentInfoByTaxFileID(
-                  { User_Id: user_id, Tax_File_Id: tax_file_id },
-                  depResByTaxFileID => {
-                    if (depResByTaxFileID.status == 1) {
-                      setDeps(depResByTaxFileID.data);
-                      setIsLoading(false);
-                    }
-                  },
-                );
-              }
+    SKTStorage.getValue('isLastDepHit', (isHit)=>{
+      if (Tax_Filed_With_Sukhtax && (isHit == undefined || isHit == false || isHit == null)) {
+        setIsLoading(true);
+        onlineGetDependentInfoByUserId({ User_Id: user_id }, lastdepRes => {
+          SKTStorage.setKeyValue('isLastDepHit',true, ()=>{})
+          if (lastdepRes.status == 1 && lastdepRes.data?.length > 0) {
+            lastdepRes.data?.forEach((obj,index) => {
+              const params = prepareParams(obj);
+              onlineSaveDependentInfo(params, saveRes => {
+                if (index == lastdepRes.data.length - 1) {
+                  setIsLoading(true);
+                  onlineGetDependentInfoByTaxFileID(
+                    { User_Id: user_id, Tax_File_Id: tax_file_id },
+                    depResByTaxFileID => {
+                      if (depResByTaxFileID.status == 1) {
+                        setDeps(depResByTaxFileID.data);
+                        setIsLoading(false);
+                      }
+                    },
+                  );
+                }
+              });
             });
-          });
-        } else {
-          // get data
-          setIsLoading(true);
-          onlineGetDependentInfoByTaxFileID(
-            { User_Id: user_id, Tax_File_Id: tax_file_id },
-            depResByTaxFileID => {
-              if (depResByTaxFileID.status == 1) {
-                console.log('depResByTax====>', depResByTaxFileID);
-                setDeps(depResByTaxFileID.data);
-                setIsLoading(false);
-              }
-            },
-          );
-        }
-      });
-    } else {
-      // get data
-      setIsLoading(true);
-      onlineGetDependentInfoByTaxFileID(
-        { User_Id: user_id, Tax_File_Id: tax_file_id },
-        depResByTaxFileID => {
-          if (depResByTaxFileID.status == 1) {
-            console.log('depResByTax====>', depResByTaxFileID);
-            setDeps(depResByTaxFileID.data);
-            setIsLoading(false);
+          } else {
+            // get data
+            setIsLoading(true);
+            onlineGetDependentInfoByTaxFileID(
+              { User_Id: user_id, Tax_File_Id: tax_file_id },
+              depResByTaxFileID => {
+                if (depResByTaxFileID.status == 1) {
+                  setDeps(depResByTaxFileID.data);
+                  setIsLoading(false);
+                }
+              },
+            );
           }
-        },
-      );
-    }
-  }, [isFocused]);
+        });
+      } else {
+        // get data
+        setIsLoading(true);
+        onlineGetDependentInfoByTaxFileID(
+          { User_Id: user_id, Tax_File_Id: tax_file_id },
+          depResByTaxFileID => {
+            if (depResByTaxFileID.status == 1) {
+              setDeps(depResByTaxFileID.data);
+              setIsLoading(false);
+            }
+          },
+        );
+      }
+    })
+    }, [isFocused]);
 
   return (
     <View
@@ -161,14 +161,12 @@ const DependentsList = props => {
                           }
                           setIsLoading(true)
                           onlineDeteleDependent(params, deleteRes => {
-                            console.log('params', deleteRes)
                             if (deleteRes.status == 1) {
                               setTimeout(() => {
                                 onlineGetDependentInfoByTaxFileID(
                                   { User_Id: user_id, Tax_File_Id: tax_file_id },
                                   depResByTaxFileID => {
                                     if (depResByTaxFileID.status == 1) {
-                                      console.log('depResByTax====>', depResByTaxFileID);
                                       setDeps(depResByTaxFileID.data);
                                       setIsLoading(false);
                                     }

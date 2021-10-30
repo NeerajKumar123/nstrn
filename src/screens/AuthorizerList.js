@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
+import {TouchableOpacity, View, Text, ScrollView, Image, Alert} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import SKButton from '../components/SKButton';
@@ -8,6 +8,7 @@ import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useIsFocused} from '@react-navigation/native';
+import {onlineFinalizeAuthorization} from '../apihelper/Api';
 
 const AuthorizerList = props => {
   const navigation = useNavigation();
@@ -65,7 +66,14 @@ const AuthorizerList = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'ANYTHING ELSE'}
           onPress={() => {
-            navigation.navigate('AnyThingElse');
+            const {user_id,tax_file_id} = global.onlineStatusData
+            onlineFinalizeAuthorization({User_Id:user_id,Tax_File_Id:tax_file_id},(res) =>{
+              if (res.status == 1) {
+                navigation.navigate('AnyThingElse');
+              }else{
+                Alert.alert('Sukhtax', 'Something went wrong.')
+              }
+            } )
           }}
         />
       </ScrollView>

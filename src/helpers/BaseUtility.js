@@ -60,8 +60,7 @@ export async function downloadFileFromUrl(url, filename, callback) {
     pathToSave = `${dirs.DocumentDir}/${filename}`;
   }
   pathToSave = pathToSave.replace(' ', '');
-  let fileType,
-    filePath = '';
+  let fileType, filePath = '';
 
   RNFetchBlob.fs
     .exists(pathToSave)
@@ -72,9 +71,7 @@ export async function downloadFileFromUrl(url, filename, callback) {
         .fetch('GET', `${url}`, {})
         .then(res => {
           filePath = res.path();
-          fileType =
-            res.respInfo.headers['content-type'] ||
-            res.respInfo.headers['Content-Type'];
+          fileType =  res.respInfo.headers['content-type'] || res.respInfo.headers['Content-Type'];
           if (!fileType) {
             fileType = 'application/pdf';
           }
@@ -83,12 +80,10 @@ export async function downloadFileFromUrl(url, filename, callback) {
             Alert.alert('SukhTax', 'No internet connection!');
             return;
           }
-          Alert.alert('SukhTax', 'Download completed',pathToSave);
-          callback(pathToSave)
           if (Platform.OS === 'ios') {
-            RNFetchBlob.ios.openDocument(pathToSave)
-            .catch((errorMessage, statusCode) => {
-              Alert.alert('SukhTax', 'Something went wrong!');
+            RNFetchBlob.ios.openDocument(pathToSave).catch((errorMessage, statusCode) => {
+              // Alert.alert('SukhTax', 'Something went wrong!',errorMessage,statusCode);
+              console.log('openDocument====>', errorMessage, statusCode)
             });;
           } else {
             RNFetchBlob.android.actionViewIntent(filePath, fileType);
