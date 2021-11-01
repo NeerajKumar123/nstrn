@@ -25,7 +25,7 @@ import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import {
-  getResidencyList,
+  getSpouseResidencyList,
   getInstitutionList,
   saveSpouseInfo,
   onlineGetSpouseInfoByUserId
@@ -33,7 +33,7 @@ import {
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
 import * as SKTStorage from '../helpers/SKTStorage';
-import {LocalInstsList, LocalResidencyList} from '../constants/StaticValues';
+import {LocalInstsList,LocalResidencyListSpouse} from '../constants/StaticValues';
 
 const Spouse = props => {
   const navigation = useNavigation();
@@ -73,13 +73,13 @@ const Spouse = props => {
     getInstitutionList({}, instRes => {
       setBanks(instRes?.data);
       setBank(instRes?.data?.[0]);
-      getResidencyList({}, resdencyRes => {
+      getSpouseResidencyList({}, resdencyRes => {
         if (resdencyRes.status == 1) {
           setResidencies(resdencyRes?.data);
           setResidency(resdencyRes?.data?.[0]);  
         }else{
-          setResidencies(LocalResidencyList);
-          setResidency(LocalResidencyList[0]);  
+          setResidencies(LocalResidencyListSpouse);
+          setResidency(LocalResidencyListSpouse[0]);  
         }
         setTimeout(() => {
           setIsLoading(false);
@@ -96,11 +96,12 @@ const Spouse = props => {
     const isDOBValid = dob;
     const isGenderValid = gender;
     const isResidencyValid = residency?.residency_id > 0;
-    const isSinValid = Validator.isValidSIN(sinNo);
+    const isSinValid = residency?.residency_id != 5 ?  Validator.isValidSIN(sinNo) : true;
     const isEnrtyDateValid = enrtyDate;
     const isBankValid = bank?.institution_id > 0;
     const isAccValid = accountNo.length > 0;
     const isBranchValid = branchNo.length == 5;
+
     if (!isValidLastYear) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select valid year');
@@ -150,7 +151,7 @@ const Spouse = props => {
       Last_Name: lName,
       DOB: dob && format(dob, 'yyyy-MM-dd'),
       Gender: gender,
-      SIN_Number: sinNo,
+      SIN_Number:  sinNo,
       Date_of_Entry_in_Canada: enrtyDate && format(enrtyDate, 'yyyy-MM-dd'),
       Institution_Id: bank?.institution_id,
       Branch: branchNo,
@@ -173,6 +174,7 @@ const Spouse = props => {
         setDOB(new Date(details.DOB))
         setGender(details.gender)
         setSinNo(details.SIN_Number)
+        setLastTime(details.last_year_filed)
         setEnrtyDate(new Date(details.DOE_Canada))
         const filtered = residencies?.filter(element => {
           return element.residency_name == details.residency;
@@ -242,8 +244,8 @@ const Spouse = props => {
                   fontSize={16}
                   width={'48%'}
                   fontWeight={'normal'}
-                  backgroundColor={Colors.PRIMARY_BORDER}
-                  borderColor={Colors.PRIMARY_FILL}
+                  backgroundColor={Colors.CLR_7F7F9F}
+                  borderColor={Colors.CLR_D3D3D9}
                   title={'YES'}
                   onPress={() => {
                     console.log('YES')
@@ -278,8 +280,8 @@ const Spouse = props => {
                   fontSize={16}
                   width={'48%'}
                   fontWeight={'normal'}
-                  backgroundColor={Colors.PRIMARY_BORDER}
-                  borderColor={Colors.PRIMARY_FILL}
+                  backgroundColor={Colors.CLR_7F7F9F}
+                  borderColor={Colors.CLR_D3D3D9}
                   title={'YES'}
                   onPress={() => {
                     console.log('YES')
@@ -357,18 +359,21 @@ const Spouse = props => {
                   setIsResidenceVisible(true);
                 }}
               />
-              <SKInput
-                leftAccImage={CustomFonts.Number}
-                marginTop={15}
-                maxLength={30}
-                borderColor={Colors.CLR_0065FF}
-                value={sinNo}
-                placeholder="Enter SIN"
-                keyboardType="number-pad"
-                onEndEditing={value => {
-                  setSinNo(value);
-                }}
-              />
+              {residency?.residency_id != 5 && 
+               <SKInput
+               leftAccImage={CustomFonts.Number}
+               marginTop={15}
+               maxLength={9}
+               borderColor={Colors.CLR_0065FF}
+               value={sinNo}
+               placeholder="Enter SIN"
+               keyboardType="number-pad"
+               onEndEditing={value => {
+                 setSinNo(value);
+               }}
+             />
+              }
+ 
               <TouchableInput
                 marginTop = {15}
                 leftAccImage={CustomFonts.Calender}

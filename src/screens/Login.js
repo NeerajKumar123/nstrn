@@ -149,8 +149,12 @@ const Login = props => {
                     console.log('deres',deres)
                   })
                   SKTStorage.storeUserData(user, (savedRes) =>{
+                    console.log('savedRes',savedRes)
                     global.userInfo = savedRes
-                    DeviceEventEmitter.emit('user_loggedin',true)
+                    console.log('global.userInfo login',global.userInfo)
+                    setTimeout(() => {
+                      DeviceEventEmitter.emit('user_loggedin',true)
+                    }, 200);
                   });
                 }else{
                   const msg = userRes?.message ?? 'Something went wront, Please try again later.'

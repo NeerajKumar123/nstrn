@@ -50,7 +50,7 @@ const Address = props => {
     const isProvinceValid = province?.state_id;
     if (!isMailingAddValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid Mailing address');
+      Alert.alert('SukhTax', 'Address field is mandatory.');
     } else if (!isProvinceValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid province');

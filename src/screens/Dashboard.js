@@ -21,12 +21,9 @@ import * as SKTStorage from '../helpers/SKTStorage';
 import * as CustomFonts from '../constants/FontsDefs';
 import {useIsFocused} from '@react-navigation/native';
 import {
-  getActiveFileStatusOnLogin,
   getServicePriceList,
-  incorpGetIncorpStatus,
-  taxDocsGetTaxDocsStatus,
-  craLattersGetStatus,
-  getUserProfileDetails
+  getUserProfileDetails,
+  getInvalidSIN
 } from '../apihelper/Api';
 
 const data = [
@@ -83,6 +80,7 @@ const Dashboard = props => {
   // const book_an_appointment_link = global.userInfo
 
   useEffect(() => {
+    console.log('useEffect====>',global.userInfo)
     if(isFocused){
       setIsLoading(true);
       setTimeout(() => {
@@ -92,9 +90,11 @@ const Dashboard = props => {
           }, 100);
         })
       }, 500);
+      
       const {user_id = 0} = global?.userInfo ? global?.userInfo : {}
       if (user_id) {
         getUserProfileDetails({user_id:user_id},(userDetailsRes)=>{
+          console.log('userDetailsRes===>',userDetailsRes)
           if (userDetailsRes.status == 1) {
             const user = userDetailsRes?.data?.[0]
             const fName = user?.firstname ?? ''
@@ -118,6 +118,16 @@ const Dashboard = props => {
       }
     })
   }, [])
+
+  useEffect(() => {
+    getInvalidSIN((invalidSinRes) =>{
+      if(invalidSinRes?.status == 1){
+        let invalidSinList = invalidSinRes?.data
+        global.invalidSinList = invalidSinList
+      }
+    })
+  }, [])
+
 // this is new page of dashboard 
   const navigateToScreen = item => {
     switch (item.id) {

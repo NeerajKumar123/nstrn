@@ -289,7 +289,6 @@ const TaxFilingStatusCard = props => {
       } else if (banking_family_info_filled) {
         const yrwiseRecords = global?.onlineStatusData?.Year_Wise_Records
         let firstYearData = yrwiseRecords?.[0] || {}
-        console.log('firstYearData',firstYearData)
         let isMarried = false
         let isDepSel = false
         if (firstYearData?.marital_status_id == 2 || firstYearData?.marital_status_id == 3) {
@@ -445,7 +444,7 @@ const TaxFilingStatusCard = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'EDIT INFO'}
           onPress={() => {
-            onlineMoveToPage();
+            navigation.navigate('BasicInfo')
           }}
         />
       )}
@@ -490,22 +489,7 @@ const TaxFilingStatusCard = props => {
               borderColor={Colors.PRIMARY_BORDER}
               title={'EDIT INFO'}
               onPress={() => {
-                if (tax_file_status_id == 8) {
-                  navigation.popToTop();
-                } else {
-                  onlineMoveToPage();
-                }
-              }}
-            />
-            <SKButton
-              fontSize={16}
-              width="48%"
-              fontWeight={'normal'}
-              backgroundColor={Colors.PRIMARY_FILL}
-              borderColor={Colors.PRIMARY_BORDER}
-              title={'Continue'}
-              onPress={() => {
-                navigation.goBack();
+                navigation.navigate('BasicInfo')
               }}
             />
           </View>

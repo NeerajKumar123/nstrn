@@ -18,16 +18,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newLaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="b6f-UG-ilk">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="46" y="163" width="283" height="341"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="b6f-UG-ilk" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Sdu-Id-1En"/>
-                            <constraint firstAttribute="trailing" secondItem="b6f-UG-ilk" secondAttribute="trailing" id="aUx-FW-HUc"/>
-                            <constraint firstAttribute="bottom" secondItem="b6f-UG-ilk" secondAttribute="bottom" id="bFN-K8-fYR"/>
-                            <constraint firstItem="b6f-UG-ilk" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="c6g-YT-3hG"/>
+                            <constraint firstItem="b6f-UG-ilk" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="AhB-Fm-bPt"/>
+                            <constraint firstItem="b6f-UG-ilk" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="wfB-Jf-O01"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -37,7 +35,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="newLaunchLogo" width="341.5" height="512"/>
+        <image name="newLaunchLogo" width="283" height="341"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -113,6 +113,7 @@ const BasicInfo = props => {
                       setsin(details.SIN_number)
                       setgender(details.gender)
                       setDOB(new Date(details.DOB))
+                      setLastTime(details.last_year_filed)
                       setIsSinChanged(true)
                       setTimeout(() => {
                         setIsLoading(false)

@@ -102,6 +102,11 @@ export const getResidencyList = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const getSpouseResidencyList = (params,callback) => {
+  const path = `${BaseURL}/GetSpouseResidencyList`
+  API.makePostRequest(path , params, callback);
+};
+
 export const getMaritalStatusList = (params,callback) => {
   const path = `${BaseURL}/GetMaritalStatusList`
   API.makePostRequest(path , params, callback);
@@ -420,4 +425,9 @@ export const onlineGetMyYearInfo = (params,callback) => {
 export const onlineFinalizeAuthorization = (params,callback) => {
   const path = `${BaseURL}/Online_Finalize_Authorization`
   API.makePostRequest(path , params, callback);
+};
+
+export const getInvalidSIN = (callback) => {
+  const path = `${BaseURL}/Get_Invalid_SIN`
+  API.makeGetRequest(path , callback);
 };

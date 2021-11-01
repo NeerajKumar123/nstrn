@@ -12,7 +12,7 @@ const setKeyValue = async (key, value, callback) => {
     global[key] = value
     try {
       await AsyncStorage.setItem(key, valuestring)
-      callback && callback()
+      callback && callback(value)
     } catch (e) {
       // Alert.alert('Failed to save the data to the storage')
       console.log('Failed to save the data to the storage')
@@ -55,9 +55,14 @@ const setKeyValue = async (key, value, callback) => {
 
   const storeUserData = async (userData, callback) => {
     try {
+      console.log('userData',userData)
       const savedData = await AsyncStorage.getItem('USER_DATA');
       const finalUserData = Object.assign({}, savedData, userData);
-      global.userInfo = finalUserData
+      console.log('finalUserData',finalUserData)
+      if (finalUserData) {
+        global.userInfo = finalUserData
+      }
+      console.log('global.userInfo',global.userInfo)
       await setKeyValue('USER_DATA', userData, callback);
     } catch (error) {
         console.log(error);

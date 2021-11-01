@@ -10,7 +10,7 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import {LocalInstsList, LocalResidencyList} from '../constants/StaticValues';
+import {LocalInstsList, LocalResidencyList, LocalResidencyListSpouse} from '../constants/StaticValues';
 import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
 import SKInput from '../components/SKInput';
@@ -23,6 +23,7 @@ import {
   getCanadaProvinceList,
   saveBankingAndFamilyInfoByYear,
   getResidencyList,
+  getSpouseResidencyList,
   getMaritalStatusList,
 } from '../apihelper/Api';
 import SKModel from '../components/SKModel';
@@ -47,6 +48,7 @@ const RemainedDetailsTaxYrFlow = props => {
   const [residency, setResidency] = useState('');
   const [spouseResidency, setSpouseResidency] = useState('');
   const [residencies, setResidencies] = useState();
+  const [residenciesSpouse, setResidenciesSpouse] = useState();
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [maritalStatus, setMaritalStatus] = useState();
   const [maritalStatuses, setMaritalStatuses] = useState();
@@ -72,6 +74,15 @@ const RemainedDetailsTaxYrFlow = props => {
         }else{
           setResidencies(LocalResidencyList);
           setResidency(LocalResidencyList[0]);  
+        }
+      });
+      getSpouseResidencyList({}, resdencyResSpouse => {
+        if (resdencyResSpouse.status == 1) {
+          setResidenciesSpouse(resdencyResSpouse?.data);
+          setSpouseResidency(resdencyResSpouse?.data?.[0]);  
+        }else{
+          setResidenciesSpouse(LocalResidencyListSpouse);
+          setSpouseResidency(LocalResidencyListSpouse[0]);  
         }
       });
       getMaritalStatusList({}, maritalRes => {
@@ -277,7 +288,7 @@ const RemainedDetailsTaxYrFlow = props => {
         {isSpouseResidenceVisible && (
           <SKModel
             title="Select"
-            data={residencies}
+            data={residenciesSpouse}
             keyLabel="residency_name"
             onClose={() => {
               setIsSpouseResidenceVisible(false);

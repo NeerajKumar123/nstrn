@@ -52,6 +52,7 @@ const DependentDetails = props => {
     const isDOBValid = dob;
     const isGenderValid = gender;
     const isSinValid = Validator.isValidSIN(sinNo);
+    console.log('isSinValid',isSinValid)
     const isRelationValid = relation;
     if (!isFNameValid) {
       isValidForm = false;
@@ -59,15 +60,15 @@ const DependentDetails = props => {
     } else if (!isLNameValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter Last Name.');
-    } else if (!isDOBValid) {
+    }  else if (!isSinValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please enter SIN');
+    }else if (!isDOBValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter DOB.');
     } else if (!isGenderValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select gender.');
-    } else if (!isSinValid) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter SIN');
     } else if (!isRelationValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select gender');

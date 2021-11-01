@@ -72,7 +72,9 @@ const DependentsList = props => {
                     depResByTaxFileID => {
                       if (depResByTaxFileID.status == 1) {
                         setDeps(depResByTaxFileID.data);
-                        setIsLoading(false);
+                        setTimeout(() => {
+                          setIsLoading(false);
+                        }, 200);
                       }
                     },
                   );
@@ -87,7 +89,9 @@ const DependentsList = props => {
               depResByTaxFileID => {
                 if (depResByTaxFileID.status == 1) {
                   setDeps(depResByTaxFileID.data);
-                  setIsLoading(false);
+                  setTimeout(() => {
+                    setIsLoading(false);
+                  }, 200);
                 }
               },
             );
@@ -101,7 +105,9 @@ const DependentsList = props => {
           depResByTaxFileID => {
             if (depResByTaxFileID.status == 1) {
               setDeps(depResByTaxFileID.data);
-              setIsLoading(false);
+              setTimeout(() => {
+                setIsLoading(false);
+              }, 200);
             }
           },
         );

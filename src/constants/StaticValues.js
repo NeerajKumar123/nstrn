@@ -137,3 +137,48 @@ export const LocalResidencyList = [
     "added_by": 1
   }
 ]
+
+export const LocalResidencyListSpouse = [
+  {
+    "residency_id": 1,
+    "residency_name": "Citizen",
+    "status": 1,
+    "added_on": "2020-12-10T06:47:04.197",
+    "added_by": 1
+  },
+  {
+    "residency_id": 2,
+    "residency_name": "Permanent Resident",
+    "status": 1,
+    "added_on": "2020-12-10T06:47:17.437",
+    "added_by": 1
+  },
+  {
+    "residency_id": 3,
+    "residency_name": "Work Permit",
+    "status": 1,
+    "added_on": "2020-12-10T06:47:30.667",
+    "added_by": 1
+  },
+  {
+    "residency_id": 4,
+    "residency_name": "Student Visa",
+    "status": 1,
+    "added_on": "2020-12-10T06:47:41.39",
+    "added_by": 1
+  },
+  {
+    "residency_id": 5,
+    "residency_name": "Non-Resident",
+    "status": 1,
+    "added_on": "2020-12-10T06:47:51.553",
+    "added_by": 1
+  },
+  {
+    "residency_id": 6,
+    "residency_name": "Other",
+    "status": 1,
+    "added_on": "2020-12-10T06:48:01.533",
+    "added_by": 1
+  }
+]

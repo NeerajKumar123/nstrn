@@ -87,10 +87,10 @@ const HomeDocsListing = props => {
                     if (!fileName.includes('.pdf')) {
                       fileName = fileName +  '.pdf'
                     }
-                    downloadFileFromUrl(doc?.document_file_name, 'fileName.png' , ()=>{
+                    downloadFileFromUrl(doc?.document_file_name, fileName, ()=>{
                       console.log('document_file_name', doc)
                     })
-                  }else if (docUrl?.includes('.jpeg') || docUrl?.includes('.png') || docUrl?.includes('.jpg')){
+                  }else if (docUrl?.includes('.jpeg') || docUrl?.includes('.JPEG') || docUrl?.includes('.png') || docUrl?.includes('.PNG') || docUrl?.includes('.jpg') || docUrl?.includes('.JPG')){
                     setSelectedItem(doc);
                     setShowDoc(true);  
                   }
