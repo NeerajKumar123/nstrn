@@ -149,12 +149,12 @@ const IncorpSignaturePage = props => {
           <Heading
             fontSize={14}
             color={Colors.APP_BLUE_HEADING_COLOR}
-            value={global.selectedCorp.incorporation_type}
+            value={global?.selectedCorp?.incorporation_type}
           />
            <Heading
             fontSize={14}
             color={Colors.APP_BLUE_HEADING_COLOR}
-            value={global.selectedCategory.incorporation_category}
+            value={global?.selectedCategory?.incorporation_type}
           />
           <Heading
             fontSize={16}

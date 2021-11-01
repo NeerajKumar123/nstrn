@@ -180,10 +180,29 @@ const AllSet = props => {
           navigation.navigate('AllDocuments');
         }}
       />
+       <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+          borderColor={Colors.CLR_D3D3D9}
+          title={'NEW REQUEST'}
+          onPress={() => {
+            navigation.navigate('IncorporationLanding');
+          }}
+        />
+      
+      <DarkBlueButton
+        title={'RETURN TO DASHBOARD'}
+        onClick={() => {
+          navigation.popToTop();
+        }}
+      />
       <SKButton
         fontSize={16}
         marginTop={30}
-        width="100%"
+        width="50%"
         fontWeight={'normal'}
         backgroundColor={Colors.SECONDARY_FILL}
         borderColor={Colors.PRIMARY_BORDER}
@@ -200,12 +219,6 @@ const AllSet = props => {
             },
             err => console.log(err),
           );
-        }}
-      />
-      <DarkBlueButton
-        title={'RETURN TO DASHBOARD'}
-        onClick={() => {
-          navigation.popToTop();
         }}
       />
     </View>

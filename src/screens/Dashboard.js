@@ -226,7 +226,7 @@ const Dashboard = props => {
       authorization_document_uploaded, // HST
       incorporation_status_id
     } = global?.incStatusData;
-    if(incorporation_status_id ==1 ){
+    if(incorporation_status_id ==1){
       if (hst_registration || authorization_document_uploaded) {
         navigation.navigate('HSTRegistration');
       } else if (identification_document_uploaded) {
@@ -234,9 +234,7 @@ const Dashboard = props => {
       } else {
         navigation.navigate('IncorporationLanding');
       }
-    }else if(incorporation_status_id == 2){
-      navigation.navigate('IncorpInProcessScreen');
-    }else if(incorporation_status_id == 3){
+    }else if(incorporation_status_id == 3 || incorporation_status_id == 2){
       navigation.navigate('IncorpApplyStatus');
     }else {
       navigation.navigate('IncorporationLanding');
@@ -244,7 +242,7 @@ const Dashboard = props => {
   };
   const reqMoveToPage = props => {
     const {tax_docs_status_id = 1} = global?.taxDocsStatusData
-    if (tax_docs_status_id == 2) { // inprogrees
+    if (tax_docs_status_id == 2 || tax_docs_status_id == 3) { // inprogrees 
       navigation.navigate('RequestApplyStatus');
     }else{
       navigation.navigate('RequestLanding');

@@ -28,8 +28,8 @@ const AboutCorp = props => {
   const checkFormValidations = () => {
     let isValidForm = true;
     const isNatureValid =  true
-    const isOtherValid =  true
-    const isBAddressValid =  true
+    const isOtherValid =  ifOther?.length > 0
+    const isBAddressValid =  naturesOfBussiness?.nature_of_business_id > 0 ? true : bussAddress?.length > 0
     if (!isNatureValid) {
       isValidForm = false;
       Alert.alert('SukhTax','Please select a valid nature of bussiness.');
@@ -147,6 +147,7 @@ const AboutCorp = props => {
             setIsNOBVisible(false);
           }}
           onSelect={value => {
+            console.log('isNatureValid',value)
             setIsNOBVisible(false)
             setSelectedNature(value)
           }}
