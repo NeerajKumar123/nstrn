@@ -444,7 +444,7 @@ const TaxFilingStatusCard = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'EDIT INFO'}
           onPress={() => {
-            navigation.navigate('BasicInfo')
+            navigation.navigate('OnlineEditInfo')
           }}
         />
       )}
@@ -474,25 +474,18 @@ const TaxFilingStatusCard = props => {
       )}
       {(tax_file_status_id == 9 || tax_file_status_id == 8) &&
         can_edit_documents == 1 && (
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: 18,
-            }}>
-            <SKButton
-              fontSize={16}
-              width="48%"
-              fontWeight={'normal'}
-              backgroundColor={Colors.SECONDARY_FILL}
-              borderColor={Colors.PRIMARY_BORDER}
-              title={'EDIT INFO'}
-              onPress={() => {
-                navigation.navigate('BasicInfo')
-              }}
-            />
-          </View>
+          <SKButton
+          fontSize={16}
+          marginTop = {18}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.SECONDARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'EDIT INFO'}
+          onPress={() => {
+            navigation.navigate('OnlineEditInfo')
+          }}
+        />
         )}
       {tax_file_status_id == 14 && (
         <View
@@ -659,7 +652,7 @@ const TaxFilingStatusCard = props => {
         <SKButton
           fontSize={16}
           marginTop={30}
-          width="100%"
+          width="50%"
           fontWeight={'normal'}
           backgroundColor={Colors.SECONDARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}

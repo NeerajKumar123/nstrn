@@ -200,7 +200,7 @@ const AllSet = props => {
       <SKButton
         fontSize={16}
         marginTop={30}
-        width="100%"
+        width="50%"
         fontWeight={'normal'}
         backgroundColor={Colors.SECONDARY_FILL}
         borderColor={Colors.PRIMARY_BORDER}

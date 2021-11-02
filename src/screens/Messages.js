@@ -94,6 +94,7 @@ const Messages = props => {
         <SKInput
           rightAccImage={CustomFonts.send_msg}
           isChatInput={true}
+          autoCapitalize = 'sentences'
           onTextChange={text => {
             setChatText(text);
           }}

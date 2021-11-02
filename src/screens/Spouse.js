@@ -28,15 +28,21 @@ import {
   getSpouseResidencyList,
   getInstitutionList,
   saveSpouseInfo,
-  onlineGetSpouseInfoByUserId
+  onlineGetSpouseInfoByUserId,
+  onlineGetSpouseInfo,
+  updateSpouseInfo
 } from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
 import * as SKTStorage from '../helpers/SKTStorage';
 import {LocalInstsList,LocalResidencyListSpouse} from '../constants/StaticValues';
+import {useIsFocused} from '@react-navigation/native';
 
 const Spouse = props => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const pageParams = props.route.params;
+  const isEditing = pageParams?.isEditing
   const [isFillingForWife, setIsFillingForWife] = useState(false);
   const [lastTime, setLastTime] = useState();
   const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
@@ -62,11 +68,20 @@ const Spouse = props => {
   const [isBankVisible, setIsBankVisible] = useState();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const { Tax_Filed_With_Sukhtax } = global.onlineStatusData;
+  const [taxFileSpouseId, setTaxFileSpouseId] = useState()
   let tax_file_year_id = 0
-  SKTStorage.getValue('tax_file_year_id', (id)=>{
-    tax_file_year_id = id
-  })
-
+  //check if  in editing  mode then pick from server data only
+  if (isEditing) {
+    const {Year_Wise_Records} = global.onlineStatusData
+    if (Year_Wise_Records && Year_Wise_Records.length > 0) {
+      const singYear  = Year_Wise_Records[0] || {}
+      tax_file_year_id = singYear.tax_file_year_id
+    }
+  }else{
+    SKTStorage.getValue('tax_file_year_id', (id)=>{
+      tax_file_year_id = id
+    })  
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -76,10 +91,8 @@ const Spouse = props => {
       getSpouseResidencyList({}, resdencyRes => {
         if (resdencyRes.status == 1) {
           setResidencies(resdencyRes?.data);
-          setResidency(resdencyRes?.data?.[0]);  
         }else{
           setResidencies(LocalResidencyListSpouse);
-          setResidency(LocalResidencyListSpouse[0]);  
         }
         setTimeout(() => {
           setIsLoading(false);
@@ -87,6 +100,43 @@ const Spouse = props => {
       });
     });
   }, []);
+
+  useEffect(() => {
+    if (isFocused && isEditing) {
+      const {tax_file_id, user_id} =  global.onlineStatusData;
+      const params = {
+        User_Id: user_id,
+        Tax_File_Id: tax_file_id,
+      };
+      onlineGetSpouseInfo(params, spouseInfoRes => {
+        const details = spouseInfoRes.data[0];
+        if (details) {
+          setLastTime(details.last_year_filed)
+          setFName(details.first_name)
+          setLName(details.last_name)
+          setDOB(new Date(details.DOB))
+          setGender(details.gender)
+          setSinNo(details.SIN_Number)
+          setLastTime(details.last_year_filed)
+          setEnrtyDate(new Date(details.DOE_Canada))
+          setResidency({residency_id:details.residency_id,residency_name:details.residency});
+          setBank({
+            institution_name: details.institution_name,
+            institution_id: details.institution_id,
+          });
+          setAccountNo(details.account_no)
+          setBranhcNo(details.branch)
+          const isFilingS  = details.Filing_For_Spouse ? true : false
+          console.log('details.isFilingS',isFilingS)
+          setIsFillingForWife(isFilingS)
+          setTaxFileSpouseId(details.tax_file_spouse_id)
+        }
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
+      });
+    }
+  }, [isFocused])
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -141,7 +191,6 @@ const Spouse = props => {
 
   const prepareParams = () => {
     const {user_id, tax_file_id} = global.onlineStatusData;
-
     const params = {
       User_id: user_id,
       Tax_File_Id: tax_file_id || Tax_File_Id,
@@ -159,6 +208,9 @@ const Spouse = props => {
       Residency: residency?.residency_name,
       Filing_For_Spouse: isFillingForWife ? 1 : 0,
     };
+    if (isEditing) {
+      params['Tax_File_Spouse_id'] = taxFileSpouseId
+    }
     return params;
   };
 
@@ -194,6 +246,40 @@ const Spouse = props => {
     })
   }
 
+  const handleSaveAndUpdateInfo = () =>{
+    if (!isEditing) {
+      setIsLoading(true);
+      const params = prepareParams();
+      saveSpouseInfo(params, spouseRes => {
+        if (spouseRes?.status == 1) {
+          SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
+            navigation.push('DependentsList', {depCount: 1, isEditing:isEditing});
+          });
+        } else {
+          Alert.alert('SukhTax', 'Something went wrong!');
+        }
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 200);
+      });
+    }else{
+      setIsLoading(true);
+      const params = prepareParams();
+      updateSpouseInfo(params, spouseRes => {
+        if (spouseRes?.status == 1) {
+          SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
+            navigation.push('DependentsList', {depCount: 1, isEditing:isEditing});
+          });
+        } else {
+          Alert.alert('SukhTax', 'Something went wrong!');
+        }
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 200);
+      });  
+    }
+  }
+
   return (
     <View
       style={{
@@ -214,7 +300,7 @@ const Spouse = props => {
             paddingHorizontal: 20,
           }}>
           <Heading value="SPOUSE" marginTop={26} />
-          {Tax_Filed_With_Sukhtax && !isConfirmed ? (
+          {Tax_Filed_With_Sukhtax && !isEditing && !isConfirmed ? (
             <>
               <Heading
                 fontSize={20}
@@ -244,7 +330,7 @@ const Spouse = props => {
                   fontSize={16}
                   width={'48%'}
                   fontWeight={'normal'}
-                  backgroundColor={Colors.CLR_7F7F9F}
+                  backgroundColor={Colors.APP_RED_SUBHEADING_COLOR}
                   borderColor={Colors.CLR_D3D3D9}
                   title={'YES'}
                   onPress={() => {
@@ -280,7 +366,7 @@ const Spouse = props => {
                   fontSize={16}
                   width={'48%'}
                   fontWeight={'normal'}
-                  backgroundColor={Colors.CLR_7F7F9F}
+                  backgroundColor={Colors.APP_RED_SUBHEADING_COLOR}
                   borderColor={Colors.CLR_D3D3D9}
                   title={'YES'}
                   onPress={() => {
@@ -437,18 +523,7 @@ const Spouse = props => {
                 title={'DEPENDENTS'}
                 onPress={() => {
                   if (checkFormValidations()) {
-                    setIsLoading(true);
-                    const params = prepareParams();
-                    saveSpouseInfo(params, spouseRes => {
-                      setIsLoading(false);
-                      if (spouseRes?.status == 1) {
-                        SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
-                          navigation.push('DependentsList', {depCount: 1});
-                        });
-                      } else {
-                        Alert.alert('SukhTax', 'Something went wrong!');
-                      }
-                    });
+                   handleSaveAndUpdateInfo()
                   }
                 }}
               />

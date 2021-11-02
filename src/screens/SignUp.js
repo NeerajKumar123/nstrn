@@ -171,6 +171,7 @@ const SignUp = props => {
             value={pass}
             isSecurePass={isSecurePass}
             placeholder="Password"
+            autoCapitalize = 'none'
             rightAccImage={
               isSecurePass
                 ? CustomFonts.EyeOutlineOff
@@ -196,6 +197,7 @@ const SignUp = props => {
             value={''}
             isSecurePass={isSecurePassC}
             placeholder="Confirm Password"
+            autoCapitalize = 'none'
             onRightPressed={() => {
               setIsSecurePassC(!isSecurePassC);
             }}

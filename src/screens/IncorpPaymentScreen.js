@@ -97,7 +97,7 @@ import {
                 const incStatusData = incStatusRes?.data && incStatusRes?.data.length > 0 ? incStatusRes?.data[0] : undefined
                 global.incStatusData = incStatusData
                 setTimeout(() => {
-                  navigation.navigate('IncorpApplyStatus')
+                  navigation.navigate('IncorpApplyStatus',{shouldGoToHome:true})
                 }, 300);
               }else{
                 setIsLoading(false);

@@ -65,6 +65,7 @@ import CRAReply from './screens/CRAReply';
 import CRAAttachments from './screens/CRAAttachments';
 import AnimTest from './screens/AnimTest'
 import {SafeAreaView} from 'react-native';
+import OnlineEditInfo from './screens/OnlineEditInfo'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 const Stack = createStackNavigator();
 
@@ -406,6 +407,11 @@ const SKStack = () => { /// This is After login stack
           name="CRAAttachments"
           component={CRAAttachments}
           options={{title: 'CRAAttachments', headerShown: false}}
+        />
+        <Stack.Screen
+          name="OnlineEditInfo"
+          component={OnlineEditInfo}
+          options={{title: 'OnlineEditInfo', headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>

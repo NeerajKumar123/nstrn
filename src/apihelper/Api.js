@@ -82,6 +82,10 @@ export const saveAboutInfo = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const updateAboutInfo = (params,callback) => {
+  const path = `${BaseURL}/Update_About_Info`
+  API.makePostRequest(path , params, callback);
+};
 export const getCanadaProvinceList = (params,callback) => {
   const path = `${BaseURL}/GetCanadaProvinceList`
   API.makePostRequest(path , params, callback);
@@ -123,6 +127,11 @@ export const updateBankingAndFamilyInfoByYear = (params,callback) => {
 };
 export const saveSpouseInfo = (params,callback) => {
   const path = `${BaseURL}/Save_Spouse_Info`
+  API.makePostRequest(path , params, callback);
+};
+
+export const updateSpouseInfo = (params,callback) => {
+  const path = `${BaseURL}/Update_Spouse_Info`
   API.makePostRequest(path , params, callback);
 };
 
@@ -398,6 +407,11 @@ export const onlineGetBankingInfoByUser = (params,callback) => {
 };
 
 
+export const onlineGetSpouseInfo = (params,callback) => {
+  const path = `${BaseURL}/Get_Spouse_Info`
+  API.makePostRequest(path , params, callback);
+};
+
 export const onlineGetSpouseInfoByUserId = (params,callback) => {
   const path = `${BaseURL}/Online_Get_Spouse_Info_By_User_Id`
   API.makePostRequest(path , params, callback);
@@ -419,6 +433,11 @@ export const onlineDeteleDependent = (params,callback) => {
 
 export const onlineGetMyYearInfo = (params,callback) => {
   const path = `${BaseURL}/Online_Get_My_Year_Info`
+  API.makePostRequest(path , params, callback);
+};
+
+export const onlineUpdateMyYearInfo = (params,callback) => {
+  const path = `${BaseURL}/Online_Update_My_Year_Info`
   API.makePostRequest(path , params, callback);
 };
 

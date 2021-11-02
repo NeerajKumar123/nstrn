@@ -18,18 +18,20 @@ import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
-import {getCanadaProvinceList, saveAboutInfo} from '../apihelper/Api';
+import {getCanadaProvinceList, saveAboutInfo,getAboutInfo,updateAboutInfo} from '../apihelper/Api';
 import SKModel from '../components/SKModel';
 import SKGGLAddressModel from '../components/SKGGLAddressModel';
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
 import * as SKTStorage from '../helpers/SKTStorage';
+import {useIsFocused} from '@react-navigation/native';
 
 const Address = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  const [mailingAddress, setMailingAddress] = useState();
-  const [province, setProvince] = useState('');
+  const isEditing = pageParams?.isEditing
+  const [mailingAddress, setMailingAddress] = useState(pageParams.mailingAddress);
+  const [province, setProvince] = useState(pageParams.province);
   const [provinces, setProvinces] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isProvinceVisible, setIsProvinceVisible] = useState(false);
@@ -72,6 +74,70 @@ const Address = props => {
       Year: global?.mostRecentYear,
       Module_Type_Id: 2,
       Years_Selected: commaSepYrs,
+    };
+    return params;
+  };
+
+  const handleSaveAndUpdateCall = () =>{
+    if (isEditing) {
+      setIsLoading(true);
+      const params = prepareParamsUpdate();
+      updateAboutInfo(params, saveRes => {
+        setIsLoading(false);
+        if (saveRes?.status == -1) {
+          Alert.alert('SukhTax', 'Something went wrong');
+          return;
+        }
+        global.onlineStatusData = {
+          ...global.onlineStatusData,
+          ...saveRes?.data[0],
+        };
+        const data = saveRes?.data[0]
+        SKTStorage.setKeyValue('tax_file_year_id',data?.tax_file_year_id, ()=>{})
+        SKTStorage.setKeyValue('tax_file_id',data?.tax_file_id, ()=>{})
+        SKTStorage.setKeyValue('province',province, ()=>{
+          navigation.navigate('BankingAndMore', {province: province, isEditing:isEditing});
+        })
+      });
+    }else{
+      setIsLoading(true);
+      const params = prepareParams();
+      saveAboutInfo(params, saveRes => {
+        setIsLoading(false);
+        if (saveRes?.status == -1) {
+          Alert.alert('SukhTax', 'Something went wrong');
+          return;
+        }
+        global.onlineStatusData = {
+          ...global.onlineStatusData,
+          ...saveRes?.data[0],
+        };
+        const data = saveRes?.data[0]
+        SKTStorage.setKeyValue('tax_file_year_id',data?.tax_file_year_id, ()=>{})
+        SKTStorage.setKeyValue('tax_file_id',data?.tax_file_id, ()=>{})
+        SKTStorage.setKeyValue('province',province, ()=>{
+          navigation.navigate('BankingAndMore', {province: province, isEditing:isEditing});
+        })
+      });
+    }
+
+  }
+
+  const prepareParamsUpdate = () => {
+    const {user_id,tax_file_id,years_selected} = global.onlineStatusData
+    const ar = years_selected?.split(',')
+    const dob = pageParams.dob && format(pageParams.dob, 'yyyy-MM-dd');
+    const params = {
+      User_Id: user_id,
+      Tax_File_Id:tax_file_id,
+      Year: ar[0],
+      SIN_Number: pageParams.sin,
+      Gender: pageParams.gender,
+      DOB: dob,
+      Last_Year_Tax_Filed: pageParams.lastTime,
+      Mailing_Address: mailingAddress,
+      Module_Type_Id: 2,
+      Province_Lived_In:province.state_name
     };
     return params;
   };
@@ -138,25 +204,7 @@ const Address = props => {
           title={'BANKING'}
           onPress={() => {
             if (checkFormValidations()) {
-              setIsLoading(true);
-              const params = prepareParams();
-              saveAboutInfo(params, saveRes => {
-                setIsLoading(false);
-                if (saveRes?.status == -1) {
-                  Alert.alert('SukhTax', 'Something went wrong');
-                  return;
-                }
-                global.onlineStatusData = {
-                  ...global.onlineStatusData,
-                  ...saveRes?.data[0],
-                };
-                const data = saveRes?.data[0]
-                SKTStorage.setKeyValue('tax_file_year_id',data?.tax_file_year_id, ()=>{})
-                SKTStorage.setKeyValue('tax_file_id',data?.tax_file_id, ()=>{})
-                SKTStorage.setKeyValue('province',province, ()=>{
-                  navigation.navigate('BankingAndMore', {province: province});
-                })
-              });
+              handleSaveAndUpdateCall()
             }
           }}
         />

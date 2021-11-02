@@ -101,8 +101,8 @@ const SignaturePage = props => {
             result: 'base64',
           }}>
           <Heading
-            fontSize={20}
-            value="AUTHORIZE A REPRESENTATIVE-SIGNATURE PAGE"
+            fontSize={18}
+            value="AUTHORIZE A REPRESENTATIVE SIGNATURE PAGE"
             marginTop={26}
           />
           <Heading

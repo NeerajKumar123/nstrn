@@ -47,7 +47,7 @@ const API = {
 
 const extractError = (error, url) => {
   // Error 😨
-  if (error.response) {
+  if (error && error.response) {
     /*
      * The request was made and the server responded with a
      * status code that falls out of the range of 2xx
@@ -56,18 +56,18 @@ const extractError = (error, url) => {
     console.log('error.response.data', error.response.data);
     console.log('error.response.status',error.response.status);
     console.log(error.response.headers);
-  } else if (error.request) {
+  } else if (error &&  error.request) {
     /*
      * The request was made but no response was received, `error.request`
      * is an instance of XMLHttpRequest in the browser and an instance
      * of http.ClientRequest in Node.js
      */
-    console.log('error.request', error.request);
+    console.log('error.request',error?.request);
   } else {
     // Something happened in setting up the request and triggered an Error
-    console.log('error.message', error.message);
+    console.log('error.message', error && error?.message);
   }
-  console.log('error.config', error.config);
+  console.log('error.config', error && error?.config);
 };
 
 export default API;

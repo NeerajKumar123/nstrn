@@ -84,6 +84,10 @@ const Dashboard = props => {
     console.log('useEffect====>',global.userInfo)
     if(isFocused){
       setIsLoading(true);
+      const user = global.userInfo
+      const fName = user?.firstname ?? ''
+      const lName = user?.lastname ?? ''
+      setUserFullName(fName + ' ' + lName )
       setTimeout(() => {
         loadIntialData((res)=>{
           setTimeout(() => {
@@ -104,7 +108,6 @@ const Dashboard = props => {
           }
         })
       }
-
     }
   }, [isFocused])
 
@@ -150,7 +153,6 @@ const Dashboard = props => {
           );
           setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
         }
-        setLoading(false);
       });
   }, []);
 
@@ -188,8 +190,6 @@ const Dashboard = props => {
     }
   };
   const onlineMoveToPage = props => {
-    navigation.navigate('Spouse');
-    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -302,7 +302,7 @@ const Dashboard = props => {
           color: Colors.APP_RED_SUBHEADING_COLOR,
           fontFamily: CustomFonts.OpenSansRegular,
         }}>
-        {`Welcome, ${userFullName}`}
+        {`Welcome ${userFullName}`}
       </Text>
       {data && (
         <FlatList

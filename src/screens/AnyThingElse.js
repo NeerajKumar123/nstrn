@@ -39,13 +39,18 @@ const AnyThingElse = props => {
           value="PLEASE USE THE BELOW BOX TO TELL US ABOUT ANYTHING REGARDIING YOUR TAX YEAR, OR ABOUT ANYTHING YOU WOULD LIKE US TO KNOW."
         />
         <SKInput
-          marginTop={20}
-          marginBottom={0}
-          maxLength = {100}
+          marginBottom={2}
+          marginTop={30}
+          height = {100}
+          maxLength={300}
+          multiline={true}
+          returnKeyType="done"
+          blurOnSubmit={true}
           borderColor={Colors.CLR_0065FF}
-          value={''}
-          placeholder = 'Please type here.'
+          value={anythingText}
+          placeholder="'Please type here"
           onEndEditing={value => {
+            console.log('value', value)
             setAnythingText(value)
           }}
         />

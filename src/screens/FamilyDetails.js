@@ -39,31 +39,39 @@ const FamilyDetails = props => {
   }
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  const dependents = []
-  const [maritalStatus, setMaritalStatus] = useState();
+  const isEditing = pageParams?.isEditing
+  const [maritalStatus, setMaritalStatus] = useState(pageParams?.maritalStatus);
   const [maritalStatuses, setMaritalStatuses] = useState();
-  const [mChangeOpton, setMChangeOpton] = useState(YES_NO[1]);
-  const [mStatusChangedDate, setMStatusChangedDate] = useState();
+  const [mChangeOpton, setMChangeOpton] = useState(pageParams?.mChangeOpton);
+  const [mStatusChangedDate, setMStatusChangedDate] = useState(pageParams?.mStatusChangedDate);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [dependentOption, setDependentOption] = useState(YES_NO[1]);
+  const [dependentOption, setDependentOption] = useState(pageParams?.dependentOption);
   const [isLoading, setIsLoading] = useState(false);
   const [isMVisible, setIsMVisible] = useState();
   const [isMChangeVisible, setIsMChangeVisible] = useState();
   const [isDepOptionVisible, setIsDepOptionVisible] = useState();
   const [nextButtonTitle, setNextButtonTitle] = useState('MY TAX YEAR')
+
   let tax_file_year_id = 0
-  SKTStorage.getValue('tax_file_year_id', (id)=>{
-    tax_file_year_id = id
-  })
+  //check if  in editing  mode then pick from server data only
+  if (isEditing) {
+    const {Year_Wise_Records} = global.onlineStatusData
+    if (Year_Wise_Records && Year_Wise_Records.length > 0) {
+      const singYear  = Year_Wise_Records[0] || {}
+      tax_file_year_id = singYear.tax_file_year_id
+    }
+  }else{
+    SKTStorage.getValue('tax_file_year_id', (id)=>{
+      tax_file_year_id = id
+    })
+  }
 
   let maxDate = new Date(); 
   maxDate.setFullYear(global?.mostRecentYear);
-  
   useEffect(() => {
     setIsLoading(true)
     getMaritalStatusList({}, maritalRes => {
       setMaritalStatuses(maritalRes?.data);
-      setMaritalStatus(maritalRes?.data?.[0])
       setIsLoading(false)
     });
   }, []);
@@ -132,7 +140,7 @@ const FamilyDetails = props => {
           width: '100%',
           paddingHorizontal: 20,
         }}>
-        <Heading value="WHO IS IN YOUR FAMILY" marginTop={26} />
+        <Heading value="WHO IS IN YOUR FAMILY?" marginTop={26} />
         <Heading
           fontSize={20}
           marginTop={45}
@@ -205,11 +213,11 @@ const FamilyDetails = props => {
                   const check = (maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3) ? true : false
                   SKTStorage.setKeyValue('isFromSpouseFlow',check,()=>{
                     if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
-                      navigation.navigate('Spouse',{dependentOption:dependentOption.id});
+                      navigation.navigate('Spouse',{dependentOption:dependentOption.id, isEditing:isEditing});
                     }else if (dependentOption.id  == 1){
-                      navigation.push('DependentsList', {depCount:1});
+                      navigation.push('DependentsList', {depCount:1,isEditing:isEditing});
                     }else {
-                      navigation.navigate('MyTaxYear',{pageIndex:0});
+                      navigation.navigate('MyTaxYear',{pageIndex:0,isEditing:isEditing});
                     }
                   })
                 }else{
