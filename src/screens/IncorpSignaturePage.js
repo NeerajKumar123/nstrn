@@ -26,6 +26,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 import SignatureCapture from 'react-native-signature-capture';
 import ViewShot from 'react-native-view-shot';
+import * as SKTStorage from '../helpers/SKTStorage'
+
 
 const IncorpSignaturePage = props => {
   const navigation = useNavigation();
@@ -46,6 +48,10 @@ const IncorpSignaturePage = props => {
   const [isSignSaved, setIsSignSaved] = useState(false);
   const signPad = useRef(null);
   const viewShotRef = useRef(null);
+
+  SKTStorage.getValue('selectedCategory', (cat)=>{console.log('selectedCategory',cat)})
+  SKTStorage.getValue('selectedCorp', (corp)=>{console.log('selectedCorp',corp)})
+  
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -68,7 +74,6 @@ const IncorpSignaturePage = props => {
         Incorporator_Id: incorporator_id,
       };
       incorpGetIncorporatorDetails(params, detailsRes => {
-        console.log('detailsRes',detailsRes)
         setIsLoading(false);
         if (detailsRes?.status == 1) {
           const data = detailsRes?.data?.[0];

@@ -43,6 +43,7 @@ export const isEmpty = value => {
 };
 
 export async function downloadFileFromUrl(url, filename, callback) {
+  console.log('url',url,filename )
   if (Platform.OS === 'android') {
     const granted = await checkPermission(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -70,8 +71,10 @@ export async function downloadFileFromUrl(url, filename, callback) {
       })
         .fetch('GET', `${url}`, {})
         .then(res => {
+          callback()
           filePath = res.path();
           fileType =  res.respInfo.headers['content-type'] || res.respInfo.headers['Content-Type'];
+          console.log('fileType',fileType)
           if (!fileType) {
             fileType = 'application/pdf';
           }
@@ -101,11 +104,13 @@ export async function downloadFileFromUrl(url, filename, callback) {
           }
         })
         .catch((errorMessage, statusCode) => {
+          callback()
           console.log('errorMessage',errorMessage,statusCode )
           Alert.alert('SukhTax', errorMessage, statusCode);
         });
     })
     .catch(error => {
+      callback()
       console.log('error',error)
     });
 }

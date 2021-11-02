@@ -28,22 +28,22 @@ const Login = props => {
     return unsubscribe;
    }, []);
 
-   const requestUserPermission = async () => {
+   async function requestUserPermission() {
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
+  
     if (enabled) {
-      console.log('Authorization status:', authStatus);
       getFcmToken()
+      console.log('Authorization status:', authStatus);
     }
   }
 
   const getFcmToken = async () => {
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
-     console.log("Your Firebase Token is:", fcmToken);
+     Alert.alert("Your Firebase Token is:", fcmToken);
      setToken(fcmToken)
     } else {
      console.log("Failed", "No token received");
@@ -70,6 +70,7 @@ const Login = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         flex: 1,
+        backgroundColor:'green'
       }}>
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}

@@ -17,6 +17,7 @@ const download = require('../../assets/download.png');
 import {downloadFileFromUrl} from  '../helpers/BaseUtility';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DocumentViewer from '../components/DocumentViewer';
+import SKLoader from '../components/SKLoader';
 const HomeDocsListing = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
@@ -24,6 +25,7 @@ const HomeDocsListing = props => {
   const [groupedDocs, setGroupedDocs] = useState();
   const [showDoc, setShowDoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const {docs} = pageParams;
@@ -46,6 +48,34 @@ const HomeDocsListing = props => {
     }
     setGroupedDocs(tempArry);
   }, []);
+
+  const getFileName = (docUrl) =>{
+    const dateString  =`${new Date().valueOf()}`
+    console.log(dateString);
+    const loweredCase = docUrl?.toLowerCase()
+    let fileName = 'Sukhtax_' + dateString
+    if (loweredCase.includes('.pdf')){
+      fileName = fileName + '.pdf'
+    }else if (loweredCase.includes('.png')) {
+      fileName = fileName + '.png'
+    }else if (loweredCase.includes('.jpeg')) {
+      fileName = fileName + '.jpeg'
+    }else if (loweredCase.includes('.jpg')) {
+      fileName = fileName + '.jpg'
+    }
+    console.log('fileName===>',fileName)
+    return fileName
+  }
+
+  const handleFileDownloading = (doc, callback) =>{
+    const docUrl = doc?.document_file_name?.replace(/ /g, '')
+    const fileName = getFileName(docUrl)
+    downloadFileFromUrl(docUrl, fileName, ()=>{
+      console.log('document_file_name', doc)
+      callback()
+    })
+  }
+
   return (
     <View
       style={{
@@ -55,6 +85,7 @@ const HomeDocsListing = props => {
         width: '100%',
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader/>}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -80,23 +111,11 @@ const HomeDocsListing = props => {
                 key = {item.document_file_name}
                 marginTop={23}
                 onDocClicked={doc => {
-                  const docUrl = doc?.document_file_name
-                  if (docUrl?.includes('.pdf')) {
-                    let fileName =  doc?.document_title ?? 'sukhtax.pdf'
-                    fileName = fileName.replace(/ /g, '');
-                    if (!fileName.includes('.pdf')) {
-                      fileName = fileName +  '.pdf'
-                    }
-                    downloadFileFromUrl(doc?.document_file_name, fileName, ()=>{
-                      console.log('document_file_name', doc)
-                    })
-                  }else if (docUrl?.includes('.jpeg') || docUrl?.includes('.JPEG') || docUrl?.includes('.png') || docUrl?.includes('.PNG') || docUrl?.includes('.jpg') || docUrl?.includes('.JPG')){
-                    setSelectedItem(doc);
-                    setShowDoc(true);  
-                  }
-                  else{
-                    Alert.alert('Sukhtax','Dodument not supported.')
-                  }
+                  console.log('doc===>',doc)
+                  console.log('groupedDocs',groupedDocs)
+                 handleFileDownloading(doc, ()=>{
+                  console.log('groupedDocs1111',groupedDocs)
+                 })
                 }}
               />
             )}
