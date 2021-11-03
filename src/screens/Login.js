@@ -43,7 +43,8 @@ const Login = props => {
   const getFcmToken = async () => {
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
-     Alert.alert("Your Firebase Token is:", fcmToken);
+    console.log("Failed", "No token received",fcmToken);
+    //  Alert.alert("Your Firebase Token is:", fcmToken);
      setToken(fcmToken)
     } else {
      console.log("Failed", "No token received");
@@ -70,7 +71,6 @@ const Login = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         flex: 1,
-        backgroundColor:'green'
       }}>
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -112,6 +112,7 @@ const Login = props => {
           borderColor={Colors.CLR_0065FF}
           value={pass}
           isSecurePass = {isSecurePass}
+          autoCapitalize = 'none'
           placeholder = 'Password'
           rightAccImage={isSecurePass ? CustomFonts.EyeOutlineOff : CustomFonts.EyeOutlineOn}
           onRightPressed = {()=>{
@@ -144,16 +145,12 @@ const Login = props => {
                 setIsLoading(false)
                 if(userRes?.status == 1){
                   const user = userRes && userRes.data[0]
-                  console.log('userRes',userRes)
                   const {user_id} = user
                   const devparams  = {user_id:user_id,Device_Id:token,Device_OS:Platform.OS == 'ios' ? 'iOS' : 'Android'}
                   updateDeviceIDAndOS(devparams, (deres) =>{
-                    console.log('deres',deres)
                   })
                   SKTStorage.storeUserData(user, (savedRes) =>{
-                    console.log('savedRes',savedRes)
                     global.userInfo = savedRes
-                    console.log('global.userInfo login',global.userInfo)
                     setTimeout(() => {
                       DeviceEventEmitter.emit('user_loggedin',true)
                     }, 200);

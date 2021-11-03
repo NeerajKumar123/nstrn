@@ -184,7 +184,7 @@ export const SKModelImageTitle = props => {
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={imageTitle}
-            placeholder="Enter image title"
+            placeholder="Enter document title"
             onTextChange={value => {
               setImageTitle(value);
             }}
@@ -198,7 +198,7 @@ export const SKModelImageTitle = props => {
                 width: '90%',
                 marginTop: 8,
               }}>
-              Please enter valid image title.
+              Please enter valid document title.
             </Text>
           )}
           <SKButton
@@ -215,7 +215,6 @@ export const SKModelImageTitle = props => {
               if (imageTitle.length > 0) {
                 onTitleEntered(imageTitle);
               } else {
-                // Alert.alert('Sukhtax', 'Please enter valid image title.')
                 setIsError(true);
               }
             }}

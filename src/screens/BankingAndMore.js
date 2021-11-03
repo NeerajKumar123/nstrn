@@ -33,16 +33,18 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
+import {useIsFocused} from '@react-navigation/native';
 const BankingAndMore = props => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const pageParams = props.route.params;
+  const isEditing = pageParams?.isEditing
   const [bank, setBank] = useState('');
   const [banks, setBanks] = useState();
   const [accountNo, setAccountNo] = useState('');
   const [branchNo, setBranhcNo] = useState('');
   const [residency, setResidency] = useState('');
   const [residencies, setResidencies] = useState([]);
-  const [familyInfo, setFamilyInfo] = useState();
   const [enrtyDate, setEntryDate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isBankVisible, setIsBankVisible] = useState(false);
@@ -51,37 +53,62 @@ const BankingAndMore = props => {
   const [isBankingInfoChanged, setIsBankingInfoChanged] = useState(false);
   const {Tax_Filed_With_Sukhtax} = global.onlineStatusData;
 
+  // params for next page....
+  const [maritalStatus, setMaritalStatus] = useState();
+  const [mChangeOpton, setMChangeOpton] = useState({id: 1, value: 'Yes'});
+  const [mStatusChangedDate, setMStatusChangedDate] = useState();
+  const [dependentOption, setDependentOption] = useState({id: 1, value: 'Yes'});
+
+
   useEffect(() => {
     setIsLoading(true);
     getInstitutionList({}, instRes => {
       setBanks(instRes?.data);
       setBank(instRes?.data?.[0]);
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
     });
-
-    const {tax_file_id, user_id, banking_family_info_filled} =
-      global.onlineStatusData;
-    const params = {
-      User_Id: user_id,
-      Tax_File_Id: tax_file_id,
-      Year: global?.mostRecentYear,
-    };
-    if (banking_family_info_filled == 1) {
-      getBankingAndFamilyInfo(params, bankingAndFamilyRes => {
-        setFamilyInfo(bankingAndFamilyRes?.data);
-      });
-    }
 
     getResidencyList({}, resdencyRes => {
       if (resdencyRes.status == 1) {
         setResidencies(resdencyRes?.data);
-        setResidency(resdencyRes?.data?.[0])
       }else{
         setResidencies(LocalResidencyList);
-        setResidency(LocalResidencyList[0])
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (isFocused && isEditing) {
+      const {tax_file_id, user_id} =  global.onlineStatusData;
+      const params = {
+        User_Id: user_id,
+        Tax_File_Id: tax_file_id,
+        Year: global?.mostRecentYear,
+      };
+      getBankingAndFamilyInfo(params, bankingAndFamilyRes => {
+        const details = bankingAndFamilyRes.data[0];
+        if (details) {
+          setBank({
+            institution_name: details.institution_name,
+            institution_id: details.institution_id,
+          });
+          setAccountNo(details.account_no);
+          setResidency({residency_id: details.residency_id , residency_name :details.residency});
+          setBranhcNo(details.branch);
+          setEntryDate(new Date(details.immigration_date));
+          setMaritalStatus({marital_status_id:details.marital_status_id,marital_status_name:details.marital_status_name})
+          setMChangeOpton({id:details.marital_status_change,value:details.marital_status_change ? 'YES' : 'NO'})
+          setMStatusChangedDate(details.marital_status_change ? new Date(details.marital_status_change_date) : new Date())
+          setDependentOption({id:details.dependents,value:details.dependents ? 'YES' : 'NO'})
+        }
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
+      });
+    }
+  }, [isFocused])
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -118,6 +145,11 @@ const BankingAndMore = props => {
       residency: residency,
       enrtyDate: enrtyDate,
       province: global?.province,
+      maritalStatus:maritalStatus,
+      mChangeOpton:mChangeOpton,
+      mStatusChangedDate:mStatusChangedDate,
+      dependentOption:dependentOption,
+      isEditing:isEditing
     };
     return params;
   };
@@ -137,7 +169,7 @@ const BankingAndMore = props => {
           paddingHorizontal: 20,
         }}>
         <Heading value="BANKING AND MORE" marginTop={26} />
-        {Tax_Filed_With_Sukhtax && !isBankingInfoChanged ? (
+        {Tax_Filed_With_Sukhtax && !isEditing && !isBankingInfoChanged ? (
           <>
             <Heading
               fontSize={20}
@@ -168,18 +200,19 @@ const BankingAndMore = props => {
                       setIsBankingInfoChanged(true);
                       if (byUserInfoRes.status == 1) {
                         const details = byUserInfoRes.data[0];
-                        console.log('details',details)
-                        setBank({
-                          institution_name: details.institution_name,
-                          institution_id: details.institution_id,
-                        });
-                        setAccountNo(details.account_no);
-                        const filtered = residencies?.filter(element => {
-                          return element.residency_name == details.residency;
-                        });
-                        setResidency(filtered[0]);
-                        setBranhcNo(details.branch);
-                        setEntryDate(new Date(details.immigration_date));
+                        if (details) {
+                          setBank({
+                            institution_name: details.institution_name,
+                            institution_id: details.institution_id,
+                          });
+                          setAccountNo(details.account_no);
+                          const filtered = residencies?.filter(element => {
+                            return element.residency_name == details.residency;
+                          });
+                          setResidency(filtered[0]);
+                          setBranhcNo(details.branch);
+                          setEntryDate(new Date(details.immigration_date));
+                        }
                         setTimeout(() => {
                           setIsLoading(false);
                         }, 300);

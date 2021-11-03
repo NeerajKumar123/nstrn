@@ -29,7 +29,7 @@ const SKInput = props => {
     placeholder = 'Enter value',
     maxLength = 30,
     isChatInput = false,
-    multiline,
+    multiline = false,
     keyboardType = 'default',
     autoCapitalize = 'words',
     returnKeyType ,

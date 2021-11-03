@@ -16,6 +16,10 @@ import SKButton, {DarkBlueButton} from '../components/SKButton';
 
 const IncorpApplyStatus = props => {
   const navigation = useNavigation();
+  const pageParams = props.route.params;
+  const shouldGoToHome = pageParams?.shouldGoToHome
+
+  IncorpApplyStatus
   const {
     incorporation_status_name = 'File not Submitted',
     status_description = 'Looks like you have to complete your registration and upload document still!',
@@ -33,7 +37,16 @@ const IncorpApplyStatus = props => {
         backgroundColor: 'white',
         flex:1,
       }}>
-      <AppHeader navigation={navigation} />
+      <AppHeader 
+      navigation={navigation}
+      onLeftClicked = {()=>{
+        if (shouldGoToHome) {
+          navigation.popToTop()
+        }else{
+          navigation.goBack()
+        }
+      }}
+       />
       <ScrollView
         style={{width: '100%', flex:1}}
         contentContainerStyle={{

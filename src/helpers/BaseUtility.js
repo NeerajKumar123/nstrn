@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Alert} from 'react-native';
+import {Alert,PermissionsAndroid,Platform} from 'react-native';
 import moment from 'moment';
 import RNFetchBlob from 'rn-fetch-blob';
 import * as SKTStorage from '../helpers/SKTStorage';
@@ -9,6 +9,7 @@ import {
   taxDocsGetTaxDocsStatus,
   craLattersGetStatus
 } from '../apihelper/Api';
+
 
 export const rpLoaderRef = React.createRef();
 
@@ -42,6 +43,17 @@ export const isEmpty = value => {
   return typeof value === 'undefined' || value === null || value.length == 0;
 };
 
+export async function checkPermission(permission) {
+  try {
+    const granted = await PermissionsAndroid.request(permission);
+    if (granted === PermissionsAndroid.RESULTS.GRANTED || granted === true) {
+      return true;
+    } else {
+    }
+  } catch (err) {}
+  return false;
+}
+
 export async function downloadFileFromUrl(url, filename, callback) {
   console.log('url',url,filename )
   if (Platform.OS === 'android') {
@@ -56,7 +68,7 @@ export async function downloadFileFromUrl(url, filename, callback) {
   const {dirs} = RNFetchBlob.fs;
   let pathToSave = '';
   if (Platform.OS === 'android') {
-    pathToSave = `${dirs.SDCardDir}/SKT/${filename}`;
+    pathToSave = `${dirs.DocumentDir}/SKT/${filename}`;
   } else {
     pathToSave = `${dirs.DocumentDir}/${filename}`;
   }

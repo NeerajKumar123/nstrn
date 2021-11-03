@@ -28,9 +28,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import SKDatePicker from '../components/SKDatePicker';
 import { format } from 'date-fns';
 const { width } = Dimensions.get('window');
+import {useIsFocused} from '@react-navigation/native';
 
 const BasicInfo = props => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const pageParams = props.route.params;
+  const isEditing = pageParams?.isEditing
   const [sin, setsin] = useState('');
   const [gender, setgender] = useState();
   const [dob, setDOB] = useState();
@@ -42,7 +46,34 @@ const BasicInfo = props => {
   const [isSinChanged, setIsSinChanged] = useState(false)
   const iosVersion = parseInt(Platform.Version);
   const { Tax_Filed_With_Sukhtax } = global.onlineStatusData;
+  // data will be passed to next page
+  const [mailingAddress, setMailingAddress] = useState('')
+  const [province, setProvince] = useState(undefined)
 
+  useEffect(() => {
+    if (isFocused && isEditing) {
+      const {user_id,tax_file_id,years_selected} = global.onlineStatusData
+      const ar = years_selected?.split(',')
+      const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Year:ar[0]}
+      setIsLoading(true)
+      getAboutInfo(params, (aboutInfoRes) =>{
+        if (aboutInfoRes.status == 1) {
+          const details = aboutInfoRes.data?.[0]
+          if (details) {
+            setsin(details.SIN_number)
+            setgender(details.gender)
+            setDOB(new Date(details.DOB))
+            setLastTime(details.last_year_filed)
+            setMailingAddress(details.Mailing_Address)
+            setProvince({state_id:details.state_id, state_name:details.province})
+            setIsSinChanged(true)
+          }
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 500);
+        }})
+    }
+  }, [isFocused])
 
   let pickerHeight = 0;
   if (Platform.OS == 'ios') {
@@ -82,7 +113,7 @@ const BasicInfo = props => {
           paddingHorizontal: 20,
         }}>
         <Heading value="ABOUT YOU" marginTop={30} />
-        {Tax_Filed_With_Sukhtax && !isSinChanged ? (
+        {Tax_Filed_With_Sukhtax  && !isEditing && !isSinChanged ? (
           <>
             <Heading
               fontSize={20}
@@ -205,6 +236,9 @@ const BasicInfo = props => {
                       gender: gender,
                       dob: dob,
                       lastTime: lastTime,
+                      isEditing:isEditing,
+                      mailingAddress:mailingAddress,
+                      province:province
                     };
                     navigation.navigate('Address', { ...nextPageParams });
                   });

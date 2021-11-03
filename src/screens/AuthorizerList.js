@@ -9,10 +9,12 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useIsFocused} from '@react-navigation/native';
 import {onlineFinalizeAuthorization} from '../apihelper/Api';
+import SKLoader from '../components/SKLoader';
 
 const AuthorizerList = props => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
   }, [isFocused]);
@@ -27,6 +29,7 @@ const AuthorizerList = props => {
         height: '100%',
       }}>
       <AppHeader navigation={navigation} />
+      {isLoading && <SKLoader />}
       <ScrollView
         style={{width: '100%', marginBottom: 100}}
         contentContainerStyle={{
@@ -67,7 +70,11 @@ const AuthorizerList = props => {
           title={'ANYTHING ELSE'}
           onPress={() => {
             const {user_id,tax_file_id} = global.onlineStatusData
+            setIsLoading(true)
             onlineFinalizeAuthorization({User_Id:user_id,Tax_File_Id:tax_file_id},(res) =>{
+              setTimeout(() => {
+                setIsLoading(false)
+              }, 200);
               if (res.status == 1) {
                 navigation.navigate('AnyThingElse');
               }else{

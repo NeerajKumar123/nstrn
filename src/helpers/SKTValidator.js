@@ -25,8 +25,7 @@ export const isValidSIN = sin => {
   if (isZero) return false;
   console.log('invalidSinList', global.invalidSinList);
   const ar = global.invalidSinList?.map(a => a.Invalid_SIN_Number);
-  console.log('result',ar, sin)
-  if (ar.includes(sin)) {
+  if (ar && ar.includes(sin)) {
     return false
   }
 

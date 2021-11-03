@@ -15,7 +15,6 @@ const Home = props => {
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
   const [userFullName, setUserFullName] = useState('')
-
   const {tax_file_status_id = 0} = global?.onlineStatusData;
   const {incorporation_status_id = 0} = global?.incStatusData;
   const {tax_docs_status_id = 0} = global?.taxDocsStatusData;

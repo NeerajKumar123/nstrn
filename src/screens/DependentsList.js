@@ -32,6 +32,8 @@ import {format} from 'date-fns';
 const DependentsList = props => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+  const pageParams = props.route.params;
+  const isEditing = pageParams?.isEditing
   const [isLoading, setIsLoading] = useState(false);
   const [deps, setDeps] = useState([]);
   const { Tax_Filed_With_Sukhtax, user_id, tax_file_id } = global.onlineStatusData;
@@ -57,7 +59,7 @@ const DependentsList = props => {
     console.log('isFocused', isFocused,global.isLastDepHit,Tax_Filed_With_Sukhtax)
     if (!isFocused) return
     SKTStorage.getValue('isLastDepHit', (isHit)=>{
-      if (Tax_Filed_With_Sukhtax && (isHit == undefined || isHit == false || isHit == null)) {
+      if (Tax_Filed_With_Sukhtax && (isHit == undefined || isHit == false || isHit == null) && !isEditing) {
         setIsLoading(true);
         onlineGetDependentInfoByUserId({ User_Id: user_id }, lastdepRes => {
           SKTStorage.setKeyValue('isLastDepHit',true, ()=>{})
@@ -228,7 +230,7 @@ const DependentsList = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'MY TAX YEAR'}
             onPress={() => {
-              navigation.navigate('MyTaxYear', { pageIndex: 0 });
+              navigation.navigate('MyTaxYear', { pageIndex: 0,isEditing:isEditing });
             }}
           />
         </View>

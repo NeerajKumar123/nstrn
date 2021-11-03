@@ -85,7 +85,7 @@ const setKeyValue = async (key, value, callback) => {
       const value = await AsyncStorage.getItem(key);
       callback && callback(JSON.parse(value))
         } catch (error) {
-        console.log(error);
+        console.log('error',error);
     }
   };
 
