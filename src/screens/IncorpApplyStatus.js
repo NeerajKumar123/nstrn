@@ -187,7 +187,7 @@ const AllSet = props => {
         fontWeight={'normal'}
         width="100%"
         backgroundColor={Colors.PRIMARY_FILL}
-        borderColor={Colors.SECONDARY_FILL}
+        borderColor={Colors.PRIMARY_BORDER}
         title={'DOWNLOAD DOCS'}
         onPress={() => {
           navigation.navigate('AllDocuments');

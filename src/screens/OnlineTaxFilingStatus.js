@@ -666,7 +666,6 @@ const TaxFilingStatusCard = props => {
           }}
         />
       )}
-      
     </View>
   );
 };

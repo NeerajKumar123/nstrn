@@ -51,12 +51,12 @@ const OnlineEditInfo = props => {
           paddingHorizontal: 20,
           height: '100%',
         }}>
-        <Heading value="EDIT INFORMATION MENU" marginTop={50} />
+        <Heading value="EDIT INFORMATION" marginTop={50} />
         <Heading
           fontSize={16}
           marginTop={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="IF NEEDED,HERE YOU CAN UPDATE YOUR LAST TAX FILING INFORMATION BY CLICKING ON PERTICULAR SECTION"
+          value="WHICH OF THE FOLLOWING AREAS DO YOU WANT TO EDIT ?"
         />
 
         {Edit_Form_Options &&  Edit_Form_Options.map((elem) =>{

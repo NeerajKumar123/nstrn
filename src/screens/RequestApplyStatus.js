@@ -146,9 +146,9 @@ const NotSubmitted = props => {
         marginTop={30}
         width="100%"
         fontWeight={'normal'}
-        backgroundColor={Colors.SECONDARY_FILL}
-        borderColor={Colors.PRIMARY_BORDER}
-        title={'NEW REQUEST'}
+        backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+        borderColor={Colors.CLR_D3D3D9}
+      title={'NEW REQUEST'}
         onPress={() => {
           incorpMoveToPage();
         }}
@@ -191,13 +191,31 @@ const AllSet = props => {
         fontWeight={'normal'}
         width="100%"
         backgroundColor={Colors.PRIMARY_FILL}
-        borderColor={Colors.SECONDARY_FILL}
+        borderColor={Colors.PRIMARY_BORDER}
         title={'DOWNLOAD DOCS'}
         onPress={() => {
           navigation.navigate('AllDocuments');
         }}
       />
       <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+          borderColor={Colors.CLR_D3D3D9}
+          title={'NEW REQUEST'}
+          onPress={() => {
+            navigation.navigate('RequestLanding')
+          }}
+        />
+         <DarkBlueButton
+        title={'RETURN TO DASHBOARD'}
+        onClick={() => {
+          navigation.popToTop();
+        }}
+      />
+        <SKButton
         fontSize={16}
         marginTop={30}
         width="50%"
@@ -219,24 +237,7 @@ const AllSet = props => {
           );
         }}
       />
-      <SKButton
-          fontSize={16}
-          marginTop={30}
-          width="100%"
-          fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'NEW REQUEST'}
-          onPress={() => {
-            navigation.navigate('RequestLanding')
-          }}
-        />
-      <DarkBlueButton
-        title={'RETURN TO DASHBOARD'}
-        onClick={() => {
-          navigation.popToTop();
-        }}
-      />
+     
     </View>
   );
 };

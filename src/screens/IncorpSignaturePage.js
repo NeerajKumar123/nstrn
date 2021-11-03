@@ -435,7 +435,7 @@ const SKCheckbox = props => {
         color={Colors.GRAY}
       />
       <Text
-        style={{color: Colors.APP_BLUE_HEADING_COLOR, marginLeft: 10, flex: 1}}>
+        style={{color: Colors.APP_BLUE_HEADING_COLOR, marginLeft: 10, flex: 1,fontSize:15}}>
         I authorize you to open my corporation
       </Text>
     </TouchableOpacity>
