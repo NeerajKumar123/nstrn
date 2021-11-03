@@ -97,6 +97,7 @@ const Login = props => {
           maxLength = {30}
           borderColor={Colors.CLR_0065FF}
           value={email}
+          keyboardType={"email-address"}
           placeholder = 'Email'
           autoCapitalize = 'none'
           onEndEditing={value => {
