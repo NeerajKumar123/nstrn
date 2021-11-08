@@ -70,7 +70,8 @@ const IncorporationLanding = props => {
                 item={item}
                 selectedCorp = {selectedCorp}
                 onSelected={() => {
-                  SKTStorage.setKeyValue('selectedCorp',selectedCorp,()=>{})
+                  SKTStorage.setKeyValue('selectedCategory','',()=>{})
+                  SKTStorage.setKeyValue('selectedCorp',item,()=>{})
                   setSelectedCorp(item);
                 }}
               />

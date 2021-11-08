@@ -45,14 +45,12 @@ import AboutCorp from './screens/AboutCorp';
 import IncorpFinalStep from './screens/IncorpFinalStep';
 import HSTRegistration from './screens/HSTRegistration';
 import IncorpPaymentDetails from './screens/IncorpPaymentDetails';
-import IncorpInProcessScreen from './screens/IncorpInProcessScreen';
 import Spouse from './screens/Spouse';
 import SKWebPage from './screens/SKWebPage';
 import OnlinePaymentScreen from './screens/OnlinePaymentScreen';
 import CRALanding from './screens/CRALanding';
 import IncorpSignaturePage from './screens/IncorpSignaturePage';
 import IncorpPaymentScreen from './screens/IncorpPaymentScreen';
-import IncorpAllSet from './screens/IncorpAllSet';
 import IncorpApplyStatus from './screens/IncorpApplyStatus';
 import RequestLanding from './screens/RequestLanding';
 import RequestYears from './screens/RequestYears';
@@ -323,11 +321,6 @@ const SKStack = () => { /// This is After login stack
           component={IncorpPaymentDetails}
           options={{title: 'IncorpPaymentDetails', headerShown: false}}
         />
-        <Stack.Screen
-          name="IncorpInProcessScreen"
-          component={IncorpInProcessScreen}
-          options={{title: 'IncorpInProcessScreen', headerShown: false}}
-        />
          <Stack.Screen
           name="Spouse"
           component={Spouse}
@@ -347,12 +340,7 @@ const SKStack = () => { /// This is After login stack
           name="IncorpPaymentScreen"
           component={IncorpPaymentScreen}
           options={{title: 'IncorpPaymentScreen', headerShown: false}}
-        />
-         <Stack.Screen
-          name="IncorpAllSet"
-          component={IncorpAllSet}
-          options={{title: 'IncorpAllSet', headerShown: false}}
-        />
+        />         
         <Stack.Screen
           name="IncorpApplyStatus"
           component={IncorpApplyStatus}

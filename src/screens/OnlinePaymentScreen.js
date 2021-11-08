@@ -88,11 +88,13 @@ const OnlinePaymentScreen = props => {
       const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Payment_Intent_id:id,Payment_Status:status,Additional_Payment:pageParams?.additional_payment_required ? pageParams?.additional_payment_required : 0 }
       onlineSavePaymentInfo(params, (savePaymentRes)=>{
         if(savePaymentRes?.status == 1){
-          navigation.navigate('Home');
+          SKTStorage.setKeyValue('selectedYears',[],()=>{
+            navigation.navigate('Home');
           setTimeout(() => {
             const msg = savePaymentRes?.message ? savePaymentRes?.message : 'Payment done successfully.'
             Alert.alert('SukhTax', msg);  
           }, 200);
+          })
         }else{
           setTimeout(() => {
             const errormsg = savePaymentRes?.message ? savePaymentRes?.message : 'We are facing some techinical glitch , Please try again.'

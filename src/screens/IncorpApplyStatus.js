@@ -13,6 +13,8 @@ import AppHeader from '../components/AppHeader';
 import * as CustomFonts from '../constants/FontsDefs';
 import * as Colors from '../constants/ColorDefs';
 import SKButton, {DarkBlueButton} from '../components/SKButton';
+import {getIncorporationDocs} from '../apihelper/Api';
+import SKLoader from '../components/SKLoader';
 
 const IncorpApplyStatus = props => {
   const navigation = useNavigation();
@@ -27,7 +29,7 @@ const IncorpApplyStatus = props => {
     incorporation_status_id = 1,
   } = global.incStatusData;
 
-  console.log('global.incStatusData',global.incStatusData, incorporation_status_id, incorporation_status_name, status_description)
+  console.log('status_description',status_description)
 
   return (
     <View
@@ -107,10 +109,6 @@ const NotSubmitted = props => {
       } else {
         navigation.navigate('IncorporationLanding');
       }
-    } else if (incorporation_status_id == 2) {
-      navigation.navigate('IncorpInProcessScreen');
-    } else if (incorporation_status_id == 3) {
-      navigation.navigate('IncorpAllSet');
     }
   };
 
@@ -164,6 +162,7 @@ const NotSubmitted = props => {
 };
 const AllSet = props => {
   const {navigation} = props;
+  const [isLoading, setIsLoading] = useState(false)
   const {incorporation_status_name, status_description} = global.incStatusData;
   return (
     <View
@@ -173,6 +172,7 @@ const AllSet = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
+       { isLoading && <SKLoader/>}
       <Heading value={incorporation_status_name} marginTop={100} />
       <Heading
         fontSize={17}
@@ -190,7 +190,18 @@ const AllSet = props => {
         borderColor={Colors.SECONDARY_FILL}
         title={'DOWNLOAD DOCS'}
         onPress={() => {
-          navigation.navigate('AllDocuments');
+          // TO DO 
+          setIsLoading(true)
+          const {user_id} = global.onlineStatusData
+          const params = {User_Id:user_id}
+          getIncorporationDocs(params,(incorpDocsRes) =>{
+            setIsLoading(false)
+            if(incorpDocsRes?.data?.length){
+              navigation.navigate('HomeDocsListing',{page_id:2,page_title:'INCORPORATION DOCS', docs:incorpDocsRes?.data})
+            }else{
+              Alert.alert('Sukhtax','There is no document.')
+            }
+          })
         }}
       />
        <SKButton

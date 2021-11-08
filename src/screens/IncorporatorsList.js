@@ -65,7 +65,7 @@ const IncorporatorsList = props => {
           paddingHorizontal: 20,
           height: '100%',
         }}>
-        <Heading value="INCOPORATORS" marginTop={100} />
+        <Heading value="INCORPORATORS" marginTop={100} />
         <Heading
           fontSize={16}
           marginTop={20}

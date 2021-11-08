@@ -67,18 +67,7 @@ const CRAAttachments = props => {
               setShowDoc(true);
             }}/>)
           })}
-        {/* <SKButton
-          marginTop={56}
-          fontSize={16}
-          width="100%"
-          iconcolor={Colors.WHITE}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.SECONDARY_FILL}
-          title={'DOWNLOAD ALL'}
-          onPress={() => {
-            navigation.navigate('CRALanding');
-          }}
-        /> */}
+        
         <SKButton
           marginTop={56}
           fontSize={16}

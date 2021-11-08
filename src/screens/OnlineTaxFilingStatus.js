@@ -391,8 +391,8 @@ const TaxFilingStatusCard = props => {
           marginTop={30}
           width="100%"
           fontWeight={'normal'}
-          backgroundColor={Colors.CLR_7F7F9F}
-          borderColor={Colors.CLR_D3D3D9}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
           title={'DOWNLOAD MY TAX DOCS'}
           onPress={() => {
             updateLoadingStatus(true);
@@ -419,8 +419,8 @@ const TaxFilingStatusCard = props => {
           marginTop={30}
           width="100%"
           fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
+          backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+          borderColor={Colors.CLR_D3D3D9}
           title={'NEW FILING'}
           onPress={() => {
             global.selectedYears = undefined

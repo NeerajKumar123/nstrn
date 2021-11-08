@@ -1,5 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, ScrollView, Alert, Platform, Linking, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  Alert,
+  Platform,
+  Linking,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
@@ -7,9 +16,9 @@ import * as CustomFonts from '../constants/FontsDefs';
 import * as Colors from '../constants/ColorDefs';
 import SKButton, {DarkBlueButton} from '../components/SKButton';
 import DocumentViewer from '../components/DocumentViewer';
-import {
-  taxDocsGetReqDocs
-} from '../apihelper/Api';
+import SKLoader from '../components/SKLoader';
+
+import {taxDocsGetReqDocs} from '../apihelper/Api';
 
 const RequestApplyStatus = props => {
   const navigation = useNavigation();
@@ -19,25 +28,26 @@ const RequestApplyStatus = props => {
     new_message_count = 0,
     tax_docs_status_id = 1,
   } = global.taxDocsStatusData;
-  
-  const [docs, setDocs] = useState()
+
+  const [docs, setDocs] = useState();
   const [showDoc, setShowDoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
 
   useEffect(() => {
-    const {user_id, tax_docs_id,tax_docs_status_id} = global.taxDocsStatusData
-    if(tax_docs_status_id == 3){
-      const params = {User_Id:user_id,Tax_Docs_Id:tax_docs_id}
-      taxDocsGetReqDocs(params,(docsRes) =>{
-        if(docsRes?.status == 1){
-          setDocs(docsRes.data)
-        }else{
-          const msg = docsRes?.message ??'Something went wront, Please try again later.';
-        Alert.alert('SukhTax', msg);
+    const {user_id, tax_docs_id, tax_docs_status_id} = global.taxDocsStatusData;
+    if (tax_docs_status_id == 3) {
+      const params = {User_Id: user_id, Tax_Docs_Id: tax_docs_id};
+      taxDocsGetReqDocs(params, docsRes => {
+        if (docsRes?.status == 1) {
+          setDocs(docsRes.data);
+        } else {
+          const msg =
+            docsRes?.message ?? 'Something went wront, Please try again later.';
+          Alert.alert('SukhTax', msg);
         }
-      })
+      });
     }
-  }, [])
+  }, []);
 
   return (
     <View
@@ -74,18 +84,33 @@ const RequestApplyStatus = props => {
         )}
         {tax_docs_status_id == 3 && (
           <AllSet
-            reqDocs = {docs}
+            reqDocs={docs}
             tax_docs_status_name={tax_docs_status_name}
             status_description={status_description}
             new_message_count={new_message_count}
             navigation={navigation}
-            onDocClicked = {(item)=>{
-              setSelectedItem(item)
-              setShowDoc(true)
+            onDocClicked={item => {
+              setSelectedItem(item);
+              setShowDoc(true);
             }}
-           onAllDownloadClicked = {()=>{
-            console.log('onAllDownloadClicked')
-           }} 
+            onAllDownloadClicked={() => {
+              const {user_id, tax_docs_id, tax_docs_status_id} =
+                global.taxDocsStatusData;
+              if (tax_docs_status_id == 3) {
+                const params = {User_Id: user_id, Tax_Docs_Id: tax_docs_id};
+                taxDocsGetReqDocs(params, docsRes => {
+                  if (docsRes?.status == 1) {
+                    navigation.navigate('HomeDocsListing', {
+                      page_id: 3,
+                      page_title: 'T1 GENERAL, NOA, T-SLIPS',
+                      docs: docsRes?.data,
+                    });
+                  } else {
+                    Alert.alert('Sukhtax', 'There is no document.');
+                  }
+                });
+              }
+            }}
           />
         )}
       </ScrollView>
@@ -157,7 +182,14 @@ const NotSubmitted = props => {
   );
 };
 const AllSet = props => {
-  const {navigation,tax_docs_status_name, status_description,reqDocs,onAllDownloadClicked,onDocClicked} = props;
+  const {
+    navigation,
+    tax_docs_status_name,
+    status_description,
+    reqDocs,
+    onAllDownloadClicked,
+    onDocClicked,
+  } = props;
   return (
     <View
       style={{
@@ -174,10 +206,11 @@ const AllSet = props => {
         color={Colors.APP_RED_SUBHEADING_COLOR}
         value={status_description}
       />
-      {reqDocs && reqDocs.map((item, index) => {
+      {reqDocs &&
+        reqDocs.map((item, index) => {
           return (
             <FileCard
-              key = {item.document_title}
+              key={item.document_title}
               item={item}
               onClick={() => {
                 onDocClicked(item);
@@ -220,17 +253,17 @@ const AllSet = props => {
         }}
       />
       <SKButton
-          fontSize={16}
-          marginTop={30}
-          width="100%"
-          fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'NEW REQUEST'}
-          onPress={() => {
-            navigation.navigate('RequestLanding')
-          }}
-        />
+        fontSize={16}
+        marginTop={30}
+        width="100%"
+        fontWeight={'normal'}
+        backgroundColor={Colors.PRIMARY_FILL}
+        borderColor={Colors.PRIMARY_BORDER}
+        title={'NEW REQUEST'}
+        onPress={() => {
+          navigation.navigate('RequestLanding');
+        }}
+      />
       <DarkBlueButton
         title={'RETURN TO DASHBOARD'}
         onClick={() => {
@@ -241,7 +274,7 @@ const AllSet = props => {
   );
 };
 const InProcess = props => {
-  const {navigation,tax_docs_status_name, status_description} = props;
+  const {navigation, tax_docs_status_name, status_description} = props;
   const openLink = () => {
     const {company_contact_number} = global.incStatusData;
     let finalLink = company_contact_number;

@@ -53,14 +53,14 @@ const IncorpSignaturePage = props => {
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedCorp, setSelectedCorp] = useState();
 
-  SKTStorage.getValue('selectedCategory', cat => {
-    setSelectedCategory(cat);
-    console.log('selectedCategory', cat);
-  });
-  SKTStorage.getValue('selectedCorp', corp => {
-    console.log('selectedCorp',corp)
-    setSelectedCorp(corp);
-  });
+  useEffect(() => {
+    SKTStorage.getValue('selectedCategory', cat => {
+      SKTStorage.getValue('selectedCorp', corp => {
+        setSelectedCorp(corp);
+        setSelectedCategory(cat);
+      });
+    });
+  }, []);
 
   const checkFormValidations = () => {
     let isValidForm = true;
@@ -153,31 +153,26 @@ const IncorpSignaturePage = props => {
               value="AUTHORIZE A REPRESENTATIVE SIGNATURE PAGE"
               marginTop={26}
             />
-            {selectedCategory ||
-              (selectedCorp && (
-                <>
-                  <Heading
-                    fontSize={16}
-                    marginTop={20}
-                    color={Colors.APP_RED_SUBHEADING_COLOR}
-                    value="INCORPORATION DETAILS:"
-                  />
-                  {selectedCorp && (
-                    <Heading
-                      fontSize={14}
-                      color={Colors.APP_BLUE_HEADING_COLOR}
-                      value={selectedCorp.incorporation_type}
-                    />
-                  )}
-                  {selectedCategory && (
-                    <Heading
-                      fontSize={14}
-                      color={Colors.APP_BLUE_HEADING_COLOR}
-                      value={selectedCategory.incorporation_type}
-                    />
-                  )}
-                </>
-              ))}
+            <Heading
+              fontSize={16}
+              marginTop={20}
+              color={Colors.APP_RED_SUBHEADING_COLOR}
+              value="INCORPORATION DETAILS:"
+            />
+            {selectedCorp && (
+              <Heading
+                fontSize={14}
+                color={Colors.APP_BLUE_HEADING_COLOR}
+                value={selectedCorp.incorporation_type}
+              />
+            )}
+            {selectedCategory && (
+              <Heading
+                fontSize={14}
+                color={Colors.APP_BLUE_HEADING_COLOR}
+                value={selectedCategory.incorporation_category}
+              />
+            )}
 
             <Heading
               fontSize={16}

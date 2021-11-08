@@ -35,5 +35,6 @@ export const CLR_EBEBEB = '#EBEBEB'
 export const CLR_414141 = '#414141'
 export const CLR_DF9A9B = '#DF9A9B'
 export const CLR_EEEEEE = '#EEEEEE'
+export const CLR_9B9EA1 = '#9B9EA1'
 
 

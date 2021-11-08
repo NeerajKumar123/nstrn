@@ -5,6 +5,8 @@ import {
   ScrollView,
   Platform,
   KeyboardAvoidingView,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import TouchableInput from '../components/TouchableInput';
 import SKButton from '../components/SKButton';
@@ -30,19 +32,22 @@ import {
   saveSpouseInfo,
   onlineGetSpouseInfoByUserId,
   onlineGetSpouseInfo,
-  updateSpouseInfo
+  updateSpouseInfo,
 } from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
 import * as SKTStorage from '../helpers/SKTStorage';
-import {LocalInstsList,LocalResidencyListSpouse} from '../constants/StaticValues';
+import {
+  LocalInstsList,
+  LocalResidencyListSpouse,
+} from '../constants/StaticValues';
 import {useIsFocused} from '@react-navigation/native';
 
 const Spouse = props => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const pageParams = props.route.params;
-  const isEditing = pageParams?.isEditing
+  const isEditing = pageParams?.isEditing;
   const [isFillingForWife, setIsFillingForWife] = useState(false);
   const [lastTime, setLastTime] = useState();
   const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
@@ -55,7 +60,7 @@ const Spouse = props => {
   const [relation, setRelation] = useState('');
   const [residency, setResidency] = useState('');
   const [residencies, setResidencies] = useState();
-  const [bank, setBank] = useState('');
+  const [bank, setBank] = useState({});
   const [banks, setBanks] = useState();
   const [accountNo, setAccountNo] = useState('');
   const [branchNo, setBranhcNo] = useState('');
@@ -67,31 +72,40 @@ const Spouse = props => {
   const [isResidenceVisible, setIsResidenceVisible] = useState();
   const [isBankVisible, setIsBankVisible] = useState();
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const { Tax_Filed_With_Sukhtax } = global.onlineStatusData;
-  const [taxFileSpouseId, setTaxFileSpouseId] = useState()
-  let tax_file_year_id = 0
+  const {Tax_Filed_With_Sukhtax} = global.onlineStatusData;
+  const [taxFileSpouseId, setTaxFileSpouseId] = useState();
+  let tax_file_year_id = 0;
+  let isMarried = false
   //check if  in editing  mode then pick from server data only
   if (isEditing) {
-    const {Year_Wise_Records} = global.onlineStatusData
+    const {Year_Wise_Records} = global.onlineStatusData;
     if (Year_Wise_Records && Year_Wise_Records.length > 0) {
-      const singYear  = Year_Wise_Records[0] || {}
-      tax_file_year_id = singYear.tax_file_year_id
+      const singYear = Year_Wise_Records[0] || {};
+      tax_file_year_id = singYear.tax_file_year_id;
     }
-  }else{
-    SKTStorage.getValue('tax_file_year_id', (id)=>{
-      tax_file_year_id = id
-    })  
+  } else {
+    const yrwiseRecords = global?.onlineStatusData?.Year_Wise_Records;
+    let firstYearData = yrwiseRecords?.[0] || {};
+    let isMarried = false;
+    if (
+      firstYearData?.marital_status_id == 2 ||
+      firstYearData?.marital_status_id == 3
+    ) {
+      isMarried = true;
+    }
+    SKTStorage.getValue('tax_file_year_id', id => {
+      tax_file_year_id = id;
+    });
   }
 
   useEffect(() => {
     setIsLoading(true);
     getInstitutionList({}, instRes => {
       setBanks(instRes?.data);
-      setBank(instRes?.data?.[0]);
       getSpouseResidencyList({}, resdencyRes => {
         if (resdencyRes.status == 1) {
           setResidencies(resdencyRes?.data);
-        }else{
+        } else {
           setResidencies(LocalResidencyListSpouse);
         }
         setTimeout(() => {
@@ -103,7 +117,7 @@ const Spouse = props => {
 
   useEffect(() => {
     if (isFocused && isEditing) {
-      const {tax_file_id, user_id} =  global.onlineStatusData;
+      const {tax_file_id, user_id} = global.onlineStatusData;
       const params = {
         User_Id: user_id,
         Tax_File_Id: tax_file_id,
@@ -111,42 +125,45 @@ const Spouse = props => {
       onlineGetSpouseInfo(params, spouseInfoRes => {
         const details = spouseInfoRes.data[0];
         if (details) {
-          setLastTime(details.last_year_filed)
-          setFName(details.first_name)
-          setLName(details.last_name)
-          setDOB(new Date(details.DOB))
-          setGender(details.gender)
-          setSinNo(details.SIN_Number)
-          setLastTime(details.last_year_filed)
-          setEnrtyDate(new Date(details.DOE_Canada))
-          setResidency({residency_id:details.residency_id,residency_name:details.residency});
+          setLastTime(details.last_year_filed);
+          setFName(details.first_name);
+          setLName(details.last_name);
+          setDOB(new Date(details.DOB));
+          setGender(details.gender);
+          setSinNo(details.SIN_Number);
+          setLastTime(details.last_year_filed);
+          setEnrtyDate(new Date(details.DOE_Canada));
+          setResidency({
+            residency_id: details.residency_id,
+            residency_name: details.residency,
+          });
           setBank({
             institution_name: details.institution_name,
             institution_id: details.institution_id,
           });
-          setAccountNo(details.account_no)
-          setBranhcNo(details.branch)
-          const isFilingS  = details.Filing_For_Spouse ? true : false
-          console.log('details.isFilingS',isFilingS)
-          setIsFillingForWife(isFilingS)
-          setTaxFileSpouseId(details.tax_file_spouse_id)
+          setAccountNo(details.account_no);
+          setBranhcNo(details.branch);
+          const isFilingS = details.Filing_For_Spouse ? true : false;
+          setIsFillingForWife(isFilingS);
+          setTaxFileSpouseId(details.tax_file_spouse_id);
         }
         setTimeout(() => {
           setIsLoading(false);
         }, 300);
       });
     }
-  }, [isFocused])
+  }, [isFocused]);
 
   const checkFormValidations = () => {
     let isValidForm = true;
     const isValidLastYear = lastTime;
-    const isFNameValid = Validator.isValidField(fName,ST_REGEX.FullName)
-    const isLNameValid = Validator.isValidField(lName,ST_REGEX.FullName)
+    const isFNameValid = Validator.isValidField(fName, ST_REGEX.FullName);
+    const isLNameValid = Validator.isValidField(lName, ST_REGEX.FullName);
     const isDOBValid = dob;
     const isGenderValid = gender;
     const isResidencyValid = residency?.residency_id > 0;
-    const isSinValid = residency?.residency_id != 5 ?  Validator.isValidSIN(sinNo) : true;
+    const isSinValid =
+      residency?.residency_id != 5 ? Validator.isValidSIN(sinNo) : true;
     const isEnrtyDateValid = enrtyDate;
     const isBankValid = bank?.institution_id > 0;
     const isAccValid = accountNo.length > 0;
@@ -190,6 +207,7 @@ const Spouse = props => {
   };
 
   const prepareParams = () => {
+    console.log('residency',residency)
     const {user_id, tax_file_id} = global.onlineStatusData;
     const params = {
       User_id: user_id,
@@ -200,60 +218,64 @@ const Spouse = props => {
       Last_Name: lName,
       DOB: dob && format(dob, 'yyyy-MM-dd'),
       Gender: gender,
-      SIN_Number:  sinNo,
+      SIN_Number: sinNo,
       Date_of_Entry_in_Canada: enrtyDate && format(enrtyDate, 'yyyy-MM-dd'),
-      Institution_Id: bank?.institution_id,
+      Institution_Id: bank?.institution_id ? bank?.institution_id : 0,
       Branch: branchNo,
       Account_No: accountNo,
       Residency: residency?.residency_name,
       Filing_For_Spouse: isFillingForWife ? 1 : 0,
     };
     if (isEditing) {
-      params['Tax_File_Spouse_id'] = taxFileSpouseId
+      params['Tax_File_Spouse_id'] = taxFileSpouseId;
     }
     return params;
   };
 
-  const getLastYearData = () =>{
-    setIsLoading(true)
-    const {user_id} = global.onlineStatusData
-    onlineGetSpouseInfoByUserId({ User_Id: user_id }, spouseInfoRes => {
+  const getLastYearData = (flagBank, flagSin, flagResidency, flagSpouseFiling) => {
+    setIsLoading(true);
+    const {user_id} = global.onlineStatusData;
+    onlineGetSpouseInfoByUserId({User_Id: user_id}, spouseInfoRes => {
       if (spouseInfoRes.status == 1) {
-        const details = spouseInfoRes?.data[0] || {}
-        setLastTime(details.last_year_filed)
-        setFName(details.first_name)
-        setLName(details.last_name)
-        setDOB(new Date(details.DOB))
-        setGender(details.gender)
-        setSinNo(details.SIN_Number)
-        setLastTime(details.last_year_filed)
-        setEnrtyDate(new Date(details.DOE_Canada))
+        const details = spouseInfoRes?.data[0] || {};
+        setLastTime(details.last_year_filed);
+        setFName(details.first_name);
+        setLName(details.last_name);
+        setDOB(new Date(details.DOB));
+        setGender(details.gender);
+        setSinNo(flagSin ? '' :details.SIN_Number);
+        setLastTime(details.last_year_filed);
+        setEnrtyDate(new Date(details.DOE_Canada));
         const filtered = residencies?.filter(element => {
           return element.residency_name == details.residency;
         });
-        setResidency(filtered[0]);
-        setBank({
+        setResidency(flagResidency ? {} : filtered[0]);
+        setBank(flagBank ? {} : {
           institution_name: details.institution_name,
           institution_id: details.institution_id,
         });
-        setAccountNo(details.account_no)
-        setBranhcNo(details.branch)
-        setIsConfirmed(true)
+        setAccountNo(flagBank ? '' : details.account_no);
+        setBranhcNo(flagBank ? '' : details.branch);
+        setIsConfirmed(true);
+        setIsFillingForWife(flagSpouseFiling)
         setTimeout(() => {
-          setIsLoading(false)
+          setIsLoading(false);
         }, 300);
       }
-    })
-  }
+    });
+  };
 
-  const handleSaveAndUpdateInfo = () =>{
+  const handleSaveAndUpdateInfo = () => {
     if (!isEditing) {
       setIsLoading(true);
       const params = prepareParams();
       saveSpouseInfo(params, spouseRes => {
         if (spouseRes?.status == 1) {
           SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
-            navigation.push('DependentsList', {depCount: 1, isEditing:isEditing});
+            navigation.push('DependentsList', {
+              depCount: 1,
+              isEditing: isEditing,
+            });
           });
         } else {
           Alert.alert('SukhTax', 'Something went wrong!');
@@ -262,13 +284,16 @@ const Spouse = props => {
           setIsLoading(false);
         }, 200);
       });
-    }else{
+    } else {
       setIsLoading(true);
       const params = prepareParams();
       updateSpouseInfo(params, spouseRes => {
         if (spouseRes?.status == 1) {
           SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
-            navigation.push('DependentsList', {depCount: 1, isEditing:isEditing});
+            navigation.push('DependentsList', {
+              depCount: 1,
+              isEditing: isEditing,
+            });
           });
         } else {
           Alert.alert('SukhTax', 'Something went wrong!');
@@ -276,9 +301,9 @@ const Spouse = props => {
         setTimeout(() => {
           setIsLoading(false);
         }, 200);
-      });  
+      });
     }
-  }
+  };
 
   return (
     <View
@@ -300,82 +325,12 @@ const Spouse = props => {
             paddingHorizontal: 20,
           }}>
           <Heading value="SPOUSE" marginTop={26} />
-          {Tax_Filed_With_Sukhtax && !isEditing && !isConfirmed ? (
-            <>
-              <Heading
-                fontSize={20}
-                marginTop={30}
-                color={Colors.RED}
-                value="BANKING INFO SAME AS LAST YEAR?"
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: 30,
-                }}>
-                <SKButton
-                  width={'48%'}
-                  fontSize={16}
-                  fontWeight={'normal'}
-                  backgroundColor={Colors.CLR_7F7F9F}
-                  borderColor={Colors.CLR_D3D3D9}
-                  title={'NO'}
-                  onPress={() => {
-                    console.log('NO')
-                    setIsConfirmed(true);
-                  }}
-                />
-                <SKButton
-                  fontSize={16}
-                  width={'48%'}
-                  fontWeight={'normal'}
-                  backgroundColor={Colors.APP_RED_SUBHEADING_COLOR}
-                  borderColor={Colors.CLR_D3D3D9}
-                  title={'YES'}
-                  onPress={() => {
-                    console.log('YES')
-                    getLastYearData()
-                  }}
-                />
-              </View>
-              <Heading
-                fontSize={20}
-                marginTop={30}
-                color={Colors.RED}
-                value="SIN NUMBER SAME AS LAST YEAR?"
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: 30,
-                }}>
-                <SKButton
-                  width={'48%'}
-                  fontSize={16}
-                  fontWeight={'normal'}
-                  backgroundColor={Colors.CLR_7F7F9F}
-                  borderColor={Colors.CLR_D3D3D9}
-                  title={'NO'}
-                  onPress={() => {
-                    setIsConfirmed(true);
-                  }}
-                />
-                <SKButton
-                  fontSize={16}
-                  width={'48%'}
-                  fontWeight={'normal'}
-                  backgroundColor={Colors.APP_RED_SUBHEADING_COLOR}
-                  borderColor={Colors.CLR_D3D3D9}
-                  title={'YES'}
-                  onPress={() => {
-                    console.log('YES')
-                    getLastYearData()
-                  }}
-                />
-              </View>
-            </>
+          {(Tax_Filed_With_Sukhtax  && isMarried && !isEditing && !isConfirmed) ? (
+            <LastYearDataCard 
+            onContinuePressed = {(flagBank, flagSin, flagResidency, flagSpouseFiling)=>{
+              console.log('flagSpouse, flagSin, flagResidency, flagSpouseFiling',flagBank, flagSin, flagResidency, flagSpouseFiling)
+              getLastYearData(flagBank, flagSin, flagResidency, flagSpouseFiling)
+            }} />
           ) : (
             <>
               <SKSwitch
@@ -417,7 +372,7 @@ const Spouse = props => {
                 }}
               />
               <TouchableInput
-                marginTop = {15}
+                marginTop={15}
                 leftAccImage={CustomFonts.Calender}
                 value={dob && format(dob, 'dd/MM/yyyy')}
                 placeholder="Date of Birth (DD/MM/YYYY)"
@@ -426,7 +381,7 @@ const Spouse = props => {
                 }}
               />
               <TouchableInput
-                marginTop = {15}
+                marginTop={15}
                 leftAccImage={CustomFonts.Gender}
                 rightAccImage={CustomFonts.ChevronDown}
                 value={gender}
@@ -436,7 +391,7 @@ const Spouse = props => {
                 }}
               />
               <TouchableInput
-                marginTop = {15}
+                marginTop={15}
                 leftAccImage={CustomFonts.Home}
                 rightAccImage={CustomFonts.ChevronDown}
                 placeholder="Select Residency"
@@ -445,23 +400,23 @@ const Spouse = props => {
                   setIsResidenceVisible(true);
                 }}
               />
-              {residency?.residency_id != 5 && 
-               <SKInput
-               leftAccImage={CustomFonts.Number}
-               marginTop={15}
-               maxLength={9}
-               borderColor={Colors.CLR_0065FF}
-               value={sinNo}
-               placeholder="Enter SIN"
-               keyboardType="number-pad"
-               onEndEditing={value => {
-                 setSinNo(value);
-               }}
-             />
-              }
- 
+              {residency?.residency_id != 5 && (
+                <SKInput
+                  leftAccImage={CustomFonts.Number}
+                  marginTop={15}
+                  maxLength={9}
+                  borderColor={Colors.CLR_0065FF}
+                  value={sinNo}
+                  placeholder="Enter SIN"
+                  keyboardType="number-pad"
+                  onEndEditing={value => {
+                    setSinNo(value);
+                  }}
+                />
+              )}
+
               <TouchableInput
-                marginTop = {15}
+                marginTop={15}
                 leftAccImage={CustomFonts.Calender}
                 value={enrtyDate && format(enrtyDate, 'dd/MM/yyyy')}
                 placeholder="Date of Immigration (DD/MM/YYYY)"
@@ -523,7 +478,7 @@ const Spouse = props => {
                 title={'DEPENDENTS'}
                 onPress={() => {
                   if (checkFormValidations()) {
-                   handleSaveAndUpdateInfo()
+                    handleSaveAndUpdateInfo();
                   }
                 }}
               />
@@ -603,7 +558,7 @@ const Spouse = props => {
         />
       )}
 
-      {isResidenceVisible && (
+      {isResidenceVisible && residencies && (
         <SKModel
           title="Select"
           data={residencies}
@@ -635,4 +590,125 @@ const Spouse = props => {
   );
 };
 
+const LastYearDataCard = props => {
+  const {onContinuePressed = () => {}} = props;
+  const [isBankingChanged, setIsBankingChanged] = useState(true);
+  const [isSINChanged, setIsSINChanged] = useState(true);
+  const [isResidencyChanged, setIsResidencyChanged] = useState(true);
+  const [isFilingForSpouse, setIsFilingForSpouse] = useState(true);
+
+
+  return (
+    <>
+      <ButtonCard
+        title="HAS YOUR BANKING INFO CHANGED SINCE LAST YEAR?"
+        isSelected={isBankingChanged ? true : false}
+        onOptionSelected={tag => {
+          console.log('tag===>', tag);
+          setIsBankingChanged(tag == 2 ? true : false);
+        }}
+      />
+      <ButtonCard
+        title="HAS YOUR SIN NUMBER CHANGED SINCE LAST YEAR?"
+        isSelected={isSINChanged ? true : false}
+        onOptionSelected={tag => {
+          console.log('tag===>', tag);
+          setIsSINChanged(tag == 2 ? true : false);
+        }}
+      />
+      <ButtonCard
+        title="HAS YOUR SPOUSE RESIDENCY CHANGED SINCE LAST YEAR?"
+        isSelected={isResidencyChanged ? true : false}
+        onOptionSelected={tag => {
+          console.log('tag===>', tag);
+          setIsResidencyChanged(tag == 2 ? true : false);
+        }}
+      />
+      <ButtonCard
+        title="ARE YOU FILING FOR YOUR SPOUSE THIS YEAR?"
+        isSelected={isFilingForSpouse ? true : false}
+        onOptionSelected={tag => {
+          console.log('tag===>', tag);
+          setIsFilingForSpouse(tag == 2 ? true : false);
+        }}
+      />
+      <SKButton
+        fontSize={16}
+        marginTop={30}
+        fontWeight={'normal'}
+        backgroundColor={Colors.CLR_E77C7E}
+        borderColor={Colors.PRIMARY_BORDER}
+        title={'CONTINUE'}
+        onPress={() => {
+          console.log('isBankingChanged, isSINChanged, isResidencyChanged, isFilingForSpouse',isBankingChanged, isSINChanged, isResidencyChanged, isFilingForSpouse)
+          onContinuePressed(isBankingChanged, isSINChanged, isResidencyChanged, isFilingForSpouse);
+        }}
+      />
+    </>
+  );
+};
+
+const ButtonCard = props => {
+  const {title, isSelected = false, onOptionSelected = () => {}} = props;
+  return (
+    <>
+      <Heading fontSize={20} marginTop={30} color={Colors.RED} value={title} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <Button
+          title={'NO'}
+          isSelected={!isSelected}
+          onSelected={() => {
+            onOptionSelected(1);
+          }}
+        />
+        <Button
+          title={'YES'}
+          isSelected={isSelected}
+          onSelected={() => {
+            onOptionSelected(2);
+          }}
+        />
+      </View>
+    </>
+  );
+};
+
+const Button = props => {
+  const {title = 'yes', isSelected = false, onSelected = () => {}} = props;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        marginTop: 20,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '40%',
+        height: 38,
+        borderRadius: 19,
+        borderWidth: 1,
+        borderColor: isSelected ? Colors.LIGHTGRAY : Colors.CLR_E77C7E,
+        backgroundColor: isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
+      }}
+      key={`${Math.random()}`}
+      onPress={() => {
+        onSelected();
+      }}>
+      <Text
+        style={{
+          width: '100%',
+          textAlign: 'center',
+          color: isSelected ? Colors.WHITE : Colors.CLR_414141,
+          fontSize: 17,
+        }}>
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 export default Spouse;

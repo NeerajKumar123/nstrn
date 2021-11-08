@@ -134,7 +134,7 @@ const RemainedDetailsTaxYrFlow = props => {
       style={{
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: 'red',
         flex: 1,
       }}>
       {isLoading && <SKLoader />}

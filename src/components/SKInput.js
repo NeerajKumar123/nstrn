@@ -90,9 +90,10 @@ const SKInput = props => {
           fontWeight: props.fontSize ? props.fontSize : '400',
           height: height ? height :  56,
           flex: 1,
+          color:editable == false ? Colors.CLR_9B9EA1 : Colors.BLACK,
           backgroundColor: props.backgroundColor
             ? props.backgroundColor
-            : Colors.WHITE,
+            : Colors.WHITE
         }}
         textAlign={props.textAlign ? props.textAlign : 'left'}
         underlineColorAndroid="transparent"
@@ -103,7 +104,7 @@ const SKInput = props => {
         autoCapitalize={autoCapitalize}
         autoCompleteType="off"
         autoCorrect={false}
-        placeholderTextColor = {Colors.LIGHTGRAY}
+        placeholderTextColor = {Colors.CLR_9B9EA1}
         placeholder={placeholder}
         maxLength={maxLength}
         returnKeyType = {returnKeyType}

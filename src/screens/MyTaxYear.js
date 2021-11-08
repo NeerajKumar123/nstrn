@@ -299,7 +299,10 @@ const MyTaxYear = props => {
 
 const decideAndNavigate =(callback) =>{
   let nextIndex = pageIndex + 1
+  console.log('err', nextIndex);
   const selObj = global.selectedYears && global.selectedYears.length > nextIndex  ? global.selectedYears[nextIndex] : undefined
+  console.log('global.selectedYears', global.selectedYears);
+  console.log('selObj', selObj);
   if(selObj){
     const newPageIndex = pageIndex + 1
     navigation.push('RemainedDetailsTaxYrFlow',{pageTaxYrIndex:newPageIndex, year:selObj, isEditing:isEditing});

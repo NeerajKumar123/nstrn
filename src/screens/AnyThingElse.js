@@ -48,7 +48,7 @@ const AnyThingElse = props => {
           blurOnSubmit={true}
           borderColor={Colors.CLR_0065FF}
           value={anythingText}
-          placeholder="'Please type here"
+          placeholder="Please type here"
           onEndEditing={value => {
             console.log('value', value)
             setAnythingText(value)

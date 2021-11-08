@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -21,20 +21,28 @@ import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 
-const Edit_Form_Options = [
-    {name:"About Info", screen:'BasicInfo'},
-    {name:"Banking & Family Info", screen:'BankingAndMore'},
-    {name:"Spouse Info", screen:'Spouse'},
-    {name:"Dependents",screen:'DependentsList'},
-    {name:"My Tax Year",screen:'MyTaxYear'},
-    // {name:"My Tax Year for other Years"},
-    {name:"Manage Documents", screen:'OnlineDocuments'},
-]
-
 const OnlineEditInfo = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-
+  let menus = [
+    {name: 'About Info', screen: 'BasicInfo'},
+    {name: 'Banking & Family Info', screen: 'BankingAndMore'},
+    {name: 'Dependents', screen: 'DependentsList'},
+    {name: 'My Tax Year', screen: 'MyTaxYear'},
+    {name: 'Manage Documents', screen: 'OnlineDocuments'},
+  ];
+  const yrwiseRecords = global?.onlineStatusData?.Year_Wise_Records;
+  let firstYearData = yrwiseRecords?.[0] || {};
+  let isMarried = false;
+  if (
+    firstYearData?.marital_status_id == 2 ||
+    firstYearData?.marital_status_id == 3
+  ) {
+    isMarried = true;
+  }
+  if (isMarried) {
+    menus.splice(2, 0, {name: 'Spouse Info', screen: 'Spouse'});
+  }
   return (
     <View
       style={{
@@ -51,36 +59,35 @@ const OnlineEditInfo = props => {
           paddingHorizontal: 20,
           height: '100%',
         }}>
-        <Heading value="EDIT INFORMATION MENU" marginTop={50} />
+        <Heading value="EDIT INFORMATION" marginTop={50} />
         <Heading
           fontSize={16}
           marginTop={20}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="IF NEEDED,HERE YOU CAN UPDATE YOUR LAST TAX FILING INFORMATION BY CLICKING ON PERTICULAR SECTION"
+          value="WHICH OF THE FOLLOWING AREAS DO YOU WANT TO EDIT?"
         />
 
-        {Edit_Form_Options &&  Edit_Form_Options.map((elem) =>{
-            return(
-                <DocCard
+        {menus &&
+          menus.map(elem => {
+            return (
+              <DocCard
                 title={elem.name}
                 onSelected={() => {
-                    console.log('elem',elem)
-                    if (elem.screen) {
-                        navigation.navigate(elem.screen,{isEditing:true})
-                    }
+                  console.log('elem', elem);
+                  if (elem.screen) {
+                    navigation.navigate(elem.screen, {isEditing: true});
+                  }
                 }}
               />
-            )
-        })
-        }
-       
+            );
+          })}
       </ScrollView>
     </View>
   );
 };
 
 const DocCard = props => {
-  const {title,onSelected = ()=>{}} = props;
+  const {title, onSelected = () => {}} = props;
   return (
     <TouchableOpacity
       style={{
@@ -93,8 +100,8 @@ const DocCard = props => {
         width: '100%',
         height: 48,
         borderRadius: 24,
-        borderWidth:1,
-        borderColor:Colors.CLR_E77C7E,
+        borderWidth: 1,
+        borderColor: Colors.CLR_E77C7E,
         backgroundColor: Colors.WHITE,
       }}
       key={`${Math.random()}`}
@@ -112,11 +119,11 @@ const DocCard = props => {
         {title}
       </Text>
       <Icon
-      style = {{position:'absolute', right:20}}
-            name={CustomFonts.ChevronRight}
-            size={20}
-            color={Colors.APP_RED_SUBHEADING_COLOR}
-          />
+        style={{position: 'absolute', right: 20}}
+        name={CustomFonts.ChevronRight}
+        size={20}
+        color={Colors.APP_RED_SUBHEADING_COLOR}
+      />
     </TouchableOpacity>
   );
 };
