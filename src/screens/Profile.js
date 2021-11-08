@@ -23,7 +23,7 @@ const Profile = props => {
   const navigation = useNavigation();
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
-  const [email, setEmail] = useState();
+  const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState();
   const [isLoading, setIsLoading] = useState(false);
 

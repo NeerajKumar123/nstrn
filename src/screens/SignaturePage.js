@@ -287,7 +287,7 @@ const SKCheckbox = props => {
         size={20}
         color={Colors.GRAY}
       />
-      <Text style={{color: Colors.APP_BLUE_HEADING_COLOR, marginLeft: 10, flex: 1}}>
+      <Text style={{color: Colors.APP_BLUE_HEADING_COLOR, marginLeft: 10, flex: 1,fontSize:15}}>
         I authorize SukhTax and Financial Services as per below.
       </Text>
     </TouchableOpacity>
