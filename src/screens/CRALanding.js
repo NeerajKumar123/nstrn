@@ -83,8 +83,8 @@ const CRALanding = props => {
           fontSize={16}
           width="100%"
           fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
-          borderColor={Colors.SECONDARY_FILL}
+          backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+          borderColor={Colors.CLR_D3D3D9}
           title={'NEW CRA LETTER'}
           onPress={() => {
             navigation.navigate('NewCRALatter');

@@ -81,7 +81,6 @@ const Dashboard = props => {
   // const book_an_appointment_link = global.userInfo
 
   useEffect(() => {
-    console.log('useEffect====>',global.userInfo)
     if(isFocused){
       setIsLoading(true);
       const user = global.userInfo

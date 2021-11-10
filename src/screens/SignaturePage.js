@@ -276,7 +276,6 @@ const SKCheckbox = props => {
       style={{
         width: '100%',
         flexDirection: 'row',
-        alignItems: 'center',
         marginTop: 20,
       }}
       onPress={() => {
@@ -284,7 +283,7 @@ const SKCheckbox = props => {
       }}>
       <Icon
         name={isChecked ? 'check-box-outline' : 'checkbox-blank-outline'}
-        size={20}
+        size={22}
         color={Colors.GRAY}
       />
       <Text style={{color: Colors.APP_BLUE_HEADING_COLOR, marginLeft: 10, flex: 1,fontSize:15}}>

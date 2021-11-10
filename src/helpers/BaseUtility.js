@@ -145,7 +145,7 @@ export const loadIntialData = (callback) => {
   SKTStorage.loadLastSavedData((res)=>{
     const [selectedYears,isFromSpouseFlow,province] = res
     const [keyYear, valueYear] = selectedYears
-    global[keyYear] = JSON.parse(valueYear) 
+    global[keyYear] = valueYear && JSON.parse(valueYear) 
     const [keySpouse, valueSpouse] = isFromSpouseFlow
     global[keySpouse] = valueSpouse 
     const [keyProvince, valueProvince] = province
@@ -208,5 +208,5 @@ export default {
   hideLoader,
   showLoader,
   showToast,
-  downloadFileFromUrl,
+  downloadFileFromUrl
 };

@@ -144,9 +144,11 @@ const DependentsList = props => {
         <View style={{ marginVertical: 20, justifyContent: 'center' }}>
           {deps &&
             deps.map((item, index) => {
+              console.log('index',index)
               return (
                 <DepCard
                   item={item}
+                  marginTop = {index == 0 ? 0 : 10}
                   onSelected={() => {
                     //   navigation.navigate('DependentDetails', {...item});
                   }}
@@ -200,7 +202,7 @@ const DependentsList = props => {
           }}>
           <Image
             resizeMode="contain"
-            style={{ width: 30, height: 30, alignSelf: 'center' }}
+            style={{ width: 25, height: 25, alignSelf: 'center' }}
             source={CustomFonts.add_filled_circle}
           />
           <Text
@@ -228,9 +230,13 @@ const DependentsList = props => {
             fontWeight={'normal'}
             backgroundColor={Colors.PRIMARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'MY TAX YEAR'}
+            title={ isEditing ? 'SUBMIT': 'MY TAX YEAR'}
             onPress={() => {
-              navigation.navigate('MyTaxYear', { pageIndex: 0,isEditing:isEditing });
+              if (isEditing) {
+                navigation.navigate('OnlineEditInfo');
+              }else{
+                navigation.navigate('MyTaxYear', { pageIndex: 0,isEditing:isEditing });
+              }
             }}
           />
         </View>
@@ -240,7 +246,7 @@ const DependentsList = props => {
 };
 
 const DepCard = props => {
-  const { item, onDelete = () => { } } = props;
+  const {marginTop, item, onDelete = () => { } } = props;
   const { first_name, last_name, Relationship } = item;
   if (!first_name) return null;
   return (
@@ -250,13 +256,14 @@ const DepCard = props => {
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         width: '100%',
+        marginTop:marginTop,
       }}>
       <Text
         style={{
           width: '100%',
           textAlign: 'left',
           color: Colors.APP_BLUE_HEADING_COLOR,
-          fontSize: 18,
+          fontSize: 16,
           fontFamily: CustomFonts.OpenSansRegular,
           fontWeight: '700',
         }}>
@@ -285,14 +292,6 @@ const DepCard = props => {
           color={Colors.RED}
         />
       </TouchableOpacity>
-      <View
-        style={{
-          backgroundColor: Colors.BLACK,
-          height: 0.4,
-          width: '85%',
-          marginTop: 10,
-        }}
-      />
     </View>
   );
 };

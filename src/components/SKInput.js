@@ -31,7 +31,7 @@ const SKInput = props => {
     isChatInput = false,
     multiline = false,
     keyboardType = 'default',
-    autoCapitalize = 'words',
+    autoCapitalize = 'sentences',
     returnKeyType ,
     blurOnSubmit,
     editable = true
@@ -85,7 +85,7 @@ const SKInput = props => {
       <TextInput
         editable = {editable}
         style={{
-          fontSize: 18,
+          fontSize: 17,
           fontFamily: CustomFonts.OpenSansRegular,
           fontWeight: props.fontSize ? props.fontSize : '400',
           height: height ? height :  56,

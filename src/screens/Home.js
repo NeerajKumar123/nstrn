@@ -44,6 +44,7 @@ const Home = props => {
    }
 
    useEffect(() => {
+     console.log('isFocused',isFocused)
     if(isFocused){
       setIsLoading(true);
       setTimeout(() => {

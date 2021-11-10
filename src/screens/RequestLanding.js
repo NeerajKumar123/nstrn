@@ -15,7 +15,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {taxDocsGetTaxDocsType, taxDocsGenerateTaxDocId} from '../apihelper/Api';
+import {taxDocsGetTaxDocsType, taxDocsGenerateTaxDocId, getT1GeneralDocs} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
@@ -61,7 +61,7 @@ const RequestLanding = props => {
           marginTop={0}
           marginBottom={0}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="NEED A TAX DOCUMENT"
+          value="NEED A TAX DOCUMENT?"
         />
         <Heading
           fontSize={16}
@@ -99,7 +99,17 @@ const RequestLanding = props => {
           isStatic={true}
           item={{fee: 'SEE DOCS REQUESTED', tax_docs_type: 'PREVIOUS REQUESTS'}}
           onSelected={() => {
-            navigation.navigate('AllDocuments');
+            setIsLoading(true)
+            const {user_id} = global.onlineStatusData
+            const params = {user_id}
+            getT1GeneralDocs(params, (t1GRes)=>{
+              setIsLoading(false)
+              if(t1GRes?.data?.length){
+                navigation.navigate('HomeDocsListing',{page_id:3,page_title:'T1 GENERAL, NOA, T-SLIPS',docs:t1GRes?.data})
+              }else{
+                Alert.alert('Sukhtax','There is no document.')
+              }
+            })
           }}
         />
         <View

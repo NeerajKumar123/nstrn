@@ -37,6 +37,7 @@ import {YES_NO} from '../constants/StaticValues';
 const RemainedDetailsTaxYrFlow = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
+  const isEditing = pageParams?.isEditing
   const [mailingAddress, setMailingAddress] = useState();
   const [province, setProvince] = useState('');
   const [provinces, setProvinces] = useState();
@@ -66,6 +67,7 @@ const RemainedDetailsTaxYrFlow = props => {
     setIsLoading(true);
     const params = {};
     getCanadaProvinceList(params, provinceRes => {
+      console.log('setProvinces',provinceRes)
       setProvinces(provinceRes?.data);
       getResidencyList({}, resdencyRes => {
         if (resdencyRes.status == 1) {
@@ -134,8 +136,8 @@ const RemainedDetailsTaxYrFlow = props => {
       style={{
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: 'red',
         flex: 1,
+        backgroundColor:'white'
       }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation={navigation} />

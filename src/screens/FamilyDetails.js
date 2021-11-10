@@ -115,7 +115,9 @@ const FamilyDetails = props => {
   }
 
   useEffect(() => {
-    if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
+    if (isEditing) {
+      setNextButtonTitle('SUBMIT')
+    }else if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
       setNextButtonTitle('SPOUSE')
     }else if(dependentOption?.id == 1){
       setNextButtonTitle('DEPENDENTS')
@@ -212,7 +214,9 @@ const FamilyDetails = props => {
                 if(saveBankingRes?.status == 1){
                   const check = (maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3) ? true : false
                   SKTStorage.setKeyValue('isFromSpouseFlow',check,()=>{
-                    if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
+                    if (isEditing) {
+                      navigation.navigate('OnlineEditInfo');
+                    }else if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
                       navigation.navigate('Spouse',{dependentOption:dependentOption.id, isEditing:isEditing});
                     }else if (dependentOption.id  == 1){
                       navigation.push('DependentsList', {depCount:1,isEditing:isEditing});
@@ -231,7 +235,7 @@ const FamilyDetails = props => {
       </ScrollView>
       {isMVisible && (
         <SKModel
-          title="Select Gender"
+          title="Select Marital Status"
           data={maritalStatuses}
           keyLabel="marital_status_name"
           onClose={() => {

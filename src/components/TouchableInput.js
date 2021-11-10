@@ -22,7 +22,7 @@ const TouchableInput = props => {
     marginTop = 15,
     marginBottom = 10,
     placeholder = 'Select value',
-    fontSize = 15,
+    fontSize = 16,
     height = 60
   } = props;
   return (
@@ -64,7 +64,7 @@ const TouchableInput = props => {
           flex: 1,
           fontFamily: CustomFonts.OpenSansRegular,
           fontSize: fontSize,
-          color: value ? Colors.BLACK : Colors.LIGHTGRAY,
+          color: value ? Colors.BLACK : Colors.CLR_9B9EA1,
         }}>
         {value || placeholder}
       </Text>

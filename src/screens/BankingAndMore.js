@@ -323,7 +323,7 @@ const BankingAndMore = props => {
           </>
         )}
       </ScrollView>
-      {isBankVisible && (
+      {isBankVisible && banks  &&  (
         <SKModel
           title="Select"
           data={banks}
@@ -337,7 +337,7 @@ const BankingAndMore = props => {
           }}
         />
       )}
-      {isResidenceVisible && (
+      {isResidenceVisible && residencies && (
         <SKModel
           title="Select"
           data={residencies}

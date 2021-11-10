@@ -24,12 +24,13 @@ const IncorpApplyStatus = props => {
   IncorpApplyStatus
   const {
     incorporation_status_name = 'File not Submitted',
-    status_description = 'Looks like you have to complete your registration and upload document still!',
     new_message_count = 0,
     incorporation_status_id = 1,
   } = global.incStatusData;
 
-  console.log('status_description',status_description)
+  let status = global.incStatusData?.status_description
+  status = status?.split('$').join('\n');
+  const status_description = status || ''
 
   return (
     <View
@@ -90,11 +91,9 @@ const NotSubmitted = props => {
     navigation,
     incorporation_status_name,
     status_description,
-    new_message_count,
   } = props;
 
   const incorpMoveToPage = props => {
-    console.log('IncorporationLanding',incorporation_status_id)
     const {
       hst_registration, // HST
       identification_document_uploaded, // incprtr
@@ -134,23 +133,19 @@ const NotSubmitted = props => {
         value={incorporation_status_name}
         marginTop={2}
       />
-      <Text
-        style={{
-          textAlign: 'left',
-          color: Colors.BLACK,
-          fontSize: 17,
-          width: '100%',
-          fontWeight: '400',
-          marginTop: 30,
-        }}>
-        {status_description}
-      </Text>
+        <Heading
+        fontSize={17}
+        marginTop={12}
+        fontWeight="700"
+        color={Colors.APP_RED_SUBHEADING_COLOR}
+        value={status_description}
+      />
       <SKButton
         fontSize={16}
         marginTop={30}
         width="100%"
         fontWeight={'normal'}
-        backgroundColor={Colors.SECONDARY_FILL}
+        backgroundColor={Colors.PRIMARY_FILL}
         borderColor={Colors.PRIMARY_BORDER}
         title={'EDIT INFO'}
         onPress={() => {
@@ -161,9 +156,9 @@ const NotSubmitted = props => {
   );
 };
 const AllSet = props => {
-  const {navigation} = props;
+  const {navigation,status_description} = props;
   const [isLoading, setIsLoading] = useState(false)
-  const {incorporation_status_name, status_description} = global.incStatusData;
+  const {incorporation_status_name} = global.incStatusData;
   return (
     <View
       style={{
@@ -249,8 +244,8 @@ const AllSet = props => {
   );
 };
 const InProcess = props => {
-  const {navigation} = props;
-  const {incorporation_status_name, status_description} = global.incStatusData;
+  const {navigation,status_description} = props;
+  const {incorporation_status_name} = global.incStatusData;
   const openLink = () => {
     const {company_contact_number} = global.incStatusData;
     let finalLink = company_contact_number;

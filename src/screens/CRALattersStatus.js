@@ -152,6 +152,29 @@ const Rejected = props => {
         color={Colors.APP_BLUE_HEADING_COLOR}
         value={status_description}
       />
+       {details.Sukh_Tax_Reply && (
+        <Heading
+          fontSize={17}
+          marginTop={12}
+          fontWeight="700"
+          color={Colors.APP_RED_SUBHEADING_COLOR}
+          value={'SUKH TAX REPLY'}
+        />
+      )}
+
+      {details.Sukh_Tax_Reply &&
+        details.Sukh_Tax_Reply.map((item, index) => {
+          return (
+            <Heading
+              key={item.reply}
+              fontSize={18}
+              marginTop={12}
+              fontWeight="700"
+              color={Colors.APP_BLUE_HEADING_COLOR}
+              value={item.reply}
+            />
+          );
+        })}
       <SKButton
         marginTop={56}
         fontSize={16}

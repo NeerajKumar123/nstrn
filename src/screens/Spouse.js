@@ -275,8 +275,8 @@ const Spouse = props => {
             navigation.push('DependentsList', {
               depCount: 1,
               isEditing: isEditing,
-            });
-          });
+            });  
+        });
         } else {
           Alert.alert('SukhTax', 'Something went wrong!');
         }
@@ -290,10 +290,14 @@ const Spouse = props => {
       updateSpouseInfo(params, spouseRes => {
         if (spouseRes?.status == 1) {
           SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
-            navigation.push('DependentsList', {
-              depCount: 1,
-              isEditing: isEditing,
-            });
+            if (isEditing) {
+              navigation.navigate('OnlineEditInfo');
+            }else{
+              navigation.push('DependentsList', {
+                depCount: 1,
+                isEditing: isEditing,
+              });
+              }
           });
         } else {
           Alert.alert('SukhTax', 'Something went wrong!');
@@ -328,7 +332,6 @@ const Spouse = props => {
           {(Tax_Filed_With_Sukhtax  && isMarried && !isEditing && !isConfirmed) ? (
             <LastYearDataCard 
             onContinuePressed = {(flagBank, flagSin, flagResidency, flagSpouseFiling)=>{
-              console.log('flagSpouse, flagSin, flagResidency, flagSpouseFiling',flagBank, flagSin, flagResidency, flagSpouseFiling)
               getLastYearData(flagBank, flagSin, flagResidency, flagSpouseFiling)
             }} />
           ) : (
@@ -475,7 +478,7 @@ const Spouse = props => {
                 fontWeight={'normal'}
                 backgroundColor={Colors.PRIMARY_FILL}
                 borderColor={Colors.PRIMARY_BORDER}
-                title={'DEPENDENTS'}
+                title={isEditing ? 'SUBMIT':'DEPENDENTS'}
                 onPress={() => {
                   if (checkFormValidations()) {
                     handleSaveAndUpdateInfo();
@@ -640,7 +643,6 @@ const LastYearDataCard = props => {
         borderColor={Colors.PRIMARY_BORDER}
         title={'CONTINUE'}
         onPress={() => {
-          console.log('isBankingChanged, isSINChanged, isResidencyChanged, isFilingForSpouse',isBankingChanged, isSINChanged, isResidencyChanged, isFilingForSpouse)
           onContinuePressed(isBankingChanged, isSINChanged, isResidencyChanged, isFilingForSpouse);
         }}
       />

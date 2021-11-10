@@ -85,8 +85,9 @@ const OnlinePaymentScreen = props => {
     } else if (paymentIntent) {
       const {id,status} = paymentIntent
       const {user_id,tax_file_id} = global.onlineStatusData;
-      const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Payment_Intent_id:id,Payment_Status:status,Additional_Payment:pageParams?.additional_payment_required ? pageParams?.additional_payment_required : 0 }
+      const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Payment_Intent_id:id,Payment_Status:status,Additional_Payment:pageParams?.additional_payment_required > 0 ? 1 : 0 }
       onlineSavePaymentInfo(params, (savePaymentRes)=>{
+        setIsLoading(false);
         if(savePaymentRes?.status == 1){
           SKTStorage.setKeyValue('selectedYears',[],()=>{
             navigation.navigate('Home');

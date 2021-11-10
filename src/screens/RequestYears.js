@@ -118,7 +118,7 @@ const RequestYears = props => {
                             if (taxDocsRes?.status == 1) {
                               const taxDocsResData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
                               global.taxDocsStatusData = taxDocsResData ? { ...taxDocsResData, ...global.userInfo } : { ...global.taxDocsResData, ...global.userInfo }
-                              navigation.navigate('RequestApplyStatus');
+                              navigation.navigate('RequestApplyStatus',{shouldGoToHome:true});
                             } else {
                               setIsLoading(false)
                               Alert.alert('SukhTax', taxDocsRes?.message)

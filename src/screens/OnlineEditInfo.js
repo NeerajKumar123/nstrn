@@ -14,7 +14,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {getTaxReturnsDocs} from '../apihelper/Api';
+import BaseUtility, {remove_duplicates_es6} from '../helpers/BaseUtility'
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
@@ -43,6 +43,19 @@ const OnlineEditInfo = props => {
   if (isMarried) {
     menus.splice(2, 0, {name: 'Spouse Info', screen: 'Spouse'});
   }
+
+  function remove_duplicates_es6(arr) {
+    let s = new Set(arr);
+    let it = s.values();
+    return Array.from(it);
+}
+const str = global?.onlineStatusData?.years_selected
+const ar = str?.split(',')
+const selYrs = remove_duplicates_es6(ar)
+SKTStorage.setKeyValue('selectedYears',selYrs,()=>{
+  global.selectedYears = selYrs
+})
+
   return (
     <View
       style={{
@@ -73,7 +86,6 @@ const OnlineEditInfo = props => {
               <DocCard
                 title={elem.name}
                 onSelected={() => {
-                  console.log('elem', elem);
                   if (elem.screen) {
                     navigation.navigate(elem.screen, {isEditing: true});
                   }

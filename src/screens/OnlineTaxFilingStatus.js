@@ -27,6 +27,7 @@ import {
 import SKButton, {UploadDocButton,DarkBlueButton} from '../components/SKButton';
 import {LibImageQualityOptions,ImageActionSheetOptions} from '../constants/StaticValues'
 import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
+import * as SKTStorage from '../helpers/SKTStorage';
 
 const OnlineTaxFilingStatus = props => {
   const navigation = useNavigation();
@@ -248,7 +249,6 @@ const TaxFilingStatusCard = props => {
   const [isDetailsClicked, setIsDetailsClicked] = useState(false);
   const {
     tax_file_status_name = 'File not Submitted',
-    status_description = 'Looks like you have to complete your registration and upload document still!',
     new_message_count = 0,
     can_edit_documents = 0,
     payment_required = 0,
@@ -258,63 +258,9 @@ const TaxFilingStatusCard = props => {
     tax_file_status_id
   } = global.onlineStatusData;
 
-
-  const onlineMoveToPage = props => {
-    const {
-      years_selected = 0,
-      identification_document_uploaded = 0,
-      about_info_filled = 0,
-      banking_family_info_filled = 0,
-      dependent_info_filled = 0,
-      spouse_info_filled = 0,
-      my_year_info_filled = 0,
-      document_uploaded = 0,
-      authorization_document_uploaded = 1,
-      Online_Button_Enabled
-    } = global?.onlineStatusData ?? {};
-
-    if (Online_Button_Enabled == 0) {
-      navigation.navigate('OnlineTaxFilingStatus')
-    }else{
-      if (authorization_document_uploaded) {
-        navigation.navigate('AnyThingElse');
-      } else if (document_uploaded) {
-        navigation.navigate('AuthorizerList');
-      } else if (my_year_info_filled) {
-        navigation.navigate('OnlineDocuments');
-      } else if (spouse_info_filled) {
-        navigation.navigate('DependentsList');
-      } else if (dependent_info_filled) {
-        navigation.navigate('MyTaxYear',{pageIndex:0}); 
-      } else if (banking_family_info_filled) {
-        const yrwiseRecords = global?.onlineStatusData?.Year_Wise_Records
-        let firstYearData = yrwiseRecords?.[0] || {}
-        let isMarried = false
-        let isDepSel = false
-        if (firstYearData?.marital_status_id == 2 || firstYearData?.marital_status_id == 3) {
-          isMarried = true
-        }
-        if (firstYearData?.dependents) {
-          isDepSel = true
-        }
-        if (isMarried) {
-          navigation.navigate('Spouse');
-        }else if (isDepSel){
-          navigation.navigate('DependentsList');
-        }else{
-          navigation.navigate('MyTaxYear',{pageIndex:0});
-        }
-      } else if (about_info_filled) {
-        navigation.navigate('BankingAndMore');
-      } else if (identification_document_uploaded) {
-        navigation.navigate('BasicInfo');
-      } else if (years_selected) {
-        navigation.navigate('Identification');
-      } else {
-        navigation.navigate('OnlineReturnLanding');
-      }
-    }    
-  };
+  let status = global.onlineStatusData?.status_description
+  status = status?.split('$').join('\n');
+  const status_description = status || ''
 
   if (
     (tax_file_status_id == 10 || tax_file_status_id == 12) &&
@@ -357,10 +303,10 @@ const TaxFilingStatusCard = props => {
       <Text
         style={{
           textAlign: 'left',
-          color: Colors.BLACK,
+          color: Colors.APP_RED_SUBHEADING_COLOR,
           fontSize: 17,
           width: '100%',
-          fontWeight: '400',
+          fontWeight: '700',
           marginTop: 30,
         }}>
         {status_description}
@@ -424,27 +370,11 @@ const TaxFilingStatusCard = props => {
           title={'NEW FILING'}
           onPress={() => {
             global.selectedYears = undefined
+            global.isFAuthorized = undefined
+            global.isSAuthorized  = undefined
+            global.isFromSpouseFlow = undefined
+            SKTStorage.setKeyValue('isFromSpouseFlow',undefined,()=>{})
             navigation.navigate('OnlineReturnLanding');
-          }}
-        />
-      )}
-      <MessegesView
-        count={new_message_count}
-        onClick={() => {
-          navigation.navigate('Messages');
-        }}
-      />
-      {tax_file_status_id == 7 && can_edit_documents == 1 && (
-        <SKButton
-          fontSize={16}
-          marginTop={30}
-          width="100%"
-          fontWeight={'normal'}
-          backgroundColor={Colors.SECONDARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
-          title={'EDIT INFO'}
-          onPress={() => {
-            navigation.navigate('OnlineEditInfo')
           }}
         />
       )}
@@ -479,10 +409,10 @@ const TaxFilingStatusCard = props => {
           marginTop = {18}
           width="100%"
           fontWeight={'normal'}
-          backgroundColor={Colors.SECONDARY_FILL}
+          backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
           title={'EDIT INFO'}
-          onPress={() => {
+          onPress={() => { 
             navigation.navigate('OnlineEditInfo')
           }}
         />
@@ -647,7 +577,12 @@ const TaxFilingStatusCard = props => {
           />
         </View>
       )}
-
+      <MessegesView
+        count={new_message_count}
+        onClick={() => {
+          navigation.navigate('Messages');
+        }}
+      />
       {tax_file_status_id == 16  &&  (
         <SKButton
           fontSize={16}

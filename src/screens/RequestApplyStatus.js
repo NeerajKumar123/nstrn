@@ -17,21 +17,29 @@ import * as Colors from '../constants/ColorDefs';
 import SKButton, {DarkBlueButton} from '../components/SKButton';
 import DocumentViewer from '../components/DocumentViewer';
 import SKLoader from '../components/SKLoader';
+import {downloadFileFromUrl} from  '../helpers/BaseUtility';
+import {taxDocsGetTaxDocsType, taxDocsGenerateTaxDocId, getT1GeneralDocs} from '../apihelper/Api';
 
 import {taxDocsGetReqDocs} from '../apihelper/Api';
 
 const RequestApplyStatus = props => {
   const navigation = useNavigation();
+  const pageParams = props.route.params;
+  const shouldGoToHome = pageParams?.shouldGoToHome
   const {
     tax_docs_status_name = 'File not Submitted',
-    status_description = 'Looks like you have to complete your registration and upload document still!',
     new_message_count = 0,
     tax_docs_status_id = 1,
   } = global.taxDocsStatusData;
 
+  let status = global.taxDocsStatusData?.status_description
+  status = status?.split('$').join('\n');
+  const status_description = status || ''
+
   const [docs, setDocs] = useState();
   const [showDoc, setShowDoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const {user_id, tax_docs_id, tax_docs_status_id} = global.taxDocsStatusData;
@@ -49,6 +57,33 @@ const RequestApplyStatus = props => {
     }
   }, []);
 
+  const getFileName = (docUrl) =>{
+    const dateString  =`${new Date().valueOf()}`
+    console.log(dateString);
+    const loweredCase = docUrl?.toLowerCase()
+    let fileName = 'Sukhtax_' + dateString
+    if (loweredCase.includes('.pdf')){
+      fileName = fileName + '.pdf'
+    }else if (loweredCase.includes('.png')) {
+      fileName = fileName + '.png'
+    }else if (loweredCase.includes('.jpeg')) {
+      fileName = fileName + '.jpeg'
+    }else if (loweredCase.includes('.jpg')) {
+      fileName = fileName + '.jpg'
+    }
+    console.log('fileName===>',fileName)
+    return fileName
+  }
+
+  const handleFileDownloading = (doc, callback) =>{
+    const docUrl = doc?.document_file_name?.replace(/ /g, '')
+    const fileName = getFileName(docUrl)
+    downloadFileFromUrl(docUrl, fileName, ()=>{
+      console.log('document_file_name', doc)
+      callback()
+    })
+  }
+
   return (
     <View
       style={{
@@ -57,7 +92,16 @@ const RequestApplyStatus = props => {
         backgroundColor: 'white',
         width: '100%',
       }}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+      navigation={navigation}
+      onLeftClicked = {()=>{
+        if (shouldGoToHome) {
+          navigation.popToTop()
+        }else{
+          navigation.goBack()
+        }
+      }}
+      />
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -76,7 +120,7 @@ const RequestApplyStatus = props => {
         )}
         {tax_docs_status_id == 2 && (
           <InProcess
-            tax_docs_status_name={tax_docs_status_name}
+            tax_docs_status_name={tax_docs_status_name} 
             status_description={status_description}
             new_message_count={new_message_count}
             navigation={navigation}
@@ -91,7 +135,10 @@ const RequestApplyStatus = props => {
             navigation={navigation}
             onDocClicked={item => {
               setSelectedItem(item);
-              setShowDoc(true);
+              // setShowDoc(true);
+              handleFileDownloading(item,()=>{
+                console.log('item',item)
+              })
             }}
             onAllDownloadClicked={() => {
               const {user_id, tax_docs_id, tax_docs_status_id} =
@@ -126,7 +173,6 @@ const NotSubmitted = props => {
     navigation,
     tax_docs_status_name,
     status_description,
-    new_message_count,
   } = props;
 
   const incorpMoveToPage = props => {
@@ -166,18 +212,6 @@ const NotSubmitted = props => {
         }}>
         {status_description}
       </Text>
-      <SKButton
-        fontSize={16}
-        marginTop={30}
-        width="100%"
-        fontWeight={'normal'}
-        backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
-        borderColor={Colors.CLR_D3D3D9}
-      title={'NEW REQUEST'}
-        onPress={() => {
-          incorpMoveToPage();
-        }}
-      />
     </View>
   );
 };
@@ -187,7 +221,6 @@ const AllSet = props => {
     tax_docs_status_name,
     status_description,
     reqDocs,
-    onAllDownloadClicked,
     onDocClicked,
   } = props;
   return (
@@ -219,18 +252,6 @@ const AllSet = props => {
           );
         })}
       <SKButton
-        marginTop={56}
-        fontSize={16}
-        fontWeight={'normal'}
-        width="100%"
-        backgroundColor={Colors.PRIMARY_FILL}
-        borderColor={Colors.PRIMARY_BORDER}
-        title={'DOWNLOAD DOCS'}
-        onPress={() => {
-          navigation.navigate('AllDocuments');
-        }}
-      />
-      <SKButton
           fontSize={16}
           marginTop={30}
           width="100%"
@@ -242,7 +263,7 @@ const AllSet = props => {
             navigation.navigate('RequestLanding')
           }}
         />
-         <DarkBlueButton
+        <DarkBlueButton
         title={'RETURN TO DASHBOARD'}
         onClick={() => {
           navigation.popToTop();
@@ -268,24 +289,6 @@ const AllSet = props => {
             },
             err => console.log(err),
           );
-        }}
-      />
-      <SKButton
-        fontSize={16}
-        marginTop={30}
-        width="100%"
-        fontWeight={'normal'}
-        backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
-        borderColor={Colors.PRIMARY_BORDER}
-        title={'NEW REQUEST'}
-        onPress={() => {
-          navigation.navigate('RequestLanding');
-        }}
-      />
-      <DarkBlueButton
-        title={'RETURN TO DASHBOARD'}
-        onClick={() => {
-          navigation.popToTop();
         }}
       />
     </View>

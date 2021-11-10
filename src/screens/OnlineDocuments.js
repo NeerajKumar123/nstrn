@@ -26,7 +26,8 @@ import {useIsFocused} from '@react-navigation/native';
 
 const OnlineDocuments = props => {
   const navigation = useNavigation();
-
+  const pageParams = props.route.params;
+  const isEditing = pageParams?.isEditing
   const data = global.selectedYears;
   const [uploadImageCount, setUploadImageCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
@@ -121,7 +122,7 @@ const OnlineDocuments = props => {
         <UploadedFilesStatus count={docs?.length} />
         <ManageDocButton
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
-          title="MANAGE DOCUMENTS"
+          title={"MANAGE DOCUMENTS"}
           onClicked={() => {
             navigation.navigate('ManageDocuments', { isDocAdded: docs?.length > 0 ? true : false, showFooterBtn: true });
           }}
@@ -134,9 +135,13 @@ const OnlineDocuments = props => {
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'AUTHORIZATION'}
+          title={isEditing ? 'SUBMIT' : 'AUTHORIZATION'}
           onPress={() => {
-            navigation.navigate('AuthorizerList');
+            if (isEditing) {
+              navigation.navigate('OnlineEditInfo');
+            }else{
+              navigation.navigate('AuthorizerList');
+            }
           }}
         />
         <ActionSheet

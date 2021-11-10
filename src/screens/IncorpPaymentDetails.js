@@ -65,9 +65,10 @@ const IncorpPaymentDetails = props => {
       />
       {payments &&
           payments.map((item, index) => {
+            console.log('index',index)
             if(item.item_name){
               return (
-                <KeyValueView key = {item.item_name} marginTop={54} title={item.item_name} value={`$${item.amount}`} />
+                <KeyValueView key = {item.item_name} marginTop={index == 0 ? 40 : 20} title={item.item_name} value={`$${item.amount}`} />
               );
             }
           })}

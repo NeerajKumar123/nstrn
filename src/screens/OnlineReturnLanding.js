@@ -37,6 +37,13 @@ const OnlineReturnLanding = props => {
   useEffect(() => {
     SKTStorage.setKeyValue('isLastDepHit',false, ()=>{})
   }, [])
+  
+  function remove_duplicates_es6(arr) {
+    let s = new Set(arr);
+    let it = s.values();
+    return Array.from(it);
+}
+
   return (
     <View
       style={{
@@ -133,7 +140,8 @@ const OnlineReturnLanding = props => {
               });
               global.mostRecentYear = arr?.[0] ?? '2021'        
               if (global?.selectedYears?.length > 0) {
-                SKTStorage.setKeyValue('selectedYears',selectedYears,()=>{
+                const uniques = remove_duplicates_es6(global?.selectedYears);
+                SKTStorage.setKeyValue('selectedYears',uniques,()=>{
                   navigation.navigate('Identification');
                 })
               } else {

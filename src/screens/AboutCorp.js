@@ -28,7 +28,6 @@ const AboutCorp = props => {
   const checkFormValidations = () => {
     let isValidForm = true;
     const isNatureValid =  true
-    console.log('naturesOfBussiness?.nature_of_business_id',selectedNature.nature_of_business_id)
     const isOtherValid =  selectedNature?.nature_of_business_id > 0 ? true : ifOther?.length > 0
     const isBAddressValid =   bussAddress?.length > 0
     if (!isNatureValid) {
@@ -50,7 +49,6 @@ const AboutCorp = props => {
       if(natureRes?.status == 1){
         const natures = natureRes?.data
         setNaturesOfBussiness(natures)
-        setSelectedNature(natures[0])
         setIsLoading(false)
       }
     })
@@ -141,7 +139,7 @@ const AboutCorp = props => {
       </ScrollView>
       {isNOBVisible && (
         <SKModel
-          title="Select Gender"
+          title="Select Occupation"
           data={naturesOfBussiness}
           keyLabel="nature_of_business"
           onClose={() => {

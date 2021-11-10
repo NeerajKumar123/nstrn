@@ -100,7 +100,7 @@ import {
                     const taxDocsStatusData = taxDocsRes?.data && taxDocsRes?.data.length > 0 ? taxDocsRes?.data[0] : undefined
                     global.taxDocsStatusData = taxDocsStatusData
                     setTimeout(() => {
-                      navigation.navigate('RequestApplyStatus')
+                      navigation.navigate('RequestApplyStatus', {shouldGoToHome:true})
                     }, 200);
                   }else{
                     setIsLoading(false);

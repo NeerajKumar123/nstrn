@@ -71,7 +71,7 @@ const DependentDetails = props => {
       Alert.alert('SukhTax', 'Please select gender.');
     } else if (!isRelationValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please select gender');
+      Alert.alert('SukhTax', 'Please select relation');
     }
     return isValidForm;
   };

@@ -96,7 +96,11 @@ const Address = props => {
         SKTStorage.setKeyValue('tax_file_year_id',data?.tax_file_year_id, ()=>{})
         SKTStorage.setKeyValue('tax_file_id',data?.tax_file_id, ()=>{})
         SKTStorage.setKeyValue('province',province, ()=>{
-          navigation.navigate('BankingAndMore', {province: province, isEditing:isEditing});
+          if (isEditing) {
+            navigation.navigate('OnlineEditInfo');
+          }else{
+            navigation.navigate('BankingAndMore', {province: province, isEditing:isEditing});
+          }
         })
       });
     }else{
@@ -201,7 +205,7 @@ const Address = props => {
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={'BANKING'}
+          title={ isEditing ? 'SUBMIT' : 'BANKING'}
           onPress={() => {
             if (checkFormValidations()) {
               handleSaveAndUpdateCall()
