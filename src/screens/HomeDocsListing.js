@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   Alert,
+  Platform,
 } from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
@@ -14,21 +15,25 @@ import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import * as CustomFonts from '../constants/FontsDefs';
 const download = require('../../assets/download.png');
-import {downloadFileFromUrl} from  '../helpers/BaseUtility';
+import {downloadFileFromUrl} from '../helpers/BaseUtility';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DocumentViewer from '../components/DocumentViewer';
 import SKLoader from '../components/SKLoader';
+import Lottie from 'lottie-react-native';
+const loader = require('../../assets/loader.json');
 const HomeDocsListing = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  const {docs} = pageParams;
   const [groupedDocs, setGroupedDocs] = useState();
   const [showDoc, setShowDoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingiOS, setIsLoadingiOS] = useState(false);
+  const [downloadingItem, setDownloadingItem] = useState();
+  const pageId = pageParams?.page_id;
 
   useEffect(() => {
-    const {docs} = pageParams;
+    const {docs, page_id} = pageParams;
     let yr21Docs = docs?.filter(doc => doc.year == 2021);
     let yr20Docs = docs?.filter(doc => doc.year == 2020);
     let yr19Docs = docs?.filter(doc => doc.year == 2019);
@@ -46,35 +51,48 @@ const HomeDocsListing = props => {
     if (yr18Docs?.length) {
       tempArry.push({title: '2018 DOC', data: yr18Docs});
     }
-    setGroupedDocs(tempArry);
+    if (page_id == 3) {
+      setGroupedDocs([{title: 'DOCUMENTS', data: docs}]);
+    } else {
+      setGroupedDocs(tempArry);
+    }
   }, []);
 
-  const getFileName = (docUrl) =>{
-    const dateString  =`${new Date().valueOf()}`
-    console.log(dateString);
-    const loweredCase = docUrl?.toLowerCase()
-    let fileName = 'Sukhtax_' + dateString
-    if (loweredCase.includes('.pdf')){
-      fileName = fileName + '.pdf'
-    }else if (loweredCase.includes('.png')) {
-      fileName = fileName + '.png'
-    }else if (loweredCase.includes('.jpeg')) {
-      fileName = fileName + '.jpeg'
-    }else if (loweredCase.includes('.jpg')) {
-      fileName = fileName + '.jpg'
+  const getFileName = docUrl => {
+    const dateString = `${new Date().valueOf()}`;
+    const loweredCase = docUrl?.toLowerCase();
+    let fileName = 'Sukhtax_' + dateString;
+    if (loweredCase.includes('.pdf')) {
+      fileName = fileName + '.pdf';
+    } else if (loweredCase.includes('.png')) {
+      fileName = fileName + '.png';
+    } else if (loweredCase.includes('.jpeg')) {
+      fileName = fileName + '.jpeg';
+    } else if (loweredCase.includes('.jpg')) {
+      fileName = fileName + '.jpg';
     }
-    console.log('fileName===>',fileName)
-    return fileName
-  }
+    return fileName;
+  };
 
-  const handleFileDownloading = (doc, callback) =>{
-    const docUrl = doc?.document_file_name?.replace(/ /g, '')
-    const fileName = getFileName(docUrl)
-    downloadFileFromUrl(docUrl, fileName, ()=>{
-      console.log('document_file_name', doc)
-      callback()
-    })
-  }
+  const handleFileDownloading = (doc, callback) => {
+    const docUrl = doc?.document_file_name?.replace(/ /g, '');
+    const fileName = getFileName(docUrl);
+    if (Platform.OS == 'android') {
+      setIsLoading(true);
+    } else {
+      setIsLoadingiOS(true);
+      setDownloadingItem(doc);
+    }
+    downloadFileFromUrl(docUrl, fileName, () => {
+      if (Platform.OS == 'android') {
+        setIsLoading(false);
+      } else {
+        setDownloadingItem(undefined);
+        setIsLoadingiOS(false);
+      }
+      callback();
+    });
+  };
 
   return (
     <View
@@ -85,7 +103,7 @@ const HomeDocsListing = props => {
         width: '100%',
       }}>
       <AppHeader navigation={navigation} />
-      {isLoading && <SKLoader/>}
+      {isLoading && <SKLoader />}
       <ScrollView
         style={{width: '100%'}}
         contentContainerStyle={{
@@ -101,27 +119,27 @@ const HomeDocsListing = props => {
         />
         {groupedDocs && groupedDocs.length > 0 && (
           <View>
-        <FlatList
-            style={{width: '100%', marginTop: 20}}
-            data={groupedDocs}
-            keyExtractor={(item, index) => 'key_' + index}
-            renderItem={({item}) => (
-              <TaxReturnCard
-                item={item}
-                key = {item.document_file_name}
-                marginTop={23}
-                onDocClicked={doc => {
-                  console.log('doc===>',doc)
-                  console.log('groupedDocs',groupedDocs)
-                 handleFileDownloading(doc, ()=>{
-                  console.log('groupedDocs1111',groupedDocs)
-                 })
-                }}
-              />
-            )}
-          />
-            </View>
-          
+            <FlatList
+              style={{width: '100%', marginTop: 20}}
+              data={groupedDocs}
+              keyExtractor={(item, index) => 'key_' + index}
+              renderItem={({item}) => (
+                <TaxReturnCard
+                  item={item}
+                  key={item.document_file_name}
+                  marginTop={23}
+                  isLoadingiOS={isLoadingiOS}
+                  downloadingItem={downloadingItem}
+                  pageId={pageId}
+                  onDocClicked={doc => {
+                    handleFileDownloading(doc, () => {
+                      console.log('groupedDocs1111', groupedDocs);
+                    });
+                  }}
+                />
+              )}
+            />
+          </View>
         )}
       </ScrollView>
       {showDoc && (
@@ -132,13 +150,14 @@ const HomeDocsListing = props => {
 };
 
 const TaxReturnCard = props => {
-  const {title, data} = props.item;
+  const {isLoadingiOS, downloadingItem, pageId, item} = props;
+  const {title, data} = item;
   const [isExpanded, setIsExpanded] = useState();
   return (
     <TouchableOpacity
-    onPress={() => {
-      setIsExpanded(!isExpanded);
-    }}
+      onPress={() => {
+        setIsExpanded(!isExpanded);
+      }}
       style={{
         width: '100%',
         paddingVertical: 11,
@@ -178,8 +197,11 @@ const TaxReturnCard = props => {
         data?.map((item, index) => {
           return (
             <FileCard
-              key = {item.document_file_name}
+              key={item.document_file_name}
               item={item}
+              isLoadingiOS={isLoadingiOS}
+              downloadingItem={downloadingItem}
+              pageId={pageId}
               onClick={() => {
                 props.onDocClicked(item);
               }}
@@ -191,7 +213,19 @@ const TaxReturnCard = props => {
 };
 
 const FileCard = props => {
-  const {item, onClick} = props;
+  const {item, onClick, isLoadingiOS, downloadingItem, pageId} = props;
+  let keyName = 'key';
+  if (pageId == 1) {
+    keyName = 'tax_file_document_id';
+  } else if (pageId == 2) {
+    keyName = 'incorporation_document_id';
+  } else if (pageId == 3) {
+    keyName = 'tax_docs_document_id';
+  } else if (pageId == 4) {
+    keyName = 'cra_letters_document_id';
+  }
+  const isSame = downloadingItem?.[keyName] == item?.[keyName];
+
   return (
     <TouchableOpacity
       style={{
@@ -200,6 +234,7 @@ const FileCard = props => {
         alignItems: 'center',
         marginHorizontal: 20,
         marginTop: 10,
+        height: 40,
       }}
       onPress={() => {
         onClick();
@@ -207,18 +242,22 @@ const FileCard = props => {
       <Text
         style={{
           textAlign: 'left',
-          color: Colors.BLACK,
+          color: Colors.APP_BLUE_HEADING_COLOR,
           fontSize: 15,
-          fontWeight: '400',
+          fontWeight: '700',
           flex: 1,
         }}>
         {item.document_title}
       </Text>
-      <Image
-        resizeMode="contain"
-        style={{width: 20, height: 20, marginLeft: 10}}
-        source={download}
-      />
+      {isLoadingiOS && isSame ? (
+        <Lottie style={{width: 35, height: 35}} autoPlay loop source={loader} />
+      ) : (
+        <Image
+          resizeMode="contain"
+          style={{width: 25, height: 25, marginLeft: 10}}
+          source={CustomFonts.download}
+        />
+      )}
     </TouchableOpacity>
   );
 };

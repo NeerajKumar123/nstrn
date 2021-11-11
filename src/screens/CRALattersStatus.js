@@ -18,6 +18,8 @@ import * as Colors from '../constants/ColorDefs';
 import SKButton, {DarkBlueButton} from '../components/SKButton';
 import {craLattersGetDetails} from '../apihelper/Api';
 import {downloadFileFromUrl} from '../helpers/BaseUtility';
+import Lottie from 'lottie-react-native';
+const loader = require('../../assets/loader.json');
 
 const CRALattersStatus = props => {
   const navigation = useNavigation();
@@ -59,10 +61,18 @@ const CRALattersStatus = props => {
           height: '100%',
           paddingBottom: Platform.OS == 'ios' ? 100 : 0,
         }}>
-        {details && status == 1 && <InProcess details = {details} navigation={navigation} />}
-        {details && status == 2 && <InProcess details = {details} navigation={navigation} marginTop={25} />}
-        {details && status == 3 && <Resolved details={details} navigation={navigation} />}
-        {details && status == 4 && <Rejected details = {details} navigation={navigation} />}
+        {details && status == 1 && (
+          <InProcess details={details} navigation={navigation} />
+        )}
+        {details && status == 2 && (
+          <InProcess details={details} navigation={navigation} marginTop={25} />
+        )}
+        {details && status == 3 && (
+          <Resolved details={details} navigation={navigation} />
+        )}
+        {details && status == 4 && (
+          <Rejected details={details} navigation={navigation} />
+        )}
       </ScrollView>
     </View>
   );
@@ -104,7 +114,7 @@ const InProcess = props => {
       <SKButton
         marginTop={56}
         fontSize={16}
-        fontWeight = 'normal'
+        fontWeight="normal"
         width="50%"
         iconcolor={Colors.WHITE}
         backgroundColor={Colors.PRIMARY_FILL}
@@ -152,7 +162,7 @@ const Rejected = props => {
         color={Colors.APP_BLUE_HEADING_COLOR}
         value={status_description}
       />
-       {details.Sukh_Tax_Reply && (
+      {details.Sukh_Tax_Reply && (
         <Heading
           fontSize={17}
           marginTop={12}
@@ -179,7 +189,7 @@ const Rejected = props => {
         marginTop={56}
         fontSize={16}
         width="50%"
-        fontWeight = 'normal'
+        fontWeight="normal"
         iconcolor={Colors.WHITE}
         backgroundColor={Colors.PRIMARY_FILL}
         borderColor={Colors.SECONDARY_FILL}
@@ -193,8 +203,11 @@ const Rejected = props => {
 };
 
 const Resolved = props => {
-  const {navigation,details} = props;
- const {cra_letters_status_name, status_description, title} = details;
+  const {navigation, details} = props;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingiOS, setIsLoadingiOS] = useState(false);
+  const [downloadingItem, setDownloadingItem] = useState();
+  const {cra_letters_status_name, status_description, title} = details;
 
   const getFileName = docUrl => {
     const dateString = `${new Date().valueOf()}`;
@@ -210,15 +223,26 @@ const Resolved = props => {
     } else if (loweredCase.includes('.jpg')) {
       fileName = fileName + '.jpg';
     }
-    console.log('fileName===>', fileName);
     return fileName;
   };
 
   const handleFileDownloading = (doc, callback) => {
     const docUrl = doc?.document_file_name?.replace(/ /g, '');
     const fileName = getFileName(docUrl);
+    if (Platform.OS == 'android') {
+      setIsLoading(true);
+    } else {
+      setIsLoadingiOS(true);
+      setDownloadingItem(doc);
+    }
     downloadFileFromUrl(docUrl, fileName, () => {
       callback();
+      if (Platform.OS == 'android') {
+        setIsLoading(false);
+      } else {
+        setDownloadingItem(undefined);
+        setIsLoadingiOS(false);
+      }
     });
   };
 
@@ -231,6 +255,7 @@ const Resolved = props => {
         width: '100%',
       }}>
       <Heading value={'CRA LETTER'} marginTop={50} />
+      {isLoading && <SKLoader />}
       <Heading
         fontSize={20}
         color={Colors.APP_RED_SUBHEADING_COLOR}
@@ -291,6 +316,8 @@ const Resolved = props => {
           <FileCard
             key={item.document_title}
             item={item}
+            isLoadingiOS={isLoadingiOS}
+            downloadingItem={downloadingItem}
             onClick={() => {
               if (item.document_file_name) {
                 handleFileDownloading(item, () => {
@@ -330,12 +357,19 @@ const KeyValueView = props => {
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: marginTop
+        marginTop: marginTop,
       }}>
-      <Text style={{fontWeight: '700', fontSize: 20, color: titleColor, flex:2}}>
+      <Text
+        style={{fontWeight: '700', fontSize: 20, color: titleColor, flex: 2}}>
         {props.title}
       </Text>
-      <Text style={{fontWeight: '700', fontSize: 20, color: subtitleColor,flex:1}}>
+      <Text
+        style={{
+          fontWeight: '700',
+          fontSize: 20,
+          color: subtitleColor,
+          flex: 1,
+        }}>
         {props.value}
       </Text>
     </View>
@@ -343,8 +377,10 @@ const KeyValueView = props => {
 };
 
 const FileCard = props => {
-  const {item, onClick} = props;
-  const {document_title} = item;
+  const {item, onClick, isLoadingiOS = false, downloadingItem} = props;
+  const {document_title, cra_letters_document_id} = item;
+  const isSame =
+    downloadingItem?.cra_letters_document_id == cra_letters_document_id;
   return (
     <TouchableOpacity
       style={{
@@ -352,6 +388,7 @@ const FileCard = props => {
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 20,
+        height: 40,
       }}
       onPress={() => {
         onClick();
@@ -366,11 +403,15 @@ const FileCard = props => {
         }}>
         {document_title}
       </Text>
-      <Image
-        resizeMode="contain"
-        style={{width: 20, height: 20, marginLeft: 10}}
-        source={CustomFonts.download}
-      />
+      {isLoadingiOS && isSame ? (
+        <Lottie style={{width: 25, height: 25}} autoPlay loop source={loader} />
+      ) : (
+        <Image
+          resizeMode="contain"
+          style={{width: 25, height: 25, marginLeft: 10}}
+          source={CustomFonts.download}
+        />
+      )}
     </TouchableOpacity>
   );
 };

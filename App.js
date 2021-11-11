@@ -6,12 +6,12 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import {LogBox} from 'react-native'
+import React,{useEffect} from 'react';
+import {LogBox, Platform} from 'react-native'
 import AuthNavigator from './src/AuthNavigator';
 import {StripeProvider} from '@stripe/stripe-react-native';
 import {stripekey_live,stripekey_test} from './src/constants/StaticValues';
-
+import SplashScreen from 'react-native-splash-screen'
 LogBox.ignoreLogs([
   'Animated: `useNativeDriver`',
   'VirtualizedLists should never be nested inside',
@@ -23,6 +23,11 @@ LogBox.ignoreLogs([
 ]);
 
 const App = () => {
+
+  useEffect(() => {
+    {Platform.OS == 'android' && SplashScreen.hide()}
+  }, [])
+
   return (
     <>
       <StripeProvider publishableKey={stripekey_test}>
