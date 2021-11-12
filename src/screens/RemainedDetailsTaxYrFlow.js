@@ -25,6 +25,7 @@ import {
   getResidencyList,
   getSpouseResidencyList,
   getMaritalStatusList,
+  getBankingAndFamilyInfo
 } from '../apihelper/Api';
 import SKModel from '../components/SKModel';
 import SKGGLAddressModel from '../components/SKGGLAddressModel';
@@ -33,11 +34,13 @@ import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
 import * as SKTStorage from '../helpers/SKTStorage';
 import {YES_NO} from '../constants/StaticValues';
+import {useIsFocused} from '@react-navigation/native';
 
 const RemainedDetailsTaxYrFlow = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const isEditing = pageParams?.isEditing
+  const isFocused = useIsFocused();
   const [mailingAddress, setMailingAddress] = useState();
   const [province, setProvince] = useState('');
   const [provinces, setProvinces] = useState();
@@ -67,29 +70,23 @@ const RemainedDetailsTaxYrFlow = props => {
     setIsLoading(true);
     const params = {};
     getCanadaProvinceList(params, provinceRes => {
-      console.log('setProvinces',provinceRes)
       setProvinces(provinceRes?.data);
       getResidencyList({}, resdencyRes => {
         if (resdencyRes.status == 1) {
           setResidencies(resdencyRes?.data);
-          setResidency(resdencyRes?.data?.[0]);  
         }else{
           setResidencies(LocalResidencyList);
-          setResidency(LocalResidencyList[0]);  
         }
       });
       getSpouseResidencyList({}, resdencyResSpouse => {
         if (resdencyResSpouse.status == 1) {
           setResidenciesSpouse(resdencyResSpouse?.data);
-          setSpouseResidency(resdencyResSpouse?.data?.[0]);  
         }else{
           setResidenciesSpouse(LocalResidencyListSpouse);
-          setSpouseResidency(LocalResidencyListSpouse[0]);  
         }
       });
       getMaritalStatusList({}, maritalRes => {
         setMaritalStatuses(maritalRes?.data);
-        setMaritalStatus(maritalRes?.data?.[0]);
       });
 
       setTimeout(() => {
@@ -98,13 +95,51 @@ const RemainedDetailsTaxYrFlow = props => {
     });
   }, []);
 
+  useEffect(() => {
+    if (isFocused && isEditing) {
+      const {tax_file_id, user_id} =  global.onlineStatusData;
+      const params = {
+        User_Id: user_id,
+        Tax_File_Id: tax_file_id,
+        Year: pageParams?.year,
+      };
+      getBankingAndFamilyInfo(params, bankingAndFamilyRes => {
+        const details = bankingAndFamilyRes.data[0];
+        if (details) {
+          setProvince({state_id:details.state_id, state_name:details.province})
+          setResidency({residency_id: details.residency_id , residency_name :details.residency});
+          setSpouseResidency({residency_id: details.spouse_residency_id , residency_name :details.spouse_residency})
+          setMaritalStatus({marital_status_id:details.marital_status_id,marital_status_name:details.marital_status_name})
+          setMChangeOpton({id:details.marital_status_change,value:details.marital_status_change ? 'YES' : 'NO'})
+          setMStatusChangedDate(details.marital_status_change ? new Date(details.marital_status_change_date) : new Date())
+          setDependentOption({id:details.dependents,value:details.dependents ? 'YES' : 'NO'})
+                }
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
+      });
+    }
+  }, [isFocused])
+
 
   const checkFormValidations = () => {
     let isValidForm = true;
     const isProvinceValid = province?.state_id;
+    const isResidencyValid = residency?.residency_id;
+    const isSResidencyValid = spouseResidency?.residency_id;
+    const isMaritalStatusValid = maritalStatus?.marital_status_id
      if (!isProvinceValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid province');
+      Alert.alert('SukhTax', 'Please select valid province');
+    }else  if (!isResidencyValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select valid residency');
+    }else  if (!isSResidencyValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select valid spouse residency');
+    }else  if (!isMaritalStatusValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select valid marital status');
     }
     return isValidForm;
   };
@@ -257,13 +292,14 @@ const RemainedDetailsTaxYrFlow = props => {
               saveBankingAndFamilyInfoByYear(params, (saveBankingRes) =>{
                 setIsLoading(false);
                 if (saveBankingRes?.status == 1) {
-                  const isSpouceFlow = maritalStatus.id == 2 || maritalStatus.id == 3
-                  SKTStorage.setKeyValue('isFromSpouseFlow',isSpouceFlow, ()=>{
+                  const isSpouseFlow = maritalStatus.marital_status_id == 2 || maritalStatus.marital_status_id == 3
+                  SKTStorage.setKeyValue('isFromSpouseFlow',isSpouseFlow, ()=>{
+                    global.isFromSpouseFlow = isSpouseFlow
                     global.onlineStatusData = {
                       ...global.onlineStatusData,
                       ...saveBankingRes?.data[0],
                     };
-                    navigation.push('MyTaxYear',{pageIndex:pageParams?.pageTaxYrIndex});
+                    navigation.push('MyTaxYear',{pageIndex:pageParams?.pageTaxYrIndex,isEditing:isEditing});
                   })
                 }else{
                   Alert.alert('SukhTax', saveBankingRes.message || 'Something went wrong');

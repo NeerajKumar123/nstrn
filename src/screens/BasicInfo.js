@@ -118,7 +118,7 @@ const BasicInfo = props => {
             <Heading
               fontSize={20}
               marginTop={30}
-              color={Colors.RED}
+              color={Colors.APP_RED_SUBHEADING_COLOR}
               value="HAS YOUR SIN NUMBER CHANGED SINCE LAST YEAR?"
             />
             <View

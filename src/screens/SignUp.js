@@ -52,7 +52,7 @@ const SignUp = props => {
       Alert.alert('SukhTax', 'Please enter valid Last Name');
     }else if (!isEmailValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid Email Address');
+      Alert.alert('SukhTax', 'Please enter valid a email address');
     } else if (!isValidSIN(sin)) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid sin.');
@@ -73,7 +73,7 @@ const SignUp = props => {
       );
       } else if (pass != cPass) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Passwords mismatch');
+      Alert.alert('SukhTax', "Looks like your passwords didn't match, Please check again.");
     }
 
     return isValidForm;

@@ -329,7 +329,6 @@ const MyTaxYear = props => {
     }
     return isValidForm
   }
-
   return (
     <View
       style={{

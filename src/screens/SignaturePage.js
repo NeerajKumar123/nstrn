@@ -84,22 +84,24 @@ const SignaturePage = props => {
         backgroundColor: 'white',
         flex: 1,
       }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        enabled={true}
+        style={{flex: 1, width: '100%', paddingBottom: 10}}
+        keyboardVerticalOffset={0}>
         {isLoading && <SKLoader />}
         <AppHeader navigation={navigation} />
         <ScrollView
-          alwaysBounceVertical = {false}
           contentContainerStyle={{
             paddingHorizontal: 20,
           }}>
-        <ViewShot
-          ref={viewShotRef}
-          options={{
-            format: 'jpg',
-            quality: 0.8,
-            height: 400,
-            width: 300,
-            result: 'base64',
-          }}>
+          <ViewShot
+            ref={viewShotRef}
+            options={{
+              format: 'jpg',
+              quality: 0.8,
+              result: 'base64',
+            }}>
           <Heading
             fontSize={18}
             value="AUTHORIZE A REPRESENTATIVE SIGNATURE PAGE"
@@ -172,7 +174,7 @@ const SignaturePage = props => {
               marginTop: 20,
             }}>
             <SignatureCapture
-              style={{width: '100%', height: 200, backgroundColor:'red'}}
+              style={{width: '100%', height: 200}}
               ref={signPad}
               onSaveEvent={result => {
               }}
@@ -253,7 +255,7 @@ const SignaturePage = props => {
                   }else if(pageParams.authIndex == 2){
                     global.isTAuthorized = true
                   }
-                  if(global.isFromSpouseFlow){
+                  if(pageParams.showOtherAuthorizer){
                     global.isAuthorized = global.isFAuthorized && global.isSAuthorized
                   }else{
                     global.isAuthorized = global.isFAuthorized
@@ -265,6 +267,7 @@ const SignaturePage = props => {
           }}
         />
       </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };

@@ -144,8 +144,6 @@ const IncorpSignaturePage = props => {
             options={{
               format: 'jpg',
               quality: 0.8,
-              height: 400,
-              width: 300,
               result: 'base64',
             }}>
             <Heading

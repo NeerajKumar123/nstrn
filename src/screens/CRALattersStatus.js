@@ -101,8 +101,8 @@ const InProcess = props => {
         title={'STATUS OF LETTER : '}
         value={cra_letters_status_name}
         marginTop={20}
-        titleColor={Colors.APP_BLUE_HEADING_COLOR}
-        subtitleColor={Colors.APP_RED_SUBHEADING_COLOR}
+        titleColor={Colors.APP_RED_SUBHEADING_COLOR}
+        subtitleColor={Colors.APP_BLUE_HEADING_COLOR}
       />
       <Heading
         fontSize={17}
@@ -152,8 +152,8 @@ const Rejected = props => {
         title={'STATUS OF LETTER : '}
         value={cra_letters_status_name}
         marginTop={20}
-        titleColor={Colors.APP_BLUE_HEADING_COLOR}
-        subtitleColor={Colors.APP_RED_SUBHEADING_COLOR}
+        titleColor={Colors.APP_RED_SUBHEADING_COLOR}
+        subtitleColor={Colors.APP_BLUE_HEADING_COLOR}
       />
       <Heading
         fontSize={17}

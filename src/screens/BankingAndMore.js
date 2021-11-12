@@ -64,7 +64,6 @@ const BankingAndMore = props => {
     setIsLoading(true);
     getInstitutionList({}, instRes => {
       setBanks(instRes?.data);
-      setBank(instRes?.data?.[0]);
       setTimeout(() => {
         setIsLoading(false);
       }, 300);

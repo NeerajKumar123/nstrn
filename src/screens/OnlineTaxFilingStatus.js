@@ -52,27 +52,16 @@ const OnlineTaxFilingStatus = props => {
     const params = prepareParams(imgObj.base64);
     uploadDocumentBS64(params, uploadRes => {
       if(uploadRes?.status == 1){
-        setUploadImageCount(uploadImageCount + 1)  
-        const {user_id,tax_file_id} = global.onlineStatusData
-        const params = {User_Id: user_id,Tax_File_Id: tax_file_id};
-        finalizeOnlineProcess(params,(finalizeRes) =>{
-          if (finalizeRes?.status == 1) {
-            setIsLoading(false)
-            setTimeout(() => {
-              finalizeRes?.message && Alert.alert('SukhTax', finalizeRes?.message);
-            }, 350);
-          }else{
-            setIsLoading(false);
-            setTimeout(() => {
-              finalizeRes?.message && Alert.alert('SukhTax', finalizeRes?.message);
-            }, 300);      
-          }
-        })  
+        setUploadImageCount(uploadImageCount + 1) 
+        setIsLoading(false);
+        setTimeout(() => {
+          uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+        }, 500);     
       }else{
         setIsLoading(false);
         setTimeout(() => {
           uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
-        }, 300);  
+        }, 500);  
       }
     });
   };
@@ -103,9 +92,9 @@ const OnlineTaxFilingStatus = props => {
         style={{width: '100%', height:'100%'}}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          paddingBottom:Platform.OS == 'ios' ? 100 : 0
+          paddingBottom: 100
         }}>
-        <Heading value={pageHeading()} marginTop={124} />
+        <Heading value={pageHeading()} marginTop={40} />
         <TaxFilingStatusCard
           navigation={navigation}
           marginTop={25}
@@ -115,6 +104,25 @@ const OnlineTaxFilingStatus = props => {
           }}
           uploadClick={() => {
             actionSheetRef.current.show()
+          }}
+          onContinue = {()=>{
+            const {user_id,tax_file_id} = global.onlineStatusData
+            const params = {User_Id: user_id,Tax_File_Id: tax_file_id};
+            setIsLoading(true)
+            finalizeOnlineProcess(params,(finalizeRes) =>{
+              if (finalizeRes?.status == 1) {
+                setIsLoading(false)
+                setTimeout(() => {
+                  finalizeRes?.message && Alert.alert('SukhTax', finalizeRes?.message);
+                  navigation.goBack()
+                }, 350);
+              }else{
+                setIsLoading(false);
+                setTimeout(() => {
+                  finalizeRes?.message && Alert.alert('SukhTax', finalizeRes?.message);
+                }, 300);      
+              }
+            })
           }}
         />
       </ScrollView>
@@ -244,7 +252,7 @@ const KeyValueView = props => {
 };
 
 const TaxFilingStatusCard = props => {
-  const {uploadClick, navigation, updateLoadingStatus,uploadImageCount} = props;
+  const {uploadClick, navigation, updateLoadingStatus,uploadImageCount = 0, onContinue} = props;
   const [paymentDetails, setPaymentDetails] = useState();
   const [isDetailsClicked, setIsDetailsClicked] = useState(false);
   const {
@@ -311,7 +319,7 @@ const TaxFilingStatusCard = props => {
         }}>
         {status_description}
       </Text>
-      {tax_file_status_id == 9 && (
+      {tax_file_status_id == 9  && (
         <UploadDocButton
           marginTop={35}
           title="UPLOAD THE DOC HERE"
@@ -322,6 +330,20 @@ const TaxFilingStatusCard = props => {
         />
       )}
       {tax_file_status_id == 9 && uploadImageCount ? <UploadedFilesStatus count={uploadImageCount} /> : null}
+      {tax_file_status_id == 9 && uploadImageCount > 0 && (
+        <SKButton
+        fontSize={16}
+        marginTop={30}
+        width="100%"
+        fontWeight={'normal'}
+        backgroundColor={Colors.PRIMARY_FILL}
+        borderColor={Colors.PRIMARY_BORDER}
+        title={'SUBMIT UPLOADED DOCUMENTS'}
+        onPress={() => {
+          onContinue()
+        }}
+      />
+      )}
       {tax_file_status_id == 9 &&
         <ManageDocButton
         grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}

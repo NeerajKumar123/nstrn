@@ -90,7 +90,7 @@ const IncorpDetails = props => {
       Alert.alert('SukhTax', 'Please enter valid Last Name');
     } else if (!isEmailValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid Email Address');
+      Alert.alert('SukhTax', 'Please enter a valid email address');
     } else if (!isMobileValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid Phone Number');

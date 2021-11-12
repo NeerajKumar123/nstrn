@@ -57,10 +57,10 @@ const Login = props => {
     let isValidForm = true;
     if (!isEmailValid) {
       isValidForm = false;
-      Alert.alert('SukhTax','Please enter valid email.' );
+      Alert.alert('SukhTax','Please enter a valid email.' );
     }else if (!isPassValid) {
       isValidForm = false;
-      Alert.alert('SukhTax','Please enter valid password.' );
+      Alert.alert('SukhTax','Please enter a valid password.' );
     }
     return isValidForm;
   };

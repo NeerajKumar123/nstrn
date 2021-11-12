@@ -10,11 +10,16 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useIsFocused} from '@react-navigation/native';
 import {onlineFinalizeAuthorization} from '../apihelper/Api';
 import SKLoader from '../components/SKLoader';
+import * as SKTStorage from '../helpers/SKTStorage';
 
 const AuthorizerList = props => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
+  const [showOtherAuthorizer, setShowOtherAuthorizer] = useState(false);
+  SKTStorage.getValue('showOtherAuthorizer', (value)=>{
+    setShowOtherAuthorizer(value)
+  })
 
   useEffect(() => {
   }, [isFocused]);
@@ -47,15 +52,15 @@ const AuthorizerList = props => {
           title={'TAX PAYER 1'}
           isAuthorized={global.isFAuthorized}
           onSelected={() => {
-            navigation.navigate('SignaturePage', {authIndex: 0});
+            navigation.navigate('SignaturePage', {authIndex: 0,showOtherAuthorizer:showOtherAuthorizer});
           }}
         />
-        {global.isFromSpouseFlow && 
+        {showOtherAuthorizer && 
         <Card
         title={'TAX PAYER 2'}
         isAuthorized={global.isSAuthorized}
         onSelected={() => {
-          navigation.navigate('SignaturePage', {authIndex: 1});
+          navigation.navigate('SignaturePage', {authIndex: 1,showOtherAuthorizer:showOtherAuthorizer});
         }}
       />
         }

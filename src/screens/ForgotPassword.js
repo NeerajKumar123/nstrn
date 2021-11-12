@@ -195,7 +195,7 @@ const ForgotPassword = props => {
                   }
                 });
               } else {
-                Alert.alert('SukhTax', 'Please enter valid email id.');
+                Alert.alert('SukhTax', 'Please enter valid a email address.');
               }
             }}
           />

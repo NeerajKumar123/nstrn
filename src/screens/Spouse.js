@@ -72,10 +72,10 @@ const Spouse = props => {
   const [isResidenceVisible, setIsResidenceVisible] = useState();
   const [isBankVisible, setIsBankVisible] = useState();
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const {Tax_Filed_With_Sukhtax} = global.onlineStatusData;
+  const {Tax_Filed_With_Sukhtax, last_marital_status_id = 1} = global.onlineStatusData;
   const [taxFileSpouseId, setTaxFileSpouseId] = useState();
   let tax_file_year_id = 0;
-  let isMarried = false
+  console.log('global.onlineStatusData',global.onlineStatusData)
   //check if  in editing  mode then pick from server data only
   if (isEditing) {
     const {Year_Wise_Records} = global.onlineStatusData;
@@ -84,15 +84,6 @@ const Spouse = props => {
       tax_file_year_id = singYear.tax_file_year_id;
     }
   } else {
-    const yrwiseRecords = global?.onlineStatusData?.Year_Wise_Records;
-    let firstYearData = yrwiseRecords?.[0] || {};
-    let isMarried = false;
-    if (
-      firstYearData?.marital_status_id == 2 ||
-      firstYearData?.marital_status_id == 3
-    ) {
-      isMarried = true;
-    }
     SKTStorage.getValue('tax_file_year_id', id => {
       tax_file_year_id = id;
     });
@@ -207,7 +198,6 @@ const Spouse = props => {
   };
 
   const prepareParams = () => {
-    console.log('residency',residency)
     const {user_id, tax_file_id} = global.onlineStatusData;
     const params = {
       User_id: user_id,
@@ -232,7 +222,12 @@ const Spouse = props => {
     return params;
   };
 
-  const getLastYearData = (flagBank, flagSin, flagResidency, flagSpouseFiling) => {
+  const getLastYearData = (
+    flagBank,
+    flagSin,
+    flagResidency,
+    flagSpouseFiling,
+  ) => {
     setIsLoading(true);
     const {user_id} = global.onlineStatusData;
     onlineGetSpouseInfoByUserId({User_Id: user_id}, spouseInfoRes => {
@@ -243,21 +238,25 @@ const Spouse = props => {
         setLName(details.last_name);
         setDOB(new Date(details.DOB));
         setGender(details.gender);
-        setSinNo(flagSin ? '' :details.SIN_Number);
+        setSinNo(flagSin ? '' : details.SIN_Number);
         setLastTime(details.last_year_filed);
         setEnrtyDate(new Date(details.DOE_Canada));
         const filtered = residencies?.filter(element => {
           return element.residency_name == details.residency;
         });
         setResidency(flagResidency ? {} : filtered[0]);
-        setBank(flagBank ? {} : {
-          institution_name: details.institution_name,
-          institution_id: details.institution_id,
-        });
+        setBank(
+          flagBank
+            ? {}
+            : {
+                institution_name: details.institution_name,
+                institution_id: details.institution_id,
+              },
+        );
         setAccountNo(flagBank ? '' : details.account_no);
         setBranhcNo(flagBank ? '' : details.branch);
         setIsConfirmed(true);
-        setIsFillingForWife(flagSpouseFiling)
+        setIsFillingForWife(flagSpouseFiling);
         setTimeout(() => {
           setIsLoading(false);
         }, 300);
@@ -271,12 +270,10 @@ const Spouse = props => {
       const params = prepareParams();
       saveSpouseInfo(params, spouseRes => {
         if (spouseRes?.status == 1) {
-          SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
-            navigation.push('DependentsList', {
-              depCount: 1,
-              isEditing: isEditing,
-            });  
-        });
+          navigation.push('DependentsList', {
+            depCount: 1,
+            isEditing: isEditing,
+          });
         } else {
           Alert.alert('SukhTax', 'Something went wrong!');
         }
@@ -289,16 +286,14 @@ const Spouse = props => {
       const params = prepareParams();
       updateSpouseInfo(params, spouseRes => {
         if (spouseRes?.status == 1) {
-          SKTStorage.setKeyValue('isFromSpouseFlow', true, () => {
-            if (isEditing) {
-              navigation.navigate('OnlineEditInfo');
-            }else{
-              navigation.push('DependentsList', {
-                depCount: 1,
-                isEditing: isEditing,
-              });
-              }
-          });
+          if (isEditing) {
+            navigation.navigate('OnlineEditInfo');
+          } else {
+            navigation.push('DependentsList', {
+              depCount: 1,
+              isEditing: isEditing,
+            });
+          }
         } else {
           Alert.alert('SukhTax', 'Something went wrong!');
         }
@@ -329,11 +324,23 @@ const Spouse = props => {
             paddingHorizontal: 20,
           }}>
           <Heading value="SPOUSE" marginTop={26} />
-          {(Tax_Filed_With_Sukhtax  && isMarried && !isEditing && !isConfirmed) ? (
-            <LastYearDataCard 
-            onContinuePressed = {(flagBank, flagSin, flagResidency, flagSpouseFiling)=>{
-              getLastYearData(flagBank, flagSin, flagResidency, flagSpouseFiling)
-            }} />
+          {console.log('Tax_Filed_With_Sukhtax',Tax_Filed_With_Sukhtax, last_marital_status_id,isEditing,isConfirmed)}
+          {Tax_Filed_With_Sukhtax && (last_marital_status_id == 2 || last_marital_status_id == 3)  && !isEditing && !isConfirmed ? (
+            <LastYearDataCard
+              onContinuePressed={(
+                flagBank,
+                flagSin,
+                flagResidency,
+                flagSpouseFiling,
+              ) => {
+                getLastYearData(
+                  flagBank,
+                  flagSin,
+                  flagResidency,
+                  flagSpouseFiling,
+                );
+              }}
+            />
           ) : (
             <>
               <SKSwitch
@@ -342,7 +349,11 @@ const Spouse = props => {
                 isOn={isFillingForWife}
                 value="ARE YOU FILING FOR YOUR SPOUSE?"
                 onToggle={status => {
-                  setIsFillingForWife(!isFillingForWife);
+                  const updated = !isFillingForWife
+                  setIsFillingForWife(updated);
+                  SKTStorage.setKeyValue('showOtherAuthorizer',updated,()=>{
+                    global.showOtherAuthorizer = updated
+                  })
                 }}
               />
               <TouchableInput
@@ -478,7 +489,7 @@ const Spouse = props => {
                 fontWeight={'normal'}
                 backgroundColor={Colors.PRIMARY_FILL}
                 borderColor={Colors.PRIMARY_BORDER}
-                title={isEditing ? 'SUBMIT':'DEPENDENTS'}
+                title={isEditing ? 'SUBMIT' : 'DEPENDENTS'}
                 onPress={() => {
                   if (checkFormValidations()) {
                     handleSaveAndUpdateInfo();
@@ -600,7 +611,6 @@ const LastYearDataCard = props => {
   const [isResidencyChanged, setIsResidencyChanged] = useState(true);
   const [isFilingForSpouse, setIsFilingForSpouse] = useState(true);
 
-
   return (
     <>
       <ButtonCard
@@ -631,7 +641,6 @@ const LastYearDataCard = props => {
         title="ARE YOU FILING FOR YOUR SPOUSE THIS YEAR?"
         isSelected={isFilingForSpouse ? true : false}
         onOptionSelected={tag => {
-          console.log('tag===>', tag);
           setIsFilingForSpouse(tag == 2 ? true : false);
         }}
       />
@@ -639,11 +648,16 @@ const LastYearDataCard = props => {
         fontSize={16}
         marginTop={30}
         fontWeight={'normal'}
-        backgroundColor={Colors.CLR_E77C7E}
+        backgroundColor={Colors.PRIMARY_FILL}
         borderColor={Colors.PRIMARY_BORDER}
         title={'CONTINUE'}
         onPress={() => {
-          onContinuePressed(isBankingChanged, isSINChanged, isResidencyChanged, isFilingForSpouse);
+          onContinuePressed(
+            isBankingChanged,
+            isSINChanged,
+            isResidencyChanged,
+            isFilingForSpouse,
+          );
         }}
       />
     </>

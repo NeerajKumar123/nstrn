@@ -4,8 +4,8 @@
     <item
         android:drawable="@color/splashscreen_bg"/>
     <item
-        android:width="283dp"
-        android:height="341dp"
+        android:width="130dp"
+        android:height="150dp"
         android:drawable="@mipmap/header_logo"
         android:gravity="center" />
 </layer-list>

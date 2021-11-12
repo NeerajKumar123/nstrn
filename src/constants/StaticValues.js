@@ -42,7 +42,7 @@ export const Google_Api_key = 'AIzaSyDpdF27ZiuKLmsJXNfLyRbD-7nmlMa4tJw';
 
 const width = 1200
 const height = 1600
-const quality = 1.0
+const quality = .7
 // const width = 50
 // const height = 50
 // const quality = .2

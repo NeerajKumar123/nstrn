@@ -48,7 +48,7 @@ const OnlineAllDone = props => {
           fontSize={20}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="PLEASE COMPLETE THE PAYMENT ON HOME SCREEN TO PROCEED WITH YOUR RETURN."
+          value="WE WILL NOTIFY YOU WITH YOUR REQUIRED PAYMENT SHORTLY."
         />
       </ScrollView>
       <View

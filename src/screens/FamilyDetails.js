@@ -214,6 +214,7 @@ const FamilyDetails = props => {
                 if(saveBankingRes?.status == 1){
                   const check = (maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3) ? true : false
                   SKTStorage.setKeyValue('isFromSpouseFlow',check,()=>{
+                    global.isFromSpouseFlow = check
                     if (isEditing) {
                       navigation.navigate('OnlineEditInfo');
                     }else if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
