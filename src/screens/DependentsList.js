@@ -56,10 +56,10 @@ const DependentsList = props => {
 
 
   useEffect(() => {
-    console.log('isFocused', isFocused,global.isLastDepHit,Tax_Filed_With_Sukhtax)
     if (!isFocused) return
     SKTStorage.getValue('isLastDepHit', (isHit)=>{
-      if (Tax_Filed_With_Sukhtax && (isHit == undefined || isHit == false || isHit == null) && !isEditing) {
+      const sdsd = Tax_Filed_With_Sukhtax && (isHit == undefined || isHit == false || isHit == null) && (isEditing == undefined || !isEditing)
+      if (Tax_Filed_With_Sukhtax && (isHit == undefined || isHit == false || isHit == null) && (isEditing == undefined || !isEditing)) {
         setIsLoading(true);
         onlineGetDependentInfoByUserId({ User_Id: user_id }, lastdepRes => {
           SKTStorage.setKeyValue('isLastDepHit',true, ()=>{})
@@ -144,7 +144,6 @@ const DependentsList = props => {
         <View style={{ marginVertical: 20, justifyContent: 'center' }}>
           {deps &&
             deps.map((item, index) => {
-              console.log('index',index)
               return (
                 <DepCard
                   item={item}

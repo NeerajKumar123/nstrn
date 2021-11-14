@@ -52,7 +52,6 @@ const DependentDetails = props => {
     const isDOBValid = dob;
     const isGenderValid = gender;
     const isSinValid = Validator.isValidSIN(sinNo);
-    console.log('isSinValid',isSinValid)
     const isRelationValid = relation;
     if (!isFNameValid) {
       isValidForm = false;

@@ -219,6 +219,11 @@ const Spouse = props => {
     if (isEditing) {
       params['Tax_File_Spouse_id'] = taxFileSpouseId;
     }
+    if(isFillingForWife){
+      SKTStorage.setKeyValue('showOtherAuthorizer',isFillingForWife,()=>{
+        global.showOtherAuthorizer = isFillingForWife
+      })
+    }
     return params;
   };
 
