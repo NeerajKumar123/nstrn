@@ -43,6 +43,24 @@ const API = {
         callback && callback({status:0});
       });
   },
+  
+  makePostRequestEverSign(path, params, callback) {
+    console.log('Posting ===>', path, JSON.stringify(params));   
+    axios({
+      method: 'post',
+      url: path,
+      data: params,
+    })
+      .then(res => {
+        const resData = res && res.data;
+        console.log('Response=====>',path, JSON.stringify(resData))
+        callback && callback(resData);
+      })
+      .catch(error => {
+        extractError(error, path);
+        callback && callback({status:0});
+      });
+  },
 };
 
 const extractError = (error, url) => {

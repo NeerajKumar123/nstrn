@@ -1,8 +1,12 @@
 import API from './BaseAPI';
+import {Eversign_Api_Access_Key, Eversign_Bussiness_Id} from '../constants/StaticValues';
 
 // test commit
 
-const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
+export const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
+
+export const EversingSuccess  = 'http://sukhtax.newunlimitedhosting.21gtech.com/signcompleted.aspx'
+export const EversingFailed  = 'http://sukhtax.newunlimitedhosting.21gtech.com/signdeclined.aspx'
 
 export const register = (params,callback) => {
   const path = `${BaseURL}/User_Register`
@@ -449,4 +453,21 @@ export const onlineFinalizeAuthorization = (params,callback) => {
 export const getInvalidSIN = (callback) => {
   const path = `${BaseURL}/Get_Invalid_SIN`
   API.makeGetRequest(path , callback);
+};
+
+// Signing....
+export const getConfirmationDocs = (params,callback) => {
+  const path = `${BaseURL}/Get_Confirmation_Documents`
+  API.makePostRequest(path ,params, callback);
+};
+
+export const onlineSaveEversignConfirmation = (params,callback) => {
+  const path = `${BaseURL}/Online_Save_Eversign_Confirmation`
+  API.makePostRequest(path ,params, callback);
+};
+
+export const createEvenrSignDoc = (params,callback) => {
+  console.log('params====>',params)
+  const path = `https://api.eversign.com/api/document?access_key=${Eversign_Api_Access_Key}&business_id=${Eversign_Bussiness_Id}`
+  API.makePostRequestEverSign(path ,params, callback);
 };

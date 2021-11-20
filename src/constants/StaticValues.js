@@ -39,6 +39,8 @@ export const stripeAccountId = 'acct_1I8rlGBHi8nqbGSx';
 export const stripeAPIVersion = '2020-08-27';
 
 export const Google_Api_key = 'AIzaSyDpdF27ZiuKLmsJXNfLyRbD-7nmlMa4tJw';
+export const Eversign_Api_Access_Key = '744c2cf7171c82ded3d54bca371f4da9'
+export const Eversign_Bussiness_Id = '365089'
 
 const width = 1200
 const height = 1600

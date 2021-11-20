@@ -189,8 +189,6 @@ const Dashboard = props => {
     }
   };
   const onlineMoveToPage = props => {
-    navigation.navigate('PDFExample')
-    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,

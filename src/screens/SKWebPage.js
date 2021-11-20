@@ -10,7 +10,11 @@ import { WebView } from 'react-native-webview';
 import * as CustomFonts from '../constants/FontsDefs';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
-import SKLoader from '../components/SKLoader';
+import {
+  EversingSuccess,
+  EversingFailed,
+  onlineSaveEversignConfirmation
+} from '../apihelper/Api';
 import * as Colors from '../constants/ColorDefs';
 const { height } = Dimensions.get('window');
 
@@ -34,6 +38,24 @@ const SKWebPage = (props) => {
     return true;
   }
 
+  const onNavigationStateChange = (navState) => {
+    if (navState?.url?.includes(EversingSuccess) ) {
+      const pageParams = props.route.params;
+      const {noOfDocs,currentIndex,dochash,doc} = pageParams
+      const {user_id,tax_file_id} = global.onlineStatusData
+      const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Tax_File_Confirmation_Id:doc?.tax_file_confirmation_id,Document_Hash:dochash}
+      onlineSaveEversignConfirmation(params, () =>{
+        if(noOfDocs == currentIndex){
+          navigation.navigate('Home')
+        }else{
+          navigation.goBack()
+        }  
+      })
+    }else if (navState?.url?.includes(EversingFailed) ) {
+      // navigation.goBack()
+  }
+  }
+  
   return (
     <View style={{ flex: 1,backgroundColor:Colors.WHITE }}>
     <AppHeader navigation={navigation} />
@@ -50,6 +72,7 @@ const SKWebPage = (props) => {
             onLoadEnd = {() => {
               setIsLoaderVisible(false);
             }}
+            onNavigationStateChange={onNavigationStateChange}
         />
         )}
         {isLoaderVisible && (
