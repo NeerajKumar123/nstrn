@@ -103,7 +103,7 @@ const SKButton = props => {
         {rightImage && isRightLocalPNG && (
           <Image
             resizeMode="contain"
-            style={{width: 15, height: 15, opacity: disable ? 0.5 : 1.0}}
+            style={{width: 20, height: 20, resizeMode:'contain', opacity: disable ? 0.5 : 1.0,position:'absolute',right:10}}
             source={rightImage}
           />
         )}
@@ -113,6 +113,7 @@ const SKButton = props => {
             size={iconsize}
             color={iconcolor}
             opacity={disable ? 0.5 : 1.0}
+            style = {{position:'absolute', right:10}}
           />
         )}
       </View>

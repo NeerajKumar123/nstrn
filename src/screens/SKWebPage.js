@@ -23,6 +23,7 @@ const SKWebPage = (props) => {
   const pageParams = props.route.params;
   const [pageUrl] = useState(pageParams.pageUrl);
   const [isLoaderVisible, setIsLoaderVisible] = useState(false);
+  const [navigationHandled, setNavigationHandled] = useState(false);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
@@ -38,18 +39,15 @@ const SKWebPage = (props) => {
     return true;
   }
 
-  const onNavigationStateChange = (navState) => {
-    if (navState?.url?.includes(EversingSuccess) ) {
+  const handleNavStateChange = (navState) => {
+    if (!navigationHandled && navState?.url?.includes(EversingSuccess) ) {
+      setNavigationHandled(true)
       const pageParams = props.route.params;
       const {noOfDocs,currentIndex,dochash,doc} = pageParams
       const {user_id,tax_file_id} = global.onlineStatusData
       const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Tax_File_Confirmation_Id:doc?.tax_file_confirmation_id,Document_Hash:dochash}
       onlineSaveEversignConfirmation(params, () =>{
-        if(noOfDocs == currentIndex){
-          navigation.navigate('Home')
-        }else{
-          navigation.goBack()
-        }  
+        navigation.goBack()
       })
     }else if (navState?.url?.includes(EversingFailed) ) {
       // navigation.goBack()
@@ -72,7 +70,9 @@ const SKWebPage = (props) => {
             onLoadEnd = {() => {
               setIsLoaderVisible(false);
             }}
-            onNavigationStateChange={onNavigationStateChange}
+            onNavigationStateChange={(navState)=>{
+              handleNavStateChange(navState)
+            }}
         />
         )}
         {isLoaderVisible && (
