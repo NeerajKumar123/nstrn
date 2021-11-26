@@ -11,62 +11,87 @@ import {
 const {width} = Dimensions.get('window');
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
-import * as CustomFonts from '../constants/FontsDefs'
+import * as CustomFonts from '../constants/FontsDefs';
+const arrow_dash = require('../../assets/tab/arrow_dash.png');
+
 const DashCard = props => {
-  const {id, name = 'Card Name', desc, image, colors} = props.item;
-  const {fee} = props
-  let displayDesc = name
-  if(id == 3){
-    displayDesc = `STARTING FROM $${fee}`
-  }else if (id == 2) {
-    displayDesc = desc
-  }
+  const {title, desc, status = undefined, onClick = () => {}, marginTop = 0, marginBotton = 0} = props;
   return (
     <TouchableOpacity
+      style={{
+        width: '100%',
+        elevation: 5,
+        shadowColor: Platform.OS == 'ios' ? Colors.GRAY: Colors.BLACK,
+        shadowOffset: {width: 3, height: 3},
+        shadowOpacity: Platform.OS  == 'ios' ?  .5 : 1.0,
+        shadowRadius: 3,
+        backgroundColor: Colors.WHITE,
+        borderRadius: 10,
+        padding: 16,
+        marginTop:marginTop,
+        marginBottom:marginBotton
+      }}
       onPress={() => {
-        props.onSelected && props.onSelected();
+        onClick()
       }}>
-      <LinearGradient
-        colors={colors}
+      <View
         style={{
-          borderRadius: 6,
-          width: 163,
-          height: 185,
-          backgroundColor: 'white',
-          margin: 7,
-          alignItems: 'center',
-          paddingHorizontal: 7,
-          paddingVertical: 8,
+          flexDirection: 'row',
+          width: '100%',
+          justifyContent: 'space-between',
         }}>
         <Text
           style={{
-            fontWeight: '700',
-            color: Colors.WHITE,
+            color: Colors.APP_BLUE_HEADING_COLOR,
             fontSize: 17,
-            textAlign: 'center',
-            fontFamily:Platform.OS == 'android' ?  CustomFonts.OpenSansBold : CustomFonts.OpenSansRegular,
-            fontWeight:'800',
-            minHeight: 48,
+            fontWeight: '500',
           }}>
-          {name}
+          {title}
         </Text>
         <Image
           resizeMode="contain"
-          style={{width: 33, height: 33, alignSelf: 'center'}}
-          source={image}
+          style={{width: 16, height: 16}}
+          source={arrow_dash}
         />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          width: '100%',
+          justifyContent: 'space-between',
+          marginTop:16,
+          alignItems:'flex-end'
+        }}>
         <Text
           style={{
-            marginTop: 20,
-            textAlign: 'center',
-            color: Colors.WHITE,
-            fontWeight:Platform.OS == 'android' ? 'normal' : '700',
-            fontSize: 15,
-            fontFamily:Platform.OS == 'android' ?  CustomFonts.OpenSansBold : CustomFonts.OpenSansRegular,
+            color: Colors.CLR_676767,
+            fontSize: 17,
+            fontWeight: '700',
           }}>
-          {displayDesc}
+          {desc}
         </Text>
-      </LinearGradient>
+        {status && 
+         <View style = {{flexDirection:'column', justifyContent:'center', alignItems:'flex-end'}}>
+         <Text
+           style={{
+             color: Colors.CLR_5F5F94,
+             fontSize: 15,
+             fontWeight: '400',
+           }}>
+           STATUS
+         </Text>
+         <Text
+           style={{
+             color: Colors.APP_RED_SUBHEADING_COLOR,
+             fontSize: 15,
+             fontWeight: '600',
+           }}>
+           {status}
+         </Text>
+       </View>
+        }
+       
+      </View>
     </TouchableOpacity>
   );
 };

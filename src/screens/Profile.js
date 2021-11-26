@@ -6,6 +6,8 @@ import {
   ScrollView,
   Image,
   Keyboard,
+  Text,
+  DeviceEventEmitter
 } from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
@@ -190,6 +192,53 @@ const Profile = props => {
                 }}
           />
         </View>
+        <View
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 40,
+          marginTop: 10,
+          backgroundColor:Colors.WHITE,
+          // backgroundColor:'red'
+        }}>
+        <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={() => {
+            const options = [
+              {
+                text: 'Cancel',
+                onPress: () => {
+                }
+              },
+              {
+                text: 'Yes,Logout',
+                onPress: () => {
+                  DeviceEventEmitter.emit('user_loggedin', false);
+                }
+              }
+            ]
+            Alert.alert('SukhTax','Are you sure you want to logout?',options)
+          }}>
+          <Image
+            resizeMode="contain"
+            style={{width: 20, height: 18, marginRight: 5}}
+            source={CustomFonts.logout_icon}
+          />
+          <Text
+            style={{
+              fontWeight: '700',
+              fontSize: 16,
+              fontFamily: CustomFonts.OpenSansRegular,
+            }}>
+            Logout
+          </Text>
+        </TouchableOpacity>
+      </View>
       </ScrollView>
     </View>
   );

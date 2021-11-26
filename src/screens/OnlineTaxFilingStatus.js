@@ -381,7 +381,7 @@ const TaxFilingStatusCard = props => {
 
   const prepareParams = document => {
     let params = {};
-    params['sandbox'] = 1;
+    params['sandbox'] = 0;
     params['is_draft'] = 0;
     params['embedded'] = 1;
     params['title'] = 'Sukhtax Confirmation';
@@ -624,7 +624,7 @@ const TaxFilingStatusCard = props => {
               fontWeight={'normal'}
               backgroundColor={Colors.CLR_7F7F9F}
               borderColor={Colors.CLR_D3D3D9}
-              title={item?.document_format_name}
+              title={item?.title}
               onPress={() => {
                 if (item?.eversign_document_hash?.length < 1) {
                   const params = prepareParams(item);
