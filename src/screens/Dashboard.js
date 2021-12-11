@@ -156,6 +156,9 @@ const Dashboard = props => {
       case 6:
         craMoveToPage();
         break;
+        case 7:
+        navigation.navigate('RoyaltyInstruction');
+        break;
       default:
         break;
     }
@@ -281,6 +284,14 @@ const Dashboard = props => {
           marginTop={10}
           onClick={() => {
             navigateToScreen({id:1});
+          }}
+        />
+         <DashCard
+          title={'Sukh Tax Loyalty Program'}
+          desc={`Sign up today !Get Paid instantly`}
+          marginTop={10}
+          onClick={() => {
+            navigateToScreen({id:7});
           }}
         />
         <DashCard

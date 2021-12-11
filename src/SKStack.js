@@ -12,6 +12,11 @@ import OnlineTaxFilingStatus from './screens/OnlineTaxFilingStatus';
 import SecurityCode from './screens/SecurityCode';
 import SetupNewPass from './screens/SetupNewPass';
 import Instructions from './screens/Instructions';
+import RoyaltyInstruction from './screens/RoyaltyInstruction';
+import RoyaltySignup from './screens/RoyaltySignup';
+import RoyaltyPayment from './screens/RoyaltyPayment';
+import RoyaltyWallat from './screens/RoyaltyWallat';
+import RoyaltyRefHistory from './screens/RoyaltyRefHistory';
 import ForgotPassword from './screens/ForgotPassword';
 import Profile from './screens/Profile';
 import Messages from './screens/Messages';
@@ -111,6 +116,7 @@ export const AuthStack = () => { /// This is before login stack
           component={Instructions}
           options={{title: 'Instructions', headerShown: false}}
         />
+        
       </Stack.Navigator>
     </NavigationContainer>
     </SafeAreaView>
@@ -148,6 +154,32 @@ const SKStack = () => { /// This is After login stack
           component={Home}
           options={{title: 'Home', headerShown: false}}
         />
+         <Stack.Screen
+          name="RoyaltyInstruction"
+          component={RoyaltyInstruction}
+          options={{title: 'RoyaltyInstruction', headerShown: false}}
+        />
+        <Stack.Screen
+          name="RoyaltySignup"
+          component={RoyaltySignup}
+          options={{title: 'RoyaltySignup', headerShown: false}}
+        />
+        <Stack.Screen
+          name="RoyaltyPayment"
+          component={RoyaltyPayment}
+          options={{title: 'RoyaltyPayment', headerShown: false}}
+        />
+        <Stack.Screen
+          name="RoyaltyWallat"
+          component={RoyaltyWallat}
+          options={{title: 'RoyaltyWallat', headerShown: false}}
+        />
+        <Stack.Screen
+          name="RoyaltyRefHistory"
+          component={RoyaltyRefHistory}
+          options={{title: 'RoyaltyRefHistory', headerShown: false}}
+        />
+       
         <Stack.Screen
           name="Profile"
           component={Profile}
