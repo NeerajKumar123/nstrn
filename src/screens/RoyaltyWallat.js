@@ -45,7 +45,7 @@ const RoyaltyWallat = props => {
           paddingHorizontal: 20,
           flex: 1,
         }}>
-        <Heading value="Sukh Tax Loyalty Program" marginTop={26} color = {Colors.BLACK}  />
+        <Heading value="Sukh Tax Loyalty Program" marginTop={26} color = {Colors.APP_RED_SUBHEADING_COLOR}  />
         <Heading value="Welcome,Japjot" marginTop={26} color = {Colors.BLACK}  />
        <View 
        style = {{

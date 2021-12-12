@@ -1,8 +1,9 @@
 import React from 'react';
-import {TouchableOpacity, View, Image,Text,Button} from 'react-native';
+import {TouchableOpacity, View, Image,Text,Button,StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
+import SKButton from '../components/SKButton';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 
@@ -25,65 +26,54 @@ const RoyaltyInstruction = props => {
       paddingHorizontal:20,
       alignItems:"center",
       }}>
-      <Text
-            style={{
-              color: Colors.BLACK,
-              fontSize: 25,
-              fontWeight: '500',
-              alignContent:"center",
-              }}>
-             Sukh Tax Loyalty Program
-          </Text>
-          <Text style={{
-              color: Colors.BLACK,
-              fontSize: 25,
-              fontWeight: '500',
-             
-              padding:50
-              }}>
-          How does it work?
-          </Text>
-      </View>
-      <View style={{ 
-      width:'100%',  
-      paddingHorizontal:20,
-      alignItems:"center",}}>
-        <Text style={{fontSize:20}}>
+        <Heading value="Sukh Tax Loyalty Program" fontSize = {18} marginTop={26} color = {Colors.APP_RED_SUBHEADING_COLOR}  />
+        <Text 
+        style={styles.blueText}>
+        How does this work ?
+        </Text> 
+        <Text 
+          style={styles.blueText}
+        >
         Sukh Tax aims to make your experience as simple as possible.
         </Text> 
-      </View>
-      <View style={{paddingHorizontal:10,alignItems:"flex-start"}}>
-        <Text style={{fontSize:20,paddingTop:25,paddingHorizontal:10,fontWeight:"400"}}>
+        <Text style={styles.blueText}>
         Our loyalty program is no different.
         </Text>
-        </View>
-        <View
-        style = {{alignItems:"flex-start",paddingHorizontal:5}}>
-        <Text style={{fontSize:20,paddingTop:25}}>
+      <Text style={styles.blueText}>
       1) Sign up for our Loyalty Program
       </Text>
-      <Text style={{fontSize:20,paddingTop:25}}>
-      2) Refer a friend and give them your unique referral code      </Text>
-      <Text style={{fontSize:20,paddingTop:25}}>
-      3) Your friend will save $5 at checkout of their Online Return, and you will receive $5      </Text>
-      <Text style={{fontSize:20,paddingTop:25}}>
-      4) If you refer a friend for incorporation, your friend will save $15, and you will receive $15      </Text>
-      </View>
-      <View style = {{backgroundColor:"red",paddingVertical:5,paddingHorizontal:90}}>
-      <Button
-      style = {{
-        color: 'red',
-        marginTop: 20,
-        padding: 20,
-        backgroundColor: 'green'
-      }}
-        title="SignUp"
-        onPress = {() =>{
-          navigation.navigate('RoyaltySignup')
-          }}/>
+      <Text style={styles.blueText}>
+      2) Refer a friend and give them your unique referral code</Text>
+      <Text style={styles.blueText}>
+      3) Your friend will save $5 at checkout of their Online Return, and you will receive $5</Text>
+      <Text style={styles.blueText}>
+      4) If you refer a friend for incorporation, your friend will save $15, and you will receive $15</Text>
+
+      <SKButton
+          marginTop = {30}
+          fontSize={16}
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'ENROLL NOW'}
+          onPress={() => {
+            navigation.navigate('RoyaltySignup')
+          }}
+        />
       </View>
     </View>
   );
 };
 
 export default RoyaltyInstruction;
+
+
+const styles = StyleSheet.create({
+  blueText :{
+    fontSize:17,
+    color:Colors.APP_BLUE_HEADING_COLOR,
+    width:'100%',
+    fontWeight:'500',
+    marginTop:16
+  }
+})

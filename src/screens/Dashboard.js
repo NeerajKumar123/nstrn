@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import DashCard from '../components/DashCard';
+import RoyaltyDashCard from '../components/RoyaltyDashCard';
 import SKLoader from '../components/SKLoader';
 import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
@@ -286,7 +287,7 @@ const Dashboard = props => {
             navigateToScreen({id:1});
           }}
         />
-         <DashCard
+         <RoyaltyDashCard
           title={'Sukh Tax Loyalty Program'}
           desc={`Sign up today !Get Paid instantly`}
           marginTop={10}
