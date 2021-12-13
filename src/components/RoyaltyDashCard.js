@@ -25,12 +25,11 @@ const RoyaltyDashCard = props => {
         shadowOffset: {width: 3, height: 3},
         shadowOpacity: Platform.OS  == 'ios' ?  .5 : 1.0,
         shadowRadius: 3,
-        backgroundColor: Colors.WHITE,
         borderRadius: 10,
         padding: 16,
         marginTop:marginTop,
         marginBottom:marginBotton,
-        backgroundColor:Colors.CLR_F7FAFF
+        backgroundColor:Colors.CLR_F7FAFF,
       }}
       onPress={() => {
         onClick()
@@ -43,11 +42,11 @@ const RoyaltyDashCard = props => {
         }}>
         <Text
           style={{
-            color: Colors.APP_RED_SUBHEADING_COLOR,
-            fontSize: 17,
-            fontWeight: '500',
+            color: Colors.CLR_D9272A,
+            fontSize: 15,
+            fontWeight: '700',
           }}>
-          {title}
+         {title}
         </Text>
         <Image
           resizeMode="contain"
@@ -60,15 +59,15 @@ const RoyaltyDashCard = props => {
           flexDirection: 'row',
           width: '100%',
           justifyContent: 'space-between',
-          marginTop:16,
-          alignItems:'flex-end'
+          alignItems:'flex-end',
+          marginTop: 5,          
         }}>
         <Text
           style={{
-            color: Colors.CLR_676767,
+            color: Colors.CLR_5F5F94,
             fontSize: 17,
-            fontWeight: '700',
-          }}>
+            fontWeight: '500',
+           }}>
           {desc}
         </Text>
         {status && 

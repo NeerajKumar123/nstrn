@@ -53,11 +53,11 @@ const RoyaltyInstruction = props => {
           marginTop = {30}
           fontSize={16}
           fontWeight={'normal'}
-          backgroundColor={Colors.PRIMARY_FILL}
+          backgroundColor={Colors.CLR_EB0000}
           borderColor={Colors.PRIMARY_BORDER}
           title={'ENROLL NOW'}
           onPress={() => {
-            navigation.navigate('RoyaltySignup')
+            navigation.navigate('RoyaltySubmit')
           }}
         />
       </View>

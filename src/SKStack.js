@@ -13,7 +13,7 @@ import SecurityCode from './screens/SecurityCode';
 import SetupNewPass from './screens/SetupNewPass';
 import Instructions from './screens/Instructions';
 import RoyaltyInstruction from './screens/RoyaltyInstruction';
-import RoyaltySignup from './screens/RoyaltySignup';
+import RoyaltySubmit from './screens/RoyaltySubmit';
 import RoyaltyPayment from './screens/RoyaltyPayment';
 import RoyaltyWallat from './screens/RoyaltyWallat';
 import RoyaltyRefHistory from './screens/RoyaltyRefHistory';
@@ -160,9 +160,9 @@ const SKStack = () => { /// This is After login stack
           options={{title: 'RoyaltyInstruction', headerShown: false}}
         />
         <Stack.Screen
-          name="RoyaltySignup"
-          component={RoyaltySignup}
-          options={{title: 'RoyaltySignup', headerShown: false}}
+          name="RoyaltySubmit"
+          component={RoyaltySubmit}
+          options={{title: 'RoyaltySubmit', headerShown: false}}
         />
         <Stack.Screen
           name="RoyaltyPayment"

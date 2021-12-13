@@ -288,8 +288,8 @@ const Dashboard = props => {
           }}
         />
          <RoyaltyDashCard
-          title={'Sukh Tax Loyalty Program'}
-          desc={`Sign up today !Get Paid instantly`}
+          title={'SUKH TAX LOYALTY PROGRAM'}
+          desc={`ENROLL TODAY !\nTo Get Paid Instantly`}
           marginTop={10}
           onClick={() => {
             navigateToScreen({id:7});

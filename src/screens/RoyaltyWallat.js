@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -11,15 +11,16 @@ import {
 } from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
 import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
-import {ST_REGEX} from '../constants/StaticValues';
+import { ST_REGEX } from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
-import {getUserProfileDetails, updateUserProfile} from '../apihelper/Api';
+import { getUserProfileDetails, updateUserProfile } from '../apihelper/Api';
+const arrow_dash = require('../../assets/tab/arrow_dash.png');
 
 const RoyaltyWallat = props => {
   const navigation = useNavigation();
@@ -28,7 +29,7 @@ const RoyaltyWallat = props => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  
+
   return (
     <View
       style={{
@@ -45,29 +46,59 @@ const RoyaltyWallat = props => {
           paddingHorizontal: 20,
           flex: 1,
         }}>
-        <Heading value="Sukh Tax Loyalty Program" marginTop={26} color = {Colors.APP_RED_SUBHEADING_COLOR}  />
-        <Heading value="Welcome,Japjot" marginTop={26} color = {Colors.BLACK}  />
-       <View 
+          <Heading value="SUKH TAX LOYALTY PROGRAM" marginTop={12} fontWeight={"700"} fontSize={18} color={Colors.APP_RED_SUBHEADING_COLOR} />
+        <View 
        style = {{
-           height:150,
+           height:101,
            backgroundColor:Colors.APP_BLUE_HEADING_COLOR,
-           marginTop: 15, 
-           padding: 10}}>
+            marginTop : 12,
+            borderRadius: 8,
+            justifyContent: "flex-end",
+            alignContent: 'flex-end'
+         }}>
                <Text style = {{
                    color:"white",
-                   fontSize: 30,
-                   fontWeight: "bold"
+                   fontSize: 23,
+                   fontWeight: "700",
+                   marginLeft: 25,
+                   marginTop:16
 
 
                }}>
-                   My Wallet
+                 Welcome, Japjot.
                </Text>
                <Text style = {{
                    color:"white",
-                   fontSize: 40,
+                   fontSize: 25,
+                   textAlign :"right",
+                   fontWeight : "bold",
+
+
+               }}>
+              Today
+               </Text>
+       </View>
+       <View 
+       style = {{
+           height:116,
+           backgroundColor:Colors.CLR_FFFFFF,
+           marginTop: 20, 
+           padding: 10,
+           borderRadius: 26,
+           }}>
+               <Text style = {{
+                   color:"blue",
+                   fontSize: 21,
+                   fontWeight : "700",
+                   height:25}}>
+                  My Wallet
+               </Text>
+               <Text style = {{
+                   color:"blue",
+                   fontSize: 21,
                    marginTop: 16,
                    textAlign :"center",
-                   fontWeight : "bold"
+                   fontWeight : "700"
 
                }}>
                 $ 55.00
@@ -85,14 +116,39 @@ const RoyaltyWallat = props => {
                }}>
             JAP10283
                </Text>
-       
-               <SKButton
-        marginTop={56}
-        fontSize={16}
+       <View
+       style={{
+        flexDirection: 'row',
+        width: '100%',
+        backgroundColor: "red"
+      }}>
+        
+       <SKButton
+        fontSize={18}
         width="100%"
-        fontWeight={'normal'}
-        backgroundColor={Colors.PRIMARY_FILL}
-        borderColor={Colors.SECONDARY_FILL}
+        fontWeight={'700'}
+        backgroundColor={Colors.CLR_E77C7E}
+        borderColor={Colors.CLR_E77C7E}
+        title={'PAYOUT HISTORY'}
+        onPress = {() =>{
+            navigation.navigate('RoyaltyRefHistory')
+            }}   
+      />
+      <Image
+          resizeMode="contain"
+          style={{width: 16, height: 16}}
+          source={arrow_dash}
+        />
+       </View>
+          
+          <SKButton
+        marginTop={10}
+        fontSize={18}
+        
+        width="100%"
+        fontWeight={'700'}
+        backgroundColor={Colors.CLR_E77C7E}
+        borderColor={Colors.CLR_E77C7E}
         title={'MY REFERRAL HISTORY'}
         onPress = {() =>{
             navigation.navigate('RoyaltyRefHistory')
@@ -101,8 +157,8 @@ const RoyaltyWallat = props => {
         
         
         
-      </ScrollView>
-    </View>
+      </ScrollView >
+    </View >
   );
 };
 
