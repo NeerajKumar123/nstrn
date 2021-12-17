@@ -70,7 +70,6 @@ import AnimTest from './screens/AnimTest'
 import {SafeAreaView} from 'react-native';
 import OnlineEditInfo from './screens/OnlineEditInfo'
 import PDFExample from './screens/PDFExample'
-import RoyaltyPayout from './screens/RoyaltyPayout'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 const Stack = createStackNavigator();
 
@@ -139,11 +138,7 @@ const SKStack = () => { /// This is After login stack
           component={PDFExample}
           options={{title: 'PDFExample', headerShown: false}}
         />
-        <Stack.Screen
-          name="RoyaltyPayout"
-          component={RoyaltyPayout}
-          options={{title: 'RoyaltyPayout', headerShown: false}}
-        />
+       
         <Stack.Screen
           name="AnimTest"
           component={AnimTest}

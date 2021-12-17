@@ -223,7 +223,7 @@ const RoyaltyWallat = props => {
             borderColor={Colors.CLR_E77C7E}
             title={'PAYOUT HISTORY'}
             onPress={() => {
-              navigation.navigate('RoyaltyPayout');
+              navigation.navigate('RoyaltyPayoutHistory');
             }}
           />
 
