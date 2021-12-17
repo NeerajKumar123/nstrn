@@ -472,7 +472,28 @@ export const onlineSaveEversignConfirmation = (params,callback) => {
 };
 
 export const createEvenrSignDoc = (params,callback) => {
-  console.log('params====>',params)
   const path = `https://api.eversign.com/api/document?access_key=${Eversign_Api_Access_Key}&business_id=${Eversign_Bussiness_Id}`
   API.makePostRequestEverSign(path ,params, callback);
 };
+
+export const getRefrralPrice = (callback) => {
+  const path = `${BaseURL}/Referral_Get_Referral_Price`
+  API.makeGetRequest(path , callback);
+};
+
+export const refGetDetails= (params,callback) => {
+  const path = `${BaseURL}/Referral_Get_Details`
+  API.makePostRequest(path , params, callback);
+};
+
+export const getRefHistory= (params,callback) => {
+  const path = `${BaseURL}/Referral_Get_Referral_History`
+  API.makePostRequest(path , params, callback);
+};
+
+export const getPayoutHistory = (params,callback) => {
+  const path = `${BaseURL}/Referral_Get_Payout_History`
+  API.makePostRequest(path , params, callback);
+};
+
+
