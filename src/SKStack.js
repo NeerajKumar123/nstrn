@@ -17,6 +17,7 @@ import RoyaltySubmit from './screens/RoyaltySubmit';
 import RoyaltyPayment from './screens/RoyaltyPayment';
 import RoyaltyWallat from './screens/RoyaltyWallat';
 import RoyaltyRefHistory from './screens/RoyaltyRefHistory';
+import RoyaltyPayoutHistory from './screens/RoyaltyPayoutHistory';
 import ForgotPassword from './screens/ForgotPassword';
 import Profile from './screens/Profile';
 import Messages from './screens/Messages';
@@ -39,7 +40,6 @@ import PaymentAwaiting from './screens/PaymentAwaiting';
 import HomePayment from './screens/HomePayment';
 import CarryForward from './screens/CarryForward';
 import OnlineReturnLanding from './screens/OnlineReturnLanding';
-
 import IncorporationLanding from './screens/IncorporationLanding';
 import NumberNameCorp from './screens/NumberNameCorp';
 import UploadCorp from './screens/UploadCorp';
@@ -71,7 +71,6 @@ import {SafeAreaView} from 'react-native';
 import OnlineEditInfo from './screens/OnlineEditInfo'
 import PDFExample from './screens/PDFExample'
 import RoyaltyPayout from './screens/RoyaltyPayout'
-
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 const Stack = createStackNavigator();
 
@@ -184,6 +183,11 @@ const SKStack = () => { /// This is After login stack
           name="RoyaltyRefHistory"
           component={RoyaltyRefHistory}
           options={{title: 'RoyaltyRefHistory', headerShown: false}}
+        />
+         <Stack.Screen
+          name="RoyaltyPayoutHistory"
+          component={RoyaltyPayoutHistory}
+          options={{title: 'RoyaltyPayoutHistory', headerShown: false}}
         />
        
         <Stack.Screen

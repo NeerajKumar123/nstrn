@@ -20,6 +20,7 @@ import { ST_REGEX } from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 import RoyaltyRefCard from '../components/RoyaltyRefCard'
+import RoyaltyPayCard from '../components/RoyaltyPayCard'
 
 const DummyArray = [
 
@@ -31,7 +32,7 @@ const DummyArray = [
 { username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate:"dec 1"},
 { username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate:"dec 1"},
 { username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate:"dec 1"}]
-const RoyaltyRefHistory = () => {
+const RoyaltyPayoutHistory = () => {
     const navigation = useNavigation();
 
     return (
@@ -71,11 +72,11 @@ const RoyaltyRefHistory = () => {
                     <View style={{width:"100%",height: 1,backgroundColor: Colors.CLR_D1CFD7}} />
                   )}
                 renderItem={({ item }) => (
-                    <RoyaltyRefCard name = {item.username} payment = {item.MypaymentMode}  amount = {item.Myamount}  date = {item.MyDate}/>)}
+                    <RoyaltyPayCard name = {item.username} payment = {item.MypaymentMode}  amount = {item.Myamount}  date = {item.MyDate}/>)}
             />
             </View>
         </View>
     )
 }
-export default RoyaltyRefHistory;
+export default RoyaltyPayoutHistory;
 
