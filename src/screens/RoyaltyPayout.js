@@ -21,13 +21,16 @@ import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 import RoyaltyRefCard from '../components/RoyaltyRefCard'
 
-const DummyArray = [{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate : "dec 1"},
-{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate : "dec 1"},
-{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate : "dec 1"},
-{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate: "dec 1"},
-{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate : "dec 1"},
-{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate: "dec 1"},
-{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate : "dec 1"}]
+const DummyArray = [
+
+{usename: "neeshu",MypaymentMode: "mode",MyDate:"Date",Myamount:"Amount"},
+{ username: "neeshu", MypaymentMode: "online", Myamount: "$5",MyDate:"dec 1" },
+{ username: "neeshu", MypaymentMode: "online", Myamount: "$5",MyDate:"dec 1" },
+{ username: "neeshu", MypaymentMode: "online", Myamount: "$5",MyDate:"dec 1" },
+{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate:"dec 1"},
+{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate:"dec 1"},
+{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate:"dec 1"},
+{ username: "neeshu", MypaymentMode: "online", Myamount: "$5" ,MyDate:"dec 1"}]
 const RoyaltyRefHistory = () => {
     const navigation = useNavigation();
 
@@ -48,37 +51,29 @@ const RoyaltyRefHistory = () => {
                 marginTop : 25
             }}>
             <Text style={{
-                  fontSize: 18,
-                  fontWeight: "700",
-                  color:Colors.APP_RED_SUBHEADING_COLOR,
-
+                fontSize: 18,
+                fontWeight: "700",
+               color:Colors.APP_RED_SUBHEADING_COLOR,
                 width: "100%"
             }}>
-                MY REFERRAL HISTORY
+                PAYOUT HISTORY
             </Text>
-
-
-
             <FlatList 
             style = {{
-               
                 width :  "100%",
-                marginTop: 40
+                marginTop: 40,
+                fontSize: 13,
+                fontWeight: "400"
+                
             }}
-
                 data={DummyArray}
                 ItemSeparatorComponent={() => (
                     <View style={{width:"100%",height: 1,backgroundColor: Colors.CLR_D1CFD7}} />
                   )}
                 renderItem={({ item }) => (
-                    <RoyaltyRefCard name = {item.username} payment = {item.MypaymentMode}  amount = {item.Myamount} Date = {item.MyDate}/>)}
+                    <RoyaltyRefCard name = {item.username} payment = {item.MypaymentMode}  amount = {item.Myamount}  date = {item.MyDate}/>)}
             />
-
-           
             </View>
-
-            
-
         </View>
     )
 }

@@ -21,6 +21,12 @@ import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 import { getUserProfileDetails, updateUserProfile } from '../apihelper/Api';
 const arrow_dash = require('../../assets/tab/arrow_dash.png');
+const mywallet = require('../../assets/tab/Vector.png');
+const message = require('../../assets/tab/message.png');
+const watsup = require('../../assets/tab/watsup.png');
+const watsup1 = require('../../assets/tab/watsup1.png');
+
+const share = require('../../assets/tab/share.png');
 
 const RoyaltyWallat = props => {
   const navigation = useNavigation();
@@ -37,6 +43,9 @@ const RoyaltyWallat = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         flex: 1,
+        padding: 16,
+      
+        
 
       }}>
       {isLoading && <SKLoader />}
@@ -53,8 +62,8 @@ const RoyaltyWallat = props => {
            backgroundColor:Colors.APP_BLUE_HEADING_COLOR,
             marginTop : 12,
             borderRadius: 8,
-            justifyContent: "flex-end",
-            alignContent: 'flex-end'
+           flexDirection: "row",
+           alignItems:"center"
          }}>
                <Text style = {{
                    color:"white",
@@ -69,13 +78,15 @@ const RoyaltyWallat = props => {
                </Text>
                <Text style = {{
                    color:"white",
-                   fontSize: 25,
+                   fontSize: 18,
                    textAlign :"right",
-                   fontWeight : "bold",
-
+                   fontWeight : "400",
+                   marginLeft: 100,
+                   marginBottom: 30,
+                   marginTop:16
 
                }}>
-              Today
+             Today     
                </Text>
        </View>
        <View 
@@ -85,17 +96,29 @@ const RoyaltyWallat = props => {
            marginTop: 20, 
            padding: 10,
            borderRadius: 26,
+
+           alignItems:     "center",
+           justifyContent: "center",
+           
            }}>
+           
                <Text style = {{
-                   color:"blue",
+                   color:Colors.APP_BLUE_HEADING_COLOR,
                    fontSize: 21,
                    fontWeight : "700",
                    height:25}}>
                   My Wallet
                </Text>
+               <Image
+          resizeMode="contain"
+          style={{width: 25, height: 23}}
+          source={mywallet}
+          marginTop = {6}
+          color = {Colors.APP_BLUE_HEADING_COLOR}
+        />
                <Text style = {{
-                   color:"blue",
-                   fontSize: 21,
+                   color:Colors.APP_BLUE_HEADING_COLOR,
+                   fontSize: 29,
                    marginTop: 16,
                    textAlign :"center",
                    fontWeight : "700"
@@ -104,23 +127,94 @@ const RoyaltyWallat = props => {
                 $ 55.00
                </Text>
        </View>
-       <Heading value="NEXT PAYOUT: FRIDAY, DEC 10 2021" marginTop={26} color = {Colors.APP_RED_SUBHEADING_COLOR} fontSize = {18} />
-       <Heading value="MY REFERRAL CODE:" marginTop={37} color = {Colors.BLACK} fontSize = {18} />
-       <Text style = {{
-                   color:Colors.BLACK,
-                   fontSize: 40,
-                   marginTop: 16,
+       <Heading value="Next Payout : Friday , Dec 10 2021" marginTop={26} color = {Colors.APP_BLUE_HEADING_COLOR} fontSize = {18} />
+       <View 
+       style = {{
+           height:93,
+           backgroundColor:Colors.CLR_F7FAFF,
+           marginTop: 13, 
+           padding: 10,
+           borderRadius: 26,
+           alignItems:     "center",
+           justifyContent: "center",
+           }}>
+               <Text style = {{
+                   color:Colors.APP_BLUE_HEADING_COLOR,
+                   fontSize: 17,
+                   fontWeight : "700",
+                   marginTop: 18    }}>
+                 TOTAL CUMULATIVE EARNINGS
+               </Text>
+               <Text style = {{
+                   color:Colors.APP_BLUE_HEADING_COLOR,
+                   fontSize: 29,
+                   marginTop: 3,
                    textAlign :"center",
-                   fontWeight : "bold"
+                   fontWeight : "700"
 
                }}>
-            JAP10283
+                $595.00
                </Text>
+       </View>
+       <View 
+       style = {{
+           height:116,
+           backgroundColor:Colors.CLR_FFFFFF,
+           borderRadius: 26,
+           alignItems:     "center",
+           justifyContent: "center",
+           }}>
+               <Text style = {{
+                   color:Colors.APP_BLUE_HEADING_COLOR,
+                   fontSize: 18,
+                   fontWeight : "700",
+                   marginTop: 6
+                   }}>
+                  My Refferal Code
+               </Text>
+               <Text style = {{
+                   color:Colors.APP_BLUE_HEADING_COLOR,
+                   fontSize: 29,
+                   marginTop: 3,
+                   textAlign :"center",
+                   fontWeight : "700"
+
+               }}>
+               JAPJOT50
+               </Text>
+               <View style = {{alignItems:"center",flexDirection:"row"}}>
+               <Image
+          resizeMode="contain"
+          style={{width: 20, height: 20}}
+          source={watsup}
+          marginTop = {9}
+          
+          color = {Colors.APP_BLUE_HEADING_COLOR}
+        />
+          <Image
+          resizeMode="contain"
+          style={{width: 20, height: 20}}
+          source={share}
+          marginTop = {9}
+          marginLeft = {14}
+          color = {Colors.APP_BLUE_HEADING_COLOR}
+        />
+          <Image
+          resizeMode="contain"
+          style={{width: 20, height: 20}}
+          source={message}
+          marginTop = {9}
+          marginLeft = {14}
+
+          color = {Colors.APP_BLUE_HEADING_COLOR}
+        />
+        </View>
+
+       </View>
        <View
        style={{
         flexDirection: 'row',
         width: '100%',
-        backgroundColor: "red"
       }}>
         
        <SKButton
@@ -131,7 +225,7 @@ const RoyaltyWallat = props => {
         borderColor={Colors.CLR_E77C7E}
         title={'PAYOUT HISTORY'}
         onPress = {() =>{
-            navigation.navigate('RoyaltyRefHistory')
+            navigation.navigate('RoyaltyPayout')
             }}   
       />
       <Image
@@ -144,7 +238,6 @@ const RoyaltyWallat = props => {
           <SKButton
         marginTop={10}
         fontSize={18}
-        
         width="100%"
         fontWeight={'700'}
         backgroundColor={Colors.CLR_E77C7E}
@@ -153,10 +246,7 @@ const RoyaltyWallat = props => {
         onPress = {() =>{
             navigation.navigate('RoyaltyRefHistory')
             }}
-      />
-        
-        
-        
+      /> 
       </ScrollView >
     </View >
   );

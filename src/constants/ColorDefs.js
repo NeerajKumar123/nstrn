@@ -42,3 +42,7 @@ export const CLR_F7FAFF=  '#F7FAFF'
 export const CLR_D9272A=  '#D9272A'
 export const CLR_FFFFFF=  '#FFFFFF'
 export const CLR_393F45=  '#393F45'
+export const CLR_D1CFD7=  '#D1CFD7'
+
+
+
