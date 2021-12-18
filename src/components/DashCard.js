@@ -16,7 +16,6 @@ const arrow_dash = require('../../assets/tab/arrow_dash.png');
 
 const DashCard = props => {
   const {title, desc, status = undefined, onClick = () => {}, marginTop = 0, marginBotton = 0} = props;
-  console.log('props======>', props)
   return (
     <TouchableOpacity
       style={{

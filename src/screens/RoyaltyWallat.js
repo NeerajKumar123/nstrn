@@ -19,7 +19,7 @@ import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
-import {getUserProfileDetails, updateUserProfile} from '../apihelper/Api';
+import {refGetDetails} from '../apihelper/Api';
 const arrow_dash = require('../../assets/tab/arrow_dash.png');
 const mywallet = require('../../assets/tab/Vector.png');
 const message = require('../../assets/tab/message.png');
@@ -30,9 +30,24 @@ const share = require('../../assets/tab/share.png');
 
 const RoyaltyWallat = props => {
   const navigation = useNavigation();
-  const [fName, setFName] = useState('');
-  const [lName, setLName] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+ const [isLoading, setIsLoading] = useState(false);
+ const [details, setDetails] = useState()
+
+  useEffect(() => {
+    setIsLoading(true)
+    const {user_id} = global.onlineStatusData
+    const params = {User_Id:user_id}
+    refGetDetails(params, (res) =>{
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 200);
+      if(res?.status == 1){
+        console.log('res?.data?.[0]',res?.data?.[0])
+        setDetails(res?.data?.[0])
+      }
+    })
+  }, [])
+
 
   return (
     <View
@@ -72,7 +87,7 @@ const RoyaltyWallat = props => {
               marginLeft: 25,
               marginTop: 16,
             }}>
-            Welcome, Japjot.
+           {`$ ${details?.user_name}`}
           </Text>
           <Text
             style={{
@@ -122,7 +137,7 @@ const RoyaltyWallat = props => {
               textAlign: 'center',
               fontWeight: '700',
             }}>
-            $ 55.00
+            {`$ ${details?.wallet_amount}`}
           </Text>
         </View>
         <Heading
@@ -158,7 +173,7 @@ const RoyaltyWallat = props => {
               textAlign: 'center',
               fontWeight: '700',
             }}>
-            $595.00
+            {`$ ${details?.cumulative_earnings}`}
           </Text>
         </View>
         <View
@@ -185,7 +200,7 @@ const RoyaltyWallat = props => {
               textAlign: 'center',
               fontWeight: '700',
             }}>
-            JAPJOT50
+             {`$ ${details?.referral_code}`}
           </Text>
           <View style={{alignItems: 'center', flexDirection: 'row'}}>
             <Image
