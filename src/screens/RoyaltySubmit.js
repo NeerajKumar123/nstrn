@@ -51,8 +51,8 @@ const RoyaltySignup = props => {
       const checkFormValidations = () => {
         let isValidForm = true;
         const isBankValid = bank?.institution_id > 0;
-        const isAccValid = accountNo.length;
-        const isBranchValid = branchNo.length == 5;
+        const isAccValid = accountNo?.length;
+        const isBranchValid = branchNo?.length == 5;
     
         if (!isBankValid) {
           isValidForm = false;

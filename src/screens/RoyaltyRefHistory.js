@@ -23,57 +23,18 @@ import {getRefHistory} from '../apihelper/Api';
 
 import RoyaltyRefCard from '../components/RoyaltyRefCard';
 
-const DummyArray = [
-  {
-    username: 'neeshu',
-    MypaymentMode: 'online',
-    Myamount: '$5',
-    MyDate: 'dec 1',
-  },
-  {
-    username: 'neeshu',
-    MypaymentMode: 'online',
-    Myamount: '$5',
-    MyDate: 'dec 1',
-  },
-  {
-    username: 'neeshu',
-    MypaymentMode: 'online',
-    Myamount: '$5',
-    MyDate: 'dec 1',
-  },
-  {
-    username: 'neeshu',
-    MypaymentMode: 'online',
-    Myamount: '$5',
-    MyDate: 'dec 1',
-  },
-  {
-    username: 'neeshu',
-    MypaymentMode: 'online',
-    Myamount: '$5',
-    MyDate: 'dec 1',
-  },
-  {
-    username: 'neeshu',
-    MypaymentMode: 'online',
-    Myamount: '$5',
-    MyDate: 'dec 1',
-  },
-  {
-    username: 'neeshu',
-    MypaymentMode: 'online',
-    Myamount: '$5',
-    MyDate: 'dec 1',
-  },
-];
-const RoyaltyRefHistory = () => {
+const RoyaltyRefHistory = (props) => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [hostoryData, setHostoryData] = useState();
+  const [msg, setMsg] = useState();
 
   useEffect(() => {
-    const params = {Referral_Code:'REFCODE'}
+    const {referral_code} = props.route.params;
+    console.log('referral_code',referral_code)
+    // const params = {Referral_Code:referral_code}
+    const params = {Referral_Code:'Rah51727'}
+    console.log('params',params)
     setIsLoading(true);
     getRefHistory(params, res => {
       setTimeout(() => {
@@ -82,6 +43,7 @@ const RoyaltyRefHistory = () => {
       console.log('res===>', res);
       if (res?.status == 1) {
         setHostoryData(res?.data);
+        setMsg(res?.message)
       }
     });
   }, []);
@@ -93,9 +55,10 @@ const RoyaltyRefHistory = () => {
         alignItems: 'center',
         backgroundColor: 'white',
         width: '100%',
+        height:'100%'
       }}>
       <AppHeader navigation={navigation} />
-      {isLoading && <SKLoader/>}
+      {isLoading && <SKLoader />}
       <View
         style={{
           paddingHorizontal: 16,
@@ -109,38 +72,78 @@ const RoyaltyRefHistory = () => {
             fontSize: 18,
             fontWeight: '700',
             color: Colors.APP_RED_SUBHEADING_COLOR,
-
             width: '100%',
           }}>
           MY REFERRAL HISTORY
         </Text>
-
+        {hostoryData?.length < 1 && msg &&
+        <Text
+        style={{
+          fontSize: 18,
+          fontWeight: '700',
+          color: Colors.APP_RED_SUBHEADING_COLOR,
+          width: '100%',
+        }}>
+        {msg}
+      </Text>
+        }
+        {hostoryData && 
         <FlatList
-          style={{
-            width: '100%',
-            marginTop: 40,
-          }}
-          data={hostoryData}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                width: '100%',
-                height: 1,
-                backgroundColor: Colors.CLR_D1CFD7,
-              }}
-            />
-          )}
-          renderItem={({item}) => (
-            <RoyaltyRefCard
-              name={item.username}
-              payment={item.MypaymentMode}
-              amount={item.Myamount}
-              Date={item.MyDate}
-            />
-          )}
-        />
+        style={{
+          width: '100%',
+          marginTop: 40,
+          fontSize: 13,
+          fontWeight: '400',
+          height:'100%'
+        }}
+        data={hostoryData}
+        ListHeaderComponent={() => 
+          (<Header/>)
+        }
+        ItemSeparatorComponent={() => (
+          <View
+            style={{
+              width: '100%',
+              height: 1,
+              backgroundColor: Colors.CLR_D1CFD7,
+            }}
+          />
+        )}
+        renderItem={({item}) => (
+          <RoyaltyRefCard
+            name = {item?.user_name}
+            date={item?.added_on}
+            amount={item?.amount}
+            module = {item?.module_name}
+          />
+        )}
+      />
+        }
       </View>
     </View>
   );
 };
 export default RoyaltyRefHistory;
+
+const Header = props => {
+
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 4,
+        alignItems: 'center',
+        width : "100%",
+        height: 36,
+        borderBottomColor:Colors.LIGHTGRAY,
+        borderBottomWidth:3
+      }}
+      >
+      <Text style={{color:Colors.CLR_232326, textAlign:'left',fontSize: 13,fontWeight:"500", opacity:.9, flex:1}}>Name</Text>
+      <Text style={{color:Colors.CLR_232326,textAlign:'center',fontSize: 13,fontWeight:"500",opacity:.9,marginRight:2,flex:1}}>Date</Text>
+      <Text style={{color:Colors.CLR_232326,textAlign:'right',fontSize: 13,fontWeight:"500",opacity:.9,marginRight:2,flex:1}}>Module</Text>
+      <Text style={{color:Colors.CLR_232326,textAlign:'right',fontSize: 13,fontWeight:"500",opacity:.9,marginRight:2,flex:.7}}>Amount</Text>
+    </View>
+  );
+};

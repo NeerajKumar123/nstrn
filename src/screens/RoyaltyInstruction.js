@@ -81,16 +81,16 @@ const RoyaltyInstruction = props => {
         Our loyalty program is no different.
         </Text>
       <Text style={styles.blueText}>
-      1) Sign up for our Loyalty Program
+      1) Sign up for our Loyalty Program.
       </Text>
       <Text style={styles.blueText}>
-      2) Refer a friend and give them your unique referral code
+      2) Refer a friend and give them your unique referral code.
       </Text>
       <Text style={styles.blueText}>
-      {`3) Your friend will save $${onlineFriendSave} at checkout of their Online Return, and you will receive $${onlineYouSave}`}
+      {`3) Your friend will save $${onlineFriendSave} at checkout of their Online Return, and you will receive $${onlineYouSave}.`}
       </Text>
       <Text style={styles.blueText}>
-      {`4) If you refer a friend for incorporation, your friend will save $${incorpFriendSave}, and you will receive $${incorpYouSave}`}
+      {`4) If you refer a friend for incorporation, your friend will save $${incorpFriendSave}, and you will receive $${incorpYouSave}.`}
       </Text>
       <SKButton
           fontStyle = 'italic'

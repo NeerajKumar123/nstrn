@@ -3,8 +3,8 @@ import {Eversign_Api_Access_Key, Eversign_Bussiness_Id} from '../constants/Stati
 
 // test commit
 
-// export const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
-export const BaseURL = 'http://app.sukhtax.com/services.asmx'
+export const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
+// export const BaseURL = 'http://app.sukhtax.com/services.asmx'
 export const BaseURLRoyalty = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
 
 
@@ -504,3 +504,12 @@ export const getPayoutHistory = (params,callback) => {
 };
 
 
+export const aplyRefCodeOnline = (params,callback) => {
+  const path = `${BaseURLRoyalty}/Referral_Apply_Referral_Code_Online`
+  API.makePostRequest(path , params, callback);
+};
+
+export const aplyRefCodeIncorp = (params,callback) => {
+  const path = `${BaseURLRoyalty}/Referral_Apply_Referral_Code_Incorporation`
+  API.makePostRequest(path , params, callback);
+};

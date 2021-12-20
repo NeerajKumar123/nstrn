@@ -5,8 +5,9 @@ import * as CustomFonts from '../constants/FontsDefs'
 const RoyaltyRefCard = props => {
   const {
     name = 'JAMIE SMITH',
-    payment = "online",
     amount      = "$5",
+    date = 'sdsdsd',
+    module = 'module'
   } = props;
   return (
     <View
@@ -18,10 +19,10 @@ const RoyaltyRefCard = props => {
         width : "100%"
       }}
       >
-      <Text style={{color:'black', textAlign:'left'}}>{name}</Text>
-      <Text style={{color:'black',textAlign:'center'}}>{payment}</Text>
-      <Text style={{color:'black',textAlign:'center'}}>{amount}</Text>
-     
+      <Text style={{color:Colors.CLR_232326, textAlign:'left',fontSize: 13,fontWeight:"400", opacity:.9,flex:1}}>{name}</Text>
+      <Text style={{color:Colors.CLR_232326,textAlign:'center',fontSize: 13,fontWeight:"400",opacity:.9,marginRight:2,flex:1}}>{date}</Text>
+      <Text style={{color:Colors.CLR_232326,textAlign:'right',fontSize: 13,fontWeight:"400",opacity:.9,marginRight:2,flex:1}}>{module}</Text>
+      <Text style={{color:Colors.CLR_232326,textAlign:'right',fontSize: 13,fontWeight:"400",opacity:.9,marginRight:2,flex:.7}}>{`$ ${amount}`}</Text>
     </View>
   );
 };

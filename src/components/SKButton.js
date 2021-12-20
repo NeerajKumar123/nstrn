@@ -34,6 +34,7 @@ const SKButton = props => {
     leftImage,
     rightImage,
     marginTop = 0,
+    marginLeft = 0,
     width = '100%',
     fontFamily = CustomFonts.OpenSansRegular,
     rightIconName = undefined,
@@ -59,6 +60,7 @@ const SKButton = props => {
         borderWidth: borderWidth,
         marginTop,
         width: width,
+        marginLeft
       }}
       onPress={() => {
         !disable && props.onPress && props.onPress();

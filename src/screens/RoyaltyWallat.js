@@ -8,6 +8,7 @@ import {
   Keyboard,
   Text,
   DeviceEventEmitter,
+  Share
 } from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
@@ -48,6 +49,30 @@ const RoyaltyWallat = props => {
     })
   }, [])
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:'Hello from Sukhtax',
+        url:'urltobeshared',
+        // title:'title',
+        // dialogTitle:'dialogTitleonlyforandroid',
+        // tintColor:'tintColoronlyios',
+        // subject:'onlyforiosmails',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
 
   return (
     <View
@@ -72,44 +97,38 @@ const RoyaltyWallat = props => {
         />
         <View
           style={{
-            height: 101,
             backgroundColor: Colors.APP_BLUE_HEADING_COLOR,
             marginTop: 12,
             borderRadius: 8,
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: 'column',
+            padding:10
           }}>
+             <Text
+            style={{
+              color: 'white',
+              fontSize: 18,
+              fontWeight: '400',
+            }}>
+            Welcome,
+          </Text>
           <Text
             style={{
               color: 'white',
               fontSize: 23,
               fontWeight: '700',
-              marginLeft: 25,
-              marginTop: 16,
+              marginTop: 12,
             }}>
-           {`$ ${details?.user_name}`}
-          </Text>
-          <Text
-            style={{
-              color: 'white',
-              fontSize: 18,
-              textAlign: 'right',
-              fontWeight: '400',
-              marginLeft: 100,
-              marginBottom: 30,
-              marginTop: 16,
-            }}>
-            Today
+           {`${details?.user_name}`}
           </Text>
         </View>
         <View
           style={{
-            height: 116,
             backgroundColor: Colors.CLR_FFFFFF,
             marginTop: 20,
-            padding: 10,
-            borderRadius: 26,
-
+            padding: 8,
+            borderRadius: 8,
+            borderColor:'skyblue',
+            borderWidth:.3,
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -118,7 +137,6 @@ const RoyaltyWallat = props => {
               color: Colors.APP_BLUE_HEADING_COLOR,
               fontSize: 21,
               fontWeight: '700',
-              height: 25,
             }}>
             My Wallet
           </Text>
@@ -133,26 +151,29 @@ const RoyaltyWallat = props => {
             style={{
               color: Colors.APP_BLUE_HEADING_COLOR,
               fontSize: 29,
-              marginTop: 16,
+              marginTop: 6,
               textAlign: 'center',
               fontWeight: '700',
             }}>
-            {`$ ${details?.wallet_amount}`}
+            {`$${details?.wallet_amount || 0}`}
           </Text>
         </View>
+        {details?.next_payout && 
         <Heading
-          value="Next Payout : Friday , Dec 10 2021"
-          marginTop={26}
-          color={Colors.APP_BLUE_HEADING_COLOR}
-          fontSize={18}
-        />
+        value={`Next Payout :${details?.next_payout}`}
+        marginTop={10}
+        color={Colors.APP_BLUE_HEADING_COLOR}
+        fontSize={18}
+      />
+        }
         <View
           style={{
-            height: 93,
             backgroundColor: Colors.CLR_F7FAFF,
             marginTop: 13,
             padding: 10,
             borderRadius: 8,
+            borderWidth:.5,
+            borderColor:'pink',
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -161,7 +182,6 @@ const RoyaltyWallat = props => {
               color: Colors.APP_BLUE_HEADING_COLOR,
               fontSize: 17,
               fontWeight: '700',
-              marginTop: 18,
             }}>
             TOTAL CUMULATIVE EARNINGS
           </Text>
@@ -173,12 +193,17 @@ const RoyaltyWallat = props => {
               textAlign: 'center',
               fontWeight: '700',
             }}>
-            {`$ ${details?.cumulative_earnings}`}
+            {`$${details?.cumulative_earnings || 0}`}
           </Text>
         </View>
         <View
           style={{
-            height: 116,
+            marginTop:20,
+            borderRadius: 8,
+            borderColor:'skyblue',
+            borderWidth:.3,
+            padding:10,
+            alignItems: 'center',
             backgroundColor: Colors.CLR_FFFFFF,
             alignItems: 'center',
             justifyContent: 'center',
@@ -200,33 +225,24 @@ const RoyaltyWallat = props => {
               textAlign: 'center',
               fontWeight: '700',
             }}>
-             {`$ ${details?.referral_code}`}
+             {`${details?.referral_code}`}
           </Text>
-          <View style={{alignItems: 'center', flexDirection: 'row'}}>
-            <Image
+
+          <TouchableOpacity
+          style = {{position:'absolute', right:10, top:10}}
+          onPress={() =>{
+            onShare()
+          }}
+          >
+          <Image
               resizeMode="contain"
-              style={{width: 20, height: 20}}
-              source={watsup}
-              marginTop={9}
-              color={Colors.APP_BLUE_HEADING_COLOR}
-            />
-            <Image
-              resizeMode="contain"
-              style={{width: 20, height: 20}}
+              style={{width: 15, height: 15}}
               source={share}
-              marginTop={9}
-              marginLeft={14}
               color={Colors.APP_BLUE_HEADING_COLOR}
             />
-            <Image
-              resizeMode="contain"
-              style={{width: 20, height: 20}}
-              source={message}
-              marginTop={9}
-              marginLeft={14}
-              color={Colors.APP_BLUE_HEADING_COLOR}
-            />
-          </View>
+          </TouchableOpacity>
+          
+          
         </View>
         <SKButton
             fontSize={18}
@@ -252,7 +268,7 @@ const RoyaltyWallat = props => {
           borderColor={Colors.CLR_E77C7E}
           title={'MY REFERRAL HISTORY'}
           onPress={() => {
-            navigation.navigate('RoyaltyRefHistory');
+            navigation.navigate('RoyaltyRefHistory', {referral_code:details?.referral_code});
           }}
         />
       </ScrollView>
