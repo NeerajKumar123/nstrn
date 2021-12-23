@@ -263,6 +263,7 @@ const PaymentFinalCard = props => {
             flexDirection: 'row',
             alignItems: 'center',
             marginVertical: 20,
+            marginTop:40
           }}>
           <TextInput
             style={{
@@ -273,8 +274,8 @@ const PaymentFinalCard = props => {
               flex: 1,
               color: Colors.BLACK,
               backgroundColor: Colors.WHITE,
-              paddingHorizontal: 20,
-              borderRadius: 8,
+              borderBottomWidth:1,
+              borderBottomColor:Colors.GREY
             }}
             textAlign={'left'}
             underlineColorAndroid="transparent"
@@ -313,6 +314,7 @@ const PaymentFinalCard = props => {
               width="25%"
               marginLeft={20}
               fontWeight={'normal'}
+              borderColor = {Colors.WHITE}
               backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
               title={'APPLY'}
               onPress={() => {
@@ -358,6 +360,7 @@ const PaymentFinalCard = props => {
           </Text>
         </View>
       )}
+      
       <SKButton
         fontSize={16}
         marginTop={30}
@@ -365,7 +368,7 @@ const PaymentFinalCard = props => {
         fontWeight={'normal'}
         backgroundColor={Colors.PRIMARY_FILL}
         borderColor={Colors.PRIMARY_BORDER}
-        title={'PAY NOW'}
+        title={'PAY SECURELY'}
         onPress={() => {
           const nextPageParams = {
             payment_required: totalAmount,
@@ -844,12 +847,12 @@ const TaxFilingStatusCard = props => {
             marginTop: 18,
           }}>
           <SKButton
-            fontSize={16}
-            width="48%"
-            fontWeight={'normal'}
-            backgroundColor={Colors.SECONDARY_FILL}
+            fontSize={18}
+            fontWeight = '600'
+            width="100%"
+            backgroundColor={Colors.PRIMARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'DETAILS'}
+            title={'CHECKOUT'}
             onPress={() => {
               const {user_id, tax_file_id} = global.onlineStatusData;
               const params = {
@@ -868,7 +871,7 @@ const TaxFilingStatusCard = props => {
               });
             }}
           />
-          <SKButton
+          {/* <SKButton
             fontSize={16}
             width="48%"
             fontWeight={'normal'}
@@ -882,7 +885,7 @@ const TaxFilingStatusCard = props => {
               };
               navigation.navigate('OnlinePaymentScreen', {...nextPageParams});
             }}
-          />
+          /> */}
         </View>
       )}
       {tax_file_status_id == 12 && (
@@ -899,7 +902,7 @@ const TaxFilingStatusCard = props => {
             fontWeight={'normal'}
             backgroundColor={Colors.SECONDARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'DETAILS'}
+            title={'PAY SECURELY'}
             onPress={() => {
               const {user_id, tax_file_id} = global.onlineStatusData;
               const params = {

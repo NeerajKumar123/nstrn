@@ -77,10 +77,12 @@ const RoyaltyPayoutHistory = () => {
         {hostoryData?.length < 1 && msg &&
         <Text
         style={{
-          fontSize: 18,
-          fontWeight: '700',
-          color: Colors.APP_RED_SUBHEADING_COLOR,
+          fontSize: 15,
+          marginTop:50,
+          fontWeight: '500',
+          color: Colors.GRAY,
           width: '100%',
+          fontStyle:'italic'
         }}>
         {msg}
       </Text>
@@ -96,7 +98,7 @@ const RoyaltyPayoutHistory = () => {
         }}
         data={hostoryData}
         ListHeaderComponent={() => 
-          (<Header/>)
+          (hostoryData?.length > 0 ? <Header/> : null)
         }
         ItemSeparatorComponent={() => (
           <View

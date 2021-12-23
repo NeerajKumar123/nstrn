@@ -31,16 +31,12 @@ const RoyaltyRefHistory = (props) => {
 
   useEffect(() => {
     const {referral_code} = props.route.params;
-    console.log('referral_code',referral_code)
-    // const params = {Referral_Code:referral_code}
-    const params = {Referral_Code:'Rah51727'}
-    console.log('params',params)
+    const params = {Referral_Code:referral_code}
     setIsLoading(true);
     getRefHistory(params, res => {
       setTimeout(() => {
         setIsLoading(false);
       }, 200);
-      console.log('res===>', res);
       if (res?.status == 1) {
         setHostoryData(res?.data);
         setMsg(res?.message)
@@ -77,17 +73,19 @@ const RoyaltyRefHistory = (props) => {
           MY REFERRAL HISTORY
         </Text>
         {hostoryData?.length < 1 && msg &&
-        <Text
+           <Text
         style={{
-          fontSize: 18,
-          fontWeight: '700',
-          color: Colors.APP_RED_SUBHEADING_COLOR,
+          marginTop:50,
+          fontSize: 15,
+          fontWeight: '500',
+          color: Colors.GRAY,
           width: '100%',
+          fontStyle:'italic'
         }}>
         {msg}
-      </Text>
+      </Text>       
         }
-        {hostoryData && 
+        {hostoryData?.length > 0 && 
         <FlatList
         style={{
           width: '100%',
@@ -98,7 +96,7 @@ const RoyaltyRefHistory = (props) => {
         }}
         data={hostoryData}
         ListHeaderComponent={() => 
-          (<Header/>)
+          (hostoryData?.length > 0 ? <Header/> : null)
         }
         ItemSeparatorComponent={() => (
           <View

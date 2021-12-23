@@ -37,6 +37,7 @@ const Dashboard = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [taxFilingFee, setTaxFilingFee] = useState(49.99);
   const [userFullName, setUserFullName] = useState('');
+  const [refCode, setRefCode] = useState();
   const [lastChangedDate, setLastChangedDate] = useState();
   const [lastChangedModule, setLastChangedModule] = useState();
   const [lastChangedStatus, setLastChangedStatus] = useState();
@@ -73,6 +74,7 @@ const Dashboard = props => {
             const fName = user?.firstname ?? '';
             const lName = user?.lastname ?? '';
             setUserFullName(fName + ' ' + lName);
+            setRefCode(user?.referral_code)
             setLastChangedDate(user?.change_date ?? undefined);
             setLastChangedModule(user?.Module_changed ?? undefined);
             setLastChangedStatus(user?.change_name ?? undefined);
@@ -158,7 +160,11 @@ const Dashboard = props => {
         craMoveToPage();
         break;
         case 7:
-        navigation.navigate('RoyaltyInstruction');
+        if(refCode?.length > 0){
+          navigation.navigate('RoyaltyWallat');
+        }else{
+          navigation.navigate('RoyaltyInstruction');
+        }
         break;
       default:
         break;
@@ -289,7 +295,7 @@ const Dashboard = props => {
         />
          <RoyaltyDashCard
           title={'SUKH TAX LOYALTY PROGRAM'}
-          desc={`ENROLL TODAY !\nTo Get Paid Instantly`}
+          desc={refCode?.length ? 'Check your wallet balance' : `ENROLL TODAY !\nTo Get Paid Instantly`}
           marginTop={10}
           onClick={() => {
             navigateToScreen({id:7});

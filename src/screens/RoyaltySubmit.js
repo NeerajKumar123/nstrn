@@ -108,7 +108,7 @@ const RoyaltySignup = props => {
             marginTop={5}
             color={Colors.CLR_5F5F94}
             fontWeight={"400"}
-            value="We just need your Direct Deposit information for payout, we have the rest of your information. :"
+            value="We just need your direct deposit information for payout, we have the rest of your information."
           />
            <TouchableInput
               leftAccImage={CustomFonts.Bank}
@@ -207,10 +207,10 @@ const SKCheckbox = props => {
       <Icon
         name={isChecked ? 'check-box-outline' : 'checkbox-blank-outline'}
         size = {size}
-        color={Colors.BLUE}
+        color={Colors.APP_BLUE_HEADING_COLOR}
       />
       <Text style={{ color: Colors.BLACK, marginLeft: 10, flex: 1, fontSize: 15 }}>
-        I agree to the terms and conditions as enclosed.here
+        I agree to the terms and conditions as enclosed here.
       </Text>
 
     </TouchableOpacity>

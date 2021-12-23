@@ -98,6 +98,7 @@ const IncorpPaymentDetails = props => {
             flexDirection: 'row',
             alignItems: 'center',
             marginVertical: 20,
+            marginTop:40
           }}>
           <TextInput
             style={{
@@ -108,8 +109,8 @@ const IncorpPaymentDetails = props => {
               flex: 1,
               color: Colors.BLACK,
               backgroundColor: Colors.WHITE,
-              paddingHorizontal: 20,
-              borderRadius: 8,
+              borderBottomWidth:1,
+              borderBottomColor:Colors.GREY
             }}
             textAlign={'left'}
             underlineColorAndroid="transparent"
@@ -147,6 +148,7 @@ const IncorpPaymentDetails = props => {
               width="25%"
               marginLeft={20}
               fontWeight={'normal'}
+              borderColor = {Colors.WHITE}
               backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
               title={'APPLY'}
               onPress={() => {
