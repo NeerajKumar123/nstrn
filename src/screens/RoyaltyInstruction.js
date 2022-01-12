@@ -1,4 +1,3 @@
-import React from 'react';
 import {TouchableOpacity, View, Image,Text,Button,StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
@@ -6,9 +5,39 @@ import AppHeader from '../components/AppHeader';
 import SKButton from '../components/SKButton';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
+import {getRefrralPrice} from '../apihelper/Api'
+import React, {useState,useEffect} from 'react';
 
 const RoyaltyInstruction = props => {
   const navigation = useNavigation();
+  useEffect(() => {
+    getRefrralPrice((priceListRes)=>{
+      console.log('res',JSON.stringify(priceListRes))
+      if (priceListRes?.status == 1) {
+        let onlineFriendSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 1,
+        ); 
+        console.log('onlineFriendSaves======>',onlineFriendSave)
+        const onlineFriendSave = onlineFriendSave[0];
+        let onlineYouSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 2,
+        );
+        const onlineYouSave = onlineYouSave[0];
+          console.log('onlineYouSave======>',onlineYouSave )
+        let incorpFriendSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 3,
+        );
+        const incorpFriendSave = incorpFriendSave[0];
+
+        let incorpYouSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 4,
+        );
+        const incorpYouSave = incorpYouSave[0];
+        console.log('incorpYouSave',onlineFriendSave,onlineYouSave,incorpFriendSave,incorpYouSave)
+      }
+
+    })
+  },  [])
   return (
     <View
       style={{

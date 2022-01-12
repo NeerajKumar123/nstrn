@@ -1,19 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {View, TextInput, Image, TouchableOpacity} from 'react-native';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const SKInput = props => {
-  const {value, onFocused,isSecurePass,onRightPressed} = props;
+  const {value, onFocused, isSecurePass, onRightPressed} = props;
   const [initialValue, setInitialValue] = useState(value);
-  const [isSecure, setIsSecure] = useState(isSecurePass)
+  const [isSecure, setIsSecure] = useState(isSecurePass);
   useEffect(() => {
     setInitialValue(value);
   }, [value]);
@@ -21,8 +15,8 @@ const SKInput = props => {
     setIsSecure(isSecurePass);
   }, [isSecurePass]);
   const {
-    leftAccImage ,
-    rightAccImage ,
+    leftAccImage,
+    rightAccImage,
     marginTop = 15,
     marginBottom = 10,
     height,
@@ -32,17 +26,17 @@ const SKInput = props => {
     multiline = false,
     keyboardType = 'default',
     autoCapitalize = 'sentences',
-    returnKeyType ,
+    returnKeyType,
     blurOnSubmit,
-    editable = true
+    editable = true,
   } = props;
-  const isLeftLocalPNG = leftAccImage && typeof leftAccImage == 'number';
-  const isRightLocalPNG = rightAccImage && typeof rightAccImage == 'number';
+  const isLeftLocalPNG = leftAccImage && typeof leftAccImage === 'number';
+  const isRightLocalPNG = rightAccImage && typeof rightAccImage === 'number';
   return (
     <View
       style={{
         width: '100%',
-        height: height ? height + 2 :  57,
+        height: height ? height + 2 : 57,
         padding: 3,
         paddingHorizontal: 20,
         borderColor: props.borderColor ? props.borderColor : Colors.GRAY,
@@ -60,7 +54,7 @@ const SKInput = props => {
         },
         shadowRadius: 3,
         shadowOpacity: 0.8,
-        marginTop : marginTop,
+        marginTop: marginTop,
         marginBottom,
       }}>
       {leftAccImage && isLeftLocalPNG && (
@@ -83,43 +77,42 @@ const SKInput = props => {
         />
       )}
       <TextInput
-        editable = {editable}
+        editable={editable}
         style={{
           fontSize: 17,
           fontFamily: CustomFonts.OpenSansRegular,
           fontWeight: props.fontSize ? props.fontSize : '400',
-          height: height ? height :  56,
+          height: height ? height : 56,
           flex: 1,
-          color:editable == false ? Colors.CLR_9B9EA1 : Colors.BLACK,
+          color: editable === false ? Colors.CLR_9B9EA1 : Colors.BLACK,
           backgroundColor: props.backgroundColor
             ? props.backgroundColor
-            : Colors.LIGHTGRAY
+            : Colors.LIGHTGRAY,
         }}
         textAlign={props.textAlign ? props.textAlign : 'left'}
         underlineColorAndroid="transparent"
         value={initialValue}
         keyboardType={keyboardType}
         multiline={multiline}
-        secureTextEntry = {isSecure}
+        secureTextEntry={isSecure}
         autoCapitalize={autoCapitalize}
         autoCompleteType="off"
         autoCorrect={false}
-        placeholderTextColor = {Colors.CLR_9B9EA1}
+        placeholderTextColor={Colors.CLR_9B9EA1}
         placeholder={placeholder}
         maxLength={maxLength}
-        returnKeyType = {returnKeyType}
-        blurOnSubmit = {blurOnSubmit}
+        returnKeyType={returnKeyType}
+        blurOnSubmit={blurOnSubmit}
         onFocus={() => {
           onFocused && onFocused();
         }}
-        onChangeText={value => {
-          setInitialValue(value);
-          props.onTextChange && props.onTextChange(value);
+        onChangeText={value1 => {
+          setInitialValue(value1);
+          props.onTextChange && props.onTextChange(value1);
         }}
-        onBlur = {() =>{
-        }}
+        onBlur={() => {}}
         onEndEditing={() => {
-          const finalValue  = initialValue ? initialValue.trim() : ''
+          const finalValue = initialValue ? initialValue.trim() : '';
           props.onEndEditing && props.onEndEditing(finalValue);
         }}
       />
@@ -130,7 +123,9 @@ const SKInput = props => {
             width: isChatInput ? 40 : 40,
             justifyContent: 'center',
             alignItems: isChatInput ? 'center' : 'flex-end',
-            backgroundColor: isChatInput ? Colors.APP_RED_SUBHEADING_COLOR : Colors.TRANS,
+            backgroundColor: isChatInput
+              ? Colors.APP_RED_SUBHEADING_COLOR
+              : Colors.TRANS,
             borderRadius: isChatInput ? 6 : 0,
           }}
           onPress={() => {
@@ -156,16 +151,3 @@ const SKInput = props => {
 };
 
 export default SKInput;
-
-const styles = StyleSheet.create({
-  textInputUnderLined: {
-    fontSize: 16,
-    height: 30,
-    fontSize: 16,
-    width: '60%',
-  },
-  lottie: {
-    width: 40,
-    height: 40,
-  },
-});

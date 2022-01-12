@@ -5,7 +5,7 @@ import {Eversign_Api_Access_Key, Eversign_Bussiness_Id} from '../constants/Stati
 
 // export const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
 export const BaseURL = 'http://app.sukhtax.com/services.asmx'
-
+export const BaseURLRoyalty = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
 
 
 // export const EversingSuccess  = 'http://sukhtax.newunlimitedhosting.21gtech.com/signcompleted.aspx'
@@ -477,22 +477,22 @@ export const createEvenrSignDoc = (params,callback) => {
 };
 
 export const getRefrralPrice = (callback) => {
-  const path = `${BaseURL}/Referral_Get_Referral_Price`
+  const path = `${BaseURLRoyalty}/Referral_Get_Referral_Price`
   API.makeGetRequest(path , callback);
 };
 
 export const refGetDetails= (params,callback) => {
-  const path = `${BaseURL}/Referral_Get_Details`
+  const path = `${BaseURLRoyalty}/Referral_Get_Details`
   API.makePostRequest(path , params, callback);
 };
 
 export const getRefHistory= (params,callback) => {
-  const path = `${BaseURL}/Referral_Get_Referral_History`
+  const path = `${BaseURLRoyalty}/Referral_Get_Referral_History`
   API.makePostRequest(path , params, callback);
 };
 
 export const getPayoutHistory = (params,callback) => {
-  const path = `${BaseURL}/Referral_Get_Payout_History`
+  const path = `${BaseURLRoyalty}/Referral_Get_Payout_History`
   API.makePostRequest(path , params, callback);
 };
 
