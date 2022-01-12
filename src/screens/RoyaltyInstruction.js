@@ -1,10 +1,16 @@
+<<<<<<< HEAD
+=======
+import React , {useEffect, useState} from 'react';
+>>>>>>> 86bb8ff0e8eade130f2f06a606ea2bb9830869b9
 import {TouchableOpacity, View, Image,Text,Button,StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import SKButton from '../components/SKButton';
+import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
+<<<<<<< HEAD
 import {getRefrralPrice} from '../apihelper/Api'
 import React, {useState,useEffect} from 'react';
 
@@ -28,16 +34,61 @@ const RoyaltyInstruction = props => {
           fee => fee.referral_price_id == 3,
         );
         const incorpFriendSave = incorpFriendSave[0];
+=======
+import {getRefrralPrice} from '../apihelper/Api';
+
+const RoyaltyInstruction = props => {
+  const navigation = useNavigation();
+  const [onlineFriendSave, setOnlineFriendSave] = useState()
+  const [onlineYouSave, setOnlineYouSave] = useState()
+  const [incorpFriendSave, setIncorpFriendSave] = useState()
+  const [incorpYouSave, setIncorpYouSave] = useState()
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true)
+    getRefrralPrice((priceListRes)=>{
+      setIsLoading(false)
+      if (priceListRes?.status == 1) {
+        let onlineFriendSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 1,
+        );
+        
+        let onlineYouSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 2,
+        );
+
+        let incorpFriendSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 3,
+        );
+>>>>>>> 86bb8ff0e8eade130f2f06a606ea2bb9830869b9
 
         let incorpYouSaves = priceListRes?.data?.filter(
           fee => fee.referral_price_id == 4,
         );
+<<<<<<< HEAD
         const incorpYouSave = incorpYouSave[0];
         console.log('incorpYouSave',onlineFriendSave,onlineYouSave,incorpFriendSave,incorpYouSave)
       }
 
     })
   },  [])
+=======
+        const f = onlineFriendSaves[0];
+        const s = onlineYouSaves[0];
+        const t = incorpFriendSaves[0];
+        const four = incorpYouSaves[0];
+
+        setOnlineFriendSave(f?.referral_price)
+        setOnlineYouSave(s?.referral_price)
+        setIncorpFriendSave(t?.referral_price)
+        setIncorpYouSave(four?.referral_price)
+      }
+
+    })
+  }, [])
+
+>>>>>>> 86bb8ff0e8eade130f2f06a606ea2bb9830869b9
   return (
     <View
       style={{
@@ -55,33 +106,35 @@ const RoyaltyInstruction = props => {
       paddingHorizontal:20,
       alignItems:"center",
       }}>
+        {isLoading && <SKLoader/>}
         <Heading value="Sukh Tax Loyalty Program" fontSize = {18} marginTop={26} color = {Colors.APP_RED_SUBHEADING_COLOR}  />
         <Text 
-        style={styles.blueText}>
+        style={styles.howitwork}>
         How does this work ?
         </Text> 
-        <Text 
-          style={styles.blueText}
-        >
+        <Text  style={styles.blueText}>
         Sukh Tax aims to make your experience as simple as possible.
         </Text> 
         <Text style={styles.blueText}>
         Our loyalty program is no different.
         </Text>
       <Text style={styles.blueText}>
-      1) Sign up for our Loyalty Program
+      1) Sign up for our Loyalty Program.
       </Text>
       <Text style={styles.blueText}>
-      2) Refer a friend and give them your unique referral code</Text>
+      2) Refer a friend and give them your unique referral code.
+      </Text>
       <Text style={styles.blueText}>
-      3) Your friend will save $5 at checkout of their Online Return, and you will receive $5</Text>
+      {`3) Your friend will save $${onlineFriendSave} at checkout of their Online Return, and you will receive $${onlineYouSave}.`}
+      </Text>
       <Text style={styles.blueText}>
-      4) If you refer a friend for incorporation, your friend will save $15, and you will receive $15</Text>
-
+      {`4) If you refer a friend for incorporation, your friend will save $${incorpFriendSave}, and you will receive $${incorpYouSave}.`}
+      </Text>
       <SKButton
+          fontStyle = 'italic'
           marginTop = {30}
           fontSize={16}
-          fontWeight={'normal'}
+          fontWeight={'500'}
           backgroundColor={Colors.CLR_EB0000}
           borderColor={Colors.PRIMARY_BORDER}
           title={'ENROLL NOW'}
@@ -98,6 +151,13 @@ export default RoyaltyInstruction;
 
 
 const styles = StyleSheet.create({
+  howitwork :{
+    fontSize:15,
+    color:Colors.APP_BLUE_HEADING_COLOR,
+    width:'100%',
+    fontWeight:'500',
+    marginTop:16
+  },
   blueText :{
     fontSize:17,
     color:Colors.APP_BLUE_HEADING_COLOR,

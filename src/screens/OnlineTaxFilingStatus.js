@@ -9,6 +9,7 @@ import {
   Platform,
   Linking,
   FlatList,
+  TextInput,
 } from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
@@ -18,6 +19,8 @@ import * as CustomFonts from '../constants/FontsDefs';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
+import Lottie from 'lottie-react-native';
+const loader = require('../../assets/loader.json');
 import {
   uploadDocumentBS64,
   finalizeOnlineProcess,
@@ -28,6 +31,7 @@ import {
   createEvenrSignDoc,
   EversingSuccess,
   EversingFailed,
+  aplyRefCodeOnline,
 } from '../apihelper/Api';
 import SKButton, {
   UploadDocButton,
@@ -48,6 +52,7 @@ const OnlineTaxFilingStatus = props => {
   const [uploadImageCount, setUploadImageCount] = useState(0);
   const [confirmDocs, setConfirmDocs] = useState();
   const isFocused = useIsFocused();
+
   const pageHeading = () => {
     let title = 'ONLINE TAX FILING';
     const {tax_file_status_id} = global.onlineStatusData;
@@ -194,7 +199,16 @@ const OnlineTaxFilingStatus = props => {
 };
 
 const PaymentFinalCard = props => {
-  const {details, navigation} = props;
+  const {
+    details,
+    navigation,
+    onCouponApplied = () => {},
+    isRefCodeApplied,
+    refCodeAppliedMsg = 'Referral Code Applied Successfully.',
+  } = props;
+  const [refCode, setRefCode] = useState();
+  const [isApplying, setIsApplying] = useState(false);
+
   const totalAmount =
     (details &&
       details.reduce(function (sum, obj) {
@@ -240,7 +254,113 @@ const PaymentFinalCard = props => {
           width: '100%',
         }}
       />
+
       <KeyValueView title="TOTAL" value={`$ ${totalAmount}`} />
+      {!isRefCodeApplied ? (
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 20,
+            marginTop:40
+          }}>
+          <TextInput
+            style={{
+              fontSize: 17,
+              fontFamily: CustomFonts.OpenSansRegular,
+              fontWeight: '700',
+              height: 45,
+              flex: 1,
+              color: Colors.BLACK,
+              backgroundColor: Colors.WHITE,
+              borderBottomWidth:1,
+              borderBottomColor:Colors.GREY
+            }}
+            textAlign={'left'}
+            underlineColorAndroid="transparent"
+            value={refCode}
+            keyboardType={'default'}
+            autoCompleteType="off"
+            autoCorrect={false}
+            placeholderTextColor={Colors.CLR_9B9EA1}
+            placeholder="Referral Code"
+            maxLength={20}
+            returnKeyType="done"
+            onFocus={() => {
+              console.log('TextInput');
+            }}
+            onChangeText={value => {
+              setRefCode(value);
+            }}
+            onBlur={() => {}}
+            onEndEditing={() => {
+              const finalValue = refCode?.trim() || '';
+              console.log('finalValue====>', finalValue);
+            }}
+          />
+          {isApplying && (
+            <Lottie
+              style={{width: 35, height: 35}}
+              autoPlay
+              loop
+              source={loader}
+            />
+          )}
+          {!isApplying && (
+            <SKButton
+              fontSize={14}
+              height={40}
+              width="25%"
+              marginLeft={20}
+              fontWeight={'normal'}
+              borderColor = {Colors.WHITE}
+              backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+              title={'APPLY'}
+              onPress={() => {
+                if (refCode?.length > 1) {
+                  setIsApplying(true);
+                  const {user_id, tax_file_id} = global.onlineStatusData;
+                  const params = {
+                    User_id: user_id,
+                    Tax_File_Id: tax_file_id,
+                    Referral_Code: refCode,
+                  };
+                  aplyRefCodeOnline(params, res => {
+                    setIsApplying(false);
+                    if (res?.status == 1) {
+                      onCouponApplied(res?.message);
+                    } else {
+                      Alert.alert('Sukhtax', res?.message);
+                    }
+                  });
+                } else {
+                  Alert.alert('Sukhtax', 'Please enter valid referral code.');
+                }
+              }}
+            />
+          )}
+        </View>
+      ) : (
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 20,
+          }}>
+          <Text
+            style={{
+              fontWeight: '500',
+              fontSize: 15,
+              fontStyle: 'italic',
+              color: Colors.APP_RED_SUBHEADING_COLOR,
+            }}>
+            {refCodeAppliedMsg}
+          </Text>
+        </View>
+      )}
+      
       <SKButton
         fontSize={16}
         marginTop={30}
@@ -248,7 +368,7 @@ const PaymentFinalCard = props => {
         fontWeight={'normal'}
         backgroundColor={Colors.PRIMARY_FILL}
         borderColor={Colors.PRIMARY_BORDER}
-        title={'PAY NOW'}
+        title={'PAY SECURELY'}
         onPress={() => {
           const nextPageParams = {
             payment_required: totalAmount,
@@ -300,6 +420,8 @@ const TaxFilingStatusCard = props => {
   } = props;
   const [paymentDetails, setPaymentDetails] = useState();
   const [isDetailsClicked, setIsDetailsClicked] = useState(false);
+  const [isRefCodeApplied, setIsRefCodeApplied] = useState(false);
+  const [refCodeAppliedMsg, setRefCodeAppliedMsg] = useState('');
   const {
     tax_file_status_name = 'File not Submitted',
     new_message_count = 0,
@@ -352,7 +474,7 @@ const TaxFilingStatusCard = props => {
     // console.log('document',document)
     let fields = [];
     document?.Fields?.forEach(element => {
-      console.log('element',element)
+      console.log('element', element);
       let field = {};
       field['type'] = element?.field_type;
       field['x'] = element?.x_coordinate;
@@ -360,7 +482,9 @@ const TaxFilingStatusCard = props => {
       field['width'] = element?.width;
       field['height'] = element?.height;
       field['page'] = element?.page;
-      field['identifier'] =  `${element.field_type}${element.x_coordinate}${element.x_coordinate}`;
+      field[
+        'identifier'
+      ] = `${element.field_type}${element.x_coordinate}${element.x_coordinate}`;
       field['required'] = 1;
       field['readonly'] = 0;
       field['signer'] = 1;
@@ -422,7 +546,31 @@ const TaxFilingStatusCard = props => {
     isDetailsClicked
   ) {
     return (
-      <PaymentFinalCard details={paymentDetails} navigation={navigation} />
+      <PaymentFinalCard
+        details={paymentDetails}
+        navigation={navigation}
+        isRefCodeApplied={isRefCodeApplied}
+        refCodeAppliedMsg={refCodeAppliedMsg}
+        onCouponApplied={msg => {
+          setIsRefCodeApplied(true);
+          setRefCodeAppliedMsg(msg);
+          const {user_id, tax_file_id} = global.onlineStatusData;
+          const params = {
+            User_Id: user_id,
+            Tax_File_Id: tax_file_id,
+            Additional_Payment: additional_payment_required,
+          };
+          updateLoadingStatus(true);
+          getOnlinePaymentDetails(params, paymentDetailsRes => {
+            updateLoadingStatus(false);
+            setIsDetailsClicked(true);
+            if (paymentDetailsRes?.status) {
+              setPaymentDetails(paymentDetailsRes?.data);
+              setIsDetailsClicked(true);
+            }
+          });
+        }}
+      />
     );
   }
   return (
@@ -603,57 +751,60 @@ const TaxFilingStatusCard = props => {
             marginTop: 18,
           }}>
           <FlatList
-            contentContainerStyle={{justifyContent: 'center', alignItems:'center'}}
+            contentContainerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
             style={{width: '100%', marginTop: 20}}
             data={confirmDocs}
             keyExtractor={(item, index) => index + '_key'}
             ItemSeparatorComponent={() => (
               <View style={{width: 20, backgroundColor: 'pink'}} />
             )}
-            renderItem={({item,index}) => (
+            renderItem={({item, index}) => (
               <SKButton
-              fontSize={16}
-              marginTop = {10}
-              width={'100%'}
-              iconsize = {20}
-              rightImage={
-                item?.eversign_document_hash?.length > 0
-                  ? CustomFonts.CheckRight
-                  : CustomFonts.ChevronRight
-              }
-              fontWeight={'normal'}
-              backgroundColor={Colors.CLR_7F7F9F}
-              borderColor={Colors.CLR_D3D3D9}
-              title={item?.title}
-              onPress={() => {
-                if (item?.eversign_document_hash?.length < 1) {
-                  const params = prepareParams(item);
-                  updateLoadingStatus(true);
-                  createEvenrSignDoc(params, res => {
-                    updateLoadingStatus(false);
-                    if (res?.signers && res?.signers?.length > 0) {
-                      const dochash = res?.document_hash;
-                      const signer = res?.signers?.[0];
-                      const signingUrl = signer.embedded_signing_url;
-                      navigation.navigate('SKWebPage', {
-                        pageUrl: signingUrl,
-                        noOfDocs: confirmDocs?.length,
-                        currentIndex: index + 1,
-                        doc: item,
-                        dochash: dochash,
-                      });
-                    } else {
-                      Alert.alert(
-                        'Sukhtax',
-                        'Something went wrong, Please try again.',
-                      );
-                    }
-                  });
-                } else {
-                  Alert.alert('Sukhtax', 'Document is already signed.');
+                fontSize={16}
+                marginTop={10}
+                width={'100%'}
+                iconsize={20}
+                rightImage={
+                  item?.eversign_document_hash?.length > 0
+                    ? CustomFonts.CheckRight
+                    : CustomFonts.ChevronRight
                 }
-              }}
-            />
+                fontWeight={'normal'}
+                backgroundColor={Colors.CLR_7F7F9F}
+                borderColor={Colors.CLR_D3D3D9}
+                title={item?.title}
+                onPress={() => {
+                  if (item?.eversign_document_hash?.length < 1) {
+                    const params = prepareParams(item);
+                    updateLoadingStatus(true);
+                    createEvenrSignDoc(params, res => {
+                      updateLoadingStatus(false);
+                      if (res?.signers && res?.signers?.length > 0) {
+                        const dochash = res?.document_hash;
+                        const signer = res?.signers?.[0];
+                        const signingUrl = signer.embedded_signing_url;
+                        navigation.navigate('SKWebPage', {
+                          pageUrl: signingUrl,
+                          noOfDocs: confirmDocs?.length,
+                          currentIndex: index + 1,
+                          doc: item,
+                          dochash: dochash,
+                        });
+                      } else {
+                        Alert.alert(
+                          'Sukhtax',
+                          'Something went wrong, Please try again.',
+                        );
+                      }
+                    });
+                  } else {
+                    Alert.alert('Sukhtax', 'Document is already signed.');
+                  }
+                }}
+              />
             )}
           />
         </View>
@@ -679,7 +830,10 @@ const TaxFilingStatusCard = props => {
                 }
               });
             } else {
-              Alert.alert('Sukhtax', 'Please sign all the required documents listed above.');
+              Alert.alert(
+                'Sukhtax',
+                'Please sign all the required documents listed above.',
+              );
             }
           }}
         />
@@ -693,12 +847,12 @@ const TaxFilingStatusCard = props => {
             marginTop: 18,
           }}>
           <SKButton
-            fontSize={16}
-            width="48%"
-            fontWeight={'normal'}
-            backgroundColor={Colors.SECONDARY_FILL}
+            fontSize={18}
+            fontWeight = '600'
+            width="100%"
+            backgroundColor={Colors.PRIMARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'DETAILS'}
+            title={'CHECKOUT'}
             onPress={() => {
               const {user_id, tax_file_id} = global.onlineStatusData;
               const params = {
@@ -717,7 +871,7 @@ const TaxFilingStatusCard = props => {
               });
             }}
           />
-          <SKButton
+          {/* <SKButton
             fontSize={16}
             width="48%"
             fontWeight={'normal'}
@@ -731,7 +885,7 @@ const TaxFilingStatusCard = props => {
               };
               navigation.navigate('OnlinePaymentScreen', {...nextPageParams});
             }}
-          />
+          /> */}
         </View>
       )}
       {tax_file_status_id == 12 && (
@@ -748,7 +902,7 @@ const TaxFilingStatusCard = props => {
             fontWeight={'normal'}
             backgroundColor={Colors.SECONDARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'DETAILS'}
+            title={'PAY SECURELY'}
             onPress={() => {
               const {user_id, tax_file_id} = global.onlineStatusData;
               const params = {

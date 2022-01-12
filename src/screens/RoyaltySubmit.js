@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
+import TouchableInput from '../components/TouchableInput';
+import SKModel from '../components/SKModel';
 import { useNavigation } from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
@@ -20,7 +22,7 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import { ST_REGEX } from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import { incorpGetIncorporatorDetails } from '../apihelper/Api';
+import { refRegister,getInstitutionList } from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
 
 import SignatureCapture from 'react-native-signature-capture';
@@ -28,67 +30,58 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const RoyaltySignup = props => {
   const navigation = useNavigation();
-  const pageParams = props.route.params;
-  const [details, setDetails] = useState();
-  const [iNSNUMBER, setiNSNUMBER] = useState();
-  const [mName, setMName] = useState();
-  const [lName, setLName] = useState();
-  const [SinName, setSinName] = useState('');
-
+  const [bank, setBank] = useState();
+  const [banks, setBanks] = useState();
+  const [accountNo, setAccountNo] = useState();
+  const [branchNo, setBranhcNo] = useState();
   const [isAuthChecked, setIsAuthChecked] = useState();
-
   const [isLoading, setIsLoading] = useState(false);
+  const [isBankVisible, setIsBankVisible] = useState(false);
 
   useEffect(() => {
-    if (pageParams) {
-      setIsLoading(true);
-      const { user_id, incorporation_id, incorporator_id } = pageParams;
-      const params = {
-        User_Id: user_id,
-        Incorporation_Id: incorporation_id,
-        Incorporator_Id: incorporator_id,
-      };
-      incorpGetIncorporatorDetails(params, detailsRes => {
+    setIsLoading(true)
+    getInstitutionList({}, instRes => {
+      setBanks(instRes?.data);
+      setTimeout(() => {
         setIsLoading(false);
-        if (detailsRes?.status == 1) {
-          const data = detailsRes?.data?.[0];
-          setDetails(data);
-          const {
-            first_name,
-            middle_name,
-            last_name,
-            sinName_name
-          } = data;
-          setiNSNUMBER(first_name);
-          setLName(last_name);
-          setMName(middle_name);
-          setSinName(sinName_name);
+      }, 300);
+    });
+      }, []);
+
+      const checkFormValidations = () => {
+        let isValidForm = true;
+        const isBankValid = bank?.institution_id > 0;
+        const isAccValid = accountNo?.length;
+        const isBranchValid = branchNo?.length == 5;
+    
+        if (!isBankValid) {
+          isValidForm = false;
+          Alert.alert('SukhTax', 'Please select valid Institution.');
+        } else if (!isAccValid) {
+          isValidForm = false;
+          Alert.alert('SukhTax', 'Please enter valid account number.');
+        } else if (!isBranchValid) {
+          isValidForm = false;
+          Alert.alert('SukhTax', 'Please enter valid branch code.');
+        }  else if (!isAuthChecked) {
+          isValidForm = false;
+          Alert.alert('SukhTax', 'Have you read terms and conditions if reviewed please accept');
+        }   
+        return isValidForm;
+      };
+    
+      const prepareParams = () => {
+        const {user_id} = global.onlineStatusData
+        const params = {
+          User_Id: user_id,
+          Institiution_Id:bank?.institution_id,
+          Account_Number: accountNo,
+          Branch_Number: branchNo
+        };
+        return params;
+      };
 
 
-        }
-      });
-    }
-  }, []);
-
-  const checkFormValidations = () => {
-    let isValidForm = true;
-    const isiNSNUMBERValid = Validator.isValidField(iNSNUMBER, ST_REGEX.FullName)
-    const isLNameValid = Validator.isValidField(lName, ST_REGEX.FullName)
-    const isMNameValid = true // Validator.isValidField(mName, ST_REGEX.LName);
-
-
-    if (!isiNSNUMBERValid) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid INSTUTION NUMBER');
-    } else if (!isMNameValid && 0) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid Middle Name');
-    } else if (!isLNameValid) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid Last Name');
-    }
-    return isValidForm;
-  };
   return (
     <View
       style={{
@@ -105,8 +98,6 @@ const RoyaltySignup = props => {
         style={{ flex: 1, width: '100%', paddingBottom: 10 }}
         keyboardVerticalOffset={0}>
         {isLoading && <SKLoader />}
-
-
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: 16
@@ -117,55 +108,42 @@ const RoyaltySignup = props => {
             marginTop={5}
             color={Colors.CLR_5F5F94}
             fontWeight={"400"}
-            value="We just need your Direct Deposit information for payout, we have the rest of your information. :"
+            value="We just need your direct deposit information for payout, we have the rest of your information."
           />
-          <SKInput
-            marginTop={22}
-            marginBottom={0}
-            maxLength={15}
-            fontWeight={'500'}
-            leftAccImage={CustomFonts.Email}
-            color={Colors.CLR_FFFFFF}
-            backgroundColor={Colors.CLR_FFFFFF}
-            value={iNSNUMBER}
-            placeholder="Email or phone number"
-            onEndEditing={value => {
-              setiNSNUMBER(value);
-            }}
-          />
-
-          <SKInput
-            marginBottom={2}
-            maxLength={15}
-            borderColor={Colors.CLR_0065FF}
-            backgroundColor={Colors.CLR_FFFFFF}
-            fontWeight={'500'}
-            value={mName}
-            keyboardType="number-pad"
-            placeholder="Password"
-            leftAccImage={CustomFonts.Lock}
-            color={Colors.CLR_393F45}
-            onEndEditing={value => {
-              setMName(value);
-            }}
-          />
-          <SKInput
-            marginBottom={2}
-            maxLength={15}
-            borderColor={Colors.CLR_0065FF}
-            value={lName}
-            autoCapitalize='none'
-            color={Colors.CLR_393F45}
-            fontWeight={'500'}
-            keyboardType="number-pad"
-            backgroundColor={Colors.CLR_FFFFFF}
-            placeholder="Password"
-            leftAccImage={CustomFonts.Lock}
-            onEndEditing={value => {
-              setLName(value);
-              console.log('value======>', value)
-            }}
-          />
+           <TouchableInput
+              leftAccImage={CustomFonts.Bank}
+              rightAccImage={CustomFonts.ChevronDown}
+              placeholder="Select Bank"
+              value={bank?.institution_name}
+              onClicked={() => {
+                setIsBankVisible(true);
+              }}
+            />
+            <SKInput
+              marginTop={10}
+              maxLength={30}
+              leftAccImage={CustomFonts.Number}
+              borderColor={Colors.CLR_0065FF}
+              value={accountNo}
+              keyboardType="number-pad"
+              placeholder="Enter Account Number"
+              onEndEditing={value => {
+                setAccountNo(value);
+              }}
+            />
+            <SKInput
+              marginTop={10}
+              marginBottom={0}
+              leftAccImage={CustomFonts.Number}
+              maxLength={30}
+              borderColor={Colors.CLR_0065FF}
+              value={branchNo}
+              keyboardType="number-pad"
+              placeholder="Enter Branch Number"
+              onEndEditing={value => {
+                setBranhcNo(value);
+              }}
+            />
           <SKCheckbox
             isChecked={isAuthChecked}
             onToggle={() => {
@@ -181,16 +159,41 @@ const RoyaltySignup = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'SUBMIT'}
             onPress={() => {
-              navigation.navigate('RoyaltyWallat')
+              if(checkFormValidations()){
+                setIsLoading(true)
+                const params = prepareParams()
+                refRegister(params, (res) =>{
+                  setIsLoading(false)
+                  console.log('refRegister res', res)
+                  if(res?.status == 1){
+                    navigation.navigate('RoyaltyWallat')
+                  }
+                })
+              }
             }}
           />
         </ScrollView>
+
+        {isBankVisible && banks  &&  (
+        <SKModel
+          title="Select"
+          data={banks}
+          keyLabel="institution_name"
+          onClose={() => {
+            setIsBankVisible(false);
+          }}
+          onSelect={value => {
+            setBank(value);
+            setIsBankVisible(false);
+          }}
+        />
+      )}
       </KeyboardAvoidingView>
     </View>
   );
 };
 const SKCheckbox = props => {
-  const { isChecked, onToggle } = props;
+  const { isChecked, onToggle, size = 25 } = props;
   return (
     <TouchableOpacity
       style={{
@@ -203,11 +206,11 @@ const SKCheckbox = props => {
       }}>
       <Icon
         name={isChecked ? 'check-box-outline' : 'checkbox-blank-outline'}
-        size={30}
-        color={Colors.BLUE}
+        size = {size}
+        color={Colors.APP_BLUE_HEADING_COLOR}
       />
       <Text style={{ color: Colors.BLACK, marginLeft: 10, flex: 1, fontSize: 15 }}>
-        I agree to the terms and conditions as enclosed.here
+        I agree to the terms and conditions as enclosed here.
       </Text>
 
     </TouchableOpacity>

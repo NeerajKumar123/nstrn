@@ -34,9 +34,11 @@ const SKButton = props => {
     leftImage,
     rightImage,
     marginTop = 0,
+    marginLeft = 0,
     width = '100%',
     fontFamily = CustomFonts.OpenSansRegular,
     rightIconName = undefined,
+    fontStyle = 'normal'
   } = props;
   const isLeftLocalPNG = leftImage && typeof leftImage == 'number';
   const isRightLocalPNG = rightImage && typeof rightImage == 'number';
@@ -58,6 +60,7 @@ const SKButton = props => {
         borderWidth: borderWidth,
         marginTop,
         width: width,
+        marginLeft
       }}
       onPress={() => {
         !disable && props.onPress && props.onPress();
@@ -96,6 +99,7 @@ const SKButton = props => {
               marginLeft: leftImage ? 10 : 0,
               marginRight: rightImage ? 10 : 0,
               fontFamily,
+              fontStyle
             }}>
             {title}
           </Text>

@@ -1,44 +1,78 @@
-import React, {useState, useEffect,useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  TouchableOpacity,
   View,
-  Alert,
-  ScrollView,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
   Image,
+  FlatList,
   DeviceEventEmitter,
-  Keyboard,
   Platform,
-  Animated
+  Alert,
+  Dimensions,
+  ScrollView,
+  Animated,
 } from 'react-native';
-import SKInput from '../components/SKInput';
-import SKButton, {Link} from '../components/SKButton';
-import Heading from '../components/Heading';
-import * as Colors from '../constants/ColorDefs';
-import {useNavigation} from '@react-navigation/native';
-import {login} from '../apihelper/Api';
-import * as SKTStorage from '../helpers/SKTStorage';
-import SKLoader from '../components/SKLoader';
-import * as CustomFonts from '../constants/FontsDefs';
-import AppHeader from '../components/AppHeader';
-const AnimTest = props => {
-  const navigation = useNavigation();
 
-  const [bgColor, setBgColor] = useState()
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
-  useEffect(() => {}, [])
- 
+const AnimTest = () => {
+  const [x, setx] = useState(new Animated.Value(0));
+  const [onRight, setonRight] = useState(false);
+  var color = x.interpolate({
+    inputRange: [0, SCREEN_WIDTH - 40, Number.MAX_VALUE],
+    outputRange: ['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)'],
+  });
+
+  const _onPress = () => {
+    setonRight(!onRight);
+    Animated.spring(x, {
+      toValue: onRight ? SCREEN_WIDTH - 40 : 0,
+    }).start();
+  };
   return (
-    <Animated.View
-      style={{
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        width: '100%',
-      }}>
-      <AppHeader navigation={navigation} />
-      
-    </Animated.View>
+    <View style={styles.container}>
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            _onPress();
+          }}>
+          <Text>Move</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <Animated.View
+          style={[styles.colorContainer, {backgroundColor: color}]}
+        />
+        <Animated.View style={[styles.movingBox, {left: x}]} />
+      </View>
+    </View>
   );
 };
 
 export default AnimTest;
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  button: {
+    padding: 20,
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  colorContainer: {
+    height: 40,
+    width: SCREEN_WIDTH,
+    borderWidth: 1,
+  },
+  movingBox: {
+    width: 40,
+    height: 40,
+    backgroundColor: 'red',
+  },
+});

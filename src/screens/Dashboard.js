@@ -2,12 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
-  Image,
-  FlatList,
-  DeviceEventEmitter,
-  Platform,
   Alert,
   Dimensions,
   ScrollView,
@@ -16,12 +11,9 @@ import {useNavigation} from '@react-navigation/native';
 import DashCard from '../components/DashCard';
 import RoyaltyDashCard from '../components/RoyaltyDashCard';
 import SKLoader from '../components/SKLoader';
-import {DashHeader} from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import {loadIntialData} from '../helpers/BaseUtility';
-import * as SKTStorage from '../helpers/SKTStorage';
 const {width} = Dimensions.get('window');
-import * as CustomFonts from '../constants/FontsDefs';
 import {useIsFocused} from '@react-navigation/native';
 import {
   getServicePriceList,
@@ -37,6 +29,7 @@ const Dashboard = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [taxFilingFee, setTaxFilingFee] = useState(49.99);
   const [userFullName, setUserFullName] = useState('');
+  const [refCode, setRefCode] = useState();
   const [lastChangedDate, setLastChangedDate] = useState();
   const [lastChangedModule, setLastChangedModule] = useState();
   const [lastChangedStatus, setLastChangedStatus] = useState();
@@ -55,10 +48,18 @@ const Dashboard = props => {
       setUserFullName(fName + ' ' + lName);
       setTimeout(() => {
         loadIntialData(res => {
-          setStatusOnline(global.onlineStatusData?.tax_file_status_name ?? undefined);
-          setStatusIncorp(global.incStatusData?.incorporation_status_name ?? undefined);
-          setStatusReqTaxDocs(global.taxDocsStatusData?.tax_docs_status_name ?? undefined);
-          setStatusCRA(global.craLattersData?.cra_letters_status_name ?? undefined);
+          setStatusOnline(
+            global.onlineStatusData?.tax_file_status_name ?? undefined,
+          );
+          setStatusIncorp(
+            global.incStatusData?.incorporation_status_name ?? undefined,
+          );
+          setStatusReqTaxDocs(
+            global.taxDocsStatusData?.tax_docs_status_name ?? undefined,
+          );
+          setStatusCRA(
+            global.craLattersData?.cra_letters_status_name ?? undefined,
+          );
           setTimeout(() => {
             setIsLoading(false);
           }, 100);
@@ -68,11 +69,12 @@ const Dashboard = props => {
       const {user_id = 0} = global?.userInfo ? global?.userInfo : {};
       if (user_id) {
         getUserProfileDetails({user_id: user_id}, userDetailsRes => {
-          if (userDetailsRes.status == 1) {
+          if (userDetailsRes.status === 1) {
             const user = userDetailsRes?.data?.[0];
             const fName = user?.firstname ?? '';
             const lName = user?.lastname ?? '';
             setUserFullName(fName + ' ' + lName);
+            setRefCode(user?.referral_code);
             setLastChangedDate(user?.change_date ?? undefined);
             setLastChangedModule(user?.Module_changed ?? undefined);
             setLastChangedStatus(user?.change_name ?? undefined);
@@ -84,10 +86,10 @@ const Dashboard = props => {
 
   useEffect(() => {
     getServicePriceList(priceListRes => {
-      console.log("priceListRes",priceListRes)
-      if (priceListRes?.status == 1) {
+      console.log('priceListRes', priceListRes);
+      if (priceListRes?.status === 1) {
         let onlineTaxFees = priceListRes?.data?.filter(
-          fee => fee.services_fee_id == 1,
+          fee => fee.services_fee_id === 1,
         );
         const feeObj = onlineTaxFees[0];
         setTaxFilingFee(feeObj?.service_fee);
@@ -97,7 +99,7 @@ const Dashboard = props => {
 
   useEffect(() => {
     getInvalidSIN(invalidSinRes => {
-      if (invalidSinRes?.status == 1) {
+      if (invalidSinRes?.status === 1) {
         let invalidSinList = invalidSinRes?.data;
         global.invalidSinList = invalidSinList;
       }
@@ -123,9 +125,9 @@ const Dashboard = props => {
             'Notification caused app to open from quit state:',
             remoteMessage.notification,
           );
-          setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
         }
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // this is new page of dashboard
@@ -157,14 +159,18 @@ const Dashboard = props => {
       case 6:
         craMoveToPage();
         break;
-        case 7:
-        navigation.navigate('RoyaltyInstruction');
+      case 7:
+        if (refCode?.length > 0 && false) {
+          navigation.navigate('RoyaltyWallat');
+        } else {
+          navigation.navigate('RoyaltyInstruction');
+        }
         break;
       default:
         break;
     }
   };
-  const onlineMoveToPage = props => {
+  const onlineMoveToPage = () => {
     const {
       years_selected = 0,
       identification_document_uploaded = 0,
@@ -268,7 +274,7 @@ const Dashboard = props => {
         height: '100%',
       }}>
       {isLoading && <SKLoader />}
-      <View style={{width:'100%', padding:16}}>
+      <View style={{width: '100%', padding: 16}}>
         <ProfileHeader
           username={userFullName}
           lastChangedDate={lastChangedDate}
@@ -277,22 +283,26 @@ const Dashboard = props => {
         />
       </View>
       <ScrollView
-        showsVerticalScrollIndicator = {false}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingHorizontal: 16, paddingBottom: 16}}>
         <DashCard
           title={'HOME'}
           desc={`STATUS\nPROFILE\nMY DOCUMENTS`}
           marginTop={10}
           onClick={() => {
-            navigateToScreen({id:1});
+            navigateToScreen({id: 1});
           }}
         />
-         <RoyaltyDashCard
+        <RoyaltyDashCard
           title={'SUKH TAX LOYALTY PROGRAM'}
-          desc={`ENROLL TODAY !\nTo Get Paid Instantly`}
+          desc={
+            refCode?.length
+              ? 'Check your wallet balance'
+              : `ENROLL TODAY !\nTo Get Paid Instantly`
+          }
           marginTop={10}
           onClick={() => {
-            navigateToScreen({id:7});
+            navigateToScreen({id: 7});
           }}
         />
         <DashCard
@@ -300,7 +310,7 @@ const Dashboard = props => {
           desc={`APPOINTMENTS\nBOOKINGS`}
           marginTop={16}
           onClick={() => {
-            navigateToScreen({id:2});
+            navigateToScreen({id: 2});
           }}
         />
         <DashCard
@@ -309,7 +319,7 @@ const Dashboard = props => {
           status={statusOnline}
           marginTop={10}
           onClick={() => {
-            navigateToScreen({id:3});
+            navigateToScreen({id: 3});
           }}
         />
         <DashCard
@@ -318,7 +328,7 @@ const Dashboard = props => {
           status={statusIncorp}
           marginTop={16}
           onClick={() => {
-            navigateToScreen({id:4});
+            navigateToScreen({id: 4});
           }}
         />
         <DashCard
@@ -327,7 +337,7 @@ const Dashboard = props => {
           status={statusReqTaxDocs}
           marginTop={16}
           onClick={() => {
-            navigateToScreen({id:5});
+            navigateToScreen({id: 5});
           }}
         />
         <DashCard
@@ -336,18 +346,18 @@ const Dashboard = props => {
           status={statusCRA}
           marginTop={16}
           onClick={() => {
-            navigateToScreen({id:6});
+            navigateToScreen({id: 6});
           }}
         />
       </ScrollView>
       <BottomTab
         selectedIndex={1}
         onTabSelected={index => {
-          if(index == 2){
+          if (index == 2) {
             navigation.navigate('AllDocuments');
-          }else if(index == 3){
+          } else if (index == 3) {
             navigation.navigate('Messages');
-          }else if(index == 4){
+          } else if (index == 4) {
             navigation.navigate('Profile');
           }
         }}
@@ -362,8 +372,8 @@ const ProfileHeader = props => {
   const {
     username = 'User',
     lastChangedModule,
-    lastChangedDate ,
-    lastChangedStatus
+    lastChangedDate,
+    lastChangedStatus,
   } = props;
   return (
     <View
@@ -384,7 +394,7 @@ const ProfileHeader = props => {
       onPress={() => {
         props.onSelected && props.onSelected();
       }}>
-      <View style={{flexDirection: 'column', flex:1.4}}>
+      <View style={{flexDirection: 'column', flex: 1.4}}>
         <Text
           style={{
             color: Colors.WHITE,
@@ -402,12 +412,18 @@ const ProfileHeader = props => {
           {username}
         </Text>
       </View>
-      <View style={{marginLeft:5, flexDirection: 'column', flex:.8, justifyContent:'flex-end'}}>
+      <View
+        style={{
+          marginLeft: 5,
+          flexDirection: 'column',
+          flex: 0.8,
+          justifyContent: 'flex-end',
+        }}>
         <Text
           style={{
             color: Colors.WHITE,
             fontSize: 18,
-            textAlign:'right',
+            textAlign: 'right',
             fontWeight: '400',
           }}>
           {lastChangedDate}
@@ -417,8 +433,8 @@ const ProfileHeader = props => {
             color: Colors.WHITE,
             fontSize: 13,
             fontWeight: '400',
-            textAlign:'right',
-            marginTop:10,
+            textAlign: 'right',
+            marginTop: 10,
           }}>
           {lastChangedModule}
         </Text>
@@ -427,7 +443,7 @@ const ProfileHeader = props => {
             color: Colors.WHITE,
             fontSize: 13,
             fontWeight: '400',
-            textAlign:'right',
+            textAlign: 'right',
           }}>
           {lastChangedStatus}
         </Text>

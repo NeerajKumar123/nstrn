@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image} from 'react-native';
+import {Alert, View, Text, ScrollView,TextInput,} from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
 import AppHeader from '../components/AppHeader';
 import * as Colors from '../constants/ColorDefs';
 import SKButton from '../components/SKButton';
 import SKLoader from '../components/SKLoader';
-import {incorpGetPaymentDetails} from '../apihelper/Api';
+import {incorpGetPaymentDetails,aplyRefCodeIncorp} from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
+
+import Lottie from 'lottie-react-native';
+const loader = require('../../assets/loader.json');
 
 const IncorpPaymentDetails = props => {
   const [isPaynow, setIsPaynow] = useState(false);
@@ -16,9 +19,17 @@ const IncorpPaymentDetails = props => {
   const [total, setTotal] = useState()
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefCodeApplied, setIsRefCodeApplied] = useState(false)
+  const [refCodeAppliedMsg, setRefCodeAppliedMsg] = useState('');
+  const [refCode, setRefCode] = useState();
+  const [isApplying, setIsApplying] = useState(false);
 
 
   useEffect(() => {
+    getUpdatedDetails()
+  }, [])
+
+  const getUpdatedDetails = () =>{
     setIsLoading(true)
     const {incorporation_id, user_id} = global.incStatusData
     const params = {User_id:user_id,Incorporation_Id:incorporation_id}
@@ -36,7 +47,7 @@ const IncorpPaymentDetails = props => {
         Alert.alert('SukhTax',msg)
       }
     })
-  }, [])
+  }
 
   
   return (
@@ -80,6 +91,111 @@ const IncorpPaymentDetails = props => {
         }}
       />
       <KeyValueView marginTop={12} title="TOTAL" value={`$${total}`} />
+      {!isRefCodeApplied ? (
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 20,
+            marginTop:40
+          }}>
+          <TextInput
+            style={{
+              fontSize: 17,
+              fontFamily: CustomFonts.OpenSansRegular,
+              fontWeight: '700',
+              height: 45,
+              flex: 1,
+              color: Colors.BLACK,
+              backgroundColor: Colors.WHITE,
+              borderBottomWidth:1,
+              borderBottomColor:Colors.GREY
+            }}
+            textAlign={'left'}
+            underlineColorAndroid="transparent"
+            value={refCode}
+            keyboardType={'default'}
+            autoCompleteType="off"
+            autoCorrect={false}
+            placeholderTextColor={Colors.CLR_9B9EA1}
+            placeholder="Referral Code"
+            maxLength={20}
+            returnKeyType="done"
+            onFocus={() => {
+            }}
+            onChangeText={value => {
+              setRefCode(value);
+            }}
+            onBlur={() => {}}
+            onEndEditing={() => {
+              const finalValue = refCode?.trim() || '';
+              console.log('finalValue====>', finalValue);
+            }}
+          />
+          {isApplying && (
+            <Lottie
+              style={{width: 35, height: 35}}
+              autoPlay
+              loop
+              source={loader}
+            />
+          )}
+          {!isApplying && (
+            <SKButton
+              fontSize={14}
+              height={40}
+              width="25%"
+              marginLeft={20}
+              fontWeight={'normal'}
+              borderColor = {Colors.WHITE}
+              backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+              title={'APPLY'}
+              onPress={() => {
+                if (refCode?.length > 1) {
+                  setIsApplying(true);
+                  const {incorporation_id, user_id} = global.incStatusData
+                  const params = {
+                    User_id: user_id,
+                    Incorporation_Id: incorporation_id,
+                    Referral_Code: refCode,
+                  };
+                  aplyRefCodeIncorp(params, res => {
+                    setIsApplying(false);
+                    if (res?.status == 1) {
+                      setRefCodeAppliedMsg(res?.message)
+                      setIsRefCodeApplied(true)
+                      getUpdatedDetails()
+                    } else {
+                      Alert.alert('Sukhtax', res?.message);
+                    }
+                  });
+                } else {
+                  Alert.alert('Sukhtax', 'Please enter valid referral code.');
+                }
+              }}
+            />
+          )}
+        </View>
+      ) : (
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 20,
+          }}>
+          <Text
+            style={{
+              fontWeight: '500',
+              fontSize: 15,
+              fontStyle: 'italic',
+              color: Colors.APP_RED_SUBHEADING_COLOR,
+            }}>
+            {refCodeAppliedMsg}
+          </Text>
+        </View>
+      )}
         <SKButton
         marginTop={56}
         fontSize={16}

@@ -8,6 +8,8 @@ import {
   Keyboard,
   Text,
   DeviceEventEmitter,
+  Share,
+  Platform,
 } from 'react-native';
 import SKInput from '../components/SKInput';
 import SKButton from '../components/SKButton';
@@ -19,7 +21,7 @@ import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
-import {getUserProfileDetails, updateUserProfile} from '../apihelper/Api';
+import {refGetDetails} from '../apihelper/Api';
 const arrow_dash = require('../../assets/tab/arrow_dash.png');
 const mywallet = require('../../assets/tab/Vector.png');
 const message = require('../../assets/tab/message.png');
@@ -30,24 +32,66 @@ const share = require('../../assets/tab/share.png');
 
 const RoyaltyWallat = props => {
   const navigation = useNavigation();
-  const [fName, setFName] = useState('');
-  const [lName, setLName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [details, setDetails] = useState();
+
+  useEffect(() => {
+    setIsLoading(true);
+    const {user_id} = global.onlineStatusData;
+    const params = {User_Id: user_id};
+    refGetDetails(params, res => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 200);
+      if (res?.status == 1) {
+        console.log('res?.data?.[0]', res?.data?.[0]);
+        setDetails(res?.data?.[0]);
+      }
+    });
+  }, []);
+
+  const onShare = async () => {
+    const appLink =
+      Platform.OS == 'ios'
+        ? 'https://apps.apple.com/ca/app/sukh-tax/id1551644082'
+        : 'https://play.google.com/store/apps/details?id=com.ushatek.sukhtax&hl=en_IN&gl=US';
+    const title = 'Sukhtax Referral Code';
+    const message = `Tax filing made easy ! Use my referral code ${details?.referral_code} and download the app from link: ${appLink}`;
+    const options = {
+      title,
+      url: appLink,
+      message,
+    };
+    try {
+      const result = await Share.share(options);
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <View
-    style={{
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      backgroundColor: 'white',
-      flex: 1,
-    }}>
+      style={{
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        flex: 1,
+      }}>
       {isLoading && <SKLoader />}
       <AppHeader navigation={navigation} />
       <ScrollView
-          contentContainerStyle={{
-            paddingHorizontal: 20,
-          }}>
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+        }}>
         <Heading
           value="SUKH TAX LOYALTY PROGRAM"
           marginTop={12}
@@ -55,46 +99,15 @@ const RoyaltyWallat = props => {
           fontSize={18}
           color={Colors.APP_RED_SUBHEADING_COLOR}
         />
+        <ProfileHeader username={details?.user_name} />
         <View
           style={{
-            height: 101,
-            backgroundColor: Colors.APP_BLUE_HEADING_COLOR,
-            marginTop: 12,
-            borderRadius: 8,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              color: 'white',
-              fontSize: 23,
-              fontWeight: '700',
-              marginLeft: 25,
-              marginTop: 16,
-            }}>
-            Welcome, Japjot.
-          </Text>
-          <Text
-            style={{
-              color: 'white',
-              fontSize: 18,
-              textAlign: 'right',
-              fontWeight: '400',
-              marginLeft: 100,
-              marginBottom: 30,
-              marginTop: 16,
-            }}>
-            Today
-          </Text>
-        </View>
-        <View
-          style={{
-            height: 116,
             backgroundColor: Colors.CLR_FFFFFF,
             marginTop: 20,
-            padding: 10,
-            borderRadius: 26,
-
+            padding: 8,
+            borderRadius: 8,
+            borderColor: 'skyblue',
+            borderWidth: 0.3,
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -103,7 +116,6 @@ const RoyaltyWallat = props => {
               color: Colors.APP_BLUE_HEADING_COLOR,
               fontSize: 21,
               fontWeight: '700',
-              height: 25,
             }}>
             My Wallet
           </Text>
@@ -118,26 +130,29 @@ const RoyaltyWallat = props => {
             style={{
               color: Colors.APP_BLUE_HEADING_COLOR,
               fontSize: 29,
-              marginTop: 16,
+              marginTop: 6,
               textAlign: 'center',
               fontWeight: '700',
             }}>
-            $ 55.00
+            {`$${details?.wallet_amount || 0}`}
           </Text>
         </View>
-        <Heading
-          value="Next Payout : Friday , Dec 10 2021"
-          marginTop={26}
-          color={Colors.APP_BLUE_HEADING_COLOR}
-          fontSize={18}
-        />
+        {details?.next_payout && (
+          <Heading
+            value={`Next Payout :${details?.next_payout}`}
+            marginTop={10}
+            color={Colors.APP_BLUE_HEADING_COLOR}
+            fontSize={18}
+          />
+        )}
         <View
           style={{
-            height: 93,
             backgroundColor: Colors.CLR_F7FAFF,
             marginTop: 13,
             padding: 10,
             borderRadius: 8,
+            borderWidth: 0.5,
+            borderColor: 'pink',
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -146,7 +161,6 @@ const RoyaltyWallat = props => {
               color: Colors.APP_BLUE_HEADING_COLOR,
               fontSize: 17,
               fontWeight: '700',
-              marginTop: 18,
             }}>
             TOTAL CUMULATIVE EARNINGS
           </Text>
@@ -158,12 +172,17 @@ const RoyaltyWallat = props => {
               textAlign: 'center',
               fontWeight: '700',
             }}>
-            $595.00
+            {`$${details?.cumulative_earnings || 0}`}
           </Text>
         </View>
         <View
           style={{
-            height: 116,
+            marginTop: 20,
+            borderRadius: 8,
+            borderColor: 'skyblue',
+            borderWidth: 0.3,
+            padding: 10,
+            alignItems: 'center',
             backgroundColor: Colors.CLR_FFFFFF,
             alignItems: 'center',
             justifyContent: 'center',
@@ -185,50 +204,38 @@ const RoyaltyWallat = props => {
               textAlign: 'center',
               fontWeight: '700',
             }}>
-            JAPJOT50
+            {`${details?.referral_code}`}
           </Text>
-          <View style={{alignItems: 'center', flexDirection: 'row'}}>
+
+          <TouchableOpacity
+            style={{position: 'absolute', right: 10, top: 10}}
+            onPress={() => {
+              onShare();
+            }}>
             <Image
               resizeMode="contain"
-              style={{width: 20, height: 20}}
-              source={watsup}
-              marginTop={9}
-              color={Colors.APP_BLUE_HEADING_COLOR}
-            />
-            <Image
-              resizeMode="contain"
-              style={{width: 20, height: 20}}
+              style={{width: 15, height: 15}}
               source={share}
-              marginTop={9}
-              marginLeft={14}
               color={Colors.APP_BLUE_HEADING_COLOR}
             />
-            <Image
-              resizeMode="contain"
-              style={{width: 20, height: 20}}
-              source={message}
-              marginTop={9}
-              marginLeft={14}
-              color={Colors.APP_BLUE_HEADING_COLOR}
-            />
-          </View>
+          </TouchableOpacity>
         </View>
         <SKButton
-            fontSize={18}
-            width="100%"
-            marginTop = {28}
-            rightImage={CustomFonts.right_arrow}
-            fontWeight={'700'}
-            backgroundColor={Colors.CLR_E77C7E}
-            borderColor={Colors.CLR_E77C7E}
-            title={'PAYOUT HISTORY'}
-            onPress={() => {
-              navigation.navigate('RoyaltyPayoutHistory');
-            }}
-          />
+          fontSize={18}
+          width="100%"
+          marginTop={35}
+          rightImage={CustomFonts.right_arrow}
+          fontWeight={'700'}
+          backgroundColor={Colors.CLR_E77C7E}
+          borderColor={Colors.CLR_E77C7E}
+          title={'PAYOUT HISTORY'}
+          onPress={() => {
+            navigation.navigate('RoyaltyPayoutHistory');
+          }}
+        />
 
         <SKButton
-          marginTop={10}
+          marginTop={20}
           fontSize={18}
           width="100%"
           rightImage={CustomFonts.right_arrow}
@@ -237,7 +244,9 @@ const RoyaltyWallat = props => {
           borderColor={Colors.CLR_E77C7E}
           title={'MY REFERRAL HISTORY'}
           onPress={() => {
-            navigation.navigate('RoyaltyRefHistory');
+            navigation.navigate('RoyaltyRefHistory', {
+              referral_code: details?.referral_code,
+            });
           }}
         />
       </ScrollView>
@@ -246,3 +255,43 @@ const RoyaltyWallat = props => {
 };
 
 export default RoyaltyWallat;
+
+const ProfileHeader = props => {
+  const {username = 'User'} = props;
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        elevation: 3,
+        marginTop: 12,
+        backgroundColor: Colors.APP_BLUE_HEADING_COLOR,
+        borderRadius: 8,
+        padding: 16,
+      }}
+      onPress={() => {
+        props.onSelected && props.onSelected();
+      }}>
+      <View style={{flexDirection: 'column', flex: 1.4}}>
+        <Text
+          style={{
+            color: Colors.WHITE,
+            fontSize: 23,
+            fontWeight: '400',
+          }}>
+          Welcome,
+        </Text>
+        <Text
+          style={{
+            color: Colors.WHITE,
+            fontSize: 23,
+            fontWeight: '700',
+          }}>
+          {username}
+        </Text>
+      </View>
+    </View>
+  );
+};

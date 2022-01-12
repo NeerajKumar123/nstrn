@@ -16,7 +16,6 @@ const arrow_dash = require('../../assets/tab/arrow_dash.png');
 
 const DashCard = props => {
   const {title, desc, status = undefined, onClick = () => {}, marginTop = 0, marginBotton = 0} = props;
-  console.log('props======>', props)
   return (
     <TouchableOpacity
       style={{
@@ -61,7 +60,7 @@ const DashCard = props => {
           width: '100%',
           justifyContent: 'space-between',
           marginTop:16,
-          alignItems:'flex-end'
+          alignItems:'flex-end',
         }}>
         <Text
           style={{
@@ -72,7 +71,7 @@ const DashCard = props => {
           {desc}
         </Text>
         {status && 
-         <View style = {{flexDirection:'column', justifyContent:'center', alignItems:'flex-end'}}>
+         <View style = {{flexDirection:'column', justifyContent:'center', alignItems:'flex-end',flex:1}}>
          <Text
            style={{
              color: Colors.CLR_5F5F94,
@@ -84,7 +83,7 @@ const DashCard = props => {
          <Text
            style={{
              color: Colors.APP_RED_SUBHEADING_COLOR,
-             fontSize: 15,
+             fontSize: 13,
              fontWeight: '600',
            }}>
            {status}

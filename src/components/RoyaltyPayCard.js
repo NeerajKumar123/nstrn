@@ -4,10 +4,8 @@ import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
 const RoyaltyPayCard = props => {
   const {
-    name = 'Name',
-    payment = "online",
-    amount      = "$5",
-    date   = "dec 1"
+    amount,
+    date
   } = props;
   return (
     <View
@@ -20,11 +18,8 @@ const RoyaltyPayCard = props => {
         height: 36
       }}
       >
-      <Text style={{color:'Colors.CLR_232326', textAlign:'left',fontSize: 13,fontWeight:"400"}}>{name}</Text>
-      <Text style={{color:'Colors.CLR_232326',textAlign:'center',fontSize: 15,fontWeight:"400"}}>{payment}</Text>
-      <Text style={{color:'Colors.CLR_232326',textAlign:'center',fontSize: 15,fontWeight:"400"}}>{amount}</Text>
-      <Text style={{color:'Colors.CLR_232326',textAlign:'center',fontSize: 15,fontWeight:"400"}}>{date}</Text>
-
+      <Text style={{color:Colors.CLR_232326, textAlign:'left',fontSize: 13,fontWeight:"400", opacity:.9}}>{date}</Text>
+      <Text style={{color:Colors.CLR_232326,textAlign:'right',fontSize: 15,fontWeight:"400",opacity:.9,marginRight:2}}>{`$ ${amount}`}</Text>
     </View>
   );
 };
