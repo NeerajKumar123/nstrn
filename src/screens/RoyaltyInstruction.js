@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 import React , {useEffect, useState} from 'react';
+>>>>>>> 86bb8ff0e8eade130f2f06a606ea2bb9830869b9
 import {TouchableOpacity, View, Image,Text,Button,StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
@@ -7,6 +10,31 @@ import SKButton from '../components/SKButton';
 import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
+<<<<<<< HEAD
+import {getRefrralPrice} from '../apihelper/Api'
+import React, {useState,useEffect} from 'react';
+
+const RoyaltyInstruction = props => {
+  const navigation = useNavigation();
+  useEffect(() => {
+    getRefrralPrice((priceListRes)=>{
+      console.log('res',JSON.stringify(priceListRes))
+      if (priceListRes?.status == 1) {
+        let onlineFriendSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 1,
+        ); 
+        console.log('onlineFriendSaves======>',onlineFriendSave)
+        const onlineFriendSave = onlineFriendSave[0];
+        let onlineYouSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 2,
+        );
+        const onlineYouSave = onlineYouSave[0];
+          console.log('onlineYouSave======>',onlineYouSave )
+        let incorpFriendSaves = priceListRes?.data?.filter(
+          fee => fee.referral_price_id == 3,
+        );
+        const incorpFriendSave = incorpFriendSave[0];
+=======
 import {getRefrralPrice} from '../apihelper/Api';
 
 const RoyaltyInstruction = props => {
@@ -33,10 +61,19 @@ const RoyaltyInstruction = props => {
         let incorpFriendSaves = priceListRes?.data?.filter(
           fee => fee.referral_price_id == 3,
         );
+>>>>>>> 86bb8ff0e8eade130f2f06a606ea2bb9830869b9
 
         let incorpYouSaves = priceListRes?.data?.filter(
           fee => fee.referral_price_id == 4,
         );
+<<<<<<< HEAD
+        const incorpYouSave = incorpYouSave[0];
+        console.log('incorpYouSave',onlineFriendSave,onlineYouSave,incorpFriendSave,incorpYouSave)
+      }
+
+    })
+  },  [])
+=======
         const f = onlineFriendSaves[0];
         const s = onlineYouSaves[0];
         const t = incorpFriendSaves[0];
@@ -51,6 +88,7 @@ const RoyaltyInstruction = props => {
     })
   }, [])
 
+>>>>>>> 86bb8ff0e8eade130f2f06a606ea2bb9830869b9
   return (
     <View
       style={{

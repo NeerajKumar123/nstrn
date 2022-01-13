@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React from 'react';
 import {Text, TouchableOpacity, Image, View} from 'react-native';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
@@ -26,19 +27,19 @@ const SKSwitch = props => {
         marginTop,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems:'center',
+        alignItems: 'center',
         padding: 2,
         width: '100%',
       }}>
-      <Text style={{color, fontSize, fontWeight, fontFamily, textAlign, flex:1}}>
+      <Text
+        style={{color, fontSize, fontWeight, fontFamily, textAlign, flex: 1}}>
         {value}
       </Text>
       <TouchableOpacity
-       onPress={() => {
-        onToggle && onToggle();
-      }}
-      >
-      <Image
+        onPress={() => {
+          onToggle && onToggle();
+        }}>
+        <Image
           resizeMode="contain"
           style={{width: 50, height: 35}}
           source={isOn ? CustomFonts.toggle_on : CustomFonts.toggle_off}
