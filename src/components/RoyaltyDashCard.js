@@ -13,7 +13,6 @@ import * as Colors from '../constants/ColorDefs';
 import LinearGradient from 'react-native-linear-gradient';
 import * as CustomFonts from '../constants/FontsDefs';
 const arrow_dash = require('../../assets/tab/arrow_dash.png');
-
 const RoyaltyDashCard = props => {
   const {title, desc, status = undefined, onClick = () => {}, marginTop = 0, marginBotton = 0} = props;
   return (
@@ -21,15 +20,16 @@ const RoyaltyDashCard = props => {
       style={{
         width: '100%',
         elevation: 5,
-        shadowColor: Platform.OS == 'ios' ? Colors.GRAY: Colors.BLACK,
+        shadowColor: Platform.OS == 'ios' ? Colors.CLR_E0BDBE: Colors.CLR_E0BDBE,
         shadowOffset: {width: 3, height: 3},
         shadowOpacity: Platform.OS  == 'ios' ?  .5 : 1.0,
         shadowRadius: 3,
-        borderRadius: 10,
+        borderRadius: 26,
         padding: 16,
         marginTop:marginTop,
         marginBottom:marginBotton,
-        backgroundColor:Colors.CLR_F7FAFF,
+        backgroundColor:Colors.CLR_FFFFFF,
+        height: 93
       }}
       onPress={() => {
         onClick()
@@ -39,13 +39,14 @@ const RoyaltyDashCard = props => {
           flexDirection: 'row',
           width: '100%',
           justifyContent: 'space-between',
-        }}>
+          
+          }}>
         <Text
           style={{
-            color: Colors.CLR_D9272A,
-            fontSize: 15,
-            fontWeight: '700',
-          }}>
+            color: Colors.CLR_B52835,
+            fontSize: 17,
+            fontWeight: '900'
+            }}>
          {title}
         </Text>
         <Image
@@ -64,9 +65,9 @@ const RoyaltyDashCard = props => {
         }}>
         <Text
           style={{
-            color: Colors.CLR_5F5F94,
-            fontSize: 17,
-            fontWeight: '500',
+            color: Colors.CLR_B52835,
+            fontSize: 15,
+            fontWeight: '700',
            }}>
           {desc}
         </Text>

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import React , {useEffect, useState} from 'react';
->>>>>>> 86bb8ff0e8eade130f2f06a606ea2bb9830869b9
 import {TouchableOpacity, View, Image,Text,Button,StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
@@ -10,12 +6,24 @@ import SKButton from '../components/SKButton';
 import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs'
-<<<<<<< HEAD
 import {getRefrralPrice} from '../apihelper/Api'
 import React, {useState,useEffect} from 'react';
+import InstCard from '../components/InstCard';
+import TilesCard from '../components/TilesCard';
+const ins1 = require('../../assets/tab/ins1.png');
+const ins2 = require('../../assets/tab/ins2.png');
+const ins3 = require('../../assets/tab/ins3.png');
+const Vector9 = require('../../assets/tab/Vector 9.png');
+const Vector10 = require('../../assets/tab/Vector 10.png');
 
 const RoyaltyInstruction = props => {
+  console.log("neeshu",props)
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false)
+  const [onlineFriendSave, setOnlineFriendSave] = useState()
+  const [onlineYouSave, setOnlineYouSave] = useState()
+  const [incorpFriendSave, setIncorpFriendSave] = useState()
+  const [incorpYouSave, setIncorpYouSave] = useState() 
   useEffect(() => {
     getRefrralPrice((priceListRes)=>{
       console.log('res',JSON.stringify(priceListRes))
@@ -23,72 +31,23 @@ const RoyaltyInstruction = props => {
         let onlineFriendSaves = priceListRes?.data?.filter(
           fee => fee.referral_price_id == 1,
         ); 
-        console.log('onlineFriendSaves======>',onlineFriendSave)
-        const onlineFriendSave = onlineFriendSave[0];
+        setOnlineFriendSave(onlineFriendSaves[0])
         let onlineYouSaves = priceListRes?.data?.filter(
           fee => fee.referral_price_id == 2,
         );
-        const onlineYouSave = onlineYouSave[0];
-          console.log('onlineYouSave======>',onlineYouSave )
+        setOnlineYouSave(onlineYouSaves[0])
         let incorpFriendSaves = priceListRes?.data?.filter(
           fee => fee.referral_price_id == 3,
         );
-        const incorpFriendSave = incorpFriendSave[0];
-=======
-import {getRefrralPrice} from '../apihelper/Api';
-
-const RoyaltyInstruction = props => {
-  const navigation = useNavigation();
-  const [onlineFriendSave, setOnlineFriendSave] = useState()
-  const [onlineYouSave, setOnlineYouSave] = useState()
-  const [incorpFriendSave, setIncorpFriendSave] = useState()
-  const [incorpYouSave, setIncorpYouSave] = useState()
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true)
-    getRefrralPrice((priceListRes)=>{
-      setIsLoading(false)
-      if (priceListRes?.status == 1) {
-        let onlineFriendSaves = priceListRes?.data?.filter(
-          fee => fee.referral_price_id == 1,
-        );
-        
-        let onlineYouSaves = priceListRes?.data?.filter(
-          fee => fee.referral_price_id == 2,
-        );
-
-        let incorpFriendSaves = priceListRes?.data?.filter(
-          fee => fee.referral_price_id == 3,
-        );
->>>>>>> 86bb8ff0e8eade130f2f06a606ea2bb9830869b9
-
+        setIncorpFriendSave(incorpFriendSaves[0])
         let incorpYouSaves = priceListRes?.data?.filter(
           fee => fee.referral_price_id == 4,
         );
-<<<<<<< HEAD
-        const incorpYouSave = incorpYouSave[0];
-        console.log('incorpYouSave',onlineFriendSave,onlineYouSave,incorpFriendSave,incorpYouSave)
+        setIncorpYouSave(incorpYouSaves[0])
       }
 
     })
   },  [])
-=======
-        const f = onlineFriendSaves[0];
-        const s = onlineYouSaves[0];
-        const t = incorpFriendSaves[0];
-        const four = incorpYouSaves[0];
-
-        setOnlineFriendSave(f?.referral_price)
-        setOnlineYouSave(s?.referral_price)
-        setIncorpFriendSave(t?.referral_price)
-        setIncorpYouSave(four?.referral_price)
-      }
-
-    })
-  }, [])
-
->>>>>>> 86bb8ff0e8eade130f2f06a606ea2bb9830869b9
   return (
     <View
       style={{
@@ -100,6 +59,8 @@ const RoyaltyInstruction = props => {
         paddingBottom:10,
         width: '100%',
       }}>
+        {console.log('incorpYouSave',onlineFriendSave,onlineYouSave,incorpFriendSave,incorpYouSave)
+}
       <AppHeader navigation={navigation}/>
       <View style={{ 
       width:'100%',  
@@ -108,6 +69,11 @@ const RoyaltyInstruction = props => {
       }}>
         {isLoading && <SKLoader/>}
         <Heading value="Sukh Tax Loyalty Program" fontSize = {18} marginTop={26} color = {Colors.APP_RED_SUBHEADING_COLOR}  />
+       
+
+       
+       
+       
         <Text 
         style={styles.howitwork}>
         How does this work ?
@@ -118,21 +84,49 @@ const RoyaltyInstruction = props => {
         <Text style={styles.blueText}>
         Our loyalty program is no different.
         </Text>
-      <Text style={styles.blueText}>
+        <View style = {{flexDirection: "column",
+         paddingHorizontal: 20 }}>
+       <InstCard
+          text={'1) Sign up for our Loyalty\n Program'}
+          marginTop={20}
+        />
+       <InstCard
+          text={'2)Refer a friend and give\nthem your unique referral\ncode'}
+          marginTop={20}
+          />
+        <View style = {{backgroundColor: "red"}}>
+        <InstCard
+          text={'3)Your friend enters the \ncode when making \npayment'}
+          marginTop={20}
+        /> 
+        </View>
+        <View style = {{flexDirection: "row",width: "100%",backgroundColor: "white",justifyContent: "space-between",marginTop: 32}}>
+        <TilesCard
+          title={'ONLINE TAX     \n RETURN'}
+          desc ={'YOUR FRIEND \nSAVE $5\nYOU GET PAID\n$5'}
+        />  
+        <TilesCard
+          title={'COMPANY \n INCORPORATION'}
+          desc ={'YOUR FRIEND \nSAVE $15\nYOU GET PAID\n$15'}
+        /> 
+        </View>
+        
+        </View>
+      {/* <Text style={styles.blueText}>
       1) Sign up for our Loyalty Program.
       </Text>
       <Text style={styles.blueText}>
       2) Refer a friend and give them your unique referral code.
-      </Text>
-      <Text style={styles.blueText}>
+      </Text> */}
+      {/* <Text style={styles.blueText}>
       {`3) Your friend will save $${onlineFriendSave} at checkout of their Online Return, and you will receive $${onlineYouSave}.`}
       </Text>
       <Text style={styles.blueText}>
       {`4) If you refer a friend for incorporation, your friend will save $${incorpFriendSave}, and you will receive $${incorpYouSave}.`}
-      </Text>
+      </Text> */}
       <SKButton
           fontStyle = 'italic'
-          marginTop = {30}
+          marginTop = {70}
           fontSize={16}
           fontWeight={'500'}
           backgroundColor={Colors.CLR_EB0000}

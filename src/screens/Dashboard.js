@@ -298,7 +298,7 @@ const Dashboard = props => {
           desc={
             refCode?.length
               ? 'Check your wallet balance'
-              : `ENROLL TODAY !\nTo Get Paid Instantly`
+              : `ENROL TODAY! GET PAID INSTANTLY`
           }
           marginTop={10}
           onClick={() => {
