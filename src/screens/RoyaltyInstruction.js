@@ -51,67 +51,66 @@ const RoyaltyInstruction = props => {
   return (
     <View
       style={{
-        flex: 1,
         flexDirection:'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: 'white',
-        paddingBottom:10,
         width: '100%',
+        paddingHorizontal: 20,
+        backgroundColor: "white"
       }}>
         {console.log('incorpYouSave',onlineFriendSave,onlineYouSave,incorpFriendSave,incorpYouSave)
 }
       <AppHeader navigation={navigation}/>
       <View style={{ 
       width:'100%',  
-      paddingHorizontal:20,
       alignItems:"center",
-      }}>
+      paddingHorizontal: 16
+        }}>
         {isLoading && <SKLoader/>}
-        <Heading value="Sukh Tax Loyalty Program" fontSize = {18} marginTop={26} color = {Colors.APP_RED_SUBHEADING_COLOR}  />
-       
-
-       
-       
-       
+        <Heading value="SUKH TAX LOYALTY PROGRAM" fontSize = {18} marginTop={26} color = {Colors.APP_RED_SUBHEADING_COLOR}  />
         <Text 
         style={styles.howitwork}>
         How does this work ?
         </Text> 
         <Text  style={styles.blueText}>
-        Sukh Tax aims to make your experience as simple as possible.
+        Sukh Tax aims to make your 
+        experience as simple as possible.
         </Text> 
         <Text style={styles.blueText}>
         Our loyalty program is no different.
         </Text>
-        <View style = {{flexDirection: "column",
-         paddingHorizontal: 20 }}>
+        </View>
+        <View style = {{
+          flexDirection: "column",
+         marginTop:10,
+         width: "100%",
+        paddingHorizontal: 16
+         }}>
        <InstCard
           text={'1) Sign up for our Loyalty\n Program'}
-          marginTop={20}
+         image = {ins1}
         />
        <InstCard
-          text={'2)Refer a friend and give\nthem your unique referral\ncode'}
-          marginTop={20}
+          text={'2) Refer a friend and give\nthem your unique referral\ncode'}
+          image = {ins2}
           />
-        <View style = {{backgroundColor: "red"}}>
         <InstCard
-          text={'3)Your friend enters the \ncode when making \npayment'}
-          marginTop={20}
+          text={'3) Your friend enters the \ncode when making \npayment'}
+          image = {ins3}
         /> 
         </View>
-        <View style = {{flexDirection: "row",width: "100%",backgroundColor: "white",justifyContent: "space-between",marginTop: 32}}>
+        <View style = {{flexDirection: "row",width: "100%",backgroundColor: "white",justifyContent: "space-between",marginTop: 32,marginHorizontal: 32,}}>
         <TilesCard
-          title={'ONLINE TAX     \n RETURN'}
-          desc ={'YOUR FRIEND \nSAVE $5\nYOU GET PAID\n$5'}
+          title={'ONLINE TAX RETURN'}
+          desc ={'YOUR FRIEND SAVE $5'}
+          desc1 = {"YOU GET PAID $5"}
         />  
         <TilesCard
-          title={'COMPANY \n INCORPORATION'}
-          desc ={'YOUR FRIEND \nSAVE $15\nYOU GET PAID\n$15'}
+          title={'COMPANY INCORPORATION'}
+          desc ={'YOUR FRIEND SAVE $15'}
+          desc1= {"YOU GET PAID $15"}
         /> 
-        </View>
-        
-        </View>
+        </View> 
       {/* <Text style={styles.blueText}>
       1) Sign up for our Loyalty Program.
       </Text>
@@ -126,9 +125,9 @@ const RoyaltyInstruction = props => {
       </Text> */}
       <SKButton
           fontStyle = 'italic'
-          marginTop = {70}
+          marginTop = {29}
           fontSize={16}
-          fontWeight={'500'}
+          fontWeight={'600'}
           backgroundColor={Colors.CLR_EB0000}
           borderColor={Colors.PRIMARY_BORDER}
           title={'ENROLL NOW'}
@@ -136,7 +135,7 @@ const RoyaltyInstruction = props => {
             navigation.navigate('RoyaltySubmit')
           }}
         />
-      </View>
+      
     </View>
   );
 };
@@ -146,17 +145,17 @@ export default RoyaltyInstruction;
 
 const styles = StyleSheet.create({
   howitwork :{
-    fontSize:15,
+    fontSize:18,
     color:Colors.APP_BLUE_HEADING_COLOR,
     width:'100%',
-    fontWeight:'500',
+    fontWeight:'400',
     marginTop:16
   },
   blueText :{
-    fontSize:17,
+    fontSize:18,
     color:Colors.APP_BLUE_HEADING_COLOR,
     width:'100%',
-    fontWeight:'500',
+    fontWeight:'400',
     marginTop:16
   }
 })

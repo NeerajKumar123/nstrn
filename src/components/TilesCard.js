@@ -12,45 +12,69 @@ import { TextAlignment } from 'pdf-lib';
 const Vector9 = require('../../assets/tab/Vector 9.png');
 const Vector10 = require('../../assets/tab/Vector 10.png');
 const TilesCard = props => {
-    const { title, desc, image} = props;
+    const { title, desc,desc1 } = props;
     return (
         <View
         style={{
           flexDirection: 'column',
           width: 144,
-          backgroundColor: 'grey',
-          height: 209,
+          backgroundColor: Colors.WHITE,
+          paddingVertical: 24,
             borderRadius: 26,
-            marginTop: 5,
-            marginHorizontal:5
-
+            marginHorizontal:15,
+            borderColor: Colors.GREEN,
+            alignItems: "center",
+            paddingHorizontal: 5,
+            shadowColor: Colors.CLR_E3BDBE,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            },
+            shadowRadius: 7,
+            shadowOpacity: .9,
+          
+            
         }}>
         <Text
           style={{
             color: Colors.APP_BLUE_HEADING_COLOR,
-            fontSize: 17,
-            fontWeight: '700',
-            marginTop:24,
-            marginHorizontal: 10,
-            alignContent: 'stretch',
-            TextAlignment: 'center'
+            fontSize: 16,
+            fontWeight: '600',
+            textAlign: "center",
+            
           }}>
           {title}
         </Text>
-        <Image
-          resizeMode='stretch'
-          style={{width: "100%" ,height:10,color:"black"}}
-          source={Vector9}
-        />
+       <View style = {{
+         backgroundColor: Colors.CLR_29295F,
+         height: 1,
+         width: "100%",
+         marginTop: 11
+         
+       }}
+       
+       />
          <Text
           style={{
             color: Colors.APP_RED_SUBHEADING_COLOR,
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: '500',
-            paddingTop:20,
-            marginHorizontal: 17
-          }}>
+            textAlign: "center",
+            marginTop: 24
+
+         }}>
           {desc}
+        </Text>
+        <Text
+          style={{
+            color: Colors.APP_RED_SUBHEADING_COLOR,
+            fontSize: 16,
+            fontWeight: '500',
+            marginTop:24,
+            textAlign: "center",
+            width: "90%"
+         }}>
+          {desc1}
         </Text>
       </View>
     );

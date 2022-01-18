@@ -154,10 +154,11 @@ const RoyaltySignup = props => {
           <SKButton
             marginTop={30}
             fontSize={16}
-            fontWeight={'normal'}
+            fontWeight={"600"}
             backgroundColor={Colors.CLR_EB0000}
             borderColor={Colors.PRIMARY_BORDER}
             title={'SUBMIT'}
+            fontStyle = 'italic'
             onPress={() => {
               if(checkFormValidations()){
                 setIsLoading(true)
@@ -209,10 +210,16 @@ const SKCheckbox = props => {
         size = {size}
         color={Colors.APP_BLUE_HEADING_COLOR}
       />
-      <Text style={{ color: Colors.BLACK, marginLeft: 10, flex: 1, fontSize: 15 }}>
-        I agree to the terms and conditions as enclosed here.
+      <Text style={{ color: Colors.RED, 
+      marginLeft: 10, 
+      flex: 1,
+      fontSize: 15,
+      fontWeight:"700"
+       }}>
+        I agree to the terms and conditions as enclosed here
+        
       </Text>
-
+       
     </TouchableOpacity>
 
   );

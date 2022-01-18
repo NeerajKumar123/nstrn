@@ -48,6 +48,9 @@ export const CLR_B52835=  '#B52835'
 export const CLR_000000=  '#000000'
 export const CLR_E0BDBE=  '#E0BDBE'
 export const CLR_29295F=  '#29295F'
+export const CLR_FEFEFF=  '#FEFEFF'
+export const CLR_E3BDBE=  '#E3BDBE'
+
 
 
 
