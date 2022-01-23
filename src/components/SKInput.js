@@ -87,7 +87,7 @@ const SKInput = props => {
           color: editable === false ? Colors.CLR_9B9EA1 : Colors.BLACK,
           backgroundColor: props.backgroundColor
             ? props.backgroundColor
-            : Colors.LIGHTGRAY,
+            : Colors.WHITE,
         }}
         textAlign={props.textAlign ? props.textAlign : 'left'}
         underlineColorAndroid="transparent"

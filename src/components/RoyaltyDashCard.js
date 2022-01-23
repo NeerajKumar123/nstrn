@@ -24,7 +24,7 @@ const RoyaltyDashCard = props => {
         shadowOffset: {width: 3, height: 3},
         shadowOpacity: Platform.OS  == 'ios' ?  .5 : 1.0,
         shadowRadius: 3,
-        borderRadius: 26,
+        borderRadius: 10,
         padding: 16,
         marginTop:marginTop,
         marginBottom:marginBotton,
