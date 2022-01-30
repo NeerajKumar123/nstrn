@@ -126,7 +126,7 @@ const RemainedDetailsTaxYrFlow = props => {
     let isValidForm = true;
     const isProvinceValid = province?.state_id;
     const isResidencyValid = residency?.residency_id;
-    const isSResidencyValid = spouseResidency?.residency_id;
+    const isSResidencyValid = (maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3) ? spouseResidency?.residency_id : true
     const isMaritalStatusValid = maritalStatus?.marital_status_id
      if (!isProvinceValid) {
       isValidForm = false;
@@ -199,7 +199,7 @@ const RemainedDetailsTaxYrFlow = props => {
             setIsProvinceVisible(true);
           }}
         />
-        <Heading fontSize={20} top={10} value="WHAT IS YOUR RESIDENCY:" />
+        <Heading fontSize={20} marginTop={20} value="WHAT IS YOUR RESIDENCY:" />
         <TouchableInput
           leftAccImage={CustomFonts.Home}
           rightAccImage={CustomFonts.ChevronDown}

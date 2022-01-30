@@ -13,7 +13,9 @@ const Heading = props => {
     textAlign = 'left',
     onClicked = undefined,
     textWidth = undefined,
-    top = 10
+    marginHorizontal,
+    marginBottom,
+    marginTop,
   } = props;
   let statusImage = CustomFonts.status_gray;
   if (status === 1) {
@@ -25,7 +27,16 @@ const Heading = props => {
   return (
     <TouchableOpacity
       disabled={!onClicked}
-      style={[styles.container, {marginTop:top}]}
+      style={{
+        marginHorizontal,
+        marginBottom,
+        marginTop,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 2,
+        width: '100%',
+        alignItems: 'center',
+      }}
       onPress={() => {
         onClicked && onClicked();
       }}>

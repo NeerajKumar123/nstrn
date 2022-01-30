@@ -369,9 +369,9 @@ const SKCheckbox = props => {
           marginLeft: 10,
           flex: 1,
           fontSize: 15,
-          fontWeight: '700',
+          fontWeight: '500',
         }}>
-        I agree to the terms and conditions as enclosed here
+        I agree to the terms and conditions as enclosed here.
       </Text>
     </TouchableOpacity>
   );

@@ -279,7 +279,6 @@ const BankingAndMore = props => {
             <Heading
               fontSize={20}
               marginTop={45}
-              top = {10}
               value="WHAT IS YOUR RESIDENCY:"
             />
             <TouchableInput
