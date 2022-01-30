@@ -160,7 +160,7 @@ const Dashboard = props => {
         craMoveToPage();
         break;
       case 7:
-        if (refCode?.length > 0 && false) {
+        if (refCode?.length > 0) {
           navigation.navigate('RoyaltyWallat');
         } else {
           navigation.navigate('RoyaltyInstruction');
@@ -254,7 +254,7 @@ const Dashboard = props => {
   };
   const reqMoveToPage = props => {
     const {tax_docs_status_id = 1} = global?.taxDocsStatusData;
-    if (tax_docs_status_id == 2 || tax_docs_status_id == 3) {
+    if (tax_docs_status_id == 2 || tax_docs_status_id == 3 || tax_docs_status_id == 4 || tax_docs_status_id == 5) {
       // inprogrees
       navigation.navigate('RequestApplyStatus');
     } else {
@@ -263,7 +263,12 @@ const Dashboard = props => {
   };
 
   const craMoveToPage = props => {
-    navigation.navigate('CRALanding');
+    const {cra_letters_status_id, user_id, cra_letters_id} = global.craLattersData
+    if (cra_letters_status_id == 5 || cra_letters_status_id == 6) {
+      navigation.navigate('CRALattersStatus', {user_id:user_id, cra_letters_id:cra_letters_id});
+    }else{
+      navigation.navigate('CRALanding');
+    }
   };
 
   return (

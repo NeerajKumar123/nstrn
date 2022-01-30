@@ -8,6 +8,7 @@ import {
   Linking,
   TouchableOpacity,
   Image,
+  FlatList
 } from 'react-native';
 import Heading from '../components/Heading';
 import {useNavigation} from '@react-navigation/native';
@@ -18,13 +19,11 @@ import SKButton, {DarkBlueButton} from '../components/SKButton';
 import DocumentViewer from '../components/DocumentViewer';
 import SKLoader from '../components/SKLoader';
 import {downloadFileFromUrl} from '../helpers/BaseUtility';
-import {
-  taxDocsGetTaxDocsType,
-  taxDocsGenerateTaxDocId,
-  getT1GeneralDocs,
+import {useIsFocused} from '@react-navigation/native';
+import {taxDocsGetReqDocs,getTaxAuthDocs, taxDocsSubmitForFiling, EversingSuccess,
+  EversingFailed,
+  createEvenrSignDoc,
 } from '../apihelper/Api';
-
-import {taxDocsGetReqDocs} from '../apihelper/Api';
 import Lottie from 'lottie-react-native';
 const loader = require('../../assets/loader.json');
 
@@ -48,6 +47,8 @@ const RequestApplyStatus = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingiOS, setIsLoadingiOS] = useState(false);
   const [downloadingItem, setDownloadingItem] = useState();
+  const isFocused = useIsFocused();
+  const [confirmDocs, setConfirmDocs] = useState();
 
   useEffect(() => {
     const {user_id, tax_docs_id, tax_docs_status_id} = global.taxDocsStatusData;
@@ -64,6 +65,130 @@ const RequestApplyStatus = props => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (isFocused && tax_docs_status_id == 4) {
+      setIsLoading(true);
+      const {user_id, tax_docs_id} = global.taxDocsStatusData;
+      const params = {User_Id: user_id, Tax_Docs_Id: tax_docs_id};
+      getTaxAuthDocs(params, confDocs => {
+       setTimeout(() => {
+        setIsLoading(false);
+       }, 200);
+        if (confDocs?.status == 1) {
+          setConfirmDocs(confDocs.data);
+        }
+      });
+    }
+  }, [isFocused]);
+
+
+
+  const getFile = document => {
+    let file = {};
+    file['name'] = document.title;
+    file['file_url'] = document.document_file_name;
+    file['file_id'] = document.tax_file_confirmation_id;
+    file['file_base64'] = '';
+    return file;
+  };
+  const getSigner = () => {
+    const {email = 'rahbar.fatmi@21gfox.com'} = global.userInfo;
+    const user = global.userInfo;
+    const fName = user?.firstname ?? '';
+    const lName = user?.lastname ?? '';
+    const userFullName = fName + ' ' + lName;
+
+    let signer = {};
+    signer['id'] = 1;
+    signer['name'] = userFullName;
+    signer['email'] = email;
+    signer['pin'] = '';
+    signer['message'] = '';
+    signer['language'] = 'en';
+    return signer;
+  };
+
+  const recipient = () => {
+    let recipient = {};
+    recipient['name'] = 'Rahber Fatmi';
+    recipient['email'] = 'rahber.fatmi@21gfox.com';
+    recipient['language'] = 'en';
+    return recipient;
+  };
+
+  const getFields = document => {
+    // console.log('document',document)
+    let fields = [];
+    document?.Fields?.forEach(element => {
+      console.log('element', element);
+      let field = {};
+      field['type'] = element?.field_type;
+      field['x'] = element?.x_coordinate;
+      field['y'] = element?.y_coordinate;
+      field['width'] = element?.width;
+      field['height'] = element?.height;
+      field['page'] = element?.page;
+      field[
+        'identifier'
+      ] = `${element.field_type}${element.x_coordinate}${element.x_coordinate}`;
+      field['required'] = 1;
+      field['readonly'] = 0;
+      field['signer'] = 1;
+      field['name'] = '';
+      field['validation_type'] = '';
+      field['text_size'] = '';
+      field['text_font'] = '';
+      field['text_font'] = '';
+      field['text_style'] = '';
+      field['value'] = '';
+      field['options'] = [];
+      field['group'] = '';
+      fields.push(field);
+    });
+    console.log('fields==>', fields);
+    return fields;
+  };
+
+  
+
+  const prepareParams = document => {
+    let params = {};
+    params['sandbox'] = 0;
+    params['is_draft'] = 0;
+    params['embedded'] = 1;
+    params['title'] = 'Sukhtax Confirmation';
+    params['message'] = 'This is my general document message.';
+    params['use_signer_order'] = 0;
+    params['reminders'] = 1;
+    params['require_all_signers'] = 1;
+    params['custom_requester_name'] = 'Sukhtax';
+    params['custom_requester_email'] = 'sukhtaxit@gmail.com';
+    params['redirect'] = EversingSuccess;
+    params['redirect_decline'] = EversingFailed;
+    params['client'] = '';
+    params['expires'] = '';
+    params['embedded_signing_enabled'] = 1;
+    params['flexible_signing'] = 0;
+    params['use_hidden_tags'] = 0;
+    params['files'] = [getFile(document)];
+    params['signers'] = [getSigner()];
+    params['recipients'] = [];
+    params['fields'] = [getFields(document)];
+    return params;
+  };
+
+  const checkIfAllDocsSigned = () => {
+    const unsingedDocs = confirmDocs.filter(function (item) {
+      return (
+        item?.eversign_document_hash == '' ||
+        item?.eversign_document_hash == null ||
+        item?.eversign_document_hash?.length < 1
+      );
+    });
+    console.log('unsingedDocs?.length', unsingedDocs?.length);
+    return unsingedDocs?.length > 0 ? false : true;
+  };
 
   const getFileName = docUrl => {
     const dateString = `${new Date().valueOf()}`;
@@ -129,6 +254,7 @@ const RequestApplyStatus = props => {
           height: '100%',
           paddingBottom: Platform.OS == 'ios' ? 100 : 0,
         }}>
+        {isLoading && <SKLoader />}
         {tax_docs_status_id == 1 && (
           <NotSubmitted
             tax_docs_status_name={tax_docs_status_name}
@@ -180,6 +306,117 @@ const RequestApplyStatus = props => {
                 });
               }
             }}
+          />
+        )}
+        {tax_docs_status_id == 4 && confirmDocs?.length > 0 && (
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 18,
+          }}>
+          <FlatList
+            contentContainerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            style={{width: '100%', marginTop: 20}}
+            data={confirmDocs}
+            keyExtractor={(item, index) => index + '_key'}
+            ItemSeparatorComponent={() => (
+              <View style={{width: 20, backgroundColor: 'pink'}} />
+            )}
+            renderItem={({item, index}) => (
+              <SKButton
+                fontSize={16}
+                marginTop={10}
+                width={'100%'}
+                iconsize={20}
+                rightImage={
+                  item?.eversign_document_hash?.length > 0
+                    ? CustomFonts.CheckRight
+                    : CustomFonts.ChevronRight
+                }
+                fontWeight={'normal'}
+                backgroundColor={Colors.CLR_7F7F9F}
+                borderColor={Colors.CLR_D3D3D9}
+                title={item?.title}
+                onPress={() => {
+                  if (item?.eversign_document_hash?.length < 1) {
+                    const params = prepareParams(item);
+                    setIsLoading(true)
+                    createEvenrSignDoc(params, res => {
+                      setTimeout(() => {
+                        setIsLoading(false)
+                      }, 500);
+                      if (res?.signers && res?.signers?.length > 0) {
+                        const dochash = res?.document_hash;
+                        const signer = res?.signers?.[0];
+                        const signingUrl = signer.embedded_signing_url;
+
+                        navigation.navigate('SKWebPage', {
+                          pageUrl: signingUrl,
+                          noOfDocs: confirmDocs?.length,
+                          currentIndex: index + 1,
+                          doc: item,
+                          dochash: dochash,
+                          saveType:2
+                        });
+                      } else {
+                        Alert.alert(
+                          'Sukhtax',
+                          'Something went wrong, Please try again.',
+                        );
+                      }
+                    });
+                  } else {
+                    Alert.alert('Sukhtax', 'Document is already signed.');
+                  }
+                }}
+              />
+            )}
+          />
+        </View>
+      )}
+      {tax_docs_status_id == 4 && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'SUBMIT'}
+          onPress={() => {
+            if (checkIfAllDocsSigned()) {
+              const {user_id, tax_docs_id} = global.taxDocsStatusData;
+              const params = {User_id: user_id, Tax_Docs_Id: tax_docs_id};
+              setIsLoading(true)
+              taxDocsSubmitForFiling(params, submitFileRes => {
+                setTimeout(() => {
+                  setIsLoading(false)
+                }, 200);
+                if (submitFileRes?.status) {
+                  navigation.goBack();
+                }
+              });
+            } else {
+              Alert.alert(
+                'Sukhtax',
+                'Please sign all the required documents listed above.',
+              );
+            }
+          }}
+        />
+      )}
+
+{tax_docs_status_id == 5 && (
+          <InProcess
+            tax_docs_status_name={tax_docs_status_name}
+            status_description={status_description}
+            new_message_count={new_message_count}
+            navigation={navigation}
           />
         )}
       </ScrollView>

@@ -188,7 +188,7 @@ const Profile = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'CHANGE PASSWORD'}
             onPress={() => {
-                navigation.navigate('ForgotPassword', {pagetitle:'CHANGE PASSWORD?', pagesubs:'WE HAVE SENT A SECURITY CODE TO YOUR PHONE. PLEASE ENTER BELOW:', preScreen:'Profile'})
+                navigation.navigate('ForgotPasswordNew', {pagetitle:'CHANGE PASSWORD?', pagesubs:'WE HAVE SENT A SECURITY CODE TO YOUR PHONE. PLEASE ENTER BELOW:', preScreen:'Profile'})
                 }}
           />
         </View>

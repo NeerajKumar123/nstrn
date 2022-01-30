@@ -42,9 +42,8 @@ const RoyaltyWallat = props => {
     refGetDetails(params, res => {
       setTimeout(() => {
         setIsLoading(false);
-      }, 200);
+      }, 500);
       if (res?.status == 1) {
-        console.log('res?.data?.[0]', res?.data?.[0]);
         setDetails(res?.data?.[0]);
       }
     });
@@ -206,7 +205,6 @@ const RoyaltyWallat = props => {
             }}>
             {`${details?.referral_code}`}
           </Text>
-
           <TouchableOpacity
             style={{position: 'absolute', right: 10, top: 10}}
             onPress={() => {
@@ -226,21 +224,20 @@ const RoyaltyWallat = props => {
           marginTop={35}
           rightImage={CustomFonts.right_arrow}
           fontWeight={'700'}
-          backgroundColor={Colors.CLR_E77C7E}
+          backgroundColor={Colors.APP_RED_SUBHEADING_COLOR}
           borderColor={Colors.CLR_E77C7E}
           title={'PAYOUT HISTORY'}
           onPress={() => {
             navigation.navigate('RoyaltyPayoutHistory');
           }}
         />
-
         <SKButton
           marginTop={20}
           fontSize={18}
           width="100%"
           rightImage={CustomFonts.right_arrow}
           fontWeight={'700'}
-          backgroundColor={Colors.CLR_E77C7E}
+          backgroundColor={Colors.APP_RED_SUBHEADING_COLOR}
           borderColor={Colors.CLR_E77C7E}
           title={'MY REFERRAL HISTORY'}
           onPress={() => {

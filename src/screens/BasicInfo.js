@@ -172,7 +172,6 @@ const BasicInfo = props => {
             <Heading
               fontSize={20}
               marginTop={30}
-              color={Colors.RED}
               value="WE NEED SOME ADDITIONAL INFO:"
             />
             <SKInput
@@ -208,7 +207,6 @@ const BasicInfo = props => {
             <Heading
               fontSize={20}
               marginTop={30}
-              color={Colors.RED}
               value="WHEN WAS THE LAST TIME YOU FILED WITH US?"
             />
             <TouchableInput

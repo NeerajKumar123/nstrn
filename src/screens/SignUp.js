@@ -233,7 +233,7 @@ const SignUp = props => {
                   if (regisRes?.status == 1) {
                     const data = regisRes?.data;
                     global.userInfo = {...global.userInfo, user_id: data};
-                    navigation.navigate('SecurityCode', {
+                    navigation.navigate('SecurityCodeNew', {
                       pagetitle: 'Security Code',
                       pagesubs:
                         'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:',

@@ -13,7 +13,9 @@ import AppHeader from '../components/AppHeader';
 import {
   EversingSuccess,
   EversingFailed,
-  onlineSaveEversignConfirmation
+  onlineSaveEversignConfirmation,
+  taxDocsSaveEverSignDoc,
+  craLatterSaveEverSignAuth,
 } from '../apihelper/Api';
 import * as Colors from '../constants/ColorDefs';
 const { height } = Dimensions.get('window');
@@ -43,12 +45,27 @@ const SKWebPage = (props) => {
     if (!navigationHandled && navState?.url?.includes(EversingSuccess) ) {
       setNavigationHandled(true)
       const pageParams = props.route.params;
-      const {noOfDocs,currentIndex,dochash,doc} = pageParams
-      const {user_id,tax_file_id} = global.onlineStatusData
-      const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Tax_File_Confirmation_Id:doc?.tax_file_confirmation_id,Document_Hash:dochash}
-      onlineSaveEversignConfirmation(params, () =>{
+      const {noOfDocs,currentIndex,dochash,doc, saveType} = pageParams
+      if(saveType == 1){ // online
+        const {user_id,tax_file_id} = global.onlineStatusData
+        const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Tax_File_Confirmation_Id:doc?.tax_file_confirmation_id,Document_Hash:dochash}
+        onlineSaveEversignConfirmation(params, () =>{
         navigation.goBack()
-      })
+        })  
+      }else if (saveType == 2) { // tax docs
+        const {user_id, tax_docs_id} = global.taxDocsStatusData;
+        const params = {User_Id:user_id,Tax_Docs_Id:tax_docs_id,Tax_Docs_Confirmation_Id:doc?.tax_docs_confirmation_id,Document_Hash:dochash}
+        taxDocsSaveEverSignDoc(params, () =>{
+          navigation.goBack()
+        })  
+      }else if (saveType == 3) { // cra
+        const {user_id,cra_letters_id} = global.craLattersData
+        const params = {User_Id:user_id,CRA_Letters_Id:cra_letters_id,CRA_Letters_Confirmation_Id:doc?.cra_letters_confirmation_id,Document_Hash:dochash}
+        craLatterSaveEverSignAuth(params, () =>{
+          navigation.goBack()
+        })  
+      }
+
     }else if (navState?.url?.includes(EversingFailed) ) {
       // navigation.goBack()
   }

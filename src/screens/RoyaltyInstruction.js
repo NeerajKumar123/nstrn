@@ -86,7 +86,7 @@ const RoyaltyInstruction = props => {
         <Text style={styles.blueText}>
           Sukh Tax aims to make your experience as simple as possible.
         </Text>
-        <Text style={styles.blueText}>
+        <Text style={[styles.blueText,{marginTop:20}]}>
           Our loyalty program is no different.
         </Text>
       </View>
@@ -149,13 +149,13 @@ const styles = StyleSheet.create({
     color: Colors.APP_BLUE_HEADING_COLOR,
     width: '100%',
     fontWeight: '400',
-    marginTop: 16,
+    marginTop: 20,
   },
   blueText: {
     fontSize: 18,
     color: Colors.APP_BLUE_HEADING_COLOR,
     width: '100%',
     fontWeight: '400',
-    marginTop: 16,
+    marginTop: 9,
   },
 });

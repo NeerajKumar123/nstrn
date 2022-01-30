@@ -202,7 +202,7 @@ const ProfDoccCardView = props => {
         borderRadius: 6,
         width: '48%',
         height: 100,
-        backgroundColor: Colors.PRIMARY_BORDER,
+        backgroundColor: Colors.APP_RED_SUBHEADING_COLOR,
       }}>
       <TouchableOpacity
         style={{
@@ -252,7 +252,7 @@ const MessegesView = props => {
         borderRadius: 6,
         width: '100%',
         height: 90,
-        backgroundColor: Colors.PRIMARY_BORDER,
+        backgroundColor: Colors.APP_RED_SUBHEADING_COLOR,
       }}>
       <TouchableOpacity
         style={{

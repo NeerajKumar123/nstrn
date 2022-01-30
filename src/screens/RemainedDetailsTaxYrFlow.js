@@ -199,7 +199,7 @@ const RemainedDetailsTaxYrFlow = props => {
             setIsProvinceVisible(true);
           }}
         />
-        <Heading fontSize={20} marginTop={20} value="WHAT IS YOUR RESIDENCY:" />
+        <Heading fontSize={20} top={10} value="WHAT IS YOUR RESIDENCY:" />
         <TouchableInput
           leftAccImage={CustomFonts.Home}
           rightAccImage={CustomFonts.ChevronDown}
@@ -207,20 +207,6 @@ const RemainedDetailsTaxYrFlow = props => {
           value={residency?.residency_name}
           onClicked={() => {
             setIsResidenceVisible(true);
-          }}
-        />
-        <Heading
-          fontSize={20}
-          marginTop={20}
-          value="WHAT IS YOUR SPOUSE RESIDENCY:"
-        />
-        <TouchableInput
-          leftAccImage={CustomFonts.Home}
-          rightAccImage={CustomFonts.ChevronDown}
-          placeholder="Select Spouse Residency"
-          value={spouseResidency?.residency_name}
-          onClicked={() => {
-            setIsSpouseResidenceVisible(true);
           }}
         />
         <Heading
@@ -237,6 +223,24 @@ const RemainedDetailsTaxYrFlow = props => {
             setIsMVisible(true);
           }}
         />
+        {(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3) && 
+        <>
+        <Heading
+          fontSize={20}
+          marginTop={20}
+          value="WHAT IS YOUR SPOUSE RESIDENCY:"
+        />
+        <TouchableInput
+          leftAccImage={CustomFonts.Home}
+          rightAccImage={CustomFonts.ChevronDown}
+          placeholder="Select Spouse Residency"
+          value={spouseResidency?.residency_name}
+          onClicked={() => {
+            setIsSpouseResidenceVisible(true);
+          }}
+        />
+        </>
+        }        
         <Heading
           fontSize={20}
           marginTop={20}

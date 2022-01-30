@@ -11,6 +11,7 @@ import AllDocuments from './screens/AllDocuments';
 import HomeDocsListing from './screens/HomeDocsListing';
 import OnlineTaxFilingStatus from './screens/OnlineTaxFilingStatus';
 import SecurityCode from './screens/SecurityCode';
+import SecurityCodeNew from './screens/SecurityCodeNew';
 import SetupNewPass from './screens/SetupNewPass';
 import Instructions from './screens/Instructions';
 import RoyaltyInstruction from './screens/RoyaltyInstruction';
@@ -19,7 +20,7 @@ import RoyaltyPayment from './screens/RoyaltyPayment';
 import RoyaltyWallat from './screens/RoyaltyWallat';
 import RoyaltyRefHistory from './screens/RoyaltyRefHistory';
 import RoyaltyPayoutHistory from './screens/RoyaltyPayoutHistory';
-import ForgotPassword from './screens/ForgotPassword';
+import ForgotPasswordNew from './screens/ForgotPasswordNew';
 import Profile from './screens/Profile';
 import Messages from './screens/Messages';
 import Identification from './screens/Identification';
@@ -93,6 +94,11 @@ export const AuthStack = () => {
             options={{title: 'VerifyOTP', headerShown: false}}
           />
           <Stack.Screen
+            name="SecurityCodeNew"
+            component={SecurityCodeNew}
+            options={{title: 'SecurityCodeNew', headerShown: false}}
+          />
+          <Stack.Screen
             name="SignUp"
             component={SignUp}
             options={{title: 'SignUp', headerShown: false}}
@@ -108,9 +114,9 @@ export const AuthStack = () => {
             options={{title: 'SetupNewPass', headerShown: false}}
           />
           <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPassword}
-            options={{title: 'ForgotPassword', headerShown: false}}
+            name="ForgotPasswordNew"
+            component={ForgotPasswordNew}
+            options={{title: 'ForgotPasswordNew', headerShown: false}}
           />
           <Stack.Screen
             name="Instructions"
@@ -140,7 +146,11 @@ const SKStack = () => {
             component={PDFExample}
             options={{title: 'PDFExample', headerShown: false}}
           />
-
+<Stack.Screen
+            name="ForgotPasswordNew"
+            component={ForgotPasswordNew}
+            options={{title: 'ForgotPasswordNew', headerShown: false}}
+          />
           <Stack.Screen
             name="AnimTest"
             component={AnimTest}
@@ -191,11 +201,6 @@ const SKStack = () => {
             name="Profile"
             component={Profile}
             options={{title: 'Profile', headerShown: false}}
-          />
-          <Stack.Screen
-            name="ForgotPassword"
-            component={ForgotPassword}
-            options={{title: 'ForgotPassword', headerShown: false}}
           />
           <Stack.Screen
             name="AllDocuments"

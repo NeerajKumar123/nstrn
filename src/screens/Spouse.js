@@ -622,7 +622,6 @@ const LastYearDataCard = props => {
         title="HAS YOUR BANKING INFO CHANGED SINCE LAST YEAR?"
         isSelected={isBankingChanged ? true : false}
         onOptionSelected={tag => {
-          console.log('tag===>', tag);
           setIsBankingChanged(tag == 2 ? true : false);
         }}
       />
@@ -630,7 +629,6 @@ const LastYearDataCard = props => {
         title="HAS YOUR SIN NUMBER CHANGED SINCE LAST YEAR?"
         isSelected={isSINChanged ? true : false}
         onOptionSelected={tag => {
-          console.log('tag===>', tag);
           setIsSINChanged(tag == 2 ? true : false);
         }}
       />
@@ -638,7 +636,6 @@ const LastYearDataCard = props => {
         title="HAS YOUR SPOUSE RESIDENCY CHANGED SINCE LAST YEAR?"
         isSelected={isResidencyChanged ? true : false}
         onOptionSelected={tag => {
-          console.log('tag===>', tag);
           setIsResidencyChanged(tag == 2 ? true : false);
         }}
       />

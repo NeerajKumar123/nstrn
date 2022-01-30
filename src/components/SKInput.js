@@ -28,6 +28,9 @@ const SKInput = props => {
     autoCapitalize = 'sentences',
     returnKeyType,
     blurOnSubmit,
+    textAlign = 'left',
+    fontSize = 17,
+    fontWeight = '400',
     editable = true,
   } = props;
   const isLeftLocalPNG = leftAccImage && typeof leftAccImage === 'number';
@@ -79,9 +82,9 @@ const SKInput = props => {
       <TextInput
         editable={editable}
         style={{
-          fontSize: 17,
+          fontSize: fontSize,
           fontFamily: CustomFonts.OpenSansRegular,
-          fontWeight: props.fontSize ? props.fontSize : '400',
+          fontWeight: fontWeight,
           height: height ? height : 56,
           flex: 1,
           color: editable === false ? Colors.CLR_9B9EA1 : Colors.BLACK,
@@ -89,7 +92,7 @@ const SKInput = props => {
             ? props.backgroundColor
             : Colors.WHITE,
         }}
-        textAlign={props.textAlign ? props.textAlign : 'left'}
+        textAlign={textAlign}
         underlineColorAndroid="transparent"
         value={initialValue}
         keyboardType={keyboardType}

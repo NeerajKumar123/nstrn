@@ -18,6 +18,7 @@ import SKModel from '../components/SKModel';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
 import SKLoader from '../components/SKLoader';
+import SKDatePicker from '../components/SKDatePicker';
 import AppHeader from '../components/AppHeader';
 import {format} from 'date-fns';
 import * as Validator from '../helpers/SKTValidator';
@@ -31,8 +32,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const RoyaltySignup = props => {
   const navigation = useNavigation();
-  const [bank, setBank] = useState();
-  const [banks, setBanks] = useState();
+  const [insNumber, setInsNumber] = useState();
   const [accountNo, setAccountNo] = useState();
   const [branchNo, setBranhcNo] = useState();
   const [accountHolderName, setAccountHolderName] = useState('');
@@ -52,16 +52,6 @@ const RoyaltySignup = props => {
 
   useEffect(() => {
     setIsLoading(true);
-    getInstitutionList({}, instRes => {
-      setBanks(instRes?.data);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
-    });
-  }, []);
-
-  useEffect(() => {
-    setIsLoading(true);
     const params = {};
     getCanadaProvinceList(params, provinceRes => {
       setIsLoading(false);
@@ -71,7 +61,7 @@ const RoyaltySignup = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isBankValid = bank?.institution_id > 0;
+    const isInsNumberValid = insNumber?.length >= 3;
     const isAccValid = accountNo?.length;
     const isBranchValid = branchNo?.length == 5;
     
@@ -83,9 +73,9 @@ const RoyaltySignup = props => {
     const isAddLine1Valid = true
     const isAddLine2Valid = true
 
-    if (!isBankValid) {
+    if (!isInsNumberValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please select valid Institution.');
+      Alert.alert('SukhTax', 'Please enter valid Institution Number.');
     } else if (!isAccValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid account number.');
@@ -123,30 +113,20 @@ const RoyaltySignup = props => {
     return isValidForm;
   };
 
-  // const prepareParams = () => {
-  //   const {user_id} = global.onlineStatusData
-  //   const params = {
-  //     User_Id: user_id,
-  //     Institiution_Id:bank?.institution_id,
-  //     Account_Number: accountNo,
-  //     Branch_Number: branchNo
-  //   };
-  //   return params;
-  // };
-
   const prepareParams = () => {
     const {user_id} = global.onlineStatusData;
     const params = {
       User_Id: user_id,
-      Institiution_Id: bank?.institution_id,
+      Institiution_Number: insNumber,
       Account_Number: accountNo,
       Branch_Number: branchNo,
-      DOB: '16-03-1988',
-      Address_City: 'Patna',
-      Address_State: 'Bihar',
-      Address_PostalCode: '110011',
-      Address_Line1: 'Address_Line1',
-      Address_Line2: 'Address_Line2',
+      Account_Holder_Name:accountHolderName,
+      DOB: dob && format(dob, 'yyyy-MM-dd'),
+      Address_City: city,
+      Address_State: province?.state_name,
+      Address_PostalCode: postal,
+      Address_Line1: addLine1,
+      Address_Line2: addLine2 || ''
     };
     return params;
   };
@@ -185,13 +165,16 @@ const RoyaltySignup = props => {
             fontWeight={'400'}
             value="We just need your direct deposit information for payout, we have the rest of your information."
           />
-          <TouchableInput
-            leftAccImage={CustomFonts.Bank}
-            rightAccImage={CustomFonts.ChevronDown}
-            placeholder="Select Bank"
-            value={bank?.institution_name}
-            onClicked={() => {
-              setIsBankVisible(true);
+          <SKInput
+            marginTop={10}
+            leftAccImage={CustomFonts.Number}
+            borderColor={Colors.CLR_0065FF}
+            value={insNumber}
+            maxLength = {3}
+            keyboardType="number-pad"
+            placeholder="Enter Institution Number"
+            onEndEditing={value => {
+              setInsNumber(value);
             }}
           />
           <SKInput
@@ -200,6 +183,7 @@ const RoyaltySignup = props => {
             leftAccImage={CustomFonts.Number}
             borderColor={Colors.CLR_0065FF}
             value={accountNo}
+            maxLength = {15}
             keyboardType="number-pad"
             placeholder="Enter Account Number"
             onEndEditing={value => {
@@ -210,7 +194,7 @@ const RoyaltySignup = props => {
             marginTop={10}
             marginBottom={0}
             leftAccImage={CustomFonts.Number}
-            maxLength={30}
+            maxLength = {5}
             borderColor={Colors.CLR_0065FF}
             value={branchNo}
             keyboardType="number-pad"
@@ -222,11 +206,11 @@ const RoyaltySignup = props => {
           <SKInput
             marginTop={10}
             marginBottom={0}
-            leftAccImage={CustomFonts.Number}
+            leftAccImage={CustomFonts.UserIcon}
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={accountHolderName}
-            placeholder="Enter account holder name"
+            placeholder="Enter Account Holder Name"
             onEndEditing={value => {
               setAccountHolderName(value);
             }}
@@ -242,18 +226,19 @@ const RoyaltySignup = props => {
           <SKInput
             marginTop={10}
             marginBottom={0}
-            leftAccImage={CustomFonts.Number}
+            leftAccImage={CustomFonts.Home}
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
-            value={accountHolderName}
-            placeholder="Enter city"
+            value={city}
+            placeholder="Enter City"
             onEndEditing={value => {
-              setAccountHolderName(value);
+              setCity(value);
             }}
           />
           <TouchableInput
             rightAccImage={CustomFonts.ChevronDown}
             marginBottom={2}
+            leftAccImage={CustomFonts.Home}
             maxLength={15}
             borderColor={Colors.CLR_0065FF}
             value={province?.state_name}
@@ -266,10 +251,11 @@ const RoyaltySignup = props => {
             marginTop={10}
             marginBottom={0}
             leftAccImage={CustomFonts.Number}
-            maxLength={30}
+            maxLength={7}
             borderColor={Colors.CLR_0065FF}
             value={postal}
-            placeholder="Enter postal code"
+            autoCapitalize = 'characters'
+            placeholder="Enter Postal Code"
             onEndEditing={value => {
               setPostal(value);
             }}
@@ -281,7 +267,7 @@ const RoyaltySignup = props => {
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={addLine1}
-            placeholder="Address line 1"
+            placeholder="Address Line 1"
             onEndEditing={value => {
               setAddLine1(value);
             }}
@@ -293,7 +279,7 @@ const RoyaltySignup = props => {
             maxLength={30}
             borderColor={Colors.CLR_0065FF}
             value={addLine2}
-            placeholder="Address line 2"
+            placeholder="Address Line 2"
             onEndEditing={value => {
               setAddLine2(value);
             }}
@@ -318,7 +304,6 @@ const RoyaltySignup = props => {
                 const params = prepareParams();
                 refRegister(params, res => {
                   setIsLoading(false);
-                  console.log('refRegister res', res);
                   if (res?.status == 1) {
                     navigation.navigate('RoyaltyWallat');
                   }
@@ -327,20 +312,6 @@ const RoyaltySignup = props => {
             }}
           />
         </ScrollView>
-        {isBankVisible && banks && (
-          <SKModel
-            title="Select"
-            data={banks}
-            keyLabel="institution_name"
-            onClose={() => {
-              setIsBankVisible(false);
-            }}
-            onSelect={value => {
-              setBank(value);
-              setIsBankVisible(false);
-            }}
-          />
-        )}
         {isDatePickerVisible && (
           <SKDatePicker
             originalDate={new Date()}
@@ -357,7 +328,7 @@ const RoyaltySignup = props => {
           />
         )}
 
-{isProvinceVisible && (
+{isProvinceVisible && provinces && (
           <SKModel
             title="Select"
             data={provinces}
@@ -376,7 +347,7 @@ const RoyaltySignup = props => {
   );
 };
 const SKCheckbox = props => {
-  const {isChecked, onToggle, size = 25} = props;
+  const {isChecked, onToggle, size = 25, color = Colors.APP_RED_SUBHEADING_COLOR} = props;
   return (
     <TouchableOpacity
       style={{
@@ -394,7 +365,7 @@ const SKCheckbox = props => {
       />
       <Text
         style={{
-          color: Colors.RED,
+          color: color,
           marginLeft: 10,
           flex: 1,
           fontSize: 15,

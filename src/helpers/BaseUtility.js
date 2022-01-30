@@ -179,25 +179,25 @@ export const loadIntialData = (callback) => {
                     callback({status:1, msg:''})
                   } else {
                     const msg = craRes?.message ?? 'Something went wrong,Please try again.'
-                    Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
+                    Alert.alert('SukhTax', msg);                
                     callback({status:-1, msg:msg})
                   }
                 });
               }else{
                 const msg = taxDocsRes?.message ?? 'Something went wrong,Please try again.'
-                Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
+                Alert.alert('SukhTax', msg);                
                 callback({status:-1, msg:msg})
               }
             })
           }else{
             const msg = incStatusRes?.message ?? 'Something went wrong,Please try again.'
-            Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
+            Alert.alert('SukhTax', msg);                
             callback({status:-1, msg:msg})
           }
         })
       }else{
         const msg = fileStatusRes?.message ?? 'Something went wrong,Please try again.'
-        Alert.alert('SukhTax', msg,[{text: 'Retry',onPress: () => loadIntialData()}]);                
+        Alert.alert('SukhTax', msg);                
         callback({status:-1, msg:msg})
       }
     })

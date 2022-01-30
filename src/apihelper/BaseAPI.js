@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Alert } from 'react-native';
 const config = {
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',

@@ -67,7 +67,6 @@ const FamilyDetails = props => {
   }
 
   let maxDate = new Date(); 
-  maxDate.setFullYear(global?.mostRecentYear);
   useEffect(() => {
     setIsLoading(true)
     getMaritalStatusList({}, maritalRes => {

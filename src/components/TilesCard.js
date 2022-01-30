@@ -51,7 +51,7 @@ const TilesCard = props => {
       <View
         style={{
           backgroundColor: Colors.CLR_29295F,
-          height: 1,
+          height: .3,
           width: '100%',
           marginTop: 11,
         }}
@@ -74,6 +74,7 @@ const TilesCard = props => {
           marginTop: 24,
           textAlign: 'center',
           width: '90%',
+          letterSpacing:-.5
         }}>
         {desc1}
       </Text>

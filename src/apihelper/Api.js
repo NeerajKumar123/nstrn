@@ -3,8 +3,8 @@ import {Eversign_Api_Access_Key, Eversign_Bussiness_Id} from '../constants/Stati
 
 // test commit
 
-// export const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
-export const BaseURL = 'http://app.sukhtax.com/services.asmx'
+export const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
+// export const BaseURL = 'http://app.sukhtax.com/services.asmx'
 export const BaseURLRoyalty = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
 
 
@@ -482,7 +482,7 @@ export const getRefrralPrice = (callback) => {
 };
 
 export const refRegister= (params,callback) => {
-  const path = `${BaseURLRoyalty}/Referral_Register`
+  const path = `${BaseURLRoyalty}/Referral_Register_New`
   API.makePostRequest(path , params, callback);
 };
 
@@ -503,7 +503,6 @@ export const getPayoutHistory = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
-
 export const aplyRefCodeOnline = (params,callback) => {
   const path = `${BaseURLRoyalty}/Referral_Apply_Referral_Code_Online`
   API.makePostRequest(path , params, callback);
@@ -513,3 +512,41 @@ export const aplyRefCodeIncorp = (params,callback) => {
   const path = `${BaseURLRoyalty}/Referral_Apply_Referral_Code_Incorporation`
   API.makePostRequest(path , params, callback);
 };
+
+export const getTaxAuthDocs = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Get_Authorization_Documents`
+  API.makePostRequest(path ,params, callback);
+};
+
+export const taxDocsSaveEverSignDoc = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Save_Eversign_Authorization`
+  API.makePostRequest(path , params, callback);
+};
+
+
+export const taxDocsSubmitForFiling = (params,callback) => {
+  const path = `${BaseURL}/Tax_Docs_Submit_For_Filing`
+  API.makePostRequest(path , params, callback);
+};
+
+export const getcraAuthDocs = (params,callback) => {
+  const path = `${BaseURL}/CRA_Letters_Get_Authorization_Documents`
+  API.makePostRequest(path ,params, callback);
+};
+
+export const craLatterSaveEverSignAuth = (params,callback) => {
+  const path = `${BaseURL}/CRA_Letters_Save_Eversign_Authorization`
+  API.makePostRequest(path , params, callback);
+};
+
+export const craLettersSubmitForFiling = (params,callback) => {
+  const path = `${BaseURL}/CRA_Letters_Submit_For_Filing`
+  API.makePostRequest(path , params, callback);
+};
+
+
+
+
+
+
+

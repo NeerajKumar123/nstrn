@@ -205,6 +205,7 @@ const PaymentFinalCard = props => {
     onCouponApplied = () => {},
     isRefCodeApplied,
     refCodeAppliedMsg = 'Referral Code Applied Successfully.',
+    hideRefCode = false
   } = props;
   const [refCode, setRefCode] = useState();
   const [isApplying, setIsApplying] = useState(false);
@@ -256,7 +257,7 @@ const PaymentFinalCard = props => {
       />
 
       <KeyValueView title="TOTAL" value={`$ ${totalAmount}`} />
-      {!isRefCodeApplied ? (
+      {!isRefCodeApplied  && !hideRefCode ? (
         <View
           style={{
             width: '100%',
@@ -445,22 +446,27 @@ const TaxFilingStatusCard = props => {
     file['file_base64'] = '';
     return file;
   };
-  const getSigner = () => {
-    const {email = 'rahbar.fatmi@21gfox.com'} = global.userInfo;
+  const getSigner = (document) => {
+    const {email = ''} = global.userInfo;
     const user = global.userInfo;
     const fName = user?.firstname ?? '';
     const lName = user?.lastname ?? '';
     const userFullName = fName + ' ' + lName;
 
-    let signer = {};
-    signer['id'] = 1;
-    signer['name'] = userFullName;
-    signer['email'] = email;
-    signer['pin'] = '';
-    signer['message'] = '';
-    signer['language'] = 'en';
-    return signer;
+    let signers = []
+    for (let index = 0; index < document?.no_of_signer; index++) {
+      let signer = {};
+      signer['id'] = index + 1;
+      signer['name'] = userFullName;
+      signer['email'] = index == 0 ? email : "noreply@sukhtax.com" ;
+      signer['pin'] = '';
+      signer['message'] = '';
+      signer['language'] = 'en';
+      signers.push(signer)
+    }
+    return signers;
   };
+
 
   const recipient = () => {
     let recipient = {};
@@ -471,10 +477,8 @@ const TaxFilingStatusCard = props => {
   };
 
   const getFields = document => {
-    // console.log('document',document)
     let fields = [];
     document?.Fields?.forEach(element => {
-      console.log('element', element);
       let field = {};
       field['type'] = element?.field_type;
       field['x'] = element?.x_coordinate;
@@ -487,7 +491,7 @@ const TaxFilingStatusCard = props => {
       ] = `${element.field_type}${element.x_coordinate}${element.x_coordinate}`;
       field['required'] = 1;
       field['readonly'] = 0;
-      field['signer'] = 1;
+      field['signer'] = element?.signer;
       field['name'] = '';
       field['validation_type'] = '';
       field['text_size'] = '';
@@ -499,7 +503,6 @@ const TaxFilingStatusCard = props => {
       field['group'] = '';
       fields.push(field);
     });
-    console.log('fields==>', fields);
     return fields;
   };
 
@@ -523,7 +526,7 @@ const TaxFilingStatusCard = props => {
     params['flexible_signing'] = 0;
     params['use_hidden_tags'] = 0;
     params['files'] = [getFile(document)];
-    params['signers'] = [getSigner()];
+    params['signers'] = getSigner(document);
     params['recipients'] = [];
     params['fields'] = [getFields(document)];
     return params;
@@ -549,6 +552,7 @@ const TaxFilingStatusCard = props => {
       <PaymentFinalCard
         details={paymentDetails}
         navigation={navigation}
+        hideRefCode = {tax_file_status_id == 12}
         isRefCodeApplied={isRefCodeApplied}
         refCodeAppliedMsg={refCodeAppliedMsg}
         onCouponApplied={msg => {
@@ -792,6 +796,7 @@ const TaxFilingStatusCard = props => {
                           currentIndex: index + 1,
                           doc: item,
                           dochash: dochash,
+                          saveType:1
                         });
                       } else {
                         Alert.alert(
@@ -838,7 +843,7 @@ const TaxFilingStatusCard = props => {
           }}
         />
       )}
-      {tax_file_status_id == 10 && (
+      {(tax_file_status_id == 10 ||  tax_file_status_id == 12) && (
         <View
           style={{
             width: '100%',
@@ -858,7 +863,7 @@ const TaxFilingStatusCard = props => {
               const params = {
                 User_Id: user_id,
                 Tax_File_Id: tax_file_id,
-                Additional_Payment: additional_payment_required,
+                Additional_Payment: additional_payment_required > 0 ? 1 : 0,
               };
               updateLoadingStatus(true);
               getOnlinePaymentDetails(params, paymentDetailsRes => {
@@ -871,24 +876,9 @@ const TaxFilingStatusCard = props => {
               });
             }}
           />
-          {/* <SKButton
-            fontSize={16}
-            width="48%"
-            fontWeight={'normal'}
-            backgroundColor={Colors.PRIMARY_FILL}
-            borderColor={Colors.PRIMARY_BORDER}
-            title={'PAY SECURELY'}
-            onPress={() => {
-              const nextPageParams = {
-                payment_required: payment_required,
-                additional_payment_required: additional_payment_required,
-              };
-              navigation.navigate('OnlinePaymentScreen', {...nextPageParams});
-            }}
-          /> */}
         </View>
       )}
-      {tax_file_status_id == 12 && (
+      {/* {tax_file_status_id == 12 && (
         <View
           style={{
             width: '100%',
@@ -937,7 +927,7 @@ const TaxFilingStatusCard = props => {
             }}
           />
         </View>
-      )}
+      )} */}
       <MessegesView
         count={new_message_count}
         onClick={() => {

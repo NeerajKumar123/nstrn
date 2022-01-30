@@ -75,7 +75,7 @@ const IncorporatorsList = props => {
           INCORPORATORS' DETAILS"
         />
         <TouchableOpacity 
-        style={{width: '100%', flexDirection: 'row'}}
+        style={{width: '100%', flexDirection: 'row', marginTop:10}}
         onPress = {() =>{
           navigation.navigate('IncorpDetails');
         }}

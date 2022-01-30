@@ -36,7 +36,7 @@ const OnlineAllDone = props => {
         />
       </View>
 
-        <Heading value="WE'RE ALL" marginTop={60} />
+        <Heading value="WE'RE ALL" top={30} />
         <Heading value="DONE HERE!" marginTop={-10} />
         <Heading
           fontSize={20}

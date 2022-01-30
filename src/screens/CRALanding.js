@@ -21,13 +21,14 @@ const CRALanding = props => {
     const params = {User_Id: user_id};
     setIsLoading(true)
     craLattersGetStatus(params, craRes => {
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 200);
       if (craRes?.status == 1) {
         setLetters(craRes?.data);
         const craLattersResData = craRes?.data && craRes?.data.length > 0 ? craRes?.data[0] : undefined
         global.craLattersData = craLattersResData
       } else {
-        setIsLoading(false);
         Alert.alert('SukhTax', craRes?.message);
       }
     });
