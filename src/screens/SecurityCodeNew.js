@@ -89,9 +89,7 @@ const SecurityCodeNew = props => {
               if(user_id){
                 setIsLoading(true)
                 const params = {user_id:user_id,OTP:otp}
-                console.log('params',params)
                 userCheckOtpForLogin(params,(checkOtpRes)=>{
-                  console.log('checkOtpRes',checkOtpRes)
                   setIsLoading(false)
                   if (checkOtpRes?.status == 1) {
                     navigation.navigate('Login')  

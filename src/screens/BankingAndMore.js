@@ -190,7 +190,6 @@ const BankingAndMore = props => {
                 borderColor={Colors.CLR_D3D3D9}
                 title={'NO'}
                 onPress={() => {
-                  console.log('NO clicked');
                   setIsLoading(true);
                   const {user_id} = global.onlineStatusData;
                   onlineGetBankingInfoByUser(
@@ -228,7 +227,6 @@ const BankingAndMore = props => {
                 borderColor={Colors.PRIMARY_FILL}
                 title={'YES'}
                 onPress={() => {
-                  console.log('YES clicked');
                   setIsBankingInfoChanged(true);
                 }}
               />

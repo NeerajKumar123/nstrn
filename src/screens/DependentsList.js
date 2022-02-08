@@ -152,7 +152,6 @@ const DependentsList = props => {
                     //   navigation.navigate('DependentDetails', {...item});
                   }}
                   onDelete={() => {
-                    console.log('item', item)
                     const options = [
                       {
                         text: 'Cancel',

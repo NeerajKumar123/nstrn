@@ -16,7 +16,6 @@ export default function AuthNavigator() {
     const authSubscriber = DeviceEventEmitter.addListener(
       'user_loggedin',
       (isLogged) => {
-        console.log('isLogged',isLogged, global.userInfo)
         if(isLogged){
           setIsLoggedIn(true)
         }else{

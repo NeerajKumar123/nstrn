@@ -42,7 +42,7 @@ const RoyaltySignup = props => {
   const [addLine1, setAddLine1] = useState('');
   const [addLine2, setAddLine2] = useState('');
   const [provinces, setProvinces] = useState();
-  
+
   const [isAuthChecked, setIsAuthChecked] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isBankVisible, setIsBankVisible] = useState(false);
@@ -64,14 +64,14 @@ const RoyaltySignup = props => {
     const isInsNumberValid = insNumber?.length >= 3;
     const isAccValid = accountNo?.length;
     const isBranchValid = branchNo?.length == 5;
-    
-    const isAccountHolderNameValid = true
-    const isdobValid = true
-    const isCityValid = true
-    const isProvinceValid = true
-    const isPostalCodeValid = true
-    const isAddLine1Valid = true
-    const isAddLine2Valid = true
+
+    const isAccountHolderNameValid = true;
+    const isdobValid = true;
+    const isCityValid = true;
+    const isProvinceValid = true;
+    const isPostalCodeValid = postal?.length < 7 && postal?.length > 5;
+    const isAddLine1Valid = addLine1?.length > 5;
+    const isAddLine2Valid = true;
 
     if (!isInsNumberValid) {
       isValidForm = false;
@@ -82,28 +82,28 @@ const RoyaltySignup = props => {
     } else if (!isBranchValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid branch code.');
-    }  else if (!isAccountHolderNameValid) {
+    } else if (!isAccountHolderNameValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid account holder name.');
-    }  else if (!isdobValid) {
+    } else if (!isdobValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid DOB.');
-    }  else if (!isCityValid) {
+    } else if (!isCityValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid city.');
-    }  else if (!isProvinceValid) {
+    } else if (!isProvinceValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid province.');
-    }  else if (!isPostalCodeValid) {
+    } else if (!isPostalCodeValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid postal code.');
-    }  else if (!isAddLine1Valid) {
+    } else if (!isAddLine1Valid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid address line 1.');
     } else if (!isAddLine2Valid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid address line 2.');
-    } else if (!isAuthChecked) { 
+    } else if (!isAuthChecked) {
       isValidForm = false;
       Alert.alert(
         'SukhTax',
@@ -120,13 +120,13 @@ const RoyaltySignup = props => {
       Institiution_Number: insNumber,
       Account_Number: accountNo,
       Branch_Number: branchNo,
-      Account_Holder_Name:accountHolderName,
+      Account_Holder_Name: accountHolderName,
       DOB: dob && format(dob, 'yyyy-MM-dd'),
       Address_City: city,
       Address_State: province?.state_name,
       Address_PostalCode: postal,
       Address_Line1: addLine1,
-      Address_Line2: addLine2 || ''
+      Address_Line2: addLine2 || '',
     };
     return params;
   };
@@ -170,7 +170,7 @@ const RoyaltySignup = props => {
             leftAccImage={CustomFonts.Number}
             borderColor={Colors.CLR_0065FF}
             value={insNumber}
-            maxLength = {3}
+            maxLength={3}
             keyboardType="number-pad"
             placeholder="Enter Institution Number"
             onEndEditing={value => {
@@ -183,7 +183,7 @@ const RoyaltySignup = props => {
             leftAccImage={CustomFonts.Number}
             borderColor={Colors.CLR_0065FF}
             value={accountNo}
-            maxLength = {15}
+            maxLength={15}
             keyboardType="number-pad"
             placeholder="Enter Account Number"
             onEndEditing={value => {
@@ -194,7 +194,7 @@ const RoyaltySignup = props => {
             marginTop={10}
             marginBottom={0}
             leftAccImage={CustomFonts.Number}
-            maxLength = {5}
+            maxLength={5}
             borderColor={Colors.CLR_0065FF}
             value={branchNo}
             keyboardType="number-pad"
@@ -254,7 +254,7 @@ const RoyaltySignup = props => {
             maxLength={7}
             borderColor={Colors.CLR_0065FF}
             value={postal}
-            autoCapitalize = 'characters'
+            autoCapitalize="characters"
             placeholder="Enter Postal Code"
             onEndEditing={value => {
               setPostal(value);
@@ -290,6 +290,9 @@ const RoyaltySignup = props => {
               setIsAuthChecked(!isAuthChecked);
             }}
           />
+          {Platform.OS == 'android' && (
+            <View style={{height: 100, width: '100%'}} />
+          )}
           <SKButton
             marginTop={30}
             fontSize={16}
@@ -306,6 +309,11 @@ const RoyaltySignup = props => {
                   setIsLoading(false);
                   if (res?.status == 1) {
                     navigation.navigate('RoyaltyWallat');
+                  } else {
+                    const msg =
+                      res?.message ??
+                      'Something went wront, Please try again later.';
+                    Alert.alert('SukhTax', msg);
                   }
                 });
               }
@@ -328,7 +336,7 @@ const RoyaltySignup = props => {
           />
         )}
 
-{isProvinceVisible && provinces && (
+        {isProvinceVisible && provinces && (
           <SKModel
             title="Select"
             data={provinces}
@@ -347,7 +355,12 @@ const RoyaltySignup = props => {
   );
 };
 const SKCheckbox = props => {
-  const {isChecked, onToggle, size = 25, color = Colors.APP_RED_SUBHEADING_COLOR} = props;
+  const {
+    isChecked,
+    onToggle,
+    size = 25,
+    color = Colors.APP_RED_SUBHEADING_COLOR,
+  } = props;
   return (
     <TouchableOpacity
       style={{

@@ -118,10 +118,8 @@ const RequestApplyStatus = props => {
   };
 
   const getFields = document => {
-    // console.log('document',document)
     let fields = [];
     document?.Fields?.forEach(element => {
-      console.log('element', element);
       let field = {};
       field['type'] = element?.field_type;
       field['x'] = element?.x_coordinate;
@@ -146,7 +144,6 @@ const RequestApplyStatus = props => {
       field['group'] = '';
       fields.push(field);
     });
-    console.log('fields==>', fields);
     return fields;
   };
 
@@ -186,13 +183,11 @@ const RequestApplyStatus = props => {
         item?.eversign_document_hash?.length < 1
       );
     });
-    console.log('unsingedDocs?.length', unsingedDocs?.length);
     return unsingedDocs?.length > 0 ? false : true;
   };
 
   const getFileName = docUrl => {
     const dateString = `${new Date().valueOf()}`;
-    console.log(dateString);
     const loweredCase = docUrl?.toLowerCase();
     let fileName = 'Sukhtax_' + dateString;
     if (loweredCase.includes('.pdf')) {
@@ -204,7 +199,6 @@ const RequestApplyStatus = props => {
     } else if (loweredCase.includes('.jpg')) {
       fileName = fileName + '.jpg';
     }
-    console.log('fileName===>', fileName);
     return fileName;
   };
 
@@ -218,7 +212,6 @@ const RequestApplyStatus = props => {
       setDownloadingItem(doc);
     }
     downloadFileFromUrl(docUrl, fileName, () => {
-      console.log('document_file_name', doc);
       if (Platform.OS == 'android') {
         setIsLoading(false);
       } else {
@@ -285,7 +278,6 @@ const RequestApplyStatus = props => {
               setSelectedItem(item);
               // setShowDoc(true);
               handleFileDownloading(item, () => {
-                console.log('item', item);
               });
             }}
             onAllDownloadClicked={() => {

@@ -48,6 +48,7 @@ const Spouse = props => {
   const isFocused = useIsFocused();
   const pageParams = props.route.params;
   const isEditing = pageParams?.isEditing;
+  const depId = pageParams?.dependentOption;
   const [isFillingForWife, setIsFillingForWife] = useState(false);
   const [lastTime, setLastTime] = useState();
   const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
@@ -75,7 +76,6 @@ const Spouse = props => {
   const {Tax_Filed_With_Sukhtax, last_marital_status_id = 1} = global.onlineStatusData;
   const [taxFileSpouseId, setTaxFileSpouseId] = useState();
   let tax_file_year_id = 0;
-  console.log('global.onlineStatusData',global.onlineStatusData)
   //check if  in editing  mode then pick from server data only
   if (isEditing) {
     const {Year_Wise_Records} = global.onlineStatusData;
@@ -275,10 +275,14 @@ const Spouse = props => {
       const params = prepareParams();
       saveSpouseInfo(params, spouseRes => {
         if (spouseRes?.status == 1) {
-          navigation.push('DependentsList', {
-            depCount: 1,
-            isEditing: isEditing,
-          });
+          if (depId == 1) {
+            navigation.push('DependentsList', {
+              depCount: 1,
+              isEditing: isEditing,
+            });
+          }else{
+            navigation.navigate('MyTaxYear',{pageIndex:0,isEditing:isEditing}); 
+          }
         } else {
           Alert.alert('SukhTax', 'Something went wrong!');
         }
@@ -329,7 +333,6 @@ const Spouse = props => {
             paddingHorizontal: 20,
           }}>
           <Heading value="SPOUSE" marginTop={26} />
-          {console.log('Tax_Filed_With_Sukhtax',Tax_Filed_With_Sukhtax, last_marital_status_id,isEditing,isConfirmed)}
           {Tax_Filed_With_Sukhtax && (last_marital_status_id == 2 || last_marital_status_id == 3)  && !isEditing && !isConfirmed ? (
             <LastYearDataCard
               onContinuePressed={(
@@ -494,7 +497,7 @@ const Spouse = props => {
                 fontWeight={'normal'}
                 backgroundColor={Colors.PRIMARY_FILL}
                 borderColor={Colors.PRIMARY_BORDER}
-                title={isEditing ? 'SUBMIT' : 'DEPENDENTS'}
+                title={isEditing ? 'SUBMIT' : depId ? 'DEPENDENTS' : 'MY TAX YEAR'}
                 onPress={() => {
                   if (checkFormValidations()) {
                     handleSaveAndUpdateInfo();

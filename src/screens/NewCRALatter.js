@@ -36,7 +36,6 @@ const NewCRALatter = props => {
   const prepareParams = () => {
     const {user_id} = global.userInfo;
     const base64s = attachments.join();
-    console.log('attachments',attachments,base64s)
     const params = {
       User_id: user_id,
       Title: title,
@@ -105,7 +104,6 @@ const NewCRALatter = props => {
           value={desc}
           placeholder="Enter description"
           onEndEditing={value => {
-            console.log('value', value)
             setDesc(value);
           }}
         />
@@ -176,7 +174,6 @@ const NewCRALatter = props => {
                     const isMultiple = res?.assets?.length > 1;
                     let names = [];
                     let attachs = [];
-                    console.log('res?.assets',res?.assets)
                     res?.assets?.forEach(element => {
                       attachs.push(element.base64);
                       names.push(element.fileName);

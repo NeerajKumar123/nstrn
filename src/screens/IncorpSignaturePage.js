@@ -229,7 +229,6 @@ const IncorpSignaturePage = props => {
               value={address}
               placeholder="Address"
               onEndEditing={value => {
-                console.log('value', value);
                 setAddress(value);
               }}
             />

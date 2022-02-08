@@ -1,7 +1,6 @@
 import * as SKTStorage from '../helpers/SKTStorage';
 
 export const isValidField = (value, regex) => {
-  console.log('value', value, regex);
   if (value == undefined || !value) {
     return false;
   }
@@ -23,17 +22,13 @@ export const isValidSIN = sin => {
   if (isEmpty) return false;
   const isZero = parseInt(sin) == 0;
   if (isZero) return false;
-  console.log('invalidSinList', global.invalidSinList);
   const ar = global.invalidSinList?.map(a => a.Invalid_SIN_Number);
   if (ar && ar.includes(sin)) {
     return false
   }
 
   const eightDigits = sin.substring(0, 8); //Grabs 8 first 8 digits
-      const checkDigit = sin.substring(8); //Grabs the 9th digit
-      console.log('The first eight digits are: ' + eightDigits);
-      console.log('The Check-digit is: ' + checkDigit);
-  
+      const checkDigit = sin.substring(8); //Grabs the 9th digit  
       let total;
       let total2 = 0;
       let counter = 0;
@@ -106,7 +101,6 @@ export const isValidSIN = sin => {
   
       //Adding all the finalized variables together
       total = first + second + third + fourth + fifth + sixth + seventh + eighth;
-      console.log('This is the total so far: ' + total);
       total2 = total;
   
       /*The loop will subtract 10 and then multiply the total by 10 to
@@ -118,15 +112,9 @@ export const isValidSIN = sin => {
         total = total - 10;
       }
       let result = counter * 10;
-  
-      console.log('This is the next highest number divisble by 10: ' + result);
-      let remaining = result - total2;
+        let remaining = result - total2;
   
       // if the checksum is divisible by 10 then it's valid
-      console.log(
-        'remaining == parseInt(checkDigit)',
-        remaining == parseInt(checkDigit),
-      );
       return remaining == parseInt(checkDigit);
 
   

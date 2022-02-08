@@ -105,10 +105,8 @@ const CRALattersStatus = props => {
   };
 
   const getFields = document => {
-    // console.log('document',document)
     let fields = [];
     document?.Fields?.forEach(element => {
-      console.log('element', element);
       let field = {};
       field['type'] = element?.field_type;
       field['x'] = element?.x_coordinate;
@@ -133,7 +131,6 @@ const CRALattersStatus = props => {
       field['group'] = '';
       fields.push(field);
     });
-    console.log('fields==>', fields);
     return fields;
   };
 
@@ -171,7 +168,6 @@ const CRALattersStatus = props => {
         item?.eversign_document_hash?.length < 1
       );
     });
-    console.log('unsingedDocs?.length', unsingedDocs?.length);
     return unsingedDocs?.length > 0 ? false : true;
   };
 
@@ -449,7 +445,6 @@ const Resolved = props => {
 
   const getFileName = docUrl => {
     const dateString = `${new Date().valueOf()}`;
-    console.log(dateString);
     const loweredCase = docUrl?.toLowerCase();
     let fileName = 'Sukhtax_' + dateString;
     if (loweredCase.includes('.pdf')) {
@@ -559,7 +554,6 @@ const Resolved = props => {
             onClick={() => {
               if (item.document_file_name) {
                 handleFileDownloading(item, () => {
-                  console.log('groupedDocs1111', item);
                 });
               }
             }}

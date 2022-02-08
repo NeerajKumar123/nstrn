@@ -28,6 +28,7 @@ const TilesCard = props => {
         backgroundColor: Colors.WHITE,
         paddingVertical: 24,
         borderRadius: 26,
+        elevation:3,
         borderColor: Colors.GREEN,
         alignItems: 'center',
         paddingHorizontal: 5,

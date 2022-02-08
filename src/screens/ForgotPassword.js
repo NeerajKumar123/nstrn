@@ -37,7 +37,6 @@ const ForgotPassword = props => {
   const [codeSentSuccessfully, setCodeSentSuccessfully] = useState(false);
   const inputs = Array(4).fill(0);
   const {params} = props?.route;
-  console.log('params===>',params)
   const {pagetitle, pagesubs} = params;
   const [otpParams, setOtpParams] = useState(params);
   const [otps, setOtps] = useState(Array(4).fill(''));

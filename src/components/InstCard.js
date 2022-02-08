@@ -20,7 +20,6 @@ const ins2 = require('../../assets/tab/ins2.png');
 const ins3 = require('../../assets/tab/ins3.png');
 const InstCard = props => {
   const {image, text, margin = 0, padding = 0} = props;
-  console.log('neeshu1', props);
   return (
     <View
       style={{

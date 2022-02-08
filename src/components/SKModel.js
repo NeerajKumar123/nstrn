@@ -211,7 +211,6 @@ export const SKModelImageTitle = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'SUBMIT'}
             onPress={() => {
-              console.log('imageTitle', imageTitle);
               if (imageTitle.length > 0) {
                 onTitleEntered(imageTitle);
               } else {

@@ -29,7 +29,7 @@ const App = () => {
 
   return (
     <>
-      <StripeProvider publishableKey={stripekey_test}>
+      <StripeProvider publishableKey={stripekey_live}>
         <AuthNavigator />
       </StripeProvider>
     </>

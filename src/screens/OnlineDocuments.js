@@ -179,7 +179,6 @@ const OnlineDocuments = props => {
               setIsImageTitleVisible(false);
             }}
             onTitleEntered={value => {
-              console.log('value', value)
               setIsImageTitleVisible(false);
               setImageTitle(value)
               intiateImageUploading(value)

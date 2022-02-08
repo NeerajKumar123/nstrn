@@ -38,7 +38,6 @@ const RoyaltyPayoutHistory = () => {
       setTimeout(() => {
         setIsLoading(false);
       }, 200);
-      console.log('res===>', res);
       if (res?.status == 1) {
         setMsg(res?.message)
         setHostoryData(res?.data);

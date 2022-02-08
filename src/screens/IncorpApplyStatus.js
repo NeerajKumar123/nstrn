@@ -263,7 +263,6 @@ const InProcess = props => {
         }
       })
       .catch(err => {
-        console.log('err', err);
       });
   };
   return (

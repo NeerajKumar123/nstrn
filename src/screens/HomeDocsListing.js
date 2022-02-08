@@ -133,7 +133,6 @@ const HomeDocsListing = props => {
                   pageId={pageId}
                   onDocClicked={doc => {
                     handleFileDownloading(doc, () => {
-                      console.log('groupedDocs1111', groupedDocs);
                     });
                   }}
                 />

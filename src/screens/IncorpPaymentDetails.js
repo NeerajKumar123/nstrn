@@ -130,7 +130,6 @@ const IncorpPaymentDetails = props => {
             onBlur={() => {}}
             onEndEditing={() => {
               const finalValue = refCode?.trim() || '';
-              console.log('finalValue====>', finalValue);
             }}
           />
           {isApplying && (

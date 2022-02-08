@@ -36,7 +36,6 @@ const Login = props => {
   
     if (enabled) {
       getFcmToken()
-      console.log('Authorization status:', authStatus);
     }
   }
 

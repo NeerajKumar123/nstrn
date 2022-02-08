@@ -364,7 +364,6 @@ const RemainedDetailsTaxYrFlow = props => {
               setIsMChangeVisible(false);
             }}
             onSelect={value => {
-              console.log('mChangeOpton?.id',value)
               setMChangeOpton(value);
               setIsMChangeVisible(false);
             }}

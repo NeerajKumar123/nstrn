@@ -159,7 +159,6 @@ const Profile = props => {
                 Mobile_No: mobile
               };
               updateUserProfile(params, updateRes => {
-                console.log('updateRes',updateRes)
                 setTimeout(() => {
                   setIsLoading(false)
                 }, 1000);

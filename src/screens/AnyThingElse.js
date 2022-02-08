@@ -50,7 +50,6 @@ const AnyThingElse = props => {
           value={anythingText}
           placeholder="Please type here"
           onEndEditing={value => {
-            console.log('value', value)
             setAnythingText(value)
           }}
         />

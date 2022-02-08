@@ -289,7 +289,6 @@ const PaymentFinalCard = props => {
             maxLength={20}
             returnKeyType="done"
             onFocus={() => {
-              console.log('TextInput');
             }}
             onChangeText={value => {
               setRefCode(value);
@@ -297,7 +296,6 @@ const PaymentFinalCard = props => {
             onBlur={() => {}}
             onEndEditing={() => {
               const finalValue = refCode?.trim() || '';
-              console.log('finalValue====>', finalValue);
             }}
           />
           {isApplying && (
@@ -452,18 +450,25 @@ const TaxFilingStatusCard = props => {
     const fName = user?.firstname ?? '';
     const lName = user?.lastname ?? '';
     const userFullName = fName + ' ' + lName;
-
     let signers = []
-    for (let index = 0; index < document?.no_of_signer; index++) {
-      let signer = {};
-      signer['id'] = index + 1;
-      signer['name'] = userFullName;
-      signer['email'] = index == 0 ? email : "noreply@sukhtax.com" ;
-      signer['pin'] = '';
-      signer['message'] = '';
-      signer['language'] = 'en';
-      signers.push(signer)
-    }
+    // for (let index = 0; index < document?.no_of_signer; index++) {
+    //   let signer = {};
+    //   signer['id'] = index + 1;
+    //   signer['name'] = userFullName;
+    //   signer['email'] = index == 0 ? email : "noreply@sukhtax.com" ;
+    //   signer['pin'] = '';
+    //   signer['message'] = '';
+    //   signer['language'] = 'en';
+    //   signers.push(signer)
+    // }
+    let signer = {};
+    signer['id'] = 1;
+    signer['name'] = userFullName;
+    signer['email'] = email;
+    signer['pin'] = '';
+    signer['message'] = '';
+    signer['language'] = 'en';
+    signers.push(signer)
     return signers;
   };
 
@@ -491,7 +496,7 @@ const TaxFilingStatusCard = props => {
       ] = `${element.field_type}${element.x_coordinate}${element.x_coordinate}`;
       field['required'] = 1;
       field['readonly'] = 0;
-      field['signer'] = element?.signer;
+      field['signer'] = 1;
       field['name'] = '';
       field['validation_type'] = '';
       field['text_size'] = '';
@@ -540,7 +545,6 @@ const TaxFilingStatusCard = props => {
         item?.eversign_document_hash?.length < 1
       );
     });
-    console.log('unsingedDocs?.length', unsingedDocs?.length);
     return unsingedDocs?.length > 0 ? false : true;
   };
 

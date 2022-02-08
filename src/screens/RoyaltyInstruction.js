@@ -5,7 +5,8 @@ import {
   Text,
   Button,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  Platform
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
@@ -33,7 +34,6 @@ const RoyaltyInstruction = props => {
   const [incorpYouSave, setIncorpYouSave] = useState('');
   useEffect(() => {
     getRefrralPrice(priceListRes => {
-      console.log('res', JSON.stringify(priceListRes));
       if (priceListRes?.status == 1) {
         let onlineFriendSaves = priceListRes?.data?.filter(
           fee => fee.referral_price_id == 1,
@@ -115,13 +115,13 @@ const RoyaltyInstruction = props => {
         }}>
         <TilesCard
           title={'ONLINE TAX RETURN'}
-          desc={`YOUR FRIEND SAVE $ ${onlineFriendSave}`}
-          desc1={`YOU GET PAID $ ${onlineYouSave}`}
+          desc={`YOUR FRIEND SAVE\n$${onlineFriendSave}`}
+          desc1={`YOU GET PAID\n$${onlineYouSave}`}
         />
         <TilesCard
           title={'COMPANY INCORPORATION'}
-          desc={`YOUR FRIEND SAVE $ ${incorpFriendSave}`}
-          desc1={`YOU GET PAID $ ${incorpYouSave}`}
+          desc={`YOUR FRIEND SAVE\n$${incorpFriendSave}`}
+          desc1={`YOU GET PAID\n$${incorpYouSave}`}
         />
       </View>
       <SKButton
@@ -136,6 +136,7 @@ const RoyaltyInstruction = props => {
           navigation.navigate('RoyaltySubmit');
         }}
       />
+      {Platform.OS == 'android' && <View style = {{height:100, width:'100%'}}/>}
       </ScrollView>
     </View>
   );

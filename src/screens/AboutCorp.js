@@ -146,7 +146,6 @@ const AboutCorp = props => {
             setIsNOBVisible(false);
           }}
           onSelect={value => {
-            console.log('isNatureValid',value)
             setIsNOBVisible(false)
             setSelectedNature(value)
           }}

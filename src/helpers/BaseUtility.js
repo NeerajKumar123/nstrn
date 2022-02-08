@@ -55,7 +55,6 @@ export async function checkPermission(permission) {
 }
 
 export async function downloadFileFromUrl(url, filename, callback) {
-  console.log('url',url,filename )
   if (Platform.OS === 'android') {
     const granted = await checkPermission(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -86,7 +85,6 @@ export async function downloadFileFromUrl(url, filename, callback) {
           callback()
           filePath = res.path();
           fileType =  res.respInfo.headers['content-type'] || res.respInfo.headers['Content-Type'];
-          console.log('fileType',fileType)
           if (!fileType) {
             fileType = 'application/pdf';
           }
@@ -98,7 +96,6 @@ export async function downloadFileFromUrl(url, filename, callback) {
           if (Platform.OS === 'ios') {
             RNFetchBlob.ios.openDocument(pathToSave).catch((errorMessage, statusCode) => {
               // Alert.alert('SukhTax', 'Something went wrong!',errorMessage,statusCode);
-              console.log('openDocument====>', errorMessage, statusCode)
             });;
           } else {
             RNFetchBlob.android.actionViewIntent(filePath, fileType);
@@ -117,13 +114,11 @@ export async function downloadFileFromUrl(url, filename, callback) {
         })
         .catch((errorMessage, statusCode) => {
           callback()
-          console.log('errorMessage',errorMessage,statusCode )
           Alert.alert('SukhTax', errorMessage, statusCode);
         });
     })
     .catch(error => {
       callback()
-      console.log('error',error)
     });
 }
 
