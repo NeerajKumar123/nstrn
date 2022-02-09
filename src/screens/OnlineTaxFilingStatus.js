@@ -447,28 +447,22 @@ const TaxFilingStatusCard = props => {
   const getSigner = (document) => {
     const {email = ''} = global.userInfo;
     const user = global.userInfo;
-    const fName = user?.firstname ?? '';
-    const lName = user?.lastname ?? '';
-    const userFullName = fName + ' ' + lName;
     let signers = []
-    // for (let index = 0; index < document?.no_of_signer; index++) {
-    //   let signer = {};
-    //   signer['id'] = index + 1;
-    //   signer['name'] = userFullName;
-    //   signer['email'] = index == 0 ? email : "noreply@sukhtax.com" ;
-    //   signer['pin'] = '';
-    //   signer['message'] = '';
-    //   signer['language'] = 'en';
-    //   signers.push(signer)
-    // }
-    let signer = {};
-    signer['id'] = 1;
-    signer['name'] = userFullName;
-    signer['email'] = email;
-    signer['pin'] = '';
-    signer['message'] = '';
-    signer['language'] = 'en';
-    signers.push(signer)
+    for (let index = 0; index < document?.Signer.length ; index++) {
+      const serverSigner = document.Signer[index]
+      const fName = serverSigner?.firstname ?? '';
+      const lName = serverSigner?.lastname ?? '';
+      const userFullName = fName + ' ' + lName;
+      let signer = {};
+      signer['id'] = index + 1;
+      signer['name'] = userFullName;
+      signer['email'] = serverSigner.email
+      signer['pin'] = '';
+      signer['message'] = '';
+      signer['language'] = 'en';
+      signers.push(signer)
+    }
+    console.log('signers',signers)
     return signers;
   };
 
@@ -484,6 +478,7 @@ const TaxFilingStatusCard = props => {
   const getFields = document => {
     let fields = [];
     document?.Fields?.forEach(element => {
+      console.log('element',element)
       let field = {};
       field['type'] = element?.field_type;
       field['x'] = element?.x_coordinate;
@@ -496,7 +491,7 @@ const TaxFilingStatusCard = props => {
       ] = `${element.field_type}${element.x_coordinate}${element.x_coordinate}`;
       field['required'] = 1;
       field['readonly'] = 0;
-      field['signer'] = 1;
+      field['signer'] = element.signer;
       field['name'] = '';
       field['validation_type'] = '';
       field['text_size'] = '';
@@ -538,6 +533,17 @@ const TaxFilingStatusCard = props => {
   };
 
   const checkIfAllDocsSigned = () => {
+    const unsingedDocs = confirmDocs.filter(function (item) {
+      return (
+        item?.eversign_document_hash == '' ||
+        item?.eversign_document_hash == null ||
+        item?.eversign_document_hash?.length < 1
+      );
+    });
+    return unsingedDocs?.length > 0 ? false : true;
+  };
+
+  const checkIfPerticularDocIsSigned = (document) => {
     const unsingedDocs = confirmDocs.filter(function (item) {
       return (
         item?.eversign_document_hash == '' ||
@@ -792,16 +798,20 @@ const TaxFilingStatusCard = props => {
                       updateLoadingStatus(false);
                       if (res?.signers && res?.signers?.length > 0) {
                         const dochash = res?.document_hash;
-                        const signer = res?.signers?.[0];
-                        const signingUrl = signer.embedded_signing_url;
-                        navigation.navigate('SKWebPage', {
-                          pageUrl: signingUrl,
-                          noOfDocs: confirmDocs?.length,
-                          currentIndex: index + 1,
-                          doc: item,
-                          dochash: dochash,
-                          saveType:1
-                        });
+                        if(res?.signers?.length > 1){
+                          navigation.navigate('EverSigners', {allSigners:res?.signers, doc:item,dochash:dochash,currentIndex: 1})
+                        }else{
+                          const signer = res?.signers?.[0];
+                          const signingUrl = signer.embedded_signing_url;
+                          navigation.navigate('SKWebPage', {
+                            pageUrl: signingUrl,
+                            noOfDocs: confirmDocs?.length,
+                            currentIndex: index + 1,
+                            doc: item,
+                            dochash: dochash,
+                            saveType:1
+                          });
+                        }
                       } else {
                         Alert.alert(
                           'Sukhtax',
@@ -847,6 +857,9 @@ const TaxFilingStatusCard = props => {
           }}
         />
       )}
+      {tax_file_status_id == 14 && 
+      <Text style = {{marginTop:5, fontSize:10, color:Colors.GRAY, fontStyle:'italic'}}>(After singing all of the above documents, Please submit for filing to complete the process.)</Text>
+      }
       {(tax_file_status_id == 10 ||  tax_file_status_id == 12) && (
         <View
           style={{

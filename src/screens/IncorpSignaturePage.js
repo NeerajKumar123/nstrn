@@ -76,7 +76,7 @@ const IncorpSignaturePage = props => {
   };
 
   useEffect(() => {
-    const {user_id, incorporation_id, incorporator_id} = pageParams;
+    const {user_id, incorporation_id, incorporator_id} = {};
     const params = {
       User_Id: user_id,
       Incorporation_Id: incorporation_id,
@@ -331,51 +331,47 @@ const IncorpSignaturePage = props => {
                 maxStrokeWidth={4}
                 viewMode={'portrait'}
               />
-              <View
+               <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                width:'100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <TouchableOpacity
                 style={{
-                  position: 'absolute',
-                  right: 0,
-                  height: '100%',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
+                  width: 40,
+                  height: 40,
+                  alignItems:'center',
+                  justifyContent:'center',
+                }}
+                onPress={() => {
+                  signPad.current.resetImage();
+                  setIsSignSaved(false);
                 }}>
+                <Icon name={'refresh'} size={30} color={Colors.PRIMARY_FILL} />
+              </TouchableOpacity>
+              {isSignStart && (
                 <TouchableOpacity
                   style={{
-                    width: 40,
-                    height: 40,
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-end',
+                    paddingHorizontal:10,
+                    marginRight:10,
+                    marginTop:10,
+                    alignItems:'center',
+                    justifyContent:'center',
+                    borderRadius:6,
+                    borderWidth:1,
+                    borderColor:Colors.APP_RED_SUBHEADING_COLOR
                   }}
                   onPress={() => {
-                    signPad.current.resetImage();
-                    setIsSignSaved(false);
+                    setIsSignStart(false);
+                    setIsSignSaved(true);
                   }}>
-                  <Icon
-                    name={'refresh'}
-                    size={30}
-                    color={Colors.PRIMARY_FILL}
-                  />
+                  <Text style = {{fontSize:15, fontWeight:'500', color:Colors.APP_RED_SUBHEADING_COLOR}}>Save</Text>
                 </TouchableOpacity>
-                {isSignStart && (
-                  <TouchableOpacity
-                    style={{
-                      width: 40,
-                      height: 40,
-                      justifyContent: 'flex-end',
-                      alignItems: 'flex-end',
-                    }}
-                    onPress={() => {
-                      setIsSignStart(false);
-                      setIsSignSaved(true);
-                    }}>
-                    <Icon
-                      name={'content-save-outline'}
-                      size={30}
-                      color={Colors.APP_BLUE_HEADING_COLOR}
-                    />
-                  </TouchableOpacity>
-                )}
-              </View>
+              )}
+            </View>
             </View>
           </ViewShot>
           <SKButton

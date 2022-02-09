@@ -73,7 +73,8 @@ const Spouse = props => {
   const [isResidenceVisible, setIsResidenceVisible] = useState();
   const [isBankVisible, setIsBankVisible] = useState();
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const {Tax_Filed_With_Sukhtax, last_marital_status_id = 1} = global.onlineStatusData;
+  const {Tax_Filed_With_Sukhtax, last_marital_status_id = 1} =
+    global.onlineStatusData;
   const [taxFileSpouseId, setTaxFileSpouseId] = useState();
   let tax_file_year_id = 0;
   //check if  in editing  mode then pick from server data only
@@ -119,11 +120,11 @@ const Spouse = props => {
           setLastTime(details.last_year_filed);
           setFName(details.first_name);
           setLName(details.last_name);
-          setDOB(new Date(details.DOB));
+          details.DOB  && setDOB(new Date(details.DOB));
           setGender(details.gender);
           setSinNo(details.SIN_Number);
           setLastTime(details.last_year_filed);
-          setEnrtyDate(new Date(details.DOE_Canada));
+          details.DOE_Canada && setEnrtyDate(new Date(details.DOE_Canada));
           setResidency({
             residency_id: details.residency_id,
             residency_name: details.residency,
@@ -147,7 +148,7 @@ const Spouse = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isValidLastYear = lastTime;
+    const isValidLastYear = isFillingForWife ? lastTime : true;
     const isFNameValid = Validator.isValidField(fName, ST_REGEX.FullName);
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.FullName);
     const isDOBValid = dob;
@@ -203,7 +204,7 @@ const Spouse = props => {
       User_id: user_id,
       Tax_File_Id: tax_file_id || Tax_File_Id,
       Tax_File_Year_Id: tax_file_year_id,
-      Last_Year_Tax_Filed: lastTime,
+      Last_Year_Tax_Filed: lastTime || '',
       First_Name: fName,
       Last_Name: lName,
       DOB: dob && format(dob, 'yyyy-MM-dd'),
@@ -217,12 +218,12 @@ const Spouse = props => {
       Filing_For_Spouse: isFillingForWife ? 1 : 0,
     };
     if (isEditing) {
-      params['Tax_File_Spouse_id'] = taxFileSpouseId;
+      params['Tax_File_Spouse_id'] = taxFileSpouseId || 0;
     }
-    if(isFillingForWife){
-      SKTStorage.setKeyValue('showOtherAuthorizer',isFillingForWife,()=>{
-        global.showOtherAuthorizer = isFillingForWife
-      })
+    if (isFillingForWife) {
+      SKTStorage.setKeyValue('showOtherAuthorizer', isFillingForWife, () => {
+        global.showOtherAuthorizer = isFillingForWife;
+      });
     }
     return params;
   };
@@ -237,15 +238,15 @@ const Spouse = props => {
     const {user_id} = global.onlineStatusData;
     onlineGetSpouseInfoByUserId({User_Id: user_id}, spouseInfoRes => {
       if (spouseInfoRes.status == 1) {
-        const details = spouseInfoRes?.data[0] || {};
+        const details = spouseInfoRes?.data[0] ;
         setLastTime(details.last_year_filed);
         setFName(details.first_name);
         setLName(details.last_name);
-        setDOB(new Date(details.DOB));
+        details?.DOB && setDOB(new Date(details.DOB))
         setGender(details.gender);
         setSinNo(flagSin ? '' : details.SIN_Number);
         setLastTime(details.last_year_filed);
-        setEnrtyDate(new Date(details.DOE_Canada));
+        details?.DOE_Canada && setEnrtyDate(new Date(details.DOE_Canada));
         const filtered = residencies?.filter(element => {
           return element.residency_name == details.residency;
         });
@@ -280,8 +281,11 @@ const Spouse = props => {
               depCount: 1,
               isEditing: isEditing,
             });
-          }else{
-            navigation.navigate('MyTaxYear',{pageIndex:0,isEditing:isEditing}); 
+          } else {
+            navigation.navigate('MyTaxYear', {
+              pageIndex: 0,
+              isEditing: isEditing,
+            });
           }
         } else {
           Alert.alert('SukhTax', 'Something went wrong!');
@@ -333,7 +337,10 @@ const Spouse = props => {
             paddingHorizontal: 20,
           }}>
           <Heading value="SPOUSE" marginTop={26} />
-          {Tax_Filed_With_Sukhtax && (last_marital_status_id == 2 || last_marital_status_id == 3)  && !isEditing && !isConfirmed ? (
+          {Tax_Filed_With_Sukhtax &&
+          (last_marital_status_id == 2 || last_marital_status_id == 3) &&
+          !isEditing &&
+          !isConfirmed || 1 ? (
             <LastYearDataCard
               onContinuePressed={(
                 flagBank,
@@ -357,22 +364,24 @@ const Spouse = props => {
                 isOn={isFillingForWife}
                 value="ARE YOU FILING FOR YOUR SPOUSE?"
                 onToggle={status => {
-                  const updated = !isFillingForWife
+                  const updated = !isFillingForWife;
                   setIsFillingForWife(updated);
-                  SKTStorage.setKeyValue('showOtherAuthorizer',updated,()=>{
-                    global.showOtherAuthorizer = updated
-                  })
+                  SKTStorage.setKeyValue('showOtherAuthorizer', updated, () => {
+                    global.showOtherAuthorizer = updated;
+                  });
                 }}
               />
-              <TouchableInput
-                leftAccImage={CustomFonts.Clock}
-                rightAccImage={CustomFonts.ChevronDown}
-                value={lastTime}
-                placeholder="Select Year"
-                onClicked={() => {
-                  setIsLastTimeVisible(true);
-                }}
-              />
+              {isFillingForWife && (
+                <TouchableInput
+                  leftAccImage={CustomFonts.Clock}
+                  rightAccImage={CustomFonts.ChevronDown}
+                  value={lastTime}
+                  placeholder="Last time filed with Sukh Tax"
+                  onClicked={() => {
+                    setIsLastTimeVisible(true);
+                  }}
+                />
+              )}
               <SKInput
                 leftAccImage={CustomFonts.UserIcon}
                 maxLength={30}
@@ -436,16 +445,17 @@ const Spouse = props => {
                   }}
                 />
               )}
-
-              <TouchableInput
-                marginTop={15}
-                leftAccImage={CustomFonts.Calender}
-                value={enrtyDate && format(enrtyDate, 'dd/MM/yyyy')}
-                placeholder="Date of Immigration (DD/MM/YYYY)"
-                onClicked={() => {
-                  setIsImmDatePickerVisible(true);
-                }}
-              />
+              {residency?.residency_id != 5 && (
+                <TouchableInput
+                  marginTop={15}
+                  leftAccImage={CustomFonts.Calender}
+                  value={enrtyDate && format(enrtyDate, 'dd/MM/yyyy')}
+                  placeholder="Date of Entry (If Applicable)"
+                  onClicked={() => {
+                    setIsImmDatePickerVisible(true);
+                  }}
+                />
+              )}
               {isFillingForWife && (
                 <>
                   <Heading
@@ -497,7 +507,9 @@ const Spouse = props => {
                 fontWeight={'normal'}
                 backgroundColor={Colors.PRIMARY_FILL}
                 borderColor={Colors.PRIMARY_BORDER}
-                title={isEditing ? 'SUBMIT' : depId ? 'DEPENDENTS' : 'MY TAX YEAR'}
+                title={
+                  isEditing ? 'SUBMIT' : depId ? 'DEPENDENTS' : 'MY TAX YEAR'
+                }
                 onPress={() => {
                   if (checkFormValidations()) {
                     handleSaveAndUpdateInfo();
@@ -673,7 +685,7 @@ const ButtonCard = props => {
   const {title, isSelected = false, onOptionSelected = () => {}} = props;
   return (
     <>
-      <Heading fontSize={20} marginTop={30} color={Colors.RED} value={title} />
+      <Heading fontSize={20} marginTop={30}  value={title} />
       <View
         style={{
           flexDirection: 'row',

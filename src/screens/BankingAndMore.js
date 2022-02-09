@@ -173,7 +173,6 @@ const BankingAndMore = props => {
             <Heading
               fontSize={20}
               marginTop={30}
-              color={Colors.RED}
               value="HAS YOUR BANKING INFO CHANGED SINCE LAST YEAR?"
             />
             <View

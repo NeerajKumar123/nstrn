@@ -36,7 +36,7 @@ const AnyThingElse = props => {
           fontSize={20}
           marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="PLEASE USE THE BELOW BOX TO TELL US ABOUT ANYTHING REGARDIING YOUR TAX YEAR, OR ABOUT ANYTHING YOU WOULD LIKE US TO KNOW."
+          value="PLEASE USE THE BELOW BOX TO TELL US ABOUT ANYTHING REGARDING YOUR TAX YEAR, OR ABOUT ANYTHING YOU WOULD LIKE US TO KNOW."
         />
         <SKInput
           marginBottom={2}

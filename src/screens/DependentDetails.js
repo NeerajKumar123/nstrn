@@ -51,7 +51,7 @@ const DependentDetails = props => {
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.FullName);
     const isDOBValid = dob;
     const isGenderValid = gender;
-    const isSinValid = Validator.isValidSIN(sinNo);
+    const isSinValid =  sinNo.length ?  Validator.isValidSIN(sinNo) : true;
     const isRelationValid = relation;
     if (!isFNameValid) {
       isValidForm = false;
@@ -82,7 +82,7 @@ const DependentDetails = props => {
       Tax_File_Id: tax_file_id,
       DOB: dob && format(dob, 'yyyy-MM-dd'),
       Gender: gender,
-      SIN_Number: sinNo,
+      SIN_Number: sinNo, 
       Relationship: relation,
       First_Name: fName,
       Last_Name: lName,

@@ -125,11 +125,14 @@ export async function downloadFileFromUrl(url, filename, callback) {
 const updateSelectionData = (res) =>{
   const allYearsData = res?.data
   const allFiledYearsData =  allYearsData?.filter(element => element?.tax_file_status_id == 16);
-
   let lastSelectedYearsString =  ''
   allFiledYearsData?.map((element) =>{
     lastSelectedYearsString = lastSelectedYearsString + element?.years_selected
+    if(lastSelectedYearsString.length){
+      lastSelectedYearsString = lastSelectedYearsString + ','
+    }
   })
+  lastSelectedYearsString = lastSelectedYearsString.slice(0, -1); 
   const years = lastSelectedYearsString.split(',')
   global.alreadyFliedYears = years
 }

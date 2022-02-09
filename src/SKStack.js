@@ -72,6 +72,7 @@ import AnimTest from './screens/AnimTest';
 import {SafeAreaView} from 'react-native';
 import OnlineEditInfo from './screens/OnlineEditInfo';
 import PDFExample from './screens/PDFExample';
+import EverSigners from './screens/EverSigners';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 const Stack = createStackNavigator();
 
@@ -146,10 +147,15 @@ const SKStack = () => {
             component={PDFExample}
             options={{title: 'PDFExample', headerShown: false}}
           />
-<Stack.Screen
+          <Stack.Screen
             name="ForgotPasswordNew"
             component={ForgotPasswordNew}
             options={{title: 'ForgotPasswordNew', headerShown: false}}
+          />
+          <Stack.Screen
+            name="EverSigners"
+            component={EverSigners}
+            options={{title: 'EverSigners', headerShown: false}}
           />
           <Stack.Screen
             name="AnimTest"

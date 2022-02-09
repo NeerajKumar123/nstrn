@@ -183,7 +183,7 @@ const Address = props => {
           />
           <Heading
             fontSize={16}
-            top={10}
+            marginTop={10}
             color={Colors.APP_RED_SUBHEADING_COLOR}
             value={`WHICH PROVINCE DID YOU LIVE IN ON DECEMBER 31, ${global.mostRecentYear}?`}
           />

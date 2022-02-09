@@ -21,7 +21,7 @@ import AppHeader from '../components/AppHeader';
 import * as Validator from '../helpers/SKTValidator';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
-import {onlineUploadAuthrizationDocumentBS64} from '../apihelper/Api';
+import {onlineUploadAuthrizationDocumentBS64,onlineUpdateSpouseEmailID} from '../apihelper/Api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as CustomFonts from '../constants/FontsDefs';
 import SignatureCapture from 'react-native-signature-capture';
@@ -33,6 +33,7 @@ const SignaturePage = props => {
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [sinNo, setSinNo] = useState('');
+  const [spouseEmailId, setSpouseEmailId] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(true);
   const [isSignStart, setIsSignStart] = useState(false);
@@ -45,6 +46,7 @@ const SignaturePage = props => {
     const isFNameValid = Validator.isValidField(fName,ST_REGEX.FullName)
     const isLNameValid = Validator.isValidField(lName,ST_REGEX.FullName)
     const isSinValid = Validator.isValidSIN(sinNo)
+    const isSpouseEmailIdValid = pageParams.authIndex == 1 ?  Validator.isValidField(spouseEmailId,ST_REGEX.Email) : true
 
     if (!isFNameValid) {
       isValidForm = false;
@@ -55,6 +57,9 @@ const SignaturePage = props => {
     }else if (!isSinValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid SIN.');
+    }else if (!isSpouseEmailIdValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please enter valid Spouse Email Id.');
     } else if (!isAuthChecked) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please authorize us by selecting checkobox');
@@ -150,6 +155,20 @@ const SignaturePage = props => {
               setSinNo(value);
             }}
           />
+          {pageParams.authIndex == 1 && 
+           <SKInput
+           leftAccImage={CustomFonts.Email}
+           marginTop={20}
+           marginBottom={0}
+           maxLength={30}
+           borderColor={Colors.CLR_0065FF}
+           value={spouseEmailId}
+           placeholder="Spouse Email Id"
+           onEndEditing={value => {
+             setSpouseEmailId(value);
+           }}
+         />
+          }
           <SKCheckbox
             isChecked={isAuthChecked}
             onToggle={() => {
@@ -194,17 +213,17 @@ const SignaturePage = props => {
             <View
               style={{
                 position: 'absolute',
-                right: 0,
-                height: '100%',
-                flexDirection: 'column',
+                top: 0,
+                width:'100%',
+                flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
               <TouchableOpacity
                 style={{
                   width: 40,
                   height: 40,
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
+                  alignItems:'center',
+                  justifyContent:'center',
                 }}
                 onPress={() => {
                   signPad.current.resetImage();
@@ -215,20 +234,20 @@ const SignaturePage = props => {
               {isSignStart && (
                 <TouchableOpacity
                   style={{
-                    width: 40,
-                    height: 40,
-                    justifyContent: 'flex-end',
-                    alignItems: 'flex-end',
+                    paddingHorizontal:10,
+                    marginRight:10,
+                    marginTop:10,
+                    alignItems:'center',
+                    justifyContent:'center',
+                    borderRadius:6,
+                    borderWidth:1,
+                    borderColor:Colors.APP_RED_SUBHEADING_COLOR
                   }}
                   onPress={() => {
                     setIsSignStart(false);
                     setIsSignSaved(true);
                   }}>
-                  <Icon
-                    name={'content-save-outline'}
-                    size={30}
-                    color={Colors.APP_BLUE_HEADING_COLOR}
-                  />
+                  <Text style = {{fontSize:15, fontWeight:'500', color:Colors.APP_RED_SUBHEADING_COLOR}}>Save</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -243,6 +262,15 @@ const SignaturePage = props => {
           title={'Submit'}
           onPress={() => {
             if (checkFormValidations()) {
+              if(pageParams.authIndex ==  1 && spouseEmailId){
+              //Call API to update Spouse Email id
+              const {user_id,tax_file_id} = global.onlineStatusData
+              const params = {User_Id:user_id, Tax_File_Id:tax_file_id, Spouse_Email:spouseEmailId}
+              onlineUpdateSpouseEmailID(params, emailUpdateRes => {
+                console.log('emailUpdateRes',emailUpdateRes)
+              })
+              }
+              //Call API to save Sign
               viewShotRef.current.capture().then(bs64Image => {
                 setIsLoading(true)
                 const params = prepareParams(bs64Image, 1);

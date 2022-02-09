@@ -115,12 +115,12 @@ const RoyaltyInstruction = props => {
         }}>
         <TilesCard
           title={'ONLINE TAX RETURN'}
-          desc={`YOUR FRIEND SAVE\n$${onlineFriendSave}`}
+          desc={`YOUR FRIEND SAVES\n$${onlineFriendSave}`}
           desc1={`YOU GET PAID\n$${onlineYouSave}`}
         />
         <TilesCard
           title={'COMPANY INCORPORATION'}
-          desc={`YOUR FRIEND SAVE\n$${incorpFriendSave}`}
+          desc={`YOUR FRIEND SAVES\n$${incorpFriendSave}`}
           desc1={`YOU GET PAID\n$${incorpYouSave}`}
         />
       </View>

@@ -215,7 +215,11 @@ const FamilyDetails = props => {
                   SKTStorage.setKeyValue('isFromSpouseFlow',check,()=>{
                     global.isFromSpouseFlow = check
                     if (isEditing) {
-                      navigation.navigate('OnlineEditInfo');
+                      if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
+                        navigation.navigate('Spouse',{dependentOption:dependentOption.id, isEditing:isEditing});
+                      }else{
+                        navigation.navigate('OnlineEditInfo');
+                      }
                     }else if(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3){
                       navigation.navigate('Spouse',{dependentOption:dependentOption.id, isEditing:isEditing});
                     }else if (dependentOption.id  == 1){
