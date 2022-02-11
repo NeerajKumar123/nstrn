@@ -23,6 +23,7 @@ const AppHeader = props => {
           justifyContent: 'space-between',
         }}>
           <TouchableOpacity
+            style = {{justifyContent:'flex-start', alignItems:'flex-start',width:40}}
             onPress={() => {
               onLeftClicked ? onLeftClicked() : navigation.goBack()
             }}>
@@ -31,7 +32,8 @@ const AppHeader = props => {
               resizeMode="contain"
               style={{
                 width: 19,
-                height: 25,
+                height: 27,
+                marginLeft:3,
               }}
             />
           </TouchableOpacity>

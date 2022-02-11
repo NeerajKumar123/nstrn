@@ -61,7 +61,6 @@ const RoyaltyInstruction = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         width: '100%',
-        paddingHorizontal: 20,
         backgroundColor: 'white',
       }}>
       <AppHeader navigation={navigation} />
@@ -82,7 +81,7 @@ const RoyaltyInstruction = props => {
           marginTop={26}
           color={Colors.APP_RED_SUBHEADING_COLOR}
         />
-        <Text style={styles.howitwork}>How does this work ?</Text>
+        <Text style={styles.howitwork}>How does this work?</Text>
         <Text style={styles.blueText}>
           Sukh Tax aims to make your experience as simple as possible.
         </Text>
@@ -96,7 +95,7 @@ const RoyaltyInstruction = props => {
           marginTop: 10,
           width: '100%',
         }}>
-        <InstCard text={'1) Sign up for our Loyalty Program'} image={ins1} />
+        <InstCard text={'1) Sign up for our Loyalty\nProgram'} image={ins1} />
         <InstCard
           text={'2) Refer a friend and give\nthem your unique referral code'}
           image={ins2}
