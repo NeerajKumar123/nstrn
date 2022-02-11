@@ -806,7 +806,7 @@ const TaxFilingStatusCard = props => {
                           navigation.navigate('SKWebPage', {
                             pageUrl: signingUrl,
                             noOfDocs: confirmDocs?.length,
-                            currentIndex: index + 1,
+                            currentIndex: 2,
                             doc: item,
                             dochash: dochash,
                             saveType:1
@@ -858,7 +858,7 @@ const TaxFilingStatusCard = props => {
         />
       )}
       {tax_file_status_id == 14 && 
-      <Text style = {{marginTop:5, fontSize:10, color:Colors.GRAY, fontStyle:'italic'}}>(After singing all of the above documents, Please submit for filing to complete the process.)</Text>
+      <Text style = {{marginTop:5, fontSize:10, color:Colors.GRAY, fontStyle:'italic'}}>(After signing all of the above documents, Please submit for filing to complete the process.)</Text>
       }
       {(tax_file_status_id == 10 ||  tax_file_status_id == 12) && (
         <View

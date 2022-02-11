@@ -340,7 +340,7 @@ const Spouse = props => {
           {Tax_Filed_With_Sukhtax &&
           (last_marital_status_id == 2 || last_marital_status_id == 3) &&
           !isEditing &&
-          !isConfirmed || 1 ? (
+          !isConfirmed  ? (
             <LastYearDataCard
               onContinuePressed={(
                 flagBank,

@@ -19,12 +19,12 @@
       "filters": [
         {
           "filterType": "ABI",
-          "value": "x86_64"
+          "value": "armeabi-v7a"
         }
       ],
-      "versionCode": 7004,
+      "versionCode": 7001,
       "versionName": "2.1",
-      "outputFile": "app-x86_64-release.apk"
+      "outputFile": "app-armeabi-v7a-release.apk"
     },
     {
       "type": "ONE_OF_MANY",
@@ -43,24 +43,24 @@
       "filters": [
         {
           "filterType": "ABI",
-          "value": "x86"
+          "value": "x86_64"
         }
       ],
-      "versionCode": 7002,
+      "versionCode": 7004,
       "versionName": "2.1",
-      "outputFile": "app-x86-release.apk"
+      "outputFile": "app-x86_64-release.apk"
     },
     {
       "type": "ONE_OF_MANY",
       "filters": [
         {
           "filterType": "ABI",
-          "value": "armeabi-v7a"
+          "value": "x86"
         }
       ],
-      "versionCode": 7001,
+      "versionCode": 7002,
       "versionName": "2.1",
-      "outputFile": "app-armeabi-v7a-release.apk"
+      "outputFile": "app-x86-release.apk"
     }
   ]
 }
