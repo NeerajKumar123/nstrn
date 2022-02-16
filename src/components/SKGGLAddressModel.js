@@ -35,7 +35,7 @@ const SKGGLAddressModel = props => {
           height: '100%',
           alignSelf:'center',
           flexDirection: 'column',
-          backgroundColor: '#00000080',
+          backgroundColor: Colors.WHITE,
         }}>
         <View
           style={{
