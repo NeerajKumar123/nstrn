@@ -88,6 +88,17 @@ export const ImageActionSheetOptions = [
       color={Colors.APP_BLUE_HEADING_COLOR}
     />
   </View>,
+   <View style={{flexDirection: 'row'}}>
+   <Text style={{fontFamily: CustomFonts.OpenSansRegular, fontSize: 20}}>
+     Documents
+   </Text>
+   <Icon
+     style={{marginLeft: 10}}
+     name={'file-document-outline'}
+     size={25}
+     color={Colors.APP_BLUE_HEADING_COLOR}
+   />
+ </View>,
    <View style={{flexDirection: 'row', height:50, justifyContent:'center', alignItems:'center'}}>
     <Text
       style={{

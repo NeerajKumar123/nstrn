@@ -11,7 +11,7 @@ const AppHeader = props => {
   const {onLeftClicked  = undefined, onRightClicked = undefined, navigation = undefined} = props;
   return (
     <>
-      <StatusBar barStyle='light-content' />
+      <StatusBar/>
       <View
         style={{
           flexDirection: 'row',

@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   Alert,
+  Platform,
 } from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
@@ -13,15 +14,22 @@ import SKButton, {UploadDocButton} from '../components/SKButton';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {craLattersSaveNewLetter} from '../apihelper/Api';
+import {
+  craLattersSaveNewLetter
+} from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
 import SKLoader from '../components/SKLoader';
 import {ImageQualityOptionsWithMultiSelectionSupport} from '../constants/StaticValues';
 import SKInput from '../components/SKInput';
 import {ST_REGEX} from '../constants/StaticValues';
 import * as Validator from '../helpers/SKTValidator';
-import {LibImageQualityOptions,ImageActionSheetOptions} from '../constants/StaticValues'
-import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
+import {
+  LibImageQualityOptions,
+  ImageActionSheetOptions,
+} from '../constants/StaticValues';
+import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
+import DocumentPicker from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const NewCRALatter = props => {
   const navigation = useNavigation();
@@ -31,24 +39,29 @@ const NewCRALatter = props => {
   const [desc, setDesc] = useState('');
   const [attachments, setAttachments] = useState([]);
   const [attachmentNames, setAttachmentNames] = useState([]);
-  const actionSheetRef  = useRef()
+  const actionSheetRef = useRef();
+  const [isPDFUploaded, setIsPDFUploaded] = useState(false);
 
   const prepareParams = () => {
     const {user_id} = global.userInfo;
-    const base64s = attachments.join();
+    let attachs = []
+    attachments.map((item, index) =>{
+      const mappedFileName = attachmentNames[index]
+      const atObj = {base64:item, FileNameWithExtension:mappedFileName}
+      attachs.push(atObj)
+    })
     const params = {
       User_id: user_id,
       Title: title,
       Description: desc,
-      FileNameWithExtension: 'cra-document.jpg',
-      Base64String: base64s
+      attachment:JSON.stringify(attachs)
     };
     return params;
   };
 
   const checkFormValidations = () => {
-    const isTitleValid = title?.length
-    const isDescValid = desc?.length
+    const isTitleValid = title?.length;
+    const isDescValid = desc?.length;
     let isValidForm = true;
     if (!isTitleValid) {
       isValidForm = false;
@@ -56,7 +69,7 @@ const NewCRALatter = props => {
     } else if (!isDescValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid desciption.');
-    } else if (attachments.length < 1) {
+    } else if (attachments.length < 1 && !isPDFUploaded) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please attach document for CRA Letter.');
     }
@@ -71,7 +84,7 @@ const NewCRALatter = props => {
         backgroundColor: 'white',
         width: '100%',
         flex: 1,
-        paddingBottom:30
+        paddingBottom: 30,
       }}>
       <AppHeader navigation={navigation} />
       {isLoading && <SKLoader />}
@@ -95,7 +108,7 @@ const NewCRALatter = props => {
         <SKInput
           marginBottom={2}
           marginTop={30}
-          height = {100}
+          height={100}
           maxLength={300}
           multiline={true}
           returnKeyType="done"
@@ -118,18 +131,21 @@ const NewCRALatter = props => {
         )}
         {attachmentNames &&
           attachmentNames.map((item, index) => {
-            return <FileCard key={item} item={item}
-            onDeleteClicked = {()=>{
-            }}
-             />;
+            return (
+              <FileCard key={item} item={item} onDeleteClicked={() => {}} />
+            );
           })}
-          <UploadDocButton
-          isAttach = {true}
+        <UploadDocButton
+          isAttach={true}
           marginTop={35}
-          title={attachments && attachments.length > 0 ? 'ATTACH MORE' : 'ATTACH CRA LETTER'}
+          title={
+            attachments && attachments.length > 0
+              ? 'ATTACH MORE'
+              : 'ATTACH CRA LETTER'
+          }
           height={46}
           onClick={() => {
-            actionSheetRef.current.show()
+            actionSheetRef.current.show();
           }}
         />
         <SKButton
@@ -147,7 +163,7 @@ const NewCRALatter = props => {
               craLattersSaveNewLetter(params, saveRes => {
                 setIsLoading(false);
                 if (saveRes?.status == 1) {
-                  navigation.navigate('CRALattersStatus',{...saveRes.data[0]});
+                  navigation.navigate('CRALattersStatus', {...saveRes.data[0]});
                 } else {
                   const msg =
                     saveRes?.message ??
@@ -160,14 +176,21 @@ const NewCRALatter = props => {
         />
         <ActionSheet
           ref={actionSheetRef}
-          title={<Text style={{color: Colors.GRAY, fontSize: 18}}>Which one do you like?</Text>}
+          title={
+            <Text style={{color: Colors.GRAY, fontSize: 18}}>
+              Which one do you like?
+            </Text>
+          }
           options={ImageActionSheetOptions}
-          onPress={(index) => {
+          onPress={index => {
             setTimeout(() => {
               if (index == 0) {
                 launchImageLibrary(LibImageQualityOptions, res => {
                   if (res?.didCancel) {
-                    Alert.alert('SukhTax', 'Image uploading cancelled by user.');
+                    Alert.alert(
+                      'SukhTax',
+                      'Image uploading cancelled by user.',
+                    );
                   } else if (res?.error) {
                     console.log('error', res?.error ?? ERROR_MSG);
                   } else if (res?.assets) {
@@ -179,17 +202,19 @@ const NewCRALatter = props => {
                       names.push(element.fileName);
                     });
                     setAttachmentNames([...attachmentNames, ...names]);
-                    setAttachments([...attachs,...attachments])
+                    setAttachments([...attachments,...attachs]);
                   }
-                });              
-                }else if (index == 1) {
+                });
+              } else if (index == 1) {
                 launchCamera(LibImageQualityOptions, res => {
                   if (res?.didCancel) {
-                    Alert.alert('SukhTax', 'Image uploading cancelled by user.');
+                    Alert.alert(
+                      'SukhTax',
+                      'Image uploading cancelled by user.',
+                    );
                   } else if (res?.error) {
                     console.log('error', res?.error ?? ERROR_MSG);
                   } else if (res?.assets) {
-                    const isMultiple = res?.assets?.length > 1;
                     let names = [];
                     let attachs = [];
                     res?.assets?.forEach(element => {
@@ -197,10 +222,45 @@ const NewCRALatter = props => {
                       names.push(element.fileName);
                     });
                     setAttachmentNames([...attachmentNames, ...names]);
-                    setAttachments([...attachs,...attachments])
+                    setAttachments([...attachments,...attachs]);
                   }
-              });
-                }
+                });
+              } else if (index == 2) {
+                setTimeout(
+                  () => {
+                    DocumentPicker.pick({
+                      type: [DocumentPicker.types.pdf],
+                    })
+                      .then(res => {
+                        const fileRes = res[0];
+                        let path =
+                          Platform.OS == 'ios'
+                            ? fileRes.uri.replace('file://', '')
+                            : fileRes.uri;
+                        const filename = fileRes?.name;
+                        if(Platform.OS == 'ios'){
+                          path = path.replace(/%20/g, " ");
+                        }
+                        console.log('path',path)
+                        RNFetchBlob.fs
+                          .readFile(path, 'base64')
+                          .then(encoded => {
+                            const t1  = [...attachmentNames,filename]
+                            const t2  = [...attachments,encoded]
+                            setAttachmentNames(t1);
+                            setAttachments(t2);        
+                          })
+                          .catch(error => {
+                            console.error('sdsdsd',error)
+                          });
+                      })
+                      .catch(err => {
+                        console.log('err', err);
+                      });
+                  },
+                  Platform.OS === 'ios' ? 300 : 0,
+                );
+              }
             }, 100);
           }}
         />
@@ -212,7 +272,7 @@ const NewCRALatter = props => {
 const FileCard = props => {
   const {item} = props;
   return (
-<TouchableOpacity
+    <TouchableOpacity
       style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -237,5 +297,3 @@ const FileCard = props => {
 };
 
 export default NewCRALatter;
-
-

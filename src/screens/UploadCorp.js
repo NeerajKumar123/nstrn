@@ -1,44 +1,97 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {TouchableOpacity, View, Text, ScrollView, Image,Alert} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Alert,
+} from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
 import SKLoader from '../components/SKLoader';
-import SKButton , {UploadDocButton} from '../components/SKButton';
+import SKButton, {UploadDocButton} from '../components/SKButton';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {incorpUploadImage} from '../apihelper/Api'
+import {incorpUploadImage} from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
-import {LibImageQualityOptions,ImageActionSheetOptions} from '../constants/StaticValues'
-import { ActionSheetCustom as ActionSheet } from 'react-native-actionsheet'
+import {
+  LibImageQualityOptions,
+  ImageActionSheetOptions,
+} from '../constants/StaticValues';
+import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
+import DocumentPicker from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const UploadCorp = props => {
   const navigation = useNavigation();
-  const [uploadImageCount, setUploadImageCount] = useState(0)
-  const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const actionSheetRef = useRef()
-  
-  const intiateImageUploading = (res) =>{
-    const imgObj = res?.assets?.[0]
-    if (!imgObj.base64) Alert.alert('SukhTax','Something went wrong!')
-    setIsLoading(true)
-    const params = prepareParams(imgObj.base64)
-    incorpUploadImage(params,(uploadRes) =>{
-      setIsLoading(false)
-      setTimeout(() => {
-        uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message)
-        setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false)
-        uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1)  
-      }, 300);
-    })
-  }
+  const [uploadImageCount, setUploadImageCount] = useState(0);
+  const [isUploadedSuccessfully, setIsUploadedSuccessfully] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const actionSheetRef = useRef();
 
-  const prepareParams = (bs64Image) =>{
-    const {incorporation_id, user_id} = global.incStatusData
-    const params = {User_id:user_id,Incorporation_Id:incorporation_id, FileNameWithExtension:'incorp-identification-document.jpg',Base64String:bs64Image}
-    return params
-  }
+  // const intiateImageUploading = res => {
+  //   const imgObj = res?.assets?.[0];
+  //   if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
+  //   setIsLoading(true);
+  //   const params = prepareParams(imgObj.base64);
+  //   incorpUploadImage(params, uploadRes => {
+  //     setIsLoading(false);
+  //     setTimeout(() => {
+  //       uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+  //       setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false);
+  //       uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1);
+  //     }, 300);
+  //   });
+  // };
+
+  const intiateImageUploading = (res, isDoc) => {
+    if (isDoc) {
+      let path =
+        Platform.OS == 'ios' ? res.uri.replace('file://', '') : res.uri;
+      const filename = res?.name;
+      RNFetchBlob.fs
+        .readFile(path, 'base64')
+        .then(encoded => {
+          const params = prepareParams(encoded, filename);
+          setIsLoading(true);
+          incorpUploadImage(params, uploadRes => {
+            setIsLoading(false);
+            setTimeout(() => {
+              uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+              setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false);
+              uploadRes?.status == 1 &&
+                setUploadImageCount(uploadImageCount + 1);
+            }, 300);
+          });
+        })
+        .catch(error => console.error(error));
+    } else {
+      const imgObj = res?.assets?.[0];
+      if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
+      const params = prepareParams(imgObj.base64, imgObj?.fileName);
+      setIsLoading(true);
+      incorpUploadImage(params, uploadRes => {
+        setIsLoading(false);
+        setTimeout(() => {
+          uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+          setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false);
+          uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1);
+        }, 300);
+      });
+    }
+  };
+  const prepareParams = (bs64Image,filename) => {
+    const {incorporation_id, user_id} = global.incStatusData;
+    const params = {
+      User_id: user_id,
+      Incorporation_Id: incorporation_id,
+      FileNameWithExtension: filename,
+      Base64String: bs64Image,
+    };
+    return params;
+  };
 
   return (
     <View
@@ -50,9 +103,9 @@ const UploadCorp = props => {
         flex: 1,
       }}>
       <AppHeader navigation={navigation} />
-      {isLoading && <SKLoader/>}
+      {isLoading && <SKLoader />}
       <ScrollView
-        style={{width: '100%', flex:1}}
+        style={{width: '100%', flex: 1}}
         contentContainerStyle={{
           paddingHorizontal: 20,
         }}>
@@ -104,15 +157,18 @@ const UploadCorp = props => {
           value="- PR CARD"
         />
         <UploadDocButton
-        marginTop = {35}
-        title = 'UPLOAD THE DOC HERE'
-        height ={46}
-        onClick={() => {
-          actionSheetRef.current.show()
-        }} />
-        {uploadImageCount ? <UploadedFilesStatus count={uploadImageCount} /> : null}
+          marginTop={35}
+          title="UPLOAD THE DOC HERE"
+          height={46}
+          onClick={() => {
+            actionSheetRef.current.show();
+          }}
+        />
+        {uploadImageCount ? (
+          <UploadedFilesStatus count={uploadImageCount} />
+        ) : null}
         <SKButton
-          disable = {!isUploadedSuccessfully}
+          disable={!isUploadedSuccessfully}
           marginTop={30}
           fontSize={16}
           fontWeight={'normal'}
@@ -123,31 +179,57 @@ const UploadCorp = props => {
             navigation.navigate('IncorporatorsList');
           }}
         />
-         <ActionSheet
+        <ActionSheet
           ref={actionSheetRef}
-          title={<Text style={{color: Colors.GRAY, fontSize: 18}}>Which one do you like?</Text>}
+          title={
+            <Text style={{color: Colors.GRAY, fontSize: 18}}>
+              Which one do you like?
+            </Text>
+          }
           options={ImageActionSheetOptions}
-          onPress={(index) => {
+          onPress={index => {
             setTimeout(() => {
               if (index == 0) {
                 launchImageLibrary(LibImageQualityOptions, res => {
-                if (res?.didCancel) {
-                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
-                }else if (res?.error) {
-                }else if(res?.assets){
-                  intiateImageUploading(res)
-                }
-              });              
-                }else if (index == 1) {
+                  if (res?.didCancel) {
+                    Alert.alert(
+                      'SukhTax',
+                      'Image uploading cancelled by user.',
+                    );
+                  } else if (res?.error) {
+                  } else if (res?.assets) {
+                    intiateImageUploading(res, false);
+                  }
+                });
+              } else if (index == 1) {
                 launchCamera(LibImageQualityOptions, res => {
-                if (res?.didCancel) {
-                  Alert.alert('SukhTax', 'Image uploading cancelled by user.')
-                }else if (res?.error) {
-                }else if(res?.assets){
-                  intiateImageUploading(res)
-                }
-              });
-                }
+                  if (res?.didCancel) {
+                    Alert.alert(
+                      'SukhTax',
+                      'Image uploading cancelled by user.',
+                    );
+                  } else if (res?.error) {
+                  } else if (res?.assets) {
+                    intiateImageUploading(res, false);
+                  }
+                });
+              } else if (index == 2) {
+                setTimeout(
+                  () => {
+                    DocumentPicker.pick({
+                      type: [DocumentPicker.types.pdf],
+                    })
+                      .then(res => {
+                        const fileRes = res[0];
+                        intiateImageUploading(fileRes, true);
+                      })
+                      .catch(err => {
+                        console.log('err', err);
+                      });
+                  },
+                  Platform.OS === 'ios' ? 300 : 0,
+                );
+              }
             }, 100);
           }}
         />
@@ -176,7 +258,7 @@ const UploadedFilesStatus = props => {
         style={{
           width: '100%',
           textAlign: 'left',
-          fontFamily:CustomFonts.OpenSansRegular,
+          fontFamily: CustomFonts.OpenSansRegular,
           color: Colors.APP_RED_SUBHEADING_COLOR,
           fontSize: 15,
         }}>
@@ -185,6 +267,5 @@ const UploadedFilesStatus = props => {
     </TouchableOpacity>
   );
 };
-
 
 export default UploadCorp;

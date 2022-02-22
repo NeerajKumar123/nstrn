@@ -44,6 +44,8 @@ import {
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import * as SKTStorage from '../helpers/SKTStorage';
 import {useIsFocused} from '@react-navigation/native';
+import DocumentPicker from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const OnlineTaxFilingStatus = props => {
   const navigation = useNavigation();
@@ -78,34 +80,67 @@ const OnlineTaxFilingStatus = props => {
     }
   }, [isFocused]);
 
-  const intiateImageUploading = res => {
-    const imgObj = res?.assets?.[0];
-    if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
-    setIsLoading(true);
-    const params = prepareParams(imgObj.base64);
-    uploadDocumentBS64(params, uploadRes => {
-      if (uploadRes?.status == 1) {
+  // const intiateImageUploading = res => {
+  //   const imgObj = res?.assets?.[0];
+  //   if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
+  //   setIsLoading(true);
+  //   const params = prepareParams(imgObj.base64);
+  //   uploadDocumentBS64(params, uploadRes => {
+  //     if (uploadRes?.status == 1) {
+  //       setUploadImageCount(uploadImageCount + 1);
+  //       setIsLoading(false);
+  //       setTimeout(() => {
+  //         uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+  //       }, 500);
+  //     } else {
+  //       setIsLoading(false);
+  //       setTimeout(() => {
+  //         uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+  //       }, 500);
+  //     }
+  //   });
+  // };
+  const intiateImageUploading = (res, isDoc) => {
+    if (isDoc) {
+      let path =
+        Platform.OS == 'ios' ? res.uri.replace('file://', '') : res.uri;
+      const filename = res?.name;
+      RNFetchBlob.fs
+        .readFile(path, 'base64')
+        .then(encoded => {
+          const params = prepareParams(encoded, filename);
+          setIsLoading(true);
+          uploadDocumentBS64(params, uploadRes => {
+            setUploadImageCount(uploadImageCount + 1);
+            setIsLoading(false);
+            setTimeout(() => {
+              uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+            }, 500);
+          });
+        })
+        .catch(error => console.error(error));
+    } else {
+      const imgObj = res?.assets?.[0];
+      if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
+      const params = prepareParams(imgObj.base64, imgObj?.fileName);
+      setIsLoading(true);
+      uploadDocumentBS64(params, uploadRes => {
         setUploadImageCount(uploadImageCount + 1);
         setIsLoading(false);
         setTimeout(() => {
           uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
         }, 500);
-      } else {
-        setIsLoading(false);
-        setTimeout(() => {
-          uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
-        }, 500);
-      }
-    });
+      });
+    }
   };
 
-  const prepareParams = bs64Image => {
+  const prepareParams = (bs64Image, fileName) => {
     const {user_id, tax_file_id} = global.onlineStatusData;
     const params = {
       User_id: user_id,
       Tax_File_Id: tax_file_id,
       Year: parseInt('2020'),
-      FileNameWithExtension: 'identification-document.jpg',
+      FileNameWithExtension: fileName,
       Base64String: bs64Image,
     };
     return params;
@@ -178,7 +213,7 @@ const OnlineTaxFilingStatus = props => {
                   Alert.alert('SukhTax', 'Image uploading cancelled by user.');
                 } else if (res?.error) {
                 } else if (res?.assets) {
-                  intiateImageUploading(res);
+                  intiateImageUploading(res, false);
                 }
               });
             } else if (index == 1) {
@@ -187,9 +222,25 @@ const OnlineTaxFilingStatus = props => {
                   Alert.alert('SukhTax', 'Image uploading cancelled by user.');
                 } else if (res?.error) {
                 } else if (res?.assets) {
-                  intiateImageUploading(res);
+                  intiateImageUploading(res, false);
                 }
               });
+            }else if (index == 2) {
+              setTimeout(
+                () => {
+                  DocumentPicker.pick({
+                    type: [DocumentPicker.types.pdf],
+                  })
+                    .then(res => {
+                      const fileRes = res[0];
+                      intiateImageUploading(fileRes, true);
+                    })
+                    .catch(err => {
+                      console.log('err', err);
+                    });
+                },
+                Platform.OS === 'ios' ? 300 : 0,
+              );
             }
           }, 100);
         }}

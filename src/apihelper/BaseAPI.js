@@ -1,7 +1,9 @@
+import { Platform } from 'react-native';
 import axios from 'axios';
 const config = {
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
+    'Platform': Platform.OS
   },
 };
 

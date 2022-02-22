@@ -71,7 +71,7 @@ const Messages = props => {
             }}
             style={{
               flex: 1,
-              marginBottom: 85 + keyboardHeight,
+              marginBottom: 120 + keyboardHeight,
             }}
             keyExtractor={(item, index) => 'key_' + index}
             data={[...chats]}
@@ -94,6 +94,11 @@ const Messages = props => {
         <SKInput
           rightAccImage={CustomFonts.send_msg}
           isChatInput={true}
+          maxLength = {300}
+          height = {100}
+          multiline = {true}
+          returnKeyType='none'
+          blurOnSubmit={true}
           autoCapitalize = 'sentences'
           onTextChange={text => {
             setChatText(text);
@@ -102,9 +107,10 @@ const Messages = props => {
             if (chatText.length < 1) return;
             setIsLoading(true);
             const {tax_file_id,user_id} = global.onlineStatusData
+            const textd = chatText.replace(/\n/g, " ");
             const params = {
               User_Id: user_id,
-              Message: chatText,
+              Message: textd,
             };
             saveMessage(params, saveMsgRes => {
               setIsLoading(false);
