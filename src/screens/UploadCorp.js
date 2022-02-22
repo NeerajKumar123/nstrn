@@ -50,6 +50,9 @@ const UploadCorp = props => {
     if (isDoc) {
       let path =
         Platform.OS == 'ios' ? res.uri.replace('file://', '') : res.uri;
+        if(Platform.OS == 'ios'){
+          path = path.replace(/%20/g, " ");
+        }
       const filename = res?.name;
       RNFetchBlob.fs
         .readFile(path, 'base64')

@@ -212,6 +212,9 @@ const OnlineDocuments = props => {
                           Platform.OS == 'ios'
                             ? fileRes.uri.replace('file://', '')
                             : fileRes.uri;
+                        if(Platform.OS == 'ios'){
+                          path = path.replace(/%20/g, " ");
+                        }
                         RNFetchBlob.fs
                           .readFile(path, 'base64')
                           .then(encoded => {

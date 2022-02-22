@@ -97,7 +97,6 @@ const Messages = props => {
           maxLength = {300}
           height = {100}
           multiline = {true}
-          returnKeyType='none'
           blurOnSubmit={true}
           autoCapitalize = 'sentences'
           onTextChange={text => {

@@ -241,7 +241,6 @@ const NewCRALatter = props => {
                         if(Platform.OS == 'ios'){
                           path = path.replace(/%20/g, " ");
                         }
-                        console.log('path',path)
                         RNFetchBlob.fs
                           .readFile(path, 'base64')
                           .then(encoded => {

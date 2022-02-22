@@ -36,6 +36,9 @@ const Identification = props => {
       let path =
         Platform.OS == 'ios' ? res.uri.replace('file://', '') : res.uri;
       const filename = res?.name;
+      if(Platform.OS == 'ios'){
+        path = path.replace(/%20/g, " ");
+      }
       RNFetchBlob.fs
         .readFile(path, 'base64')
         .then(encoded => {
