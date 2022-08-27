@@ -42,6 +42,10 @@ import PaymentAwaiting from './screens/PaymentAwaiting';
 import HomePayment from './screens/HomePayment';
 import CarryForward from './screens/CarryForward';
 import OnlineReturnLanding from './screens/OnlineReturnLanding';
+import OnlineReturnLandingV3 from './screens/OnlineReturnLandingV3';
+import OnlineSelectYearV3 from './screens/OnlineSelectYearV3';
+import OnlineDocumentUploadV3 from './screens/OnlineDocumentUploadV3';
+import OnlineCompleteReviewProfileV3 from './screens/OnlineCompleteReviewProfileV3';
 import IncorporationLanding from './screens/IncorporationLanding';
 import NumberNameCorp from './screens/NumberNameCorp';
 import UploadCorp from './screens/UploadCorp';
@@ -316,12 +320,27 @@ const SKStack = () => {
           <Stack.Screen
             name="CarryForward"
             component={CarryForward}
-            options={{title: 'CarryForward', headerShown: false}}
+          options={{title: 'CarryForward', headerShown: false}}
           />
           <Stack.Screen
-            name="OnlineReturnLanding"
-            component={OnlineReturnLanding}
-            options={{title: 'OnlineReturnLanding', headerShown: false}}
+            name="OnlineReturnLandingV3"
+            component={OnlineReturnLandingV3}
+            options={{title: 'OnlineReturnLandingV3', headerShown: false}}
+          />
+          <Stack.Screen
+            name="OnlineSelectYearV3"
+            component={OnlineSelectYearV3}
+            options={{title: 'OnlineSelectYearV3', headerShown: false}}
+          />
+          <Stack.Screen
+            name="OnlineDocumentUploadV3"
+            component={OnlineDocumentUploadV3}
+            options={{title: 'OnlineDocumentUploadV3', headerShown: false}}
+          />
+          <Stack.Screen
+            name="OnlineCompleteReviewProfileV3"
+            component={OnlineCompleteReviewProfileV3}
+            options={{title: 'OnlineCompleteReviewProfileV3', headerShown: false}}
           />
           <Stack.Screen
             name="IncorporationLanding"

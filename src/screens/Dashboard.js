@@ -162,6 +162,8 @@ const Dashboard = props => {
     }
   };
   const onlineMoveToPage = () => {
+    navigation.navigate("OnlineReturnLandingV3");
+    return
     const {
       years_selected = 0,
       identification_document_uploaded = 0,

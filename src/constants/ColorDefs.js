@@ -54,3 +54,11 @@ export const CLR_E3BDBE=  '#E3BDBE'
 
 
 
+// Colors for V3
+
+export const CLR_191919=  '#191919'
+
+
+
+
+
