@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Alert,PermissionsAndroid,Platform} from 'react-native';
 import moment from 'moment';
-import RNFetchBlob from 'rn-fetch-blob';
+// import RNFetchBlob from 'rn-fetch-blob';
 import * as SKTStorage from '../helpers/SKTStorage';
 import {
   getActiveFileStatusOnLogin,
@@ -54,72 +54,76 @@ export async function checkPermission(permission) {
   return false;
 }
 
+// export async function downloadFileFromUrl(url, filename, callback) {
+//   if (Platform.OS === 'android') {
+//     const granted = await checkPermission(
+//       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+//     );
+//     if (!granted) {
+//       return;
+//     }
+//   }
+
+//   const {dirs} = RNFetchBlob.fs;
+//   let pathToSave = '';
+//   if (Platform.OS === 'android') {
+//     pathToSave = `${dirs.DocumentDir}/SKT/${filename}`;
+//   } else {
+//     pathToSave = `${dirs.DocumentDir}/${filename}`;
+//   }
+//   pathToSave = pathToSave.replace(' ', '');
+//   let fileType, filePath = '';
+
+//   RNFetchBlob.fs
+//     .exists(pathToSave)
+//     .then(exist => {
+//       RNFetchBlob.config({
+//         path: pathToSave,
+//       })
+//         .fetch('GET', `${url}`, {})
+//         .then(res => {
+//           callback()
+//           filePath = res.path();
+//           fileType =  res.respInfo.headers['content-type'] || res.respInfo.headers['Content-Type'];
+//           if (!fileType) {
+//             fileType = 'application/pdf';
+//           }
+
+//           if (!filePath) {
+//             Alert.alert('SukhTax', 'No internet connection!');
+//             return;
+//           }
+//           if (Platform.OS === 'ios') {
+//             RNFetchBlob.ios.openDocument(pathToSave).catch((errorMessage, statusCode) => {
+//               // Alert.alert('SukhTax', 'Something went wrong!',errorMessage,statusCode);
+//             });;
+//           } else {
+//             RNFetchBlob.android.actionViewIntent(filePath, fileType);
+//             RNFetchBlob.android
+//               .addCompleteDownload({
+//                 title: filename,
+//                 description: 'Download Complete',
+//                 path: filePath,
+//                 mime: fileType,
+//                 showNotification: true,
+//               })
+//               .then(() =>
+//                 RNFetchBlob.fs.scanFile([{path: filePath, mime: fileType}]),
+//               );
+//           }
+//         })
+//         .catch((errorMessage, statusCode) => {
+//           callback()
+//           Alert.alert('SukhTax', errorMessage, statusCode);
+//         });
+//     })
+//     .catch(error => {
+//       callback()
+//     });
+// }
+
 export async function downloadFileFromUrl(url, filename, callback) {
-  if (Platform.OS === 'android') {
-    const granted = await checkPermission(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-    );
-    if (!granted) {
-      return;
-    }
-  }
-
-  const {dirs} = RNFetchBlob.fs;
-  let pathToSave = '';
-  if (Platform.OS === 'android') {
-    pathToSave = `${dirs.DocumentDir}/SKT/${filename}`;
-  } else {
-    pathToSave = `${dirs.DocumentDir}/${filename}`;
-  }
-  pathToSave = pathToSave.replace(' ', '');
-  let fileType, filePath = '';
-
-  RNFetchBlob.fs
-    .exists(pathToSave)
-    .then(exist => {
-      RNFetchBlob.config({
-        path: pathToSave,
-      })
-        .fetch('GET', `${url}`, {})
-        .then(res => {
-          callback()
-          filePath = res.path();
-          fileType =  res.respInfo.headers['content-type'] || res.respInfo.headers['Content-Type'];
-          if (!fileType) {
-            fileType = 'application/pdf';
-          }
-
-          if (!filePath) {
-            Alert.alert('SukhTax', 'No internet connection!');
-            return;
-          }
-          if (Platform.OS === 'ios') {
-            RNFetchBlob.ios.openDocument(pathToSave).catch((errorMessage, statusCode) => {
-              // Alert.alert('SukhTax', 'Something went wrong!',errorMessage,statusCode);
-            });;
-          } else {
-            RNFetchBlob.android.actionViewIntent(filePath, fileType);
-            RNFetchBlob.android
-              .addCompleteDownload({
-                title: filename,
-                description: 'Download Complete',
-                path: filePath,
-                mime: fileType,
-                showNotification: true,
-              })
-              .then(() =>
-                RNFetchBlob.fs.scanFile([{path: filePath, mime: fileType}]),
-              );
-          }
-        })
-        .catch((errorMessage, statusCode) => {
-          callback()
-          Alert.alert('SukhTax', errorMessage, statusCode);
-        });
-    })
-    .catch(error => {
-      callback()
-    });
+  console.log('downloadFileFromUrl====>')
 }
 
 const updateSelectionData = (res) =>{

@@ -22,7 +22,7 @@ import {
 } from '../constants/StaticValues';
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import DocumentPicker from 'react-native-document-picker';
-import RNFetchBlob from 'rn-fetch-blob';
+// import RNFetchBlob from 'rn-fetch-blob';
 
 const UploadCorp = props => {
   const navigation = useNavigation();
@@ -46,45 +46,52 @@ const UploadCorp = props => {
   //   });
   // };
 
+  // const intiateImageUploading = (res, isDoc) => {
+  //   if (isDoc) {
+  //     let path =
+  //       Platform.OS == 'ios' ? res.uri.replace('file://', '') : res.uri;
+  //       if(Platform.OS == 'ios'){
+  //         path = path.replace(/%20/g, " ");
+  //       }
+  //     const filename = res?.name;
+  //     RNFetchBlob.fs
+  //       .readFile(path, 'base64')
+  //       .then(encoded => {
+  //         const params = prepareParams(encoded, filename);
+  //         setIsLoading(true);
+  //         incorpUploadImage(params, uploadRes => {
+  //           setIsLoading(false);
+  //           setTimeout(() => {
+  //             uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+  //             setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false);
+  //             uploadRes?.status == 1 &&
+  //               setUploadImageCount(uploadImageCount + 1);
+  //           }, 300);
+  //         });
+  //       })
+  //       .catch(error => console.error(error));
+  //   } else {
+  //     const imgObj = res?.assets?.[0];
+  //     if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
+  //     const params = prepareParams(imgObj.base64, imgObj?.fileName);
+  //     setIsLoading(true);
+  //     incorpUploadImage(params, uploadRes => {
+  //       setIsLoading(false);
+  //       setTimeout(() => {
+  //         uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+  //         setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false);
+  //         uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1);
+  //       }, 300);
+  //     });
+  //   }
+  // };
+  	
+	
   const intiateImageUploading = (res, isDoc) => {
-    if (isDoc) {
-      let path =
-        Platform.OS == 'ios' ? res.uri.replace('file://', '') : res.uri;
-        if(Platform.OS == 'ios'){
-          path = path.replace(/%20/g, " ");
-        }
-      const filename = res?.name;
-      RNFetchBlob.fs
-        .readFile(path, 'base64')
-        .then(encoded => {
-          const params = prepareParams(encoded, filename);
-          setIsLoading(true);
-          incorpUploadImage(params, uploadRes => {
-            setIsLoading(false);
-            setTimeout(() => {
-              uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
-              setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false);
-              uploadRes?.status == 1 &&
-                setUploadImageCount(uploadImageCount + 1);
-            }, 300);
-          });
-        })
-        .catch(error => console.error(error));
-    } else {
-      const imgObj = res?.assets?.[0];
-      if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
-      const params = prepareParams(imgObj.base64, imgObj?.fileName);
-      setIsLoading(true);
-      incorpUploadImage(params, uploadRes => {
-        setIsLoading(false);
-        setTimeout(() => {
-          uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
-          setIsUploadedSuccessfully(uploadRes?.status == 1 ? true : false);
-          uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1);
-        }, 300);
-      });
-    }
+    console.log('intiateImageUploading')
   };
+
+
   const prepareParams = (bs64Image,filename) => {
     const {incorporation_id, user_id} = global.incStatusData;
     const params = {
