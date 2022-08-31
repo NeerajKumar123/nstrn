@@ -16,7 +16,6 @@ import AppHeader from '../components/AppHeader';
 import * as CustomFonts from '../constants/FontsDefs';
 import * as Colors from '../constants/ColorDefs';
 import SKButton, {DarkBlueButton} from '../components/SKButton';
-import DocumentViewer from '../components/DocumentViewer';
 import SKLoader from '../components/SKLoader';
 import {downloadFileFromUrl} from '../helpers/BaseUtility';
 import {useIsFocused} from '@react-navigation/native';
@@ -42,8 +41,6 @@ const RequestApplyStatus = props => {
   const status_description = status || '';
 
   const [docs, setDocs] = useState();
-  const [showDoc, setShowDoc] = useState(false);
-  const [selectedItem, setSelectedItem] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingiOS, setIsLoadingiOS] = useState(false);
   const [downloadingItem, setDownloadingItem] = useState();
@@ -276,7 +273,6 @@ const RequestApplyStatus = props => {
             downloadingItem={downloadingItem}
             onDocClicked={item => {
               setSelectedItem(item);
-              // setShowDoc(true);
               handleFileDownloading(item, () => {
               });
             }}
@@ -412,9 +408,6 @@ const RequestApplyStatus = props => {
           />
         )}
       </ScrollView>
-      {showDoc && (
-        <DocumentViewer onClose={() => setShowDoc(false)} item={selectedItem} />
-      )}
     </View>
   );
 };

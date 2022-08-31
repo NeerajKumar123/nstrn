@@ -12,7 +12,7 @@ import {
 import * as Colors from '../constants/ColorDefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const {width} = Dimensions.get('window');
-import Pdf from 'react-native-pdf';
+// import Pdf from 'react-native-pdf';
 
 const cross = require('../../assets/cross.png');
 const DocumentViewer = props => {
@@ -35,7 +35,8 @@ const DocumentViewer = props => {
           onClose && onClose();
         }}
       />
-      {isPDF ? (
+      {/* {isPDF ? (
+
         <Pdf
           source={source}
           onLoadComplete={(numberOfPages, filePath) => {
@@ -54,7 +55,7 @@ const DocumentViewer = props => {
           style={{flex: 1}}
           source={{uri: item.document_file_name}}
         />
-      )}
+      )} */}
     </Modal>
   );
 };

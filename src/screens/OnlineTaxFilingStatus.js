@@ -45,7 +45,7 @@ import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import * as SKTStorage from '../helpers/SKTStorage';
 import {useIsFocused} from '@react-navigation/native';
 import DocumentPicker from 'react-native-document-picker';
-// import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const OnlineTaxFilingStatus = props => {
   const navigation = useNavigation();
@@ -100,44 +100,41 @@ const OnlineTaxFilingStatus = props => {
   //     }
   //   });
   // };
-  // const intiateImageUploading = (res, isDoc) => {
-  //   if (isDoc) {
-  //     let path =
-  //       Platform.OS == 'ios' ? res.uri.replace('file://', '') : res.uri;
-  //       if(Platform.OS == 'ios'){
-  //         path = path.replace(/%20/g, " ");
-  //       }
-  //     const filename = res?.name;
-  //     RNFetchBlob.fs
-  //       .readFile(path, 'base64')
-  //       .then(encoded => {
-  //         const params = prepareParams(encoded, filename);
-  //         setIsLoading(true);
-  //         uploadDocumentBS64(params, uploadRes => {
-  //           setUploadImageCount(uploadImageCount + 1);
-  //           setIsLoading(false);
-  //           setTimeout(() => {
-  //             uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
-  //           }, 500);
-  //         });
-  //       })
-  //       .catch(error => console.error(error));
-  //   } else {
-  //     const imgObj = res?.assets?.[0];
-  //     if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
-  //     const params = prepareParams(imgObj.base64, imgObj?.fileName);
-  //     setIsLoading(true);
-  //     uploadDocumentBS64(params, uploadRes => {
-  //       setUploadImageCount(uploadImageCount + 1);
-  //       setIsLoading(false);
-  //       setTimeout(() => {
-  //         uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
-  //       }, 500);
-  //     });
-  //   }
-  // };
   const intiateImageUploading = (res, isDoc) => {
-    console.log('intiateImageUploading')
+    if (isDoc) {
+      let path =
+        Platform.OS == 'ios' ? res.uri.replace('file://', '') : res.uri;
+        if(Platform.OS == 'ios'){
+          path = path.replace(/%20/g, " ");
+        }
+      const filename = res?.name;
+      RNFetchBlob.fs
+        .readFile(path, 'base64')
+        .then(encoded => {
+          const params = prepareParams(encoded, filename);
+          setIsLoading(true);
+          uploadDocumentBS64(params, uploadRes => {
+            setUploadImageCount(uploadImageCount + 1);
+            setIsLoading(false);
+            setTimeout(() => {
+              uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+            }, 500);
+          });
+        })
+        .catch(error => console.error(error));
+    } else {
+      const imgObj = res?.assets?.[0];
+      if (!imgObj.base64) Alert.alert('SukhTax', 'Something went wrong!');
+      const params = prepareParams(imgObj.base64, imgObj?.fileName);
+      setIsLoading(true);
+      uploadDocumentBS64(params, uploadRes => {
+        setUploadImageCount(uploadImageCount + 1);
+        setIsLoading(false);
+        setTimeout(() => {
+          uploadRes?.message && Alert.alert('SukhTax', uploadRes?.message);
+        }, 500);
+      });
+    }
   };
   const prepareParams = (bs64Image, fileName) => {
     const {user_id, tax_file_id} = global.onlineStatusData;

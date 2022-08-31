@@ -15,7 +15,6 @@ import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
 import {getRefrralPrice} from '../apihelper/Api';
 import React, {useState, useEffect} from 'react';
-import {TextAlignment} from 'pdf-lib';
 const Vector9 = require('../../assets/tab/Vector 9.png');
 const Vector10 = require('../../assets/tab/Vector 10.png');
 const TilesCard = props => {

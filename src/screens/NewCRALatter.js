@@ -29,7 +29,7 @@ import {
 } from '../constants/StaticValues';
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import DocumentPicker from 'react-native-document-picker';
-// import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const NewCRALatter = props => {
   const navigation = useNavigation();
@@ -241,17 +241,17 @@ const NewCRALatter = props => {
                         if(Platform.OS == 'ios'){
                           path = path.replace(/%20/g, " ");
                         }
-                        // RNFetchBlob.fs
-                        //   .readFile(path, 'base64')
-                        //   .then(encoded => {
-                        //     const t1  = [...attachmentNames,filename]
-                        //     const t2  = [...attachments,encoded]
-                        //     setAttachmentNames(t1);
-                        //     setAttachments(t2);        
-                        //   })
-                        //   .catch(error => {
-                        //     console.error('sdsdsd',error)
-                        //   });
+                        RNFetchBlob.fs
+                          .readFile(path, 'base64')
+                          .then(encoded => {
+                            const t1  = [...attachmentNames,filename]
+                            const t2  = [...attachments,encoded]
+                            setAttachmentNames(t1);
+                            setAttachments(t2);        
+                          })
+                          .catch(error => {
+                            console.error('sdsdsd',error)
+                          });
                       })
                       .catch(err => {
                         console.log('err', err);

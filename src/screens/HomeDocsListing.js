@@ -17,7 +17,6 @@ import * as CustomFonts from '../constants/FontsDefs';
 const download = require('../../assets/download.png');
 import {downloadFileFromUrl} from '../helpers/BaseUtility';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import DocumentViewer from '../components/DocumentViewer';
 import SKLoader from '../components/SKLoader';
 import Lottie from 'lottie-react-native';
 const loader = require('../../assets/loader.json');
@@ -25,7 +24,6 @@ const HomeDocsListing = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const [groupedDocs, setGroupedDocs] = useState();
-  const [showDoc, setShowDoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingiOS, setIsLoadingiOS] = useState(false);
@@ -34,11 +32,17 @@ const HomeDocsListing = props => {
 
   useEffect(() => {
     const {docs, page_id} = pageParams;
+    let yr22Docs = docs?.filter(doc => doc.year == 2022);
     let yr21Docs = docs?.filter(doc => doc.year == 2021);
     let yr20Docs = docs?.filter(doc => doc.year == 2020);
     let yr19Docs = docs?.filter(doc => doc.year == 2019);
     let yr18Docs = docs?.filter(doc => doc.year == 2018);
     const tempArry = [];
+
+    
+    if (yr22Docs?.length) {
+      tempArry.push({title: '20222 DOC', data: yr22Docs});
+    }
     if (yr21Docs?.length) {
       tempArry.push({title: '2021 DOC', data: yr21Docs});
     }
@@ -84,6 +88,7 @@ const HomeDocsListing = props => {
       setDownloadingItem(doc);
     }
     downloadFileFromUrl(docUrl, fileName, () => {
+      console.log('docUrl====>',docUrl)
       if (Platform.OS == 'android') {
         setIsLoading(false);
       } else {
@@ -141,9 +146,6 @@ const HomeDocsListing = props => {
           </View>
         )}
       </ScrollView>
-      {showDoc && (
-        <DocumentViewer onClose={() => setShowDoc(false)} item={selectedItem} />
-      )}
     </View>
   );
 };

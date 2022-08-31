@@ -71,11 +71,9 @@ import RequestApplyStatus from './screens/RequestApplyStatus';
 import NewCRALatter from './screens/NewCRALatter';
 import CRALattersStatus from './screens/CRALattersStatus';
 import CRAReply from './screens/CRAReply';
-import CRAAttachments from './screens/CRAAttachments';
 import AnimTest from './screens/AnimTest';
 import {SafeAreaView} from 'react-native';
 import OnlineEditInfo from './screens/OnlineEditInfo';
-import PDFExample from './screens/PDFExample';
 import EverSigners from './screens/EverSigners';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 const Stack = createStackNavigator();
@@ -145,11 +143,6 @@ const SKStack = () => {
             name="Dashboard"
             component={Dashboard}
             options={{title: 'Dashboard', headerShown: false}}
-          />
-          <Stack.Screen
-            name="PDFExample"
-            component={PDFExample}
-            options={{title: 'PDFExample', headerShown: false}}
           />
           <Stack.Screen
             name="ForgotPasswordNew"
@@ -466,11 +459,6 @@ const SKStack = () => {
             name="CRAReply"
             component={CRAReply}
             options={{title: 'CRAReply', headerShown: false}}
-          />
-          <Stack.Screen
-            name="CRAAttachments"
-            component={CRAAttachments}
-            options={{title: 'CRAAttachments', headerShown: false}}
           />
 
           <Stack.Screen

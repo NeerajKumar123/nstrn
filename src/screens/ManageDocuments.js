@@ -15,15 +15,13 @@ import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getUserDocuments, deleteDocument} from '../apihelper/Api';
-import DocumentViewer from '../components/DocumentViewer';
 import SKLoader from '../components/SKLoader';
+import {downloadFileFromUrl} from '../helpers/BaseUtility';
 
 const ManageDocuments = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const [docs, setDocs] = useState();
-  const [showDoc, setShowDoc] = useState(false);
-  const [selectedItem, setSelectedItem] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -41,6 +39,43 @@ const ManageDocuments = props => {
       } else {
         Alert.alert('SukhTax', 'Something went wrong.');
       }
+    });
+  };
+
+  const getFileName = docUrl => {
+    const dateString = `${new Date().valueOf()}`;
+    const loweredCase = docUrl?.toLowerCase();
+    let fileName = 'Sukhtax_' + dateString;
+    if (loweredCase.includes('.pdf')) {
+      fileName = fileName + '.pdf';
+    } else if (loweredCase.includes('.png')) {
+      fileName = fileName + '.png';
+    } else if (loweredCase.includes('.jpeg')) {
+      fileName = fileName + '.jpeg';
+    } else if (loweredCase.includes('.jpg')) {
+      fileName = fileName + '.jpg';
+    }
+    return fileName;
+  };
+
+  const handleFileDownloading = (doc, callback) => {
+    const docUrl = doc?.document_file_name?.replace(/ /g, '');
+    const fileName = getFileName(docUrl);
+    if (Platform.OS == 'android') {
+      setIsLoading(true);
+    } else {
+      setIsLoadingiOS(true);
+      setDownloadingItem(doc);
+    }
+    downloadFileFromUrl(docUrl, fileName, () => {
+      console.log('docUrl====>',docUrl)
+      if (Platform.OS == 'android') {
+        setIsLoading(false);
+      } else {
+        setDownloadingItem(undefined);
+        setIsLoadingiOS(false);
+      }
+      callback();
     });
   };
 
@@ -83,9 +118,8 @@ const ManageDocuments = props => {
                 item={item}
                 key={`${item.tax_file_document_id}`}
                 onOpen={() => {
-                  setSelectedItem(item);
-                  setShowDoc(true);
-                }}
+                  handleFileDownloading(item, () => {
+                  });                }}
                 onDelete={() => {
                   const options = [
                     {
@@ -131,12 +165,6 @@ const ManageDocuments = props => {
             onPress={() => {
               navigation.navigate('AuthorizerList');
             }}
-          />
-        )}
-        {showDoc && (
-          <DocumentViewer
-            onClose={() => setShowDoc(false)}
-            item={selectedItem}
           />
         )}
       </ScrollView>
