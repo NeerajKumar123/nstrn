@@ -549,6 +549,30 @@ export const onlineUpdateSpouseEmailID = (params,callback) => {
 };
 
 
+//v3 apis
+export const onlineGetTaxFileStatus = (params,callback) => {
+  const path = `${BaseURL}/Online_Get_Tax_File_Status`
+  API.makePostRequest(path , params, callback);
+};
+
+export const onlineSaveMyprofile = (params,callback) => {
+  const path = `${BaseURL}/Online_Save_My_Profile`
+  API.makePostRequest(path , params, callback);
+};
+
+export const onlineSaveSelectedYear = (params,callback) => {
+  const path = `${BaseURL}/Online_Save_My_Profile`
+  API.makePostRequest(path , params, callback);
+};
+
+
+// 2. Online_Get_Tax_File_Status (New API ) --(Parameter : User_Id, Tax_File_Id) To check status of Tax Filing on the "New Online Return" screen
+
+// 3. Online_Save_My_Profile (New API) -- To save My profile info and return "Tax_File_Id" in response
+
+// 4. Online_Save_Selected_Years (New API) --(Parameters : User_Id, Tax_File_Id, Years_Selected (comma seperated)) To save or update selected years
+
+
 
 
 

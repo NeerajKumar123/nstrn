@@ -65,6 +65,7 @@ const API = {
 };
 
 const extractError = (error, url) => {
+  console.log('extractError===>',error, url)
   // Error 😨
   if (error && error.response) {
     /*

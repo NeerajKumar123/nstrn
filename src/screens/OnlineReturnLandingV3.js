@@ -14,7 +14,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {getTaxReturnsDocs} from '../apihelper/Api';
+import {onlineGetTaxFileStatus} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
@@ -33,9 +33,21 @@ const OnlineReturnLandingV3 = props => {
   const isFAlreadyFlied =  years && years.includes('2019')
   const isSAlreadyFlied = years && years.includes('2020')
   const isTAlreadyFlied = years && years.includes('2021')
+  const [statusDetails, setStatusDetails] = useState({});  
+
 
   useEffect(() => {
     SKTStorage.setKeyValue('isLastDepHit',false, ()=>{})
+    const {user_id, tax_file_id} = global.onlineStatusData
+    if(tax_file_id > 0 && user_id){
+      const params = {User_Id:user_id, Tax_File_Id:tax_file_id}
+      onlineGetTaxFileStatus(params,res => {
+        console.log('res',JSON.stringify(res))
+        if (res?.status == 1) {
+          setStatusDetails(res.data[0])
+        }
+      });
+    }
   }, [])
   
   function remove_duplicates_es6(arr) {
@@ -79,7 +91,7 @@ const OnlineReturnLandingV3 = props => {
         />
         <OnlineLandinButton
           title={'Complete or review profile'}
-          isSelected={isFSelected}
+          isSelected={statusDetails?.tax_profile_completed}
           onSelected={() => {
             console.log('OnlineCompleteReviewProfileV3OnlineCompleteReviewProfileV3')
             navigation.navigate("OnlineCompleteReviewProfileV3")
@@ -87,7 +99,7 @@ const OnlineReturnLandingV3 = props => {
         />
         <OnlineLandinButton
           title={'Select which years to file for'}
-          isSelected={isSSelected}
+          isSelected={statusDetails?.years_selected}
           onSelected={() => {
             navigation.navigate("OnlineSelectYearV3")
           }}
@@ -95,7 +107,7 @@ const OnlineReturnLandingV3 = props => {
        
          <OnlineLandinButton
           title={'Upload documents'}
-          isSelected={isTSelected}
+          isSelected={statusDetails?.document_uploaded}
           onSelected={() => {
             navigation.navigate("OnlineDocumentUploadV3")
           }}
@@ -178,9 +190,9 @@ const OnlineLandinButton = props => {
       </Text>
       <Icon
         style={{right: 20, position: 'absolute'}}
-        name={true ? CustomFonts.CheckRightFilled : CustomFonts.CheckRight}
-        size={true ? 25 : 30}
-        color={Colors.GREEN}
+        name={isSelected ? CustomFonts.CheckRightFilled : CustomFonts.CheckRight}
+        size={isSelected ? 20 : 20}
+        color={isSelected ? Colors.GREEN : Colors.GRAY}
       />
     </TouchableOpacity>
   );
