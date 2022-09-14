@@ -93,7 +93,6 @@ const OnlineReturnLandingV3 = props => {
           title={'Complete or review profile'}
           isSelected={statusDetails?.tax_profile_completed}
           onSelected={() => {
-            console.log('OnlineCompleteReviewProfileV3OnlineCompleteReviewProfileV3')
             navigation.navigate("OnlineCompleteReviewProfileV3")
           }}
         />

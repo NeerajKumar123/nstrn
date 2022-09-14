@@ -565,6 +565,13 @@ export const onlineSaveSelectedYear = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const onlineGetMyProfileInfo = (params,callback) => {
+  const path = `${BaseURL}/Online_Get_My_Profile_Info`
+  API.makePostRequest(path , params, callback);
+};
+
+
+
 
 // 2. Online_Get_Tax_File_Status (New API ) --(Parameter : User_Id, Tax_File_Id) To check status of Tax Filing on the "New Online Return" screen
 
