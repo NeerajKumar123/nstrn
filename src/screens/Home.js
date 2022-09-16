@@ -120,7 +120,6 @@ const Home = props => {
         {incorporation_status_id ? (
           <Heading
             fontSize={16}
-            status={0}
             status={incropStatus}
             marginTop={5}
             color={Colors.APP_RED_SUBHEADING_COLOR}
@@ -134,7 +133,6 @@ const Home = props => {
         {tax_docs_status_id ? (
           <Heading
             fontSize={16}
-            status={0}
             status={taxDocStatus}
             marginTop={5}
             color={Colors.APP_RED_SUBHEADING_COLOR}
@@ -148,7 +146,6 @@ const Home = props => {
         {cra_letters_status_id ? (
           <Heading
             fontSize={16}
-            status={0}
             status={craStatus}
             marginTop={5}
             color={Colors.APP_RED_SUBHEADING_COLOR}

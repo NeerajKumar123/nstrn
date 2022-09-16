@@ -560,6 +560,11 @@ export const onlineSaveMyprofile = (params,callback) => {
   API.makePostRequest(path , params, callback);
 };
 
+export const onlineUpdateMyprofile = (params,callback) => {
+  const path = `${BaseURL}/Online_Update_My_Profile`
+  API.makePostRequest(path , params, callback);
+};
+
 export const onlineSaveSelectedYear = (params,callback) => {
   const path = `${BaseURL}/Online_Save_My_Profile`
   API.makePostRequest(path , params, callback);

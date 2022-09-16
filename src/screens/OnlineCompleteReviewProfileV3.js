@@ -37,6 +37,7 @@ import {
   updateSpouseInfo,
   onlineGetMyProfileInfo,
   onlineSaveMyprofile,
+  onlineUpdateMyprofile
 } from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
@@ -62,6 +63,9 @@ const OnlineCompleteReviewProfileV3 = props => {
   const pageParams = props.route.params;
   const isEditing = pageParams?.isEditing;
   const depId = pageParams?.dependentOption;
+  console.log('pageParams',pageParams)
+
+
   const [isFillingForWife, setIsFillingForWife] = useState(false);
   const [lastTime, setLastTime] = useState();
   const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
@@ -100,6 +104,7 @@ const OnlineCompleteReviewProfileV3 = props => {
   const [isRelationVisible, setIsRelationVisible] = useState();
   const [isResidenceVisible, setIsResidenceVisible] = useState();
   const [isBankVisible, setIsBankVisible] = useState();
+  const [isSBankVisible, setIsSSBankVisible] = useState();
   const actionSheetRef = useRef();
   const [identificationImage, setIdentificationImage] = useState();
 
@@ -139,55 +144,54 @@ const OnlineCompleteReviewProfileV3 = props => {
   }, []);
 
   useEffect(() => {
-    console.log('1111=====>');
-    setIsLoading(true);
-    const {tax_file_id, user_id} = global.onlineStatusData;
-    const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
-    // "user_first_name": "Neeraj",
-    // "user_last_name": "Kumar",
-    // "user_sin_number": "123456782",
-    // "user_dob": "1999-11-17T00:00:00",
-    // "user_gender": "Male",
-
-    onlineGetMyProfileInfo(params, res => {
-      console.log('=====>', JSON.stringify(res));
-      const details = res?.data[0] || {};
-      setFName(details?.user_first_name);
-      setLName(details?.user_last_name);
-      setSinNo(details?.user_sin_number);
-      setDOB(new Date(details?.user_dob));
-      setGender(details?.user_gender);
-      setMailingAddress(details?.user_mailing_address);
-      setBank({
-        institution_name: details?.user_institution_name,
-        institution_id: details?.user_institution_id,
+    const {taxFileCompleted, taxFileID, userID,taxFileStatusID} = pageParams
+    console.log('1111=====>', taxFileCompleted, taxFileID, userID,taxFileStatusID);
+    if (taxFileCompleted || taxFileStatusID == 16) {
+      setIsLoading(true);
+      const params = {User_Id: userID, Tax_File_Id: taxFileID};
+      onlineGetMyProfileInfo(params, res => {
+        console.log('=====>', JSON.stringify(res));
+        const details = res?.data[0] || {};
+        setFName(details?.user_first_name);
+        setLName(details?.user_last_name);
+        setSinNo(details?.user_sin_number);
+        setDOB(new Date(details?.user_dob));
+        setGender(details?.user_gender);
+        setMailingAddress(details?.user_mailing_address);
+        setBank({
+          institution_name: details?.user_institution_name,
+          institution_id: details?.user_institution_id,
+        });
+        setAccountNo(details?.user_account_no);
+        setBranhcNo(details?.user_branch);
+        setMaritalStatus({
+          marital_status_id: details.user_marital_status_id,
+          marital_status_name: details.user_marital_status_name,
+        });
+  
+        setSFName(details?.spouse_first_name);
+        setSLName(details?.spouse_last_name);
+        setSSinNo(details?.user_sin_number);
+        setSDOB(new Date(details?.spouse_dob));
+        setSGender(details?.spouse_gender);
+        setSBank({
+          institution_name: details?.spouse_institution_name,
+          institution_id: details?.spouse_institution_id,
+        });
+        setSAccountNo(details?.spouse_account_no);
+        setSBranhcNo(details?.spouse_branch);
+        setSResidency({
+          residency_id: details.spouse_residency_id,
+          residency_name: details.spouse_residency,
+        });
       });
-      setAccountNo(details?.user_account_no);
-      setBranhcNo(details?.user_branch);
-      setMaritalStatus({
-        marital_status_id: details.user_marital_status_id,
-        marital_status_name: details.user_marital_status_name,
-      });
-
-      setSFName(details?.spouse_first_name);
-      setSLName(details?.spouse_last_name);
-      setSSinNo(details?.user_sin_number);
-      setSDOB(new Date(details?.spouse_dob));
-      setSGender(details?.spouse_gender);
-      setSBank({
-        institution_name: details?.spouse_institution_name,
-        institution_id: details?.spouse_institution_id,
-      });
-      setSAccountNo(details?.spouse_account_no);
-      setSBranhcNo(details?.spouse_branch);
-      setSResidency({
-        residency_id: details.spouse_residency_id,
-        residency_name: details.spouse_residency,
-      });
-    });
+    }
   }, []);
 
+  // Send """ for spouse bank details if not fling for spouse...
   const prepareParamsForSavingProfile = () => {
+    const {taxFileCompleted} = pageParams
+    console.log('isProfileUpdate',taxFileCompleted)
     const {user_id} = global.onlineStatusData;
     const params = {
       User_Id: user_id,
@@ -201,7 +205,7 @@ const OnlineCompleteReviewProfileV3 = props => {
       User_Branch: branchNo,
       User_Account_No: accountNo,
       User_Marital_Status_Id: maritalStatus?.marital_status_id,
-      User_Dependents: 0,
+      User_Dependents: haveDepdents ? 1 : 0,
       Filing_For_Spouse: isFilingForSpouse ? 1 : 0,
       Spouse_First_Name: sfName,
       Spouse_Last_Name: slName,
@@ -259,34 +263,45 @@ const OnlineCompleteReviewProfileV3 = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isValidLastYear = isFillingForWife ? lastTime : true;
+
+    // Self Details Validations
     const isFNameValid = Validator.isValidField(fName, ST_REGEX.FullName);
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.FullName);
+    const isSinValid =  sinNo.length ?  Validator.isValidSIN(sinNo) : true;
     const isDOBValid = dob;
     const isGenderValid = gender;
-    const isResidencyValid = residency?.residency_id > 0;
-    const isSinValid =
-      residency?.residency_id != 5 ? Validator.isValidSIN(sinNo) : true;
-    const isEnrtyDateValid = enrtyDate;
+    const isValidMailingAddress = mailingAddress?.length;
     const isBankValid = bank?.institution_id > 0;
     const isAccValid = accountNo.length > 0;
     const isBranchValid = branchNo.length == 5;
 
-    if (!isValidLastYear) {
+    // Familiy details validations
+    const isMaritalStatus = maritalStatus?.marital_status_id
+
+    // Spouse Details validations
+    const isSFNameValid = Validator.isValidField(fName, ST_REGEX.FullName);
+    const isSLNameValid = Validator.isValidField(lName, ST_REGEX.FullName);
+    const isSGenderValid = gender;
+    const isSDOBValid = dob;
+    const isSResidencyValid = mailingAddress?.length;
+    const isSSinValid =  sinNo.length ?  Validator.isValidSIN(sinNo) : true;
+    const isSBankValid = bank?.institution_id > 0;
+    const isSAccValid = accountNo.length > 0;
+    const isSBranchValid = branchNo.length == 5;
+    const isIdentificationImageAttached = identificationImage?.length
+
+     if (!isFNameValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please select valid year');
-    } else if (!isFNameValid) {
-      isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid first name');
+      Alert.alert('SukhTax', 'Please enter your valid first name');
     } else if (!isLNameValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please enter valid last name');
+      Alert.alert('SukhTax', 'Please enter your valid last name');
     } else if (!isDOBValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please select valid DOB.');
+      Alert.alert('SukhTax', 'Please select your valid DOB.');
     } else if (!isGenderValid) {
       isValidForm = false;
-      Alert.alert('SukhTax', 'Please select valid gender');
+      Alert.alert('SukhTax', 'Please select your valid gender');
     } else if (!isResidencyValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select valid residency');
@@ -511,7 +526,7 @@ const OnlineCompleteReviewProfileV3 = props => {
             value={mailingAddress}
             placeholder="Enter Mailing Address"
             onClicked={() => {
-
+              setIsAddViewVisible(true)
             }}
           />
           <Heading
@@ -645,46 +660,52 @@ const OnlineCompleteReviewProfileV3 = props => {
             placeholder="Residency"
             onClicked={() => {}}
           />
+          {isFilingForSpouse && 
+          <>
+          
           <Heading
-            fontSize={20}
-            marginTop={20}
-            color={Colors.APP_RED_SUBHEADING_COLOR}
-            value="SPOUSE'S BANKING INFORMATION"
-          />
-          <TouchableInput
-            leftAccImage={CustomFonts.Bank}
-            rightAccImage={CustomFonts.ChevronDown}
-            placeholder="Select Bank"
-            value={sbank?.institution_name}
-            onClicked={() => {
-              setIsBankVisible(true);
-            }}
-          />
-          <SKInput
-            marginBottom={0}
-            maxLength={30}
-            borderColor={Colors.CLR_0065FF}
-            leftAccImage={CustomFonts.Number}
-            keyboardType="number-pad"
-            value={saccountNo}
-            placeholder="Enter Account Number"
-            onEndEditing={value => {
-              setAccountNo(value);
-            }}
-          />
-          <SKInput
-            marginTop={20}
-            marginBottom={0}
-            maxLength={30}
-            borderColor={Colors.CLR_0065FF}
-            value={sbranchNo}
-            leftAccImage={CustomFonts.Number}
-            keyboardType="number-pad"
-            placeholder="Enter Branch Number"
-            onEndEditing={value => {
-              setBranhcNo(value);
-            }}
-          />
+          fontSize={20}
+          marginTop={20}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
+          value="SPOUSE'S BANKING INFORMATION"
+        />
+        <TouchableInput
+          leftAccImage={CustomFonts.Bank}
+          rightAccImage={CustomFonts.ChevronDown}
+          placeholder="Select Bank"
+          value={sbank?.institution_name}
+          onClicked={() => {
+            setIsSSBankVisible(true);
+          }}
+        />
+        <SKInput
+          marginBottom={0}
+          maxLength={30}
+          borderColor={Colors.CLR_0065FF}
+          leftAccImage={CustomFonts.Number}
+          keyboardType="number-pad"
+          value={saccountNo}
+          placeholder="Enter Account Number"
+          onEndEditing={value => {
+            setSAccountNo(value);
+          }}
+        />
+        <SKInput
+          marginTop={20}
+          marginBottom={0}
+          maxLength={30}
+          borderColor={Colors.CLR_0065FF}
+          value={sbranchNo}
+          leftAccImage={CustomFonts.Number}
+          keyboardType="number-pad"
+          placeholder="Enter Branch Number"
+          onEndEditing={value => {
+            setSBranhcNo(value);
+          }}
+        />
+        </>
+          }
+          
           <Heading
             fontSize={16}
             marginTop={20}
@@ -744,11 +765,32 @@ const OnlineCompleteReviewProfileV3 = props => {
             title={'SUBMIT'}
             rightImage={CustomFonts.right_arrow}
             onPress={() => {
+              setIsLoading(true)
               const params = prepareParamsForSavingProfile();
-              onlineSaveMyprofile(params, res => {
-                console.log('res=====>', JSON.stringify(res));
-                // navigation.goBack()
-              });
+              const {taxFileCompleted, taxFileStatusID} = pageParams
+              if (taxFileCompleted  && taxFileStatusID != 16) {
+                onlineUpdateMyprofile(params, res => {
+                  setIsLoading(false)
+                  if (res.status == 1) {
+                    Alert.alert('Sukhtax',res.message ? res.message : '' )  
+                    console.log('res=====>', JSON.stringify(res));
+                    navigation.goBack()
+                  }else{
+                    Alert.alert('Sukhtax','Something went wrong.')  
+                  }
+                });  
+              }else{
+                onlineSaveMyprofile(params, res => {
+                  setIsLoading(false)
+                  if (res.status == 1) {
+                    Alert.alert('Sukhtax',res.message ? res.message : '' )  
+                    console.log('res=====>', JSON.stringify(res));
+                    navigation.goBack()
+                  }else{
+                    Alert.alert('Sukhtax','Something went wrong.')  
+                  }
+                });  
+              }
             }}
           />
         </ScrollView>
@@ -861,6 +903,21 @@ const OnlineCompleteReviewProfileV3 = props => {
           onSelect={value => {
             setBank(value);
             setIsBankVisible(false);
+          }}
+        />
+      )}
+      {isSBankVisible && (
+        <SKModel
+          title="Select"
+          data={banks}
+          keyLabel="institution_name"
+          onClose={() => {
+            setIsSSBankVisible(false);
+          }}
+          onSelect={value => {
+            console.log('value',value)
+            setSBank(value);
+            setIsSSBankVisible(false);
           }}
         />
       )}

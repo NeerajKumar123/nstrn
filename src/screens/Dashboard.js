@@ -164,23 +164,13 @@ const Dashboard = props => {
 
   const onlineMoveToPage = () => {
     const {
-      years_selected = 0,
-      identification_document_uploaded = 0,
-      about_info_filled = 0,
-      banking_family_info_filled = 0,
-      dependent_info_filled = 0,
-      spouse_info_filled = 0,
-      my_year_info_filled = 0,
-      document_uploaded = 0,
-      authorization_document_uploaded = 1,
       Online_Button_Enabled,
-      tax_profile_completed
     } = global?.onlineStatusData ?? {};
 
-    if (Online_Button_Enabled == 0 && 0) {
+    if (Online_Button_Enabled == 0) {
       navigation.navigate('OnlineTaxFilingStatus');
     } else {
-      navigation.navigate('OnlineReturnLandingV3');      
+      navigation.navigate('OnlineReturnLandingV3');
     }
   };
   // const onlineMoveToPage = () => {

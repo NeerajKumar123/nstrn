@@ -25,16 +25,9 @@ const OnlineReturnLandingV3 = props => {
   const selectedYears = [];
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);  
-  const [isFSelected, setIsFSelected] = useState(global.selectedYears && global.selectedYears.includes('2019'));
-  const [isSSelected, setIsSSelected] = useState(global.selectedYears && global.selectedYears.includes('2020'));
-  const [isTSelected, setIsTSelected] = useState(global.selectedYears && global.selectedYears.includes('2021'));
 
   const years = global?.alreadyFliedYears
-  const isFAlreadyFlied =  years && years.includes('2019')
-  const isSAlreadyFlied = years && years.includes('2020')
-  const isTAlreadyFlied = years && years.includes('2021')
   const [statusDetails, setStatusDetails] = useState({});  
-
 
   useEffect(() => {
     SKTStorage.setKeyValue('isLastDepHit',false, ()=>{})
@@ -93,12 +86,12 @@ const OnlineReturnLandingV3 = props => {
           title={'Complete or review profile'}
           isSelected={statusDetails?.tax_profile_completed}
           onSelected={() => {
-            navigation.navigate("OnlineCompleteReviewProfileV3")
+            navigation.navigate("OnlineCompleteReviewProfileV3",{taxFileCompleted:statusDetails?.tax_profile_completed, taxFileID:statusDetails?.tax_file_id, userID:statusDetails?.user_id, taxFileStatusID:statusDetails?.tax_file_status_id})
           }}
         />
         <OnlineLandinButton
           title={'Select which years to file for'}
-          isSelected={statusDetails?.years_selected}
+          isSelected={statusDetails?.years_selected?.length}
           onSelected={() => {
             navigation.navigate("OnlineSelectYearV3")
           }}
