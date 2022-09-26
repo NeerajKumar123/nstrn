@@ -14,7 +14,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {getTaxReturnsDocs} from '../apihelper/Api';
+import {onlineSaveSelectedYears} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
@@ -22,17 +22,18 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 
 const OnlineSelectYearV3 = props => {
-  const selectedYears = [];
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);  
-  const [isFSelected, setIsFSelected] = useState(global.selectedYears && global.selectedYears.includes('2019'));
-  const [isSSelected, setIsSSelected] = useState(global.selectedYears && global.selectedYears.includes('2020'));
-  const [isTSelected, setIsTSelected] = useState(global.selectedYears && global.selectedYears.includes('2021'));
+  const [isFSelected, setIsFSelected] = useState(props.years?.includes(new Date().getFullYear() -1));
+  const [isSSelected, setIsSSelected] = useState(props.years?.includes(new Date().getFullYear() - 2));
+  const [isTSelected, setIsTSelected] = useState(props.years?.includes(new Date().getFullYear() - 3));
+  const [isFTSelected, setIsFTSelected] = useState(props.years?.includes(new Date().getFullYear() - 4));
 
   const years = global?.alreadyFliedYears
-  const isFAlreadyFlied =  years && years.includes('2019')
-  const isSAlreadyFlied = years && years.includes('2020')
-  const isTAlreadyFlied = years && years.includes('2021')
+  const isFAlreadyFlied =  props.years?.includes(new Date().getFullYear() -1)
+  const isSAlreadyFlied = props.years?.includes(new Date().getFullYear() -1)
+  const isTAlreadyFlied = props.years?.includes(new Date().getFullYear() -1)
+  const isFTAlreadyFlied = props.years?.includes(new Date().getFullYear() -1)
 
   useEffect(() => {
     SKTStorage.setKeyValue('isLastDepHit',false, ()=>{})
@@ -44,6 +45,24 @@ const OnlineSelectYearV3 = props => {
     return Array.from(it);
 }
 
+const prepareParams = () =>{
+  let yrs = ""
+  if(isFSelected){
+    yrs = new Date().getFullYear()
+  }
+  if(isSSelected){
+    yrs = yrs + "," + (new Date().getFullYear() - 1)
+  }
+  if(isTSelected){
+    yrs =yrs + "," + (new Date().getFullYear() - 2)
+  }
+  if(isFTSelected){
+    yrs = yrs + ","  + (new Date().getFullYear() - 3)
+  }
+  const {userID, taxFileID} = props?.route?.params
+  const params = {User_id:userID,Tax_File_Id:taxFileID,Years_Selected:yrs}
+  return params
+}
   return (
     <View
       style={{
@@ -68,7 +87,7 @@ const OnlineSelectYearV3 = props => {
           value="PLEASE SELECT WHICH YEARS YOU WOULD LIKE TO FILE FOR"
         />
         <DocCard
-          title={'2019'}
+          title={new Date().getFullYear()}
           isFiled = {isFAlreadyFlied}
           isSelected={isFSelected}
           onSelected={() => {
@@ -76,7 +95,7 @@ const OnlineSelectYearV3 = props => {
           }}
         />
         <DocCard
-          title={'2020'}
+          title={new Date().getFullYear() - 1}
           isFiled = {isSAlreadyFlied}
           isSelected={isSSelected}
           onSelected={() => {
@@ -85,11 +104,19 @@ const OnlineSelectYearV3 = props => {
         />
        
          <DocCard
-          title={'2021'}
+          title={new Date().getFullYear() - 2}
           isFiled = {isTAlreadyFlied}
           isSelected={isTSelected}
           onSelected={() => {
             setIsTSelected(!isTSelected);
+          }}
+        />
+        <DocCard
+          title={new Date().getFullYear() - 3}
+          isFiled = {isFTAlreadyFlied}
+          isSelected={isFTSelected}
+          onSelected={() => {
+            setIsFTSelected(!isFTSelected);
           }}
         />
         <View
@@ -107,24 +134,19 @@ const OnlineSelectYearV3 = props => {
             title={'SUBMI'}
             rightImage={CustomFonts.right_arrow}
             onPress={() => {
-                navigation.goBack()
-            //   if (isFSelected && !isFAlreadyFlied) selectedYears.push('2019');
-            //   if (isSSelected && !isSAlreadyFlied) selectedYears.push('2020');
-            //   if (isTSelected && !isTAlreadyFlied) selectedYears.push('2021');
-            //   global.selectedYears = undefined
-            //   global.selectedYears = selectedYears;
-            //   const arr =   selectedYears?.sort(function(a, b) {
-            //     return parseInt(b) - parseInt(a);
-            //   });
-            //   global.mostRecentYear = arr?.[0] ?? '2021'        
-            //   if (global?.selectedYears?.length > 0) {
-            //     const uniques = remove_duplicates_es6(global?.selectedYears);
-            //     SKTStorage.setKeyValue('selectedYears',uniques,()=>{
-            //       navigation.navigate('Identification');
-            //     })
-            //   } else {
-            //     Alert.alert('SukhTax', 'Please select year.');
-            //   }
+              if (isFSelected || isSSelected || isTSelected || isFTSelected) {
+                setIsLoading(true)
+              const params = prepareParams()
+                onlineSaveSelectedYears(params, (res)=>{
+                  setIsLoading(false)
+                  console.log("res", JSON.stringify(res));
+                  if(res?.status == 1){
+                    navigation.goBack()
+                  }else{
+                    Alert.alert("Sukhtax", "Something went wrong!")
+                  }
+                })
+              }
             }}
           />
         </View>

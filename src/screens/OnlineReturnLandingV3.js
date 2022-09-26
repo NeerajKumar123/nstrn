@@ -10,6 +10,7 @@ import {
   Platform,
   Text,
 } from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
@@ -25,23 +26,31 @@ const OnlineReturnLandingV3 = props => {
   const selectedYears = [];
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);  
+  const isFocused = useIsFocused();
 
   const years = global?.alreadyFliedYears
   const [statusDetails, setStatusDetails] = useState({});  
 
   useEffect(() => {
-    SKTStorage.setKeyValue('isLastDepHit',false, ()=>{})
+    if (isFocused) {
+      getTaxFlStatus()
+    }
+  }, [isFocused])
+
+  const getTaxFlStatus = () => {
     const {user_id, tax_file_id} = global.onlineStatusData
     if(tax_file_id > 0 && user_id){
+      setIsLoading(true)
       const params = {User_Id:user_id, Tax_File_Id:tax_file_id}
       onlineGetTaxFileStatus(params,res => {
+        setIsLoading(false)
         console.log('res',JSON.stringify(res))
         if (res?.status == 1) {
           setStatusDetails(res.data[0])
         }
       });
     }
-  }, [])
+  }
   
   function remove_duplicates_es6(arr) {
     let s = new Set(arr);
@@ -92,8 +101,9 @@ const OnlineReturnLandingV3 = props => {
         <OnlineLandinButton
           title={'Select which years to file for'}
           isSelected={statusDetails?.years_selected?.length}
+          selectedYears = {statusDetails?.years_selected}
           onSelected={() => {
-            navigation.navigate("OnlineSelectYearV3")
+            navigation.navigate("OnlineSelectYearV3", {years_selected:statusDetails?.years_selected, userID:statusDetails?.user_id, taxFileID:statusDetails?.tax_file_id})
           }}
         />
        
@@ -101,7 +111,7 @@ const OnlineReturnLandingV3 = props => {
           title={'Upload documents'}
           isSelected={statusDetails?.document_uploaded}
           onSelected={() => {
-            navigation.navigate("OnlineDocumentUploadV3")
+            navigation.navigate("OnlineDocumentUploadV3",{years_selected:statusDetails?.years_selected})
           }}
         />
         

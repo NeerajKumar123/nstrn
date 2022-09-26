@@ -1,48 +1,106 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
-  Alert,
+  Text,
   ScrollView,
   Image,
-  DeviceEventEmitter,
-  Keyboard,
-  Platform,
-  Text,
+  FlatList,
+  Alert,
 } from 'react-native';
-import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
-import * as Colors from '../constants/ColorDefs';
-import {useNavigation} from '@react-navigation/native';
-import {getTaxReturnsDocs} from '../apihelper/Api';
-import * as SKTStorage from '../helpers/SKTStorage';
-import SKLoader from '../components/SKLoader';
-import * as CustomFonts from '../constants/FontsDefs';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
+import SKButton from '../components/SKButton';
+import LinearGradient from 'react-native-linear-gradient';
+import * as Colors from '../constants/ColorDefs';
+import * as CustomFonts from '../constants/FontsDefs';
+import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import SKLoader from '../components/SKLoader';
+import {SKModelImageTitle} from '../components/SKModel';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {uploadDocumentBS64, getUserDocuments} from '../apihelper/Api';
+import {
+  LibImageQualityOptions,
+  ImageActionSheetOptions,
+} from '../constants/StaticValues';
+import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
+import {useIsFocused} from '@react-navigation/native';
+import DocumentPicker from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const OnlineDocumentUploadV3 = props => {
-  const selectedYears = [];
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);  
-  const [isFSelected, setIsFSelected] = useState(global.selectedYears && global.selectedYears.includes('2019'));
-  const [isSSelected, setIsSSelected] = useState(global.selectedYears && global.selectedYears.includes('2020'));
-  const [isTSelected, setIsTSelected] = useState(global.selectedYears && global.selectedYears.includes('2021'));
+  const pageParams = props.route.params;
+  const isEditing = pageParams?.isEditing;
+  const data = pageParams?.years_selected?.split(',');;
+  const [uploadImageCount, setUploadImageCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const actionSheetRef = useRef();
+  const [selectedYear, setSelectedYear] = useState(2020);
+  const [imageToBeUpload, setImageToBeUpload] = useState(undefined);
+  const [imageName, setImageName] = useState(undefined);
+  const [isImageTitleVisible, setIsImageTitleVisible] = useState(false);
+  const [imageTitle, setImageTitle] = useState('');
+  const [docs, setDocs] = useState();
+  const isFocused = useIsFocused();
 
-  const years = global?.alreadyFliedYears
-  const isFAlreadyFlied =  years && years.includes('2019')
-  const isSAlreadyFlied = years && years.includes('2020')
-  const isTAlreadyFlied = years && years.includes('2021')
+  const prepareParams = (bs64Image, title) => {
+    const {user_id, tax_file_id} = global.onlineStatusData;
+    const dashedTitle = title.replace(/ /g, '-');
+    const isPdf = title.includes('.pdf')
+    const params = {
+      User_id: user_id,
+      Tax_File_Id: tax_file_id,
+      Year: parseInt(selectedYear),
+      FileNameWithExtension: isPdf ? `${dashedTitle}.pdf` : `${dashedTitle}.jpg`,
+      Base64String: bs64Image,
+    };
+    return params;
+  };
 
   useEffect(() => {
-    SKTStorage.setKeyValue('isLastDepHit',false, ()=>{})
-  }, [])
-  
-  function remove_duplicates_es6(arr) {
-    let s = new Set(arr);
-    let it = s.values();
-    return Array.from(it);
-}
+    getDocs();
+  }, [isFocused, uploadImageCount]);
+
+  const getDocs = () => {
+    const {tax_file_id, user_id} = global.onlineStatusData;
+    const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
+    getUserDocuments(params, docsRes => {
+      if (docsRes?.status == 1) {
+        setDocs(docsRes.data);
+      } else {
+        Alert.alert('SukhTax', 'Something went wrong.');
+      }
+    });
+  };
+
+  const saveImageDataAndShowTitleField = res => {
+    const imgObj = res?.assets?.[0];
+    if (imgObj.base64) {
+      setImageToBeUpload(imgObj.base64);
+      setImageName('jpg')
+      setIsImageTitleVisible(true);
+    } else {
+      Alert.alert('SukhTax', 'Something went wrong!');
+    }
+  };
+
+  const saveDocumentDataAndShowTitleField = res => {
+    setImageToBeUpload(res);
+    setImageName('pdf')
+    setIsImageTitleVisible(true);
+  };
+  const intiateImageUploading = title => {
+    setIsLoading(true);
+    const params = prepareParams(imageToBeUpload, title);
+    uploadDocumentBS64(params, uploadRes => {
+      uploadRes?.status == 1 && setUploadImageCount(uploadImageCount + 1);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
+    });
+  };
 
   return (
     <View
@@ -51,6 +109,7 @@ const OnlineDocumentUploadV3 = props => {
         alignItems: 'center',
         backgroundColor: 'white',
         width: '100%',
+        height: '100%',
       }}>
       <AppHeader navigation={navigation} />
       {isLoading && <SKLoader />}
@@ -58,122 +117,239 @@ const OnlineDocumentUploadV3 = props => {
         style={{width: '100%'}}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          height: '100%',
         }}>
-        <Heading  color value="DOCUMENT UPLOAD" marginTop={86} />
+        <Heading value="DOCUMENTS" marginTop={122} />
         <Heading
-          fontSize={16}
-          marginTop={55}
+          fontSize={20}
+          marginTop={5}
           color={Colors.APP_RED_SUBHEADING_COLOR}
-          value="Documents"
+          value="THIS IS WHERE YOU CAN MANAGE ALL DOCUMENTS UPLOADED TO SUKHTAX:"
         />
-        <DocCard
-          title={'2019 Documents'}
-          isFiled = {isFAlreadyFlied}
-          isSelected={isFSelected}
-          onSelected={() => {
-            setIsFSelected(!isFSelected);
+        {data &&
+          data?.map((item, index) => {
+            return (
+              <DocCard
+                key={item}
+                item={item}
+                onClicked={() => {
+                  setSelectedYear(item);
+                  actionSheetRef.current.show();
+                }}
+              />
+            );
+          })}
+        <UploadedFilesStatus count={docs?.length} />
+        <ManageDocButton
+          grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
+          title={'MANAGE DOCUMENTS'}
+          onClicked={() => {
+            navigation.navigate('ManageDocuments', {
+              isDocAdded: docs?.length > 0 ? true : false,
+              showFooterBtn: true,
+            });
           }}
         />
-        <DocCard
-          title={'2020 Documents'}
-          isFiled = {isSAlreadyFlied}
-          isSelected={isSSelected}
-          onSelected={() => {
-            setIsSSelected(!isSSelected);
+        <SKButton
+          marginTop={30}
+          disable={docs?.length > 0 ? false : true}
+          fontSize={16}
+          rightImage={CustomFonts.right_arrow}
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={isEditing ? 'SUBMIT' : 'AUTHORIZATION'}
+          onPress={() => {
+            if (isEditing) {
+              navigation.navigate('OnlineEditInfo');
+            } else {
+              navigation.navigate('AuthorizerList');
+            }
           }}
         />
-       
-         <DocCard
-          title={'2021 Documents'}
-          isFiled = {isTAlreadyFlied}
-          isSelected={isTSelected}
-          onSelected={() => {
-            setIsTSelected(!isTSelected);
+        <ActionSheet
+          ref={actionSheetRef}
+          title={
+            <Text style={{color: Colors.GRAY, fontSize: 18}}>
+              Which one do you like?
+            </Text>
+          }
+          options={ImageActionSheetOptions}
+          onPress={index => {
+            setTimeout(() => {
+              if (index == 0) {
+                launchImageLibrary(LibImageQualityOptions, res => {
+                  if (res?.didCancel) {
+                    Alert.alert(
+                      'SukhTax',
+                      'Image uploading cancelled by user.',
+                    );
+                  } else if (res?.error) {
+                  } else if (res?.assets) {
+                    saveImageDataAndShowTitleField(res);
+                  }
+                });
+              } else if (index == 1) {
+                launchCamera(LibImageQualityOptions, res => {
+                  if (res?.didCancel) {
+                    Alert.alert(
+                      'SukhTax',
+                      'Image uploading cancelled by user.',
+                    );
+                  } else if (res?.error) {
+                  } else if (res?.assets) {
+                    saveImageDataAndShowTitleField(res);
+                  }
+                });
+              } else if (index == 2) {
+                setTimeout(
+                  () => {
+                    DocumentPicker.pick({
+                      type: [DocumentPicker.types.pdf],
+                    })
+                      .then(res => {
+                        const fileRes = res[0];
+                        let path =
+                          Platform.OS == 'ios'
+                            ? fileRes.uri.replace('file://', '')
+                            : fileRes.uri;
+                        if(Platform.OS == 'ios'){
+                          path = path.replace(/%20/g, " ");
+                        }
+                        RNFetchBlob.fs
+                          .readFile(path, 'base64')
+                          .then(encoded => {
+                            saveDocumentDataAndShowTitleField(encoded);
+                          })
+                          .catch(error => console.error(error));
+                      })
+                      .catch(err => {
+                        console.log('err', err);
+                      });
+                  },
+                  Platform.OS === 'ios' ? 300 : 0,
+                );
+              }
+            }, 100);
           }}
         />
-        <DocCard
-          title={'2022 Documents'}
-          isFiled = {isTAlreadyFlied}
-          isSelected={isTSelected}
-          onSelected={() => {
-            setIsTSelected(!isTSelected);
-          }}
-        />
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 24,
-          }}>
-          <SKButton
-            fontSize={16}
-            fontWeight={'normal'}
-            backgroundColor={Colors.PRIMARY_FILL}
-            borderColor={Colors.PRIMARY_BORDER}
-            title={'SUBMIT'}
-            rightImage={CustomFonts.right_arrow}
-            onPress={() => {
-                navigation.goBack()
-            //   if (isFSelected && !isFAlreadyFlied) selectedYears.push('2019');
-            //   if (isSSelected && !isSAlreadyFlied) selectedYears.push('2020');
-            //   if (isTSelected && !isTAlreadyFlied) selectedYears.push('2021');
-            //   global.selectedYears = undefined
-            //   global.selectedYears = selectedYears;
-            //   const arr =   selectedYears?.sort(function(a, b) {
-            //     return parseInt(b) - parseInt(a);
-            //   });
-            //   global.mostRecentYear = arr?.[0] ?? '2021'        
-            //   if (global?.selectedYears?.length > 0) {
-            //     const uniques = remove_duplicates_es6(global?.selectedYears);
-            //     SKTStorage.setKeyValue('selectedYears',uniques,()=>{
-            //       navigation.navigate('Identification');
-            //     })
-            //   } else {
-            //     Alert.alert('SukhTax', 'Please select year.');
-            //   }
+        {isImageTitleVisible && (
+          <SKModelImageTitle
+            title="Select"
+            onClose={() => {
+              setIsImageTitleVisible(false);
+            }}
+            onTitleEntered={value => {
+              setIsImageTitleVisible(false);
+              setImageTitle(`${value}.${imageName}`);
+              intiateImageUploading(`${value}.${imageName}`);
             }}
           />
-        </View>
+        )}
       </ScrollView>
     </View>
   );
 };
 
-const DocCard = props => {
-  const {title, isSelected = false,isFiled = false, onSelected = ()=>{}} = props;
+const ManageDocButton = props => {
   return (
-    <TouchableOpacity
-      disabled = {isFiled}
+    <LinearGradient
+      opacity={0.8}
+      colors={props.grads}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
         marginTop: 20,
         backgroundColor: 'white',
-        alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
-        height: 48,
-        opacity: isFiled ?  .8 : 1,
         borderRadius: 6,
-        borderWidth:1,
-        borderColor:isFiled ? Colors.LIGHTGRAY: Colors.CLR_E77C7E,
-        backgroundColor:isFiled ? Colors.WHITE :  isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
+        width: '100%',
+        height: 56,
+      }}>
+      <TouchableOpacity
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onPress={() => {
+          props.onClicked && props.onClicked();
+        }}>
+        <Text
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            color: Colors.WHITE,
+            fontSize: 17,
+            fontWeight: '700',
+          }}>
+          {props.title}
+        </Text>
+      </TouchableOpacity>
+    </LinearGradient>
+  );
+};
+
+const DocCard = props => {
+  const {item} = props;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        marginTop: 8,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        height: 40,
+        backgroundColor:'green'
       }}
-      key={`${Math.random()}`}
       onPress={() => {
-        onSelected();
+        props.onClicked && props.onClicked();
+      }}>
+      <Text
+        style={{
+          textAlign: 'left',
+          color: Colors.APP_BLUE_HEADING_COLOR,
+          fontSize: 17,
+          fontWeight: '700',
+        }}>
+        {`${item} DOCUMENTS`}
+      </Text>
+      <Image
+        resizeMode="contain"
+        style={{width: 24, height: 24}}
+        source={CustomFonts.upload}
+      />
+    </TouchableOpacity>
+  );
+};
+
+const UploadedFilesStatus = props => {
+  const {count = 0} = props;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        marginTop: 8,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        height: 40,
+      }}
+      onPress={() => {
+        props.onClicked && props.onClicked();
       }}>
       <Text
         style={{
           width: '100%',
-          textAlign: 'center',
-          color: isFiled ?Colors.CLR_414141 : isSelected ? Colors.WHITE : Colors.CLR_414141,
+          textAlign: 'left',
+          color: Colors.APP_RED_SUBHEADING_COLOR,
           fontSize: 17,
           fontWeight: '700',
         }}>
-        {title}
+        {` DOC UPLOADED : ${count ? count : 0} FILE${count > 1 ? 'S' : ''}`}
       </Text>
     </TouchableOpacity>
   );
