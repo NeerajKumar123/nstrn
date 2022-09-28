@@ -16,6 +16,7 @@ import {
   onlineSaveEversignConfirmation,
   taxDocsSaveEverSignDoc,
   craLatterSaveEverSignAuth,
+  onlineSaveEversignAuthorization
 } from '../apihelper/Api';
 import * as Colors from '../constants/ColorDefs';
 const {height} = Dimensions.get('window');
@@ -89,6 +90,18 @@ const SKWebPage = props => {
           Document_Hash: dochash,
         };
         craLatterSaveEverSignAuth(params, () => {
+          navigation.goBack();
+        });
+      } else if (saveType == 4) {
+        // cra
+        const {user_id, tax_file_id} = global.onlineStatusData;
+        const params = {
+          User_Id: user_id,
+          Tax_File_Id: tax_file_id,
+          Tax_File_Authorization_Id: doc?.tax_file_authorization_id,
+          Document_Hash: dochash,
+        };
+        onlineSaveEversignAuthorization(params, () => {
           navigation.goBack();
         });
       }

@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -15,7 +15,7 @@ import SKButton, {Link} from '../components/SKButton';
 import Heading from '../components/Heading';
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
-import {onlineGetTaxFileStatus} from '../apihelper/Api';
+import {onlineGetTaxFileStatus, finalizeOnlineProcess} from '../apihelper/Api';
 import * as SKTStorage from '../helpers/SKTStorage';
 import SKLoader from '../components/SKLoader';
 import * as CustomFonts from '../constants/FontsDefs';
@@ -23,40 +23,66 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 
 const OnlineReturnLandingV3 = props => {
-  const selectedYears = [];
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);  
+  const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
-
-  const years = global?.alreadyFliedYears
-  const [statusDetails, setStatusDetails] = useState({});  
+  const [statusDetails, setStatusDetails] = useState({});
 
   useEffect(() => {
+    console.log('isFocused',isFocused)
     if (isFocused) {
-      getTaxFlStatus()
+      getTaxFlStatus();
     }
-  }, [isFocused])
+  }, [isFocused]);
 
   const getTaxFlStatus = () => {
-    const {user_id, tax_file_id} = global.onlineStatusData
-    if(tax_file_id > 0 && user_id){
-      setIsLoading(true)
-      const params = {User_Id:user_id, Tax_File_Id:tax_file_id}
-      onlineGetTaxFileStatus(params,res => {
-        setIsLoading(false)
-        console.log('res',JSON.stringify(res))
+    const {user_id, tax_file_id} = global.onlineStatusData;
+    console.log('user_id, tax_file_id',user_id, tax_file_id)
+    if (user_id) {
+      setIsLoading(true);
+      const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
+      onlineGetTaxFileStatus(params, res => {
+        setIsLoading(false);
+        console.log('res', JSON.stringify(res));
         if (res?.status == 1) {
-          setStatusDetails(res.data[0])
+          setStatusDetails(res.data[0]);
         }
       });
     }
-  }
-  
-  function remove_duplicates_es6(arr) {
-    let s = new Set(arr);
-    let it = s.values();
-    return Array.from(it);
-}
+  };
+
+  const checkFormValidations = () => {
+    let isValidForm = true;
+    const isProfileComplete = statusDetails?.tax_profile_completed
+    const isYearSelected = statusDetails?.years_selected?.length;
+    const isDocumentUploaded = statusDetails?.document_uploaded;
+    if (!isProfileComplete) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please complete your profile first.');
+    } else if (!isYearSelected) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select year(s) you are filing for');
+    }else if (!isDocumentUploaded) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please upload required documents first');
+    }
+    return isValidForm;
+  };
+
+  const onNewTaxFileIdCreated = ({tax_file_id, user_id}) =>{
+    console.log('user_id, tax_file_id',user_id, tax_file_id)
+    if (user_id) {
+      setIsLoading(true);
+      const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
+      onlineGetTaxFileStatus(params, res => {
+        setIsLoading(false);
+        console.log('res', JSON.stringify(res));
+        if (res?.status == 1) {
+          setStatusDetails(res.data[0]);
+        }
+      });
+    }  }
+
 
   return (
     <View
@@ -95,26 +121,29 @@ const OnlineReturnLandingV3 = props => {
           title={'Complete or review profile'}
           isSelected={statusDetails?.tax_profile_completed}
           onSelected={() => {
-            navigation.navigate("OnlineCompleteReviewProfileV3",{taxFileCompleted:statusDetails?.tax_profile_completed, taxFileID:statusDetails?.tax_file_id, userID:statusDetails?.user_id, taxFileStatusID:statusDetails?.tax_file_status_id})
+            navigation.navigate('OnlineCompleteReviewProfileV3', {statusDetails:statusDetails, onBack:(details) =>{onNewTaxFileIdCreated(details)}});
           }}
         />
         <OnlineLandinButton
           title={'Select which years to file for'}
           isSelected={statusDetails?.years_selected?.length}
-          selectedYears = {statusDetails?.years_selected}
+          selectedYears={statusDetails?.years_selected}
           onSelected={() => {
-            navigation.navigate("OnlineSelectYearV3", {years_selected:statusDetails?.years_selected, userID:statusDetails?.user_id, taxFileID:statusDetails?.tax_file_id})
+            navigation.navigate('OnlineSelectYearV3', {
+              statusDetails: statusDetails,
+            });
           }}
         />
-       
-         <OnlineLandinButton
+        <OnlineLandinButton
           title={'Upload documents'}
           isSelected={statusDetails?.document_uploaded}
           onSelected={() => {
-            navigation.navigate("OnlineDocumentUploadV3",{years_selected:statusDetails?.years_selected})
+            navigation.navigate('OnlineDocumentUploadV3', {
+              statusDetails: statusDetails,
+            });
           }}
         />
-        
+
         <View
           style={{
             width: '100%',
@@ -130,22 +159,18 @@ const OnlineReturnLandingV3 = props => {
             title={'SUBMIT YOUR FILE'}
             rightImage={CustomFonts.right_arrow}
             onPress={() => {
-              if (isFSelected && !isFAlreadyFlied) selectedYears.push('2019');
-              if (isSSelected && !isSAlreadyFlied) selectedYears.push('2020');
-              if (isTSelected && !isTAlreadyFlied) selectedYears.push('2021');
-              global.selectedYears = undefined
-              global.selectedYears = selectedYears;
-              const arr =   selectedYears?.sort(function(a, b) {
-                return parseInt(b) - parseInt(a);
-              });
-              global.mostRecentYear = arr?.[0] ?? '2021'        
-              if (global?.selectedYears?.length > 0) {
-                const uniques = remove_duplicates_es6(global?.selectedYears);
-                SKTStorage.setKeyValue('selectedYears',uniques,()=>{
-                  navigation.navigate('Identification');
-                })
-              } else {
-                Alert.alert('SukhTax', 'Please select year.');
+              if (checkFormValidations()) {
+                const {user_id, tax_file_id} = statusDetails;
+                const params = {
+                  User_Id: user_id,
+                  Tax_File_Id: tax_file_id,
+                };
+                setIsLoading(true);
+                finalizeOnlineProcess(params, finalizeRes => {
+                  console.log('finalizeRes====>', finalizeRes);
+                  setIsLoading(false);
+                  navigation.popToTop();
+                });  
               }
             }}
           />
@@ -156,10 +181,15 @@ const OnlineReturnLandingV3 = props => {
 };
 
 const OnlineLandinButton = props => {
-  const {title, isSelected = false,isFiled = false, onSelected = ()=>{}} = props;
+  const {
+    title,
+    isSelected = false,
+    isFiled = false,
+    onSelected = () => {},
+  } = props;
   return (
     <TouchableOpacity
-      disabled = {isFiled}
+      disabled={isFiled}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -169,22 +199,22 @@ const OnlineLandinButton = props => {
         justifyContent: 'center',
         width: '100%',
         height: 48,
-        opacity: isFiled ?  .8 : 1,
+        opacity: isFiled ? 0.8 : 1,
         borderRadius: 6,
-        borderWidth:1,
-        borderColor:isFiled ? Colors.LIGHTGRAY: Colors.LIGHTGRAY,
-        backgroundColor:isFiled ? Colors.CLR_FFECEC:  Colors.CLR_FFECEC,
+        borderWidth: 1,
+        borderColor: isFiled ? Colors.LIGHTGRAY : Colors.LIGHTGRAY,
+        backgroundColor: isFiled ? Colors.CLR_FFECEC : Colors.CLR_FFECEC,
       }}
       key={`${Math.random()}`}
       onPress={() => {
-        console.log('OnlineCompleteReviewProfileV3')
+        console.log('OnlineCompleteReviewProfileV3');
         onSelected();
       }}>
       <Text
         style={{
           width: '100%',
           textAlign: 'center',
-          color: isFiled ?Colors.CLR_191919 : Colors.CLR_191919,
+          color: isFiled ? Colors.CLR_191919 : Colors.CLR_191919,
           fontSize: 17,
           fontWeight: '700',
         }}>
@@ -192,7 +222,9 @@ const OnlineLandinButton = props => {
       </Text>
       <Icon
         style={{right: 20, position: 'absolute'}}
-        name={isSelected ? CustomFonts.CheckRightFilled : CustomFonts.CheckRight}
+        name={
+          isSelected ? CustomFonts.CheckRightFilled : CustomFonts.CheckRight
+        }
         size={isSelected ? 20 : 20}
         color={isSelected ? Colors.GREEN : Colors.GRAY}
       />

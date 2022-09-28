@@ -32,8 +32,8 @@ import RNFetchBlob from 'rn-fetch-blob';
 const OnlineDocumentUploadV3 = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  const isEditing = pageParams?.isEditing;
-  const data = pageParams?.years_selected?.split(',');;
+  const {statusDetails} = pageParams
+  const data = statusDetails?.years_selected?.split(',');
   const [uploadImageCount, setUploadImageCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const actionSheetRef = useRef();
@@ -46,7 +46,7 @@ const OnlineDocumentUploadV3 = props => {
   const isFocused = useIsFocused();
 
   const prepareParams = (bs64Image, title) => {
-    const {user_id, tax_file_id} = global.onlineStatusData;
+    const {user_id, tax_file_id} = statusDetails
     const dashedTitle = title.replace(/ /g, '-');
     const isPdf = title.includes('.pdf')
     const params = {
@@ -64,7 +64,7 @@ const OnlineDocumentUploadV3 = props => {
   }, [isFocused, uploadImageCount]);
 
   const getDocs = () => {
-    const {tax_file_id, user_id} = global.onlineStatusData;
+    const {tax_file_id, user_id} = statusDetails;
     const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
     getUserDocuments(params, docsRes => {
       if (docsRes?.status == 1) {
@@ -138,8 +138,8 @@ const OnlineDocumentUploadV3 = props => {
               />
             );
           })}
-        <UploadedFilesStatus count={docs?.length} />
-        <ManageDocButton
+        {/* <UploadedFilesStatus count={docs?.length} /> */}
+        {/* <ManageDocButton
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title={'MANAGE DOCUMENTS'}
           onClicked={() => {
@@ -148,7 +148,7 @@ const OnlineDocumentUploadV3 = props => {
               showFooterBtn: true,
             });
           }}
-        />
+        /> */}
         <SKButton
           marginTop={30}
           disable={docs?.length > 0 ? false : true}
@@ -157,13 +157,9 @@ const OnlineDocumentUploadV3 = props => {
           fontWeight={'normal'}
           backgroundColor={Colors.PRIMARY_FILL}
           borderColor={Colors.PRIMARY_BORDER}
-          title={isEditing ? 'SUBMIT' : 'AUTHORIZATION'}
+          title={'SUBMIT'}
           onPress={() => {
-            if (isEditing) {
-              navigation.navigate('OnlineEditInfo');
-            } else {
-              navigation.navigate('AuthorizerList');
-            }
+            navigation.goBack()
           }}
         />
         <ActionSheet

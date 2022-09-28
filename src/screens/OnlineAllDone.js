@@ -8,7 +8,6 @@ import * as CustomFonts from '../constants/FontsDefs'
 import * as Colors from '../constants/ColorDefs';
 import {useNavigation} from '@react-navigation/native';
 import {finalizeOnlineProcess} from '../apihelper/Api';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OnlineAllDone = props => {
   const navigation = useNavigation()

@@ -32,6 +32,8 @@ import {
   EversingSuccess,
   EversingFailed,
   aplyRefCodeOnline,
+  onlineGetAuthDocuments,
+  onlineFinalizeAuthorization
 } from '../apihelper/Api';
 import SKButton, {
   UploadDocButton,
@@ -53,6 +55,7 @@ const OnlineTaxFilingStatus = props => {
   const actionSheetRef = useRef();
   const [uploadImageCount, setUploadImageCount] = useState(0);
   const [confirmDocs, setConfirmDocs] = useState();
+  const [authDocs, setAuthDocs] = useState();
   const isFocused = useIsFocused();
 
   const pageHeading = () => {
@@ -75,6 +78,20 @@ const OnlineTaxFilingStatus = props => {
         setIsLoading(false);
         if (confDocs?.status == 1) {
           setConfirmDocs(confDocs.data);
+        }
+      });
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (isFocused && global.onlineStatusData?.tax_file_status_id == 17) {
+      setIsLoading(true);
+      const {user_id, tax_file_id} = global.onlineStatusData;
+      const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
+      onlineGetAuthDocuments(params, authDocsRes => {
+        setIsLoading(false);
+        if (authDocsRes?.status == 1) {
+          setAuthDocs(authDocsRes.data);
         }
       });
     }
@@ -169,6 +186,7 @@ const OnlineTaxFilingStatus = props => {
           navigation={navigation}
           marginTop={25}
           confirmDocs={confirmDocs}
+          authDocs = {authDocs}
           uploadImageCount={uploadImageCount}
           updateLoadingStatus={loadingStatus => {
             setIsLoading(loadingStatus);
@@ -469,6 +487,7 @@ const TaxFilingStatusCard = props => {
     uploadImageCount = 0,
     onContinue,
     confirmDocs,
+    authDocs
   } = props;
   const [paymentDetails, setPaymentDetails] = useState();
   const [isDetailsClicked, setIsDetailsClicked] = useState(false);
@@ -515,10 +534,25 @@ const TaxFilingStatusCard = props => {
       signer['language'] = 'en';
       signers.push(signer)
     }
-    console.log('signers',signers)
     return signers;
   };
 
+  const getSignerAuth = () => {
+    const {email = 'rahbar.fatmi@21gfox.com'} = global.userInfo;
+    const user = global.userInfo;
+    const fName = user?.firstname ?? '';
+    const lName = user?.lastname ?? '';
+    const userFullName = fName + ' ' + lName;
+
+    let signer = {};
+    signer['id'] = 1;
+    signer['name'] = userFullName;
+    signer['email'] = email;
+    signer['pin'] = '';
+    signer['message'] = '';
+    signer['language'] = 'en';
+    return [signer];
+  };
 
   const recipient = () => {
     let recipient = {};
@@ -528,10 +562,9 @@ const TaxFilingStatusCard = props => {
     return recipient;
   };
 
-  const getFields = document => {
+  const getFields = (document, isAuth) => {
     let fields = [];
     document?.Fields?.forEach(element => {
-      console.log('element',element)
       let field = {};
       field['type'] = element?.field_type;
       field['x'] = element?.x_coordinate;
@@ -544,7 +577,7 @@ const TaxFilingStatusCard = props => {
       ] = `${element.field_type}${element.x_coordinate}${element.x_coordinate}`;
       field['required'] = 1;
       field['readonly'] = 0;
-      field['signer'] = element.signer;
+      field['signer'] = isAuth ? 1 :element.signer;
       field['name'] = '';
       field['validation_type'] = '';
       field['text_size'] = '';
@@ -559,7 +592,7 @@ const TaxFilingStatusCard = props => {
     return fields;
   };
 
-  const prepareParams = document => {
+  const prepareParams = (document,isAuth) => {
     let params = {};
     params['sandbox'] = 0;
     params['is_draft'] = 0;
@@ -579,14 +612,25 @@ const TaxFilingStatusCard = props => {
     params['flexible_signing'] = 0;
     params['use_hidden_tags'] = 0;
     params['files'] = [getFile(document)];
-    params['signers'] = getSigner(document);
+    params['signers'] = isAuth ? getSignerAuth(document) : getSigner(document);
     params['recipients'] = [];
-    params['fields'] = [getFields(document)];
+    params['fields'] = [getFields(document,isAuth)];
     return params;
   };
 
   const checkIfAllDocsSigned = () => {
     const unsingedDocs = confirmDocs.filter(function (item) {
+      return (
+        item?.eversign_document_hash == '' ||
+        item?.eversign_document_hash == null ||
+        item?.eversign_document_hash?.length < 1
+      );
+    });
+    return unsingedDocs?.length > 0 ? false : true;
+  };
+
+  const checkIfAllAuthDocsSigned = () => {
+    const unsingedDocs = authDocs.filter(function (item) {
       return (
         item?.eversign_document_hash == '' ||
         item?.eversign_document_hash == null ||
@@ -881,6 +925,78 @@ const TaxFilingStatusCard = props => {
           />
         </View>
       )}
+      {tax_file_status_id == 17 && authDocs?.length > 0 && (
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 18,
+          }}>
+          <FlatList
+            contentContainerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            style={{width: '100%', marginTop: 20}}
+            data={authDocs}
+            keyExtractor={(item, index) => index + '_key'}
+            ItemSeparatorComponent={() => (
+              <View style={{width: 20, backgroundColor: 'pink'}} />
+            )}
+            renderItem={({item, index}) => (
+              <SKButton
+                fontSize={16}
+                marginTop={10}
+                width={'100%'}
+                iconsize={20}
+                rightImage={
+                  item?.eversign_document_hash?.length > 0
+                    ? CustomFonts.CheckRight
+                    : CustomFonts.ChevronRight
+                }
+                fontWeight={'normal'}
+                backgroundColor={Colors.CLR_7F7F9F}
+                borderColor={Colors.CLR_D3D3D9}
+                title={item?.title}
+                onPress={() => {
+                  if (item?.eversign_document_hash?.length < 1) {
+                    const params = prepareParams(item,true);
+                    updateLoadingStatus(true);
+                    createEvenrSignDoc(params, res => {
+                      updateLoadingStatus(false);
+                      if (res?.signers && res?.signers?.length > 0) {
+                        const dochash = res?.document_hash;
+                        if(res?.signers?.length > 1){
+                          navigation.navigate('EverSigners', {allSigners:res?.signers, doc:item,dochash:dochash,currentIndex: 1})
+                        }else{
+                          const signer = res?.signers?.[0];
+                          const signingUrl = signer.embedded_signing_url;
+                          navigation.navigate('SKWebPage', {
+                            pageUrl: signingUrl,
+                            noOfDocs: confirmDocs?.length,
+                            currentIndex: 2,
+                            doc: item,
+                            dochash: dochash,
+                            saveType:4
+                          });
+                        }
+                      } else {
+                        Alert.alert(
+                          'Sukhtax',
+                          'Something went wrong, Please try again.',
+                        );
+                      }
+                    });
+                  } else {
+                    Alert.alert('Sukhtax', 'Document is already signed.');
+                  }
+                }}
+              />
+            )}
+          />
+        </View>
+      )}
       {tax_file_status_id == 14 && (
         <SKButton
           fontSize={16}
@@ -901,6 +1017,39 @@ const TaxFilingStatusCard = props => {
                   navigation.goBack();
                 }
               });
+            } else {
+              Alert.alert(
+                'Sukhtax',
+                'Please sign all the required documents listed above.',
+              );
+            }
+          }}
+        />
+      )}
+      {tax_file_status_id == 17 && (
+        <SKButton
+          fontSize={16}
+          marginTop={30}
+          width="100%"
+          fontWeight={'normal'}
+          backgroundColor={Colors.PRIMARY_FILL}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'SUBMIT'}
+          onPress={() => {
+            if (checkIfAllAuthDocsSigned()) {
+              const {user_id, tax_file_id} = global.onlineStatusData;
+              const params = {User_id: user_id, Tax_File_Id: tax_file_id};
+              updateLoadingStatus(true);
+              onlineFinalizeAuthorization(params,(res) =>{
+                setTimeout(() => {
+                  updateLoadingStatus(false);
+                }, 200);
+                if (res.status == 1) {
+                  navigation.goBack();
+                }else{
+                  Alert.alert('Sukhtax', 'Something went wrong.')
+                }
+              })
             } else {
               Alert.alert(
                 'Sukhtax',

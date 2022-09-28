@@ -23,6 +23,8 @@ import AppHeader from '../components/AppHeader';
 
 const OnlineSelectYearV3 = props => {
   const navigation = useNavigation();
+  const pageParams = props.route.params;
+  const {statusDetails} = pageParams
   const [isLoading, setIsLoading] = useState(false);  
   const [isFSelected, setIsFSelected] = useState(props.years?.includes(new Date().getFullYear() -1));
   const [isSSelected, setIsSSelected] = useState(props.years?.includes(new Date().getFullYear() - 2));
@@ -59,8 +61,8 @@ const prepareParams = () =>{
   if(isFTSelected){
     yrs = yrs + ","  + (new Date().getFullYear() - 3)
   }
-  const {userID, taxFileID} = props?.route?.params
-  const params = {User_id:userID,Tax_File_Id:taxFileID,Years_Selected:yrs}
+  const {user_id, tax_file_id} = statusDetails
+  const params = {User_id:user_id,Tax_File_Id:tax_file_id,Years_Selected:yrs}
   return params
 }
   return (

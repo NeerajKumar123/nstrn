@@ -22,7 +22,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppHeader from '../components/AppHeader';
 
 const RequestYears = props => {
-  const [years, setYears] = useState([{ year: '2016' }, { year: '2017' }, { year: '2018' }, { year: '2019' }, { year: '2020' }])
+  const [years, setYears] = useState([{ year: String(new Date().getFullYear() - 1)}, { year: String((new Date().getFullYear()) - 2) }, { year: String((new Date().getFullYear()) - 3) }, { year: String((new Date().getFullYear()) - 4) }, { year: String((new Date().getFullYear()) - 5) }])
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const [isLoading, setIsLoading] = useState(false);

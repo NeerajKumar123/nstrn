@@ -58,6 +58,9 @@ const BasicInfo = props => {
       setIsLoading(true)
       getAboutInfo(params, (aboutInfoRes) =>{
         if (aboutInfoRes.status == 1) {
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 500);
           const details = aboutInfoRes.data?.[0]
           if (details) {
             setsin(details.SIN_number)
@@ -68,9 +71,6 @@ const BasicInfo = props => {
             setProvince({state_id:details.state_id, state_name:details.province})
             setIsSinChanged(true)
           }
-          setTimeout(() => {
-            setIsLoading(false)
-          }, 500);
         }})
     }
   }, [isFocused])
