@@ -32,7 +32,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 const OnlineDocumentUploadV3 = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  const {statusDetails} = pageParams
+  const {statusDetails} = pageParams;
   const data = statusDetails?.years_selected?.split(',');
   const [uploadImageCount, setUploadImageCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,27 +46,33 @@ const OnlineDocumentUploadV3 = props => {
   const isFocused = useIsFocused();
 
   const prepareParams = (bs64Image, title) => {
-    const {user_id, tax_file_id} = statusDetails
+    const {user_id, tax_file_id} = statusDetails;
     const dashedTitle = title.replace(/ /g, '-');
-    const isPdf = title.includes('.pdf')
+    const isPdf = title.includes('.pdf');
     const params = {
       User_id: user_id,
       Tax_File_Id: tax_file_id,
       Year: parseInt(selectedYear),
-      FileNameWithExtension: isPdf ? `${dashedTitle}.pdf` : `${dashedTitle}.jpg`,
+      FileNameWithExtension: isPdf
+        ? `${dashedTitle}.pdf`
+        : `${dashedTitle}.jpg`,
       Base64String: bs64Image,
     };
     return params;
   };
 
   useEffect(() => {
-    getDocs();
+    if (isFocused) {
+      getDocs();
+    }
   }, [isFocused, uploadImageCount]);
 
   const getDocs = () => {
+    setIsLoading(true)
     const {tax_file_id, user_id} = statusDetails;
     const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
     getUserDocuments(params, docsRes => {
+      setIsLoading(false)
       if (docsRes?.status == 1) {
         setDocs(docsRes.data);
       } else {
@@ -79,7 +85,7 @@ const OnlineDocumentUploadV3 = props => {
     const imgObj = res?.assets?.[0];
     if (imgObj.base64) {
       setImageToBeUpload(imgObj.base64);
-      setImageName('jpg')
+      setImageName('jpg');
       setIsImageTitleVisible(true);
     } else {
       Alert.alert('SukhTax', 'Something went wrong!');
@@ -88,7 +94,7 @@ const OnlineDocumentUploadV3 = props => {
 
   const saveDocumentDataAndShowTitleField = res => {
     setImageToBeUpload(res);
-    setImageName('pdf')
+    setImageName('pdf');
     setIsImageTitleVisible(true);
   };
   const intiateImageUploading = title => {
@@ -111,7 +117,13 @@ const OnlineDocumentUploadV3 = props => {
         width: '100%',
         height: '100%',
       }}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+        navigation={navigation}
+        onLeftClicked={() => {
+          pageParams?.onDataFormUpdates(statusDetails);
+          navigation.goBack();
+        }}
+      />
       {isLoading && <SKLoader />}
       <ScrollView
         style={{width: '100%'}}
@@ -138,7 +150,7 @@ const OnlineDocumentUploadV3 = props => {
               />
             );
           })}
-        {/* <UploadedFilesStatus count={docs?.length} /> */}
+        <UploadedFilesStatus count={docs?.length} />
         {/* <ManageDocButton
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title={'MANAGE DOCUMENTS'}
@@ -159,7 +171,8 @@ const OnlineDocumentUploadV3 = props => {
           borderColor={Colors.PRIMARY_BORDER}
           title={'SUBMIT'}
           onPress={() => {
-            navigation.goBack()
+            pageParams?.onDataFormUpdates(statusDetails);
+            navigation.goBack();
           }}
         />
         <ActionSheet
@@ -208,8 +221,8 @@ const OnlineDocumentUploadV3 = props => {
                           Platform.OS == 'ios'
                             ? fileRes.uri.replace('file://', '')
                             : fileRes.uri;
-                        if(Platform.OS == 'ios'){
-                          path = path.replace(/%20/g, " ");
+                        if (Platform.OS == 'ios') {
+                          path = path.replace(/%20/g, ' ');
                         }
                         RNFetchBlob.fs
                           .readFile(path, 'base64')
@@ -298,7 +311,6 @@ const DocCard = props => {
         justifyContent: 'space-between',
         width: '100%',
         height: 40,
-        backgroundColor:'green'
       }}
       onPress={() => {
         props.onClicked && props.onClicked();

@@ -51,11 +51,8 @@ import SKGGLAddressModel from '../components/SKGGLAddressModel';
 
 const OnlineCompleteReviewProfileV3 = props => {
   const navigation = useNavigation();
-  console.log('props.route',props.route)
   const pageParams = props.route.params;
   const {statusDetails} = pageParams
-  console.log("statusDetails>>>",statusDetails)
-  const isEditing = pageParams?.isEditing;
   const [isFillingForWife, setIsFillingForWife] = useState(false);
   const [isLastTimeVisible, setIsLastTimeVisible] = useState(false);
   const [fName, setFName] = useState('');
@@ -126,8 +123,7 @@ const OnlineCompleteReviewProfileV3 = props => {
   }, []);
 
   useEffect(() => {
-    const {tax_profile_completed, tax_file_id, user_id, tax_file_status_id} =
-      statusDetails;
+    const {tax_profile_completed, tax_file_id, user_id, tax_file_status_id} = statusDetails;
     if (tax_profile_completed || tax_file_status_id == 16) {
       setIsLoading(true);
       const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
@@ -176,7 +172,7 @@ const OnlineCompleteReviewProfileV3 = props => {
   const prepareParamsForSavingProfile = () => {
     const {user_id} = statusDetails;
     const params = {
-      User_Id: 9,
+      User_Id: user_id,
       User_First_Name: fName,
       User_Last_Name: lName,
       User_SIN_Number: sinNo,
@@ -195,7 +191,7 @@ const OnlineCompleteReviewProfileV3 = props => {
       Spouse_Gender: sgender,
       Spouse_Residency: sresidency?.residency_name,
       Spouse_SIN_Number: ssinNo,
-      Spouse_Institution_Id: sbank?.institution_id,
+      Spouse_Institution_Id: isFilingForSpouse ? sbank?.institution_id : 0,
       Spouse_Branch: sbranchNo,
       Spouse_Account_No: saccountNo,
       Identification_FileNameWithExtension: identificationImageName || `${user_id}_online_new.png`,
@@ -312,7 +308,7 @@ const OnlineCompleteReviewProfileV3 = props => {
         style={{flex: 1, width: '100%', paddingBottom: 10}}
         keyboardVerticalOffset={0}>
         {isLoading && <SKLoader />}
-        <AppHeader navigation={navigation} />
+        <AppHeader navigation={navigation}/>
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: 20,
@@ -620,19 +616,20 @@ const OnlineCompleteReviewProfileV3 = props => {
             fontWeight={'normal'}
             backgroundColor={Colors.PRIMARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'SUBMIT'}
+            title={ statusDetails?.tax_profile_completed ? 'UPDATE' : 'SUBMIT'}
             rightImage={CustomFonts.right_arrow}
             onPress={() => {
               if (checkFormValidations()) {
                 setIsLoading(true);
                 const params = prepareParamsForSavingProfile();
-                const {taxFileCompleted, taxFileStatusID} = pageParams;
-                if (taxFileCompleted && taxFileStatusID != 16) {
-                  onlineUpdateMyprofile(params, res => {
+                const {tax_profile_completed, tax_file_status_id,tax_file_id} = statusDetails;
+                if (tax_profile_completed && tax_file_status_id != 16) {
+                  const paramsForUpdate = {...params,Tax_File_Id:tax_file_id}
+                  onlineUpdateMyprofile(paramsForUpdate, res => {
                     setIsLoading(false);
                     if (res.status == 1) {
                       Alert.alert('Sukhtax', res.message ? res.message : '');
-                      pageParams
+                      pageParams?.onDataFormUpdates(res?.data?.[0])
                       navigation.goBack();
                     } else {
                       Alert.alert('Sukhtax', 'Something went wrong.');
@@ -643,6 +640,7 @@ const OnlineCompleteReviewProfileV3 = props => {
                     setIsLoading(false);
                     if (res.status == 1) {
                       Alert.alert('Sukhtax', res.message ? res.message : '');
+                      pageParams?.onDataFormUpdates(res?.data?.[0])
                       navigation.goBack();
                     } else {
                       Alert.alert('Sukhtax', 'Something went wrong.');
@@ -788,7 +786,6 @@ const OnlineCompleteReviewProfileV3 = props => {
             setIsSSBankVisible(false);
           }}
           onSelect={value => {
-            console.log('value', value);
             setSBank(value);
             setIsSSBankVisible(false);
           }}
@@ -824,11 +821,9 @@ const OnlineCompleteReviewProfileV3 = props => {
                   Alert.alert('SukhTax', 'Image uploading cancelled by user.');
                 } else if (res?.error) {
                 } else if (res?.assets) {
-                  console.log('res', res);
                   const imgObj = res?.assets?.[0];
                   if (!imgObj.base64)
                     Alert.alert('SukhTax', 'Something went wrong!');
-                  console.log('imgObj.11111', imgObj.base64);
                   setIdentificationImage(imgObj.base64);
                   setIdentificationImageName(imgObj?.fileName)
                 }
@@ -842,7 +837,6 @@ const OnlineCompleteReviewProfileV3 = props => {
                   const imgObj = res?.assets?.[0];
                   if (!imgObj.base64)
                     Alert.alert('SukhTax', 'Something went wrong!');
-                  console.log('imgObj.22222', imgObj.base64);
                   setIdentificationImage(imgObj.base64);
                   setIdentificationImageName(imgObj?.fileName)
                 }

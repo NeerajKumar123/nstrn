@@ -26,40 +26,30 @@ const OnlineSelectYearV3 = props => {
   const pageParams = props.route.params;
   const {statusDetails} = pageParams
   const [isLoading, setIsLoading] = useState(false);  
-  const [isFSelected, setIsFSelected] = useState(props.years?.includes(new Date().getFullYear() -1));
-  const [isSSelected, setIsSSelected] = useState(props.years?.includes(new Date().getFullYear() - 2));
-  const [isTSelected, setIsTSelected] = useState(props.years?.includes(new Date().getFullYear() - 3));
-  const [isFTSelected, setIsFTSelected] = useState(props.years?.includes(new Date().getFullYear() - 4));
+  const [isFSelected, setIsFSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 1));
+  const [isSSelected, setIsSSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 2));
+  const [isTSelected, setIsTSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 3));
+  const [isFTSelected, setIsFTSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 4));
 
-  const years = global?.alreadyFliedYears
-  const isFAlreadyFlied =  props.years?.includes(new Date().getFullYear() -1)
-  const isSAlreadyFlied = props.years?.includes(new Date().getFullYear() -1)
-  const isTAlreadyFlied = props.years?.includes(new Date().getFullYear() -1)
-  const isFTAlreadyFlied = props.years?.includes(new Date().getFullYear() -1)
+  const isFAlreadyFlied =  statusDetails.years_selected?.includes(new Date().getFullYear() - 1)
+  const isSAlreadyFlied = statusDetails.years_selected?.includes(new Date().getFullYear() -2)
+  const isTAlreadyFlied = statusDetails.years_selected?.includes(new Date().getFullYear() -3)
+  const isFTAlreadyFlied = statusDetails.years_selected?.includes(new Date().getFullYear() -4)
 
-  useEffect(() => {
-    SKTStorage.setKeyValue('isLastDepHit',false, ()=>{})
-  }, [])
-  
-  function remove_duplicates_es6(arr) {
-    let s = new Set(arr);
-    let it = s.values();
-    return Array.from(it);
-}
 
 const prepareParams = () =>{
   let yrs = ""
   if(isFSelected){
-    yrs = new Date().getFullYear()
+    yrs = new Date().getFullYear() -1
   }
   if(isSSelected){
-    yrs = yrs + "," + (new Date().getFullYear() - 1)
+    yrs = yrs + "," + (new Date().getFullYear() - 2)
   }
   if(isTSelected){
-    yrs =yrs + "," + (new Date().getFullYear() - 2)
+    yrs =yrs + "," + (new Date().getFullYear() - 3)
   }
   if(isFTSelected){
-    yrs = yrs + ","  + (new Date().getFullYear() - 3)
+    yrs = yrs + ","  + (new Date().getFullYear() - 4)
   }
   const {user_id, tax_file_id} = statusDetails
   const params = {User_id:user_id,Tax_File_Id:tax_file_id,Years_Selected:yrs}
@@ -89,7 +79,7 @@ const prepareParams = () =>{
           value="PLEASE SELECT WHICH YEARS YOU WOULD LIKE TO FILE FOR"
         />
         <DocCard
-          title={new Date().getFullYear()}
+          title={new Date().getFullYear() - 1}
           isFiled = {isFAlreadyFlied}
           isSelected={isFSelected}
           onSelected={() => {
@@ -97,7 +87,7 @@ const prepareParams = () =>{
           }}
         />
         <DocCard
-          title={new Date().getFullYear() - 1}
+          title={new Date().getFullYear() - 2}
           isFiled = {isSAlreadyFlied}
           isSelected={isSSelected}
           onSelected={() => {
@@ -106,7 +96,7 @@ const prepareParams = () =>{
         />
        
          <DocCard
-          title={new Date().getFullYear() - 2}
+          title={new Date().getFullYear() - 3}
           isFiled = {isTAlreadyFlied}
           isSelected={isTSelected}
           onSelected={() => {
@@ -114,7 +104,7 @@ const prepareParams = () =>{
           }}
         />
         <DocCard
-          title={new Date().getFullYear() - 3}
+          title={new Date().getFullYear() - 4}
           isFiled = {isFTAlreadyFlied}
           isSelected={isFTSelected}
           onSelected={() => {
@@ -133,7 +123,7 @@ const prepareParams = () =>{
             fontWeight={'normal'}
             backgroundColor={Colors.PRIMARY_FILL}
             borderColor={Colors.PRIMARY_BORDER}
-            title={'SUBMI'}
+            title={'SUBMIT'}
             rightImage={CustomFonts.right_arrow}
             onPress={() => {
               if (isFSelected || isSSelected || isTSelected || isFTSelected) {
@@ -141,8 +131,8 @@ const prepareParams = () =>{
               const params = prepareParams()
                 onlineSaveSelectedYears(params, (res)=>{
                   setIsLoading(false)
-                  console.log("res", JSON.stringify(res));
                   if(res?.status == 1){
+                    pageParams?.onDataFormUpdates(statusDetails)
                     navigation.goBack()
                   }else{
                     Alert.alert("Sukhtax", "Something went wrong!")

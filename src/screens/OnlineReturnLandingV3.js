@@ -29,21 +29,16 @@ const OnlineReturnLandingV3 = props => {
   const [statusDetails, setStatusDetails] = useState({});
 
   useEffect(() => {
-    console.log('isFocused',isFocused)
-    if (isFocused) {
-      getTaxFlStatus();
-    }
-  }, [isFocused]);
-
-  const getTaxFlStatus = () => {
     const {user_id, tax_file_id} = global.onlineStatusData;
-    console.log('user_id, tax_file_id',user_id, tax_file_id)
+    getTaxFlStatus(user_id, tax_file_id);
+  }, []);
+
+  const getTaxFlStatus = (user_id, tax_file_id) => {
     if (user_id) {
       setIsLoading(true);
       const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
       onlineGetTaxFileStatus(params, res => {
         setIsLoading(false);
-        console.log('res', JSON.stringify(res));
         if (res?.status == 1) {
           setStatusDetails(res.data[0]);
         }
@@ -51,9 +46,14 @@ const OnlineReturnLandingV3 = props => {
     }
   };
 
+  const onDataFormUpdates = res => {
+    const {user_id, tax_file_id} = res;
+    getTaxFlStatus(user_id, tax_file_id);
+  };
+
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isProfileComplete = statusDetails?.tax_profile_completed
+    const isProfileComplete = statusDetails?.tax_profile_completed;
     const isYearSelected = statusDetails?.years_selected?.length;
     const isDocumentUploaded = statusDetails?.document_uploaded;
     if (!isProfileComplete) {
@@ -62,27 +62,12 @@ const OnlineReturnLandingV3 = props => {
     } else if (!isYearSelected) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select year(s) you are filing for');
-    }else if (!isDocumentUploaded) {
+    } else if (!isDocumentUploaded) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please upload required documents first');
     }
     return isValidForm;
   };
-
-  const onNewTaxFileIdCreated = ({tax_file_id, user_id}) =>{
-    console.log('user_id, tax_file_id',user_id, tax_file_id)
-    if (user_id) {
-      setIsLoading(true);
-      const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
-      onlineGetTaxFileStatus(params, res => {
-        setIsLoading(false);
-        console.log('res', JSON.stringify(res));
-        if (res?.status == 1) {
-          setStatusDetails(res.data[0]);
-        }
-      });
-    }  }
-
 
   return (
     <View
@@ -121,7 +106,12 @@ const OnlineReturnLandingV3 = props => {
           title={'Complete or review profile'}
           isSelected={statusDetails?.tax_profile_completed}
           onSelected={() => {
-            navigation.navigate('OnlineCompleteReviewProfileV3', {statusDetails:statusDetails, onBack:(details) =>{onNewTaxFileIdCreated(details)}});
+            navigation.navigate('OnlineCompleteReviewProfileV3', {
+              statusDetails: statusDetails,
+              onDataFormUpdates: details => {
+                onDataFormUpdates(details);
+              }
+            });
           }}
         />
         <OnlineLandinButton
@@ -131,6 +121,9 @@ const OnlineReturnLandingV3 = props => {
           onSelected={() => {
             navigation.navigate('OnlineSelectYearV3', {
               statusDetails: statusDetails,
+              onDataFormUpdates: details => {
+                onDataFormUpdates(details);
+              }
             });
           }}
         />
@@ -140,6 +133,9 @@ const OnlineReturnLandingV3 = props => {
           onSelected={() => {
             navigation.navigate('OnlineDocumentUploadV3', {
               statusDetails: statusDetails,
+              onDataFormUpdates: details => {
+                onDataFormUpdates(details);
+              },
             });
           }}
         />
@@ -170,7 +166,7 @@ const OnlineReturnLandingV3 = props => {
                   console.log('finalizeRes====>', finalizeRes);
                   setIsLoading(false);
                   navigation.popToTop();
-                });  
+                });
               }
             }}
           />

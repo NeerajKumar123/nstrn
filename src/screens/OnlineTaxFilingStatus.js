@@ -849,7 +849,8 @@ const TaxFilingStatusCard = props => {
             borderColor={Colors.PRIMARY_BORDER}
             title={'EDIT INFO'}
             onPress={() => {
-              navigation.navigate('OnlineEditInfo');
+              // navigation.navigate('OnlineEditInfo');
+              navigation.navigate('OnlineReturnLandingV3');
             }}
           />
         )}

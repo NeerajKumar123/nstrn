@@ -57,10 +57,10 @@ const BasicInfo = props => {
       const params = {User_Id:user_id,Tax_File_Id:tax_file_id,Year:ar[0]}
       setIsLoading(true)
       getAboutInfo(params, (aboutInfoRes) =>{
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 500);
         if (aboutInfoRes.status == 1) {
-          setTimeout(() => {
-            setIsLoading(false)
-          }, 500);
           const details = aboutInfoRes.data?.[0]
           if (details) {
             setsin(details.SIN_number)
