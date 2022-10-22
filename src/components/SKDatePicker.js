@@ -96,6 +96,7 @@ const SKDatePicker = props => {
         mode="date"
         display={Platform.OS == 'ios' ? 'spinner' : 'spinner'}
         onChange={(event, date) => {
+          console.log('event',event)
           if (event?.type != 'dismissed') {
             Platform.OS == 'ios' ? setSelectedDate(date) : onDonePressed(date);
           }else{
