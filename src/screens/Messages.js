@@ -57,7 +57,7 @@ const Messages = props => {
         flex: 1,
       }}>
       <AppHeader navigation = {navigation}/>
-      {isLoading && <SKLoader />}
+      {/* {isLoading && <SKLoader />} */}
       <View style={{width: '100%', flex: 1, paddingHorizontal: 20}}>
         <Heading value="MESSAGES" marginTop={30} />
         {chats && (

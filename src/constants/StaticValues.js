@@ -15,6 +15,7 @@ export const ST_REGEX = {
   Address: '^[0-9a-zA-Zs,-]+$',
   BankAccount: '^d{5,10}$',
   BranchCode: '^d{5,8}$',
+  PostalCode:'^(?!.*[DFIOQU])[A-VXY][0-9][A-Z]?[0-9][A-Z][0-9]$'
 };
 
 export const GENDER_OPTIONS = ['Male', 'Female', 'Other'];

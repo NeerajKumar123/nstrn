@@ -32,6 +32,7 @@ export const EyeOutlineOn = 'eye-outline';
 export const EyeOutlineOff = 'eye-off-outline';
 export const CheckRight = 'checkbox-marked-circle-outline';
 export const CheckRightFilled = 'checkbox-marked-circle';
+export const PostalCodeIcon = 'mailbox';
 
 
 

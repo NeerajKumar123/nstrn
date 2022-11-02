@@ -171,7 +171,7 @@ const SKGGLAddressModel = props => {
               }}
               filterReverseGeocodingByTypes={[
                 'locality',
-                'administrative_area_level_3',
+                'administrative_area_level_3'
               ]}
               debounce={200}
             />

@@ -31,10 +31,13 @@ const OnlineSelectYearV3 = props => {
   const [isTSelected, setIsTSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 3));
   const [isFTSelected, setIsFTSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 4));
 
-  const isFAlreadyFlied =  statusDetails.years_selected?.includes(new Date().getFullYear() - 1)
-  const isSAlreadyFlied = statusDetails.years_selected?.includes(new Date().getFullYear() -2)
-  const isTAlreadyFlied = statusDetails.years_selected?.includes(new Date().getFullYear() -3)
-  const isFTAlreadyFlied = statusDetails.years_selected?.includes(new Date().getFullYear() -4)
+  const {tax_file_status_id} = statusDetails || {}
+  const allowYearsEditing  = tax_file_status_id == 8
+
+  const isFAlreadyFlied = allowYearsEditing ? false : statusDetails.years_selected?.includes(new Date().getFullYear() - 1)
+  const isSAlreadyFlied = allowYearsEditing ? false : statusDetails.years_selected?.includes(new Date().getFullYear() -2)
+  const isTAlreadyFlied = allowYearsEditing ? false : statusDetails.years_selected?.includes(new Date().getFullYear() -3)
+  const isFTAlreadyFlied = allowYearsEditing ? false : statusDetails.years_selected?.includes(new Date().getFullYear() -4)
 
 
 const prepareParams = () =>{

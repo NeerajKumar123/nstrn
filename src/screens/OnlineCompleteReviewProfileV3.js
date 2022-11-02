@@ -61,6 +61,7 @@ const OnlineCompleteReviewProfileV3 = props => {
   const [gender, setGender] = useState();
   const [sinNo, setSinNo] = useState('');
   const [mailingAddress, setMailingAddress] = useState('');
+  const [postalCode, setPostalCode] = useState('');
   const [maritalStatus, setMaritalStatus] = useState({});
   const [haveDepdents, setHaveDepdents] = useState(false);
   const [isFilingForSpouse, setIsFilingForSpouse] = useState(true);
@@ -135,6 +136,7 @@ const OnlineCompleteReviewProfileV3 = props => {
         setDOB(new Date(details?.user_dob));
         setGender(details?.user_gender);
         setMailingAddress(details?.user_mailing_address);
+        setPostalCode(details?.user_postal_code);
         setBank({
           institution_name: details?.user_institution_name,
           institution_id: details?.user_institution_id,
@@ -171,6 +173,7 @@ const OnlineCompleteReviewProfileV3 = props => {
   // Send "" for spouse bank details if not fling for spouse...
   const prepareParamsForSavingProfile = () => {
     const {user_id} = statusDetails;
+    const isSpouseValidationNeeded = maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3
     const params = {
       User_Id: user_id,
       User_First_Name: fName,
@@ -179,19 +182,20 @@ const OnlineCompleteReviewProfileV3 = props => {
       User_DOB: dob && format(dob, 'yyyy-MM-dd'),
       User_Gender: gender,
       User_Mailing_Address: mailingAddress,
+      User_Postal_Code: postalCode,
       User_Institution_Id: bank?.institution_id,
       User_Branch: branchNo,
       User_Account_No: accountNo,
       User_Marital_Status_Id: maritalStatus?.marital_status_id,
       User_Dependents: haveDepdents ? 1 : 0,
-      Filing_For_Spouse: isFilingForSpouse ? 1 : 0,
+      Filing_For_Spouse: isSpouseValidationNeeded ? isFilingForSpouse ? 1 : 0 : 0,
       Spouse_First_Name: sfName,
       Spouse_Last_Name: slName,
       Spouse_DOB: sdob && format(sdob, 'yyyy-MM-dd'),
       Spouse_Gender: sgender,
       Spouse_Residency: sresidency?.residency_name,
       Spouse_SIN_Number: ssinNo,
-      Spouse_Institution_Id: isFilingForSpouse ? sbank?.institution_id : 0,
+      Spouse_Institution_Id: isSpouseValidationNeeded ?  isFilingForSpouse ? sbank?.institution_id : 0 : 0,
       Spouse_Branch: sbranchNo,
       Spouse_Account_No: saccountNo,
       Identification_FileNameWithExtension: identificationImageName || `${user_id}_online_new.png`,
@@ -206,10 +210,11 @@ const OnlineCompleteReviewProfileV3 = props => {
     // Self Details Validations
     const isFNameValid = Validator.isValidField(fName, ST_REGEX.FullName);
     const isLNameValid = Validator.isValidField(lName, ST_REGEX.FullName);
-    const isSinValid = sinNo.length ? Validator.isValidSIN(sinNo) : true;
+    const isSinValid = Validator.isValidSIN(sinNo);
     const isDOBValid = dob;
     const isGenderValid = gender;
     const isValidMailingAddress = mailingAddress?.length;
+    const isValidPostalCode = Validator.isValidField(postalCode, ST_REGEX.PostalCode);
     const isBankValid = bank?.institution_id > 0;
     const isAccValid = accountNo.length > 0;
     const isBranchValid = branchNo.length == 5;
@@ -217,18 +222,19 @@ const OnlineCompleteReviewProfileV3 = props => {
     // Familiy details validations
     const isValidMaritalStatus = maritalStatus?.marital_status_id;
 
+    const isSpouseValidationNeeded = maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3
+
     // Spouse Details validations
-    const isSFNameValid = Validator.isValidField(sfName, ST_REGEX.FullName);
-    const isSLNameValid = Validator.isValidField(slName, ST_REGEX.FullName);
-    const isSGenderValid = sgender;
-    const isSDOBValid = sdob;
-    const isSResidencyValid = setMailingAddress?.length;
-    const isSSinValid = ssinNo.length ? Validator.isValidSIN(ssinNo) : true;
-    const isSBankValid = sbank?.institution_id > 0;
-    const isSAccValid = saccountNo.length > 0;
-    const isSBranchValid = sbranchNo.length == 5;
+    const isSFNameValid = isSpouseValidationNeeded ? Validator.isValidField(sfName, ST_REGEX.FullName) : true;
+    const isSLNameValid = isSpouseValidationNeeded ? Validator.isValidField(slName, ST_REGEX.FullName) : true;
+    const isSGenderValid =isSpouseValidationNeeded ? sgender : true;
+    const isSDOBValid = isSpouseValidationNeeded ? sdob : true;
+    const isSResidencyValid = isSpouseValidationNeeded ? setMailingAddress?.length : true;
+    const isSSinValid = isSpouseValidationNeeded && !(sresidency?.residency_id == 5 || sresidency?.residency_id == 6) ? Validator.isValidSIN(ssinNo) : true;
+    const isSBankValid = isSpouseValidationNeeded  ? sbank?.institution_id > 0 : true;
+    const isSAccValid = isSpouseValidationNeeded ? saccountNo.length > 0 : true;
+    const isSBranchValid = isSpouseValidationNeeded ? sbranchNo.length == 5 : true;
     const isIdentificationImageAttached = identificationImage?.length;
-    console.log(identificationImage)
 
     if (!isFNameValid) {
       isValidForm = false;
@@ -248,6 +254,9 @@ const OnlineCompleteReviewProfileV3 = props => {
     } else if (!isValidMailingAddress) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select valid mailing address');
+    }else if (!isValidPostalCode) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please select valid postal code');
     } else if (!isBankValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please select a valid bank');
@@ -380,6 +389,17 @@ const OnlineCompleteReviewProfileV3 = props => {
               setIsAddViewVisible(true);
             }}
           />
+          <SKInput
+            leftAccImage={CustomFonts.PostalCodeIcon}
+            maxLength={7}
+            borderColor={Colors.CLR_0065FF}
+            value={postalCode}
+            placeholder="Enter Postal Code"
+            onEndEditing={value => {
+              console.log('value',value)
+              setPostalCode(value);
+            }}
+          />
           <Heading
             fontSize={20}
             marginTop={20}
@@ -396,18 +416,6 @@ const OnlineCompleteReviewProfileV3 = props => {
             }}
           />
           <SKInput
-            marginBottom={0}
-            maxLength={30}
-            borderColor={Colors.CLR_0065FF}
-            leftAccImage={CustomFonts.Number}
-            keyboardType="number-pad"
-            value={accountNo}
-            placeholder="Enter Account Number"
-            onEndEditing={value => {
-              setAccountNo(value);
-            }}
-          />
-          <SKInput
             marginTop={20}
             marginBottom={0}
             maxLength={30}
@@ -418,6 +426,18 @@ const OnlineCompleteReviewProfileV3 = props => {
             placeholder="Enter Branch Number"
             onEndEditing={value => {
               setBranhcNo(value);
+            }}
+          />
+          <SKInput
+            marginBottom={0}
+            maxLength={30}
+            borderColor={Colors.CLR_0065FF}
+            leftAccImage={CustomFonts.Number}
+            keyboardType="number-pad"
+            value={accountNo}
+            placeholder="Enter Account Number"
+            onEndEditing={value => {
+              setAccountNo(value);
             }}
           />
           <Heading value="FAMILY" marginTop={26} fontSize={17} />
@@ -441,12 +461,14 @@ const OnlineCompleteReviewProfileV3 = props => {
               setHaveDepdents(updated);
             }}
           />
+          {(maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3) && 
+          <>
           <Heading value="SPOUSE" marginTop={26} fontSize={17} />
           <SKSwitch
             fontSize={17}
             marginTop={20}
             isOn={isFilingForSpouse}
-            value="DO YOU FILE YOUR RETURN WITH YOUR SPOUSE ?"
+            value="DOES YOUR SPOUSE TO FILE THEIR RETURN WITH YOU?"
             onToggle={status => {
               const updated = !isFilingForSpouse;
               setIsFilingForSpouse(updated);
@@ -472,7 +494,20 @@ const OnlineCompleteReviewProfileV3 = props => {
               setSLName(value);
             }}
           />
-          <SKInput
+          <TouchableInput
+            rightAccImage={CustomFonts.ChevronDown}
+            marginBottom={2}
+            height={65}
+            maxLength={15}
+            borderColor={Colors.CLR_0065FF}
+            value={sresidency?.residency_name}
+            placeholder="Residency"
+            onClicked={() => {
+              setIsSResidenceVisible(true)
+            }}
+          />
+          {!(sresidency?.residency_id == 5 || sresidency?.residency_id == 6) &&
+            <SKInput
             leftAccImage={CustomFonts.Number}
             marginTop={15}
             maxLength={9}
@@ -484,6 +519,7 @@ const OnlineCompleteReviewProfileV3 = props => {
               setSSinNo(value);
             }}
           />
+          }
           <TouchableInput
             marginTop={15}
             leftAccImage={CustomFonts.Calender}
@@ -501,18 +537,6 @@ const OnlineCompleteReviewProfileV3 = props => {
             placeholder="Select Gender"
             onClicked={() => {
               setIsSGenderVisible(true);
-            }}
-          />
-          <TouchableInput
-            rightAccImage={CustomFonts.ChevronDown}
-            marginBottom={2}
-            height={65}
-            maxLength={15}
-            borderColor={Colors.CLR_0065FF}
-            value={sresidency?.residency_name}
-            placeholder="Residency"
-            onClicked={() => {
-              setIsSResidenceVisible(true)
             }}
           />
           {isFilingForSpouse && (
@@ -559,6 +583,8 @@ const OnlineCompleteReviewProfileV3 = props => {
               />
             </>
           )}
+          </>
+          }
 
           <Heading
             fontSize={16}
@@ -610,6 +636,14 @@ const OnlineCompleteReviewProfileV3 = props => {
               actionSheetRef.current.show();
             }}
           />
+          {identificationImage && 
+          <Heading
+          fontSize={12}
+          fontWeight = "400"
+          marginTop={5}
+          color={Colors.APP_RED_SUBHEADING_COLOR}
+          value="ID ATTACHED"
+        />}
           <SKButton
             fontSize={16}
             marginTop={20}

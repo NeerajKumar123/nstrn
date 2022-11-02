@@ -151,16 +151,16 @@ const OnlineDocumentUploadV3 = props => {
             );
           })}
         <UploadedFilesStatus count={docs?.length} />
-        {/* <ManageDocButton
+        <ManageDocButton
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title={'MANAGE DOCUMENTS'}
           onClicked={() => {
             navigation.navigate('ManageDocuments', {
-              isDocAdded: docs?.length > 0 ? true : false,
-              showFooterBtn: true,
+              isDocAdded: false,
+              showFooterBtn: false,
             });
           }}
-        /> */}
+        />
         <SKButton
           marginTop={30}
           disable={docs?.length > 0 ? false : true}
