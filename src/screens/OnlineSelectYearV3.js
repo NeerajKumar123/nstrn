@@ -31,13 +31,11 @@ const OnlineSelectYearV3 = props => {
   const [isTSelected, setIsTSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 3));
   const [isFTSelected, setIsFTSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 4));
 
-  const {tax_file_status_id} = statusDetails || {}
-  const allowYearsEditing  = tax_file_status_id == 8
 
-  const isFAlreadyFlied = allowYearsEditing ? false : statusDetails.years_selected?.includes(new Date().getFullYear() - 1)
-  const isSAlreadyFlied = allowYearsEditing ? false : statusDetails.years_selected?.includes(new Date().getFullYear() -2)
-  const isTAlreadyFlied = allowYearsEditing ? false : statusDetails.years_selected?.includes(new Date().getFullYear() -3)
-  const isFTAlreadyFlied = allowYearsEditing ? false : statusDetails.years_selected?.includes(new Date().getFullYear() -4)
+  const isFDis =  statusDetails.years_filed_for?.includes(new Date().getFullYear() - 1)
+  const isSDis = statusDetails.years_filed_for?.includes(new Date().getFullYear() -2)
+  const isTDis = statusDetails.years_filed_for?.includes(new Date().getFullYear() -3)
+  const isFTDis =statusDetails.years_filed_for?.includes(new Date().getFullYear() -4)
 
 
 const prepareParams = () =>{
@@ -54,6 +52,8 @@ const prepareParams = () =>{
   if(isFTSelected){
     yrs = yrs + ","  + (new Date().getFullYear() - 4)
   }
+  while( yrs.charAt(0) == ',' ) yrs = yrs.substring(1);
+
   const {user_id, tax_file_id} = statusDetails
   const params = {User_id:user_id,Tax_File_Id:tax_file_id,Years_Selected:yrs}
   return params
@@ -83,7 +83,7 @@ const prepareParams = () =>{
         />
         <DocCard
           title={new Date().getFullYear() - 1}
-          isFiled = {isFAlreadyFlied}
+          isDisbled = {isFDis}
           isSelected={isFSelected}
           onSelected={() => {
             setIsFSelected(!isFSelected);
@@ -91,7 +91,7 @@ const prepareParams = () =>{
         />
         <DocCard
           title={new Date().getFullYear() - 2}
-          isFiled = {isSAlreadyFlied}
+          isDisbled = {isSDis}
           isSelected={isSSelected}
           onSelected={() => {
             setIsSSelected(!isSSelected);
@@ -100,7 +100,7 @@ const prepareParams = () =>{
        
          <DocCard
           title={new Date().getFullYear() - 3}
-          isFiled = {isTAlreadyFlied}
+          isDisbled = {isTDis}
           isSelected={isTSelected}
           onSelected={() => {
             setIsTSelected(!isTSelected);
@@ -108,7 +108,7 @@ const prepareParams = () =>{
         />
         <DocCard
           title={new Date().getFullYear() - 4}
-          isFiled = {isFTAlreadyFlied}
+          isDisbled = {isFTDis}
           isSelected={isFTSelected}
           onSelected={() => {
             setIsFTSelected(!isFTSelected);
@@ -151,10 +151,10 @@ const prepareParams = () =>{
 };
 
 const DocCard = props => {
-  const {title, isSelected = false,isFiled = false, onSelected = ()=>{}} = props;
+  const {title, isSelected = false,isDisbled = false, onSelected = ()=>{}} = props;
   return (
     <TouchableOpacity
-      disabled = {isFiled}
+      disabled = {isDisbled}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -164,11 +164,11 @@ const DocCard = props => {
         justifyContent: 'center',
         width: '100%',
         height: 48,
-        opacity: isFiled ?  .8 : 1,
+        opacity: isDisbled ?  .8 : 1,
         borderRadius: 6,
         borderWidth:1,
-        borderColor:isFiled ? Colors.LIGHTGRAY: Colors.CLR_E77C7E,
-        backgroundColor:isFiled ? Colors.WHITE :  isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
+        borderColor:isDisbled ? Colors.LIGHTGRAY: Colors.CLR_E77C7E,
+        backgroundColor:isDisbled ? Colors.WHITE :  isSelected ? Colors.CLR_E77C7E : Colors.WHITE,
       }}
       key={`${Math.random()}`}
       onPress={() => {
@@ -178,7 +178,7 @@ const DocCard = props => {
         style={{
           width: '100%',
           textAlign: 'center',
-          color: isFiled ?Colors.CLR_414141 : isSelected ? Colors.WHITE : Colors.CLR_414141,
+          color: isDisbled ? Colors.CLR_414141 : isSelected ? Colors.WHITE : Colors.CLR_414141,
           fontSize: 17,
           fontWeight: '700',
         }}>

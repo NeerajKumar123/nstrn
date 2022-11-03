@@ -6,6 +6,8 @@ import {
   Platform,
   KeyboardAvoidingView,
   Text,
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import TouchableInput from '../components/TouchableInput';
@@ -18,6 +20,7 @@ import SKLoader from '../components/SKLoader';
 import SKModel from '../components/SKModel';
 import SKDatePicker from '../components/SKDatePicker';
 import AppHeader from '../components/AppHeader';
+import Lottie from 'lottie-react-native';
 
 import {
   GENDER_OPTIONS,
@@ -163,6 +166,7 @@ const OnlineCompleteReviewProfileV3 = props => {
           residency_id: details.spouse_residency_id,
           residency_name: details.spouse_residency,
         });
+        setIdentificationImageName(details?.id_file_name)
         setTimeout(() => {
           setIsLoading(false);
         }, 500);
@@ -174,7 +178,7 @@ const OnlineCompleteReviewProfileV3 = props => {
   const prepareParamsForSavingProfile = () => {
     const {user_id} = statusDetails;
     const isSpouseValidationNeeded = maritalStatus?.marital_status_id == 2 || maritalStatus?.marital_status_id == 3
-    const params = {
+    let params = {
       User_Id: user_id,
       User_First_Name: fName,
       User_Last_Name: lName,
@@ -234,7 +238,7 @@ const OnlineCompleteReviewProfileV3 = props => {
     const isSBankValid = isSpouseValidationNeeded  ? sbank?.institution_id > 0 : true;
     const isSAccValid = isSpouseValidationNeeded ? saccountNo.length > 0 : true;
     const isSBranchValid = isSpouseValidationNeeded ? sbranchNo.length == 5 : true;
-    const isIdentificationImageAttached = identificationImage?.length;
+    const isIdentificationImageAttached = identificationImage?.length || statusDetails?.tax_profile_completed;
 
     if (!isFNameValid) {
       isValidForm = false;
@@ -628,6 +632,17 @@ const OnlineCompleteReviewProfileV3 = props => {
             color={Colors.APP_RED_SUBHEADING_COLOR}
             value="- PR CARD"
           />
+          {statusDetails?.tax_profile_completed  && <Heading value="UPLOADED IDENTIFICATION DOCUMENT" marginTop={26} fontSize={17} />}
+          {statusDetails?.tax_profile_completed  && 
+          <FileCard
+          key={statusDetails.document_file_name}
+          item={{}}
+          isLoadingiOS={false}
+          downloadingItem={{}}
+          onClick={() => {
+            
+          }}
+        />}
           <UploadDocButton
             marginTop={35}
             title="UPLOAD THE DOC HERE"
@@ -660,7 +675,9 @@ const OnlineCompleteReviewProfileV3 = props => {
                 if (tax_profile_completed && tax_file_status_id != 16) {
                   const paramsForUpdate = {...params,Tax_File_Id:tax_file_id}
                   onlineUpdateMyprofile(paramsForUpdate, res => {
-                    setIsLoading(false);
+                    setTimeout(() => {
+                      setIsLoading(false);
+                    }, Platform.OS == 'ios' ? 200 : 0);
                     if (res.status == 1) {
                       Alert.alert('Sukhtax', res.message ? res.message : '');
                       pageParams?.onDataFormUpdates(res?.data?.[0])
@@ -671,7 +688,9 @@ const OnlineCompleteReviewProfileV3 = props => {
                   });
                 } else {
                   onlineSaveMyprofile(params, res => {
-                    setIsLoading(false);
+                    setTimeout(() => {
+                      setIsLoading(false);
+                    }, Platform.OS == 'ios' ? 200 : 0);
                     if (res.status == 1) {
                       Alert.alert('Sukhtax', res.message ? res.message : '');
                       pageParams?.onDataFormUpdates(res?.data?.[0])
@@ -797,7 +816,7 @@ const OnlineCompleteReviewProfileV3 = props => {
           }}
         />
       )}
-      {isBankVisible && (
+      {isBankVisible && banks?.length > 1 && (
         <SKModel
           title="Select"
           data={banks}
@@ -811,7 +830,7 @@ const OnlineCompleteReviewProfileV3 = props => {
           }}
         />
       )}
-      {isSBankVisible && (
+      {isSBankVisible && banks?.length > 1 && (
         <SKModel
           title="Select"
           data={banks}
@@ -904,5 +923,46 @@ const OnlineCompleteReviewProfileV3 = props => {
     </View>
   );
 };
+
+const FileCard = props => {
+  const {item, onClick, isLoadingiOS = false, downloadingItem} = props;
+  const {document_title = 'title', cra_letters_document_id = 3} = item;
+  const isSame =
+    downloadingItem?.cra_letters_document_id == cra_letters_document_id;
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 20,
+        height: 40,
+      }}
+      onPress={() => {
+        onClick();
+      }}>
+      <Text
+        style={{
+          textAlign: 'left',
+          color: Colors.APP_BLUE_HEADING_COLOR,
+          fontSize: 15,
+          fontWeight: '700',
+          flex: 1,
+        }}>
+        {document_title}
+      </Text>
+      {isLoadingiOS && isSame ? (
+        <Lottie style={{width: 25, height: 25}} autoPlay loop source={loader} />
+      ) : (
+        <Image
+          resizeMode="contain"
+          style={{width: 25, height: 25, marginLeft: 10}}
+          source={CustomFonts.download}
+        />
+      )}
+    </TouchableOpacity>
+  );
+};
+
 
 export default OnlineCompleteReviewProfileV3;

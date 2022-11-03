@@ -358,7 +358,7 @@ PODS:
   - React-jsinspector (0.64.2)
   - react-native-document-picker (8.1.1):
     - React-Core
-  - react-native-image-picker (4.10.0):
+  - react-native-image-picker (4.0.4):
     - React-Core
   - react-native-progress-bar-android (1.0.4):
     - React
@@ -372,7 +372,7 @@ PODS:
     - React-Core
   - react-native-view-shot (3.4.0):
     - React-Core
-  - react-native-webview (11.23.0):
+  - react-native-webview (11.23.1):
     - React-Core
   - React-perflogger (0.64.2)
   - React-RCTActionSheet (0.64.2):
@@ -457,7 +457,7 @@ PODS:
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
-  - RNReanimated (2.10.0):
+  - RNReanimated (2.1.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -465,6 +465,7 @@ PODS:
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
+    - React
     - React-callinvoker
     - React-Core
     - React-Core/DevSupport
@@ -482,9 +483,10 @@ PODS:
     - React-RCTNetwork
     - React-RCTSettings
     - React-RCTText
+    - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.17.0):
+  - RNScreens (3.18.0):
     - React-Core
     - React-RCTImage
   - RNVectorIcons (8.1.0):
@@ -755,14 +757,14 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
   react-native-document-picker: f68191637788994baed5f57d12994aa32cf8bf88
-  react-native-image-picker: 4bc9ed38c8be255b515d8c88babbaf74973f91a8
+  react-native-image-picker: c07b072faa83f3480b473a15ea3c19cc39b3d6fa
   react-native-progress-bar-android: be43138ab7da30d51fc038bafa98e9ed594d0c40
   react-native-progress-view: 4d3bbe6a099ba027b1fedb1548c2c87f74249b70
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-signature-capture: 416a3947684e049a5b012cdd6496f878dc797f16
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-view-shot: a60a98a18c72bcaaaf2138f9aab960ae9b0d96c7
-  react-native-webview: e771bc375f789ebfa02a26939a57dbc6fa897336
+  react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
   React-RCTAnimation: 6a2e76ab50c6f25b428d81b76a5a45351c4d77aa
@@ -783,8 +785,8 @@ SPEC CHECKSUMS:
   RNFBMessaging: eb8d1b08795c8718706007ed0743732d00e1acc4
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNReanimated: cce4727fde9f4da9b800d999fa9975ea7a021dcf
-  RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
+  RNReanimated: b8c8004b43446e3c2709fe64b2b41072f87428ad
+  RNScreens: f3230dd008a7d0ce5c0a8bc78ff12cf2315bda24
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Stripe: 90596971ef49bade169f68bc59369a796b30a045
   stripe-react-native: f1b034cb702aa214078d9441b0a4313ac00c020d

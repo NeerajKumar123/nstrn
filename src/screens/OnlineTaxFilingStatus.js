@@ -810,7 +810,7 @@ const TaxFilingStatusCard = props => {
             global.isSAuthorized = undefined;
             global.isFromSpouseFlow = undefined;
             SKTStorage.setKeyValue('isFromSpouseFlow', undefined, () => {});
-            navigation.navigate('OnlineReturnLanding');
+            navigation.navigate('OnlineReturnLandingV3');
           }}
         />
       )}

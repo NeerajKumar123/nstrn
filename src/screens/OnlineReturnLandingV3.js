@@ -27,6 +27,9 @@ const OnlineReturnLandingV3 = props => {
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
   const [statusDetails, setStatusDetails] = useState({});
+  const [isProfileComplete, setisProfileComplete] = useState(false);
+  const [isYearSelected, setisYearSelected] = useState(false);
+  const [isDocumentUploaded, setisDocumentUploaded] = useState(false);
 
   useEffect(() => {
     const {user_id, tax_file_id} = global.onlineStatusData;
@@ -34,16 +37,22 @@ const OnlineReturnLandingV3 = props => {
   }, []);
 
   const getTaxFlStatus = (user_id, tax_file_id) => {
+   setTimeout(() => {
     if (user_id) {
       setIsLoading(true);
       const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
       onlineGetTaxFileStatus(params, res => {
         setIsLoading(false);
         if (res?.status == 1) {
-          setStatusDetails(res.data[0]);
-        }
+          const stsDetails = res.data[0]
+          setStatusDetails(stsDetails);
+          setisProfileComplete(stsDetails?.tax_file_status_id != 16 ? stsDetails?.tax_profile_completed : false)
+          setisYearSelected(stsDetails?.tax_file_status_id != 16 ? stsDetails?.years_selected?.length : false)
+          setisDocumentUploaded(stsDetails?.tax_file_status_id != 16 ? stsDetails?.document_uploaded : false)  
+      }
       });
     }
+   }, 200);
   };
 
   const onDataFormUpdates = res => {
@@ -53,9 +62,6 @@ const OnlineReturnLandingV3 = props => {
 
   const checkFormValidations = () => {
     let isValidForm = true;
-    const isProfileComplete = statusDetails?.tax_profile_completed;
-    const isYearSelected = statusDetails?.years_selected?.length;
-    const isDocumentUploaded = statusDetails?.document_uploaded;
     if (!isProfileComplete) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please complete your profile first.');
@@ -104,7 +110,7 @@ const OnlineReturnLandingV3 = props => {
         />
         <OnlineLandinButton
           title={'Complete or review profile'}
-          isSelected={statusDetails?.tax_profile_completed}
+          isSelected={isProfileComplete}
           onSelected={() => {
             navigation.navigate('OnlineCompleteReviewProfileV3', {
               statusDetails: statusDetails,
@@ -116,8 +122,7 @@ const OnlineReturnLandingV3 = props => {
         />
         <OnlineLandinButton
           title={'Select which years to file for'}
-          isSelected={statusDetails?.years_selected?.length}
-          selectedYears={statusDetails?.years_selected}
+          isSelected={isYearSelected}
           onSelected={() => {
             navigation.navigate('OnlineSelectYearV3', {
               statusDetails: statusDetails,
@@ -129,7 +134,7 @@ const OnlineReturnLandingV3 = props => {
         />
         <OnlineLandinButton
           title={'Upload documents'}
-          isSelected={statusDetails?.document_uploaded}
+          isSelected={isDocumentUploaded}
           onSelected={() => {
             navigation.navigate('OnlineDocumentUploadV3', {
               statusDetails: statusDetails,
@@ -203,7 +208,6 @@ const OnlineLandinButton = props => {
       }}
       key={`${Math.random()}`}
       onPress={() => {
-        console.log('OnlineCompleteReviewProfileV3');
         onSelected();
       }}>
       <Text

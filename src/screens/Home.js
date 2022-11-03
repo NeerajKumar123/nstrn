@@ -6,7 +6,7 @@ import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
 import {useNavigation} from '@react-navigation/native';
-import {loadIntialData} from '../helpers/BaseUtility'
+import {loadIntialData} from '../helpers/BaseUtility';
 import {useIsFocused} from '@react-navigation/native';
 import {getUserProfileDetails} from '../apihelper/Api';
 
@@ -14,7 +14,7 @@ const Home = props => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
-  const [userFullName, setUserFullName] = useState('')
+  const [userFullName, setUserFullName] = useState('');
   const {tax_file_status_id = 0} = global?.onlineStatusData;
   const {incorporation_status_id = 0} = global?.incStatusData;
   const {tax_docs_status_id = 0} = global?.taxDocsStatusData;
@@ -23,47 +23,47 @@ const Home = props => {
   // inprogress circular loader
   // all set green tick
   // rejected red/white cross
-  let taxStatus = 3
-   if (tax_file_status_id == 16) {
-    taxStatus = 1
-   }
+  let taxStatus = 3;
+  if (tax_file_status_id == 16) {
+    taxStatus = 1;
+  }
 
-   let incropStatus = 3
-   if (incorporation_status_id == 3) {
-    incropStatus = 1
-   }
-   let taxDocStatus = 3
-   if (tax_docs_status_id == 3) {
-    taxDocStatus = 1
-   }
-   let craStatus = 3
-   if (cra_letters_status_id == 3) {
-    craStatus = 1
-   }else if (cra_letters_status_id == 4) {
-    craStatus = 2
-   }
+  let incropStatus = 3;
+  if (incorporation_status_id == 3) {
+    incropStatus = 1;
+  }
+  let taxDocStatus = 3;
+  if (tax_docs_status_id == 3) {
+    taxDocStatus = 1;
+  }
+  let craStatus = 3;
+  if (cra_letters_status_id == 3) {
+    craStatus = 1;
+  } else if (cra_letters_status_id == 4) {
+    craStatus = 2;
+  }
 
-   useEffect(() => {
-    if(isFocused){
+  useEffect(() => {
+    if (isFocused) {
       setIsLoading(true);
       setTimeout(() => {
-        loadIntialData((res)=>{
+        loadIntialData(res => {
           setTimeout(() => {
             setIsLoading(false);
           }, 100);
-        })
+        });
       }, 500);
     }
-    const {user_id = 0} = global?.userInfo ? global?.userInfo : {}
-    getUserProfileDetails({user_id:user_id},(userDetailsRes)=>{
+    const {user_id = 0} = global?.userInfo ? global?.userInfo : {};
+    getUserProfileDetails({user_id: user_id}, userDetailsRes => {
       if (userDetailsRes.status == 1) {
-        const user = userDetailsRes?.data?.[0]
-        const fName = user?.firstname ?? ''
-        const lName = user?.lastname ?? ''
-        setUserFullName(fName + ' ' + lName )
+        const user = userDetailsRes?.data?.[0];
+        const fName = user?.firstname ?? '';
+        const lName = user?.lastname ?? '';
+        setUserFullName(fName + ' ' + lName);
       }
-    })
-  }, [isFocused])
+    });
+  }, [isFocused]);
 
   return (
     <View
@@ -73,7 +73,12 @@ const Home = props => {
         backgroundColor: 'white',
         flex: 1,
       }}>
-      <AppHeader navigation={navigation} />
+      <AppHeader
+        onLeftClicked={() => {
+          navigation.popToTop();
+        }}
+        navigation={navigation}
+      />
       {isLoading && <SKLoader />}
       <ScrollView
         style={{width: '100%', flex: 1}}

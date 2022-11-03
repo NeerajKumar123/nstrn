@@ -20,6 +20,7 @@ const SKModel = props => {
     title = 'Select',
     keyLabel,
   } = props;
+  console.log('data',data)
   return (
     <Modal animationType="fade" transparent={false} visible={true}>
       <View
@@ -105,7 +106,10 @@ const SKModel = props => {
 
 const Row = props => {
   const {item, keyLabel, onRowSelect} = props;
-  const displayValue = (keyLabel && item[keyLabel]) || item;
+  let displayValue = (keyLabel && item[keyLabel]) || item;
+  if (!(typeof displayValue === 'string' || displayValue instanceof String)) {
+    displayValue = 'Select Value'
+  }
   return (
     <TouchableOpacity
       style={{marginVertical: 10}}

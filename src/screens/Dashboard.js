@@ -6,6 +6,8 @@ import {
   Alert,
   Dimensions,
   ScrollView,
+  Platform,
+  RefreshControl
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import DashCard from '../components/DashCard';
@@ -27,6 +29,7 @@ const Dashboard = props => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingForDragged, setIsLoadingForDragged] = useState(false);
   const [taxFilingFee, setTaxFilingFee] = useState(49.99);
   const [userFullName, setUserFullName] = useState('');
   const [refCode, setRefCode] = useState();
@@ -41,7 +44,13 @@ const Dashboard = props => {
 
   useEffect(() => {
     if (isFocused) {
-      setIsLoading(true);
+      loadAllData()
+    }
+  }, [isFocused]);
+
+
+  const loadAllData = () =>{
+    setIsLoading(true);
       const user = global.userInfo;
       const fName = user?.firstname ?? '';
       const lName = user?.lastname ?? '';
@@ -62,9 +71,9 @@ const Dashboard = props => {
           );
           setTimeout(() => {
             setIsLoading(false);
-          }, 100);
+          }, Platform.OS == 'ios' ? 100 : 0);
         });
-      }, 500);
+      }, Platform.OS == 'ios' ? 500 : 0);
 
       const {user_id = 0} = global?.userInfo ? global?.userInfo : {};
       if (user_id) {
@@ -81,9 +90,50 @@ const Dashboard = props => {
           }
         });
       }
-    }
-  }, [isFocused]);
+  }
 
+  const loadAllDataOnDragged = () =>{
+    setIsLoadingForDragged(true);
+      const user = global.userInfo;
+      const fName = user?.firstname ?? '';
+      const lName = user?.lastname ?? '';
+      setUserFullName(fName + ' ' + lName);
+      setTimeout(() => {
+        loadIntialData(res => {
+          setStatusOnline(
+            global.onlineStatusData?.tax_file_status_name ?? undefined,
+          );
+          setStatusIncorp(
+            global.incStatusData?.incorporation_status_name ?? undefined,
+          );
+          setStatusReqTaxDocs(
+            global.taxDocsStatusData?.tax_docs_status_name ?? undefined,
+          );
+          setStatusCRA(
+            global.craLattersData?.cra_letters_status_name ?? undefined,
+          );
+          setTimeout(() => {
+            setIsLoadingForDragged(false);
+          }, Platform.OS == 'ios' ? 100 : 0);
+        });
+      }, Platform.OS == 'ios' ? 500 : 0);
+
+      const {user_id = 0} = global?.userInfo ? global?.userInfo : {};
+      if (user_id) {
+        getUserProfileDetails({user_id: user_id}, userDetailsRes => {
+          if (userDetailsRes.status === 1) {
+            const user = userDetailsRes?.data?.[0];
+            const fName = user?.firstname ?? '';
+            const lName = user?.lastname ?? '';
+            setUserFullName(fName + ' ' + lName);
+            setRefCode(user?.referral_code);
+            setLastChangedDate(user?.change_date ?? undefined);
+            setLastChangedModule(user?.Module_changed ?? undefined);
+            setLastChangedStatus(user?.change_name ?? undefined);
+          }
+        });
+      }
+  }
   useEffect(() => {
     getServicePriceList(priceListRes => {
       if (priceListRes?.status === 1) {
@@ -128,7 +178,7 @@ const Dashboard = props => {
         navigation.navigate('Home');
         break;
       case 2:
-        let {book_an_appointment_link} = global.incStatusData;
+        let {book_an_appointment_link} = global?.incStatusData || {};
         if (!book_an_appointment_link) {
           book_an_appointment_link = global.statusData;
         }
@@ -163,114 +213,71 @@ const Dashboard = props => {
   };
 
   const onlineMoveToPage = () => {
-    const {
-      Online_Button_Enabled,
-    } = global?.onlineStatusData ?? {};
-
-    if (Online_Button_Enabled == 0) {
-      navigation.navigate('OnlineTaxFilingStatus');
-    } else {
-      navigation.navigate('OnlineReturnLandingV3');
+    if (global?.onlineStatusData) {
+      const {
+        Online_Button_Enabled,
+      } = global?.onlineStatusData;
+  
+      if (Online_Button_Enabled == 0) {
+        navigation.navigate('OnlineTaxFilingStatus');
+      } else {
+        navigation.navigate('OnlineReturnLandingV3');
+      }
+    }else{
+      Alert.alert('Sukhtax', 'Something went wrong, Please retry')
     }
   };
-  // const onlineMoveToPage = () => {
-  //   const {
-  //     years_selected = 0,
-  //     identification_document_uploaded = 0,
-  //     about_info_filled = 0,
-  //     banking_family_info_filled = 0,
-  //     dependent_info_filled = 0,
-  //     spouse_info_filled = 0,
-  //     my_year_info_filled = 0,
-  //     document_uploaded = 0,
-  //     authorization_document_uploaded = 1,
-  //     Online_Button_Enabled,
-  //   } = global?.onlineStatusData ?? {};
-
-  //   if (Online_Button_Enabled == 0) {
-  //     navigation.navigate('OnlineTaxFilingStatus');
-  //   } else {
-  //     if (authorization_document_uploaded) {
-  //       navigation.navigate('AnyThingElse');
-  //     } else if (document_uploaded) {
-  //       navigation.navigate('AuthorizerList');
-  //     } else if (my_year_info_filled) {
-  //       navigation.navigate('OnlineDocuments');
-  //     } else if (spouse_info_filled) {
-  //       navigation.navigate('DependentsList');
-  //     } else if (dependent_info_filled) {
-  //       navigation.navigate('MyTaxYear', {pageIndex: 0});
-  //     } else if (banking_family_info_filled) {
-  //       const yrwiseRecords = global?.onlineStatusData?.Year_Wise_Records;
-  //       let firstYearData = yrwiseRecords?.[0] || {};
-  //       let isMarried = false;
-  //       let isDepSel = false;
-  //       if (
-  //         firstYearData?.marital_status_id == 2 ||
-  //         firstYearData?.marital_status_id == 3
-  //       ) {
-  //         isMarried = true;
-  //       }
-  //       if (firstYearData?.dependents) {
-  //         isDepSel = true;
-  //       }
-  //       if (isMarried) {
-  //         navigation.navigate('Spouse');
-  //       } else if (isDepSel) {
-  //         navigation.navigate('DependentsList');
-  //       } else {
-  //         navigation.navigate('MyTaxYear', {pageIndex: 0});
-  //       }
-  //     } else if (about_info_filled) {
-  //       navigation.navigate('BankingAndMore');
-  //     } else if (identification_document_uploaded) {
-  //       navigation.navigate('BasicInfo');
-  //     } else if (years_selected) {
-  //       navigation.navigate('Identification');
-  //     } else {
-  //       navigation.navigate('OnlineReturnLanding');
-  //     }
-  //   }
-  // };
 
   // This is neeraj33...
-  const incorpMoveToPage = props => {
-    const {
-      hst_registration, // HST
-      identification_document_uploaded, // incprtr
-      authorization_document_uploaded, // HST
-      incorporation_status_id,
-    } = global?.incStatusData;
-    if (incorporation_status_id == 1) {
-      if (hst_registration || authorization_document_uploaded) {
-        navigation.navigate('HSTRegistration');
-      } else if (identification_document_uploaded) {
-        navigation.navigate('IncorporatorsList');
+  const incorpMoveToPage = () => {
+    if (global?.incStatusData) {
+      const {
+        hst_registration, // HST
+        identification_document_uploaded, // incprtr
+        authorization_document_uploaded, // HST
+        incorporation_status_id,
+      } = global?.incStatusData;
+      if (incorporation_status_id == 1) {
+        if (hst_registration || authorization_document_uploaded) {
+          navigation.navigate('HSTRegistration');
+        } else if (identification_document_uploaded) {
+          navigation.navigate('IncorporatorsList');
+        } else {
+          navigation.navigate('IncorporationLanding');
+        }
+      } else if (incorporation_status_id == 3 || incorporation_status_id == 2) {
+        navigation.navigate('IncorpApplyStatus');
       } else {
         navigation.navigate('IncorporationLanding');
       }
-    } else if (incorporation_status_id == 3 || incorporation_status_id == 2) {
-      navigation.navigate('IncorpApplyStatus');
-    } else {
-      navigation.navigate('IncorporationLanding');
+    }else{
+      Alert.alert('Sukhtax', 'Something went wrong, Please retry')
     }
   };
-  const reqMoveToPage = props => {
-    const {tax_docs_status_id = 1} = global?.taxDocsStatusData;
-    if (tax_docs_status_id == 2 || tax_docs_status_id == 3 || tax_docs_status_id == 4 || tax_docs_status_id == 5) {
-      // inprogrees
-      navigation.navigate('RequestApplyStatus');
-    } else {
-      navigation.navigate('RequestLanding');
+  const reqMoveToPage = () => {
+    if (global?.taxDocsStatusData) {
+      const {tax_docs_status_id = 1} = global?.taxDocsStatusData;
+      if (tax_docs_status_id == 2 || tax_docs_status_id == 3 || tax_docs_status_id == 4 || tax_docs_status_id == 5) {
+        // inprogrees
+        navigation.navigate('RequestApplyStatus');
+      } else {
+        navigation.navigate('RequestLanding');
+      }  
+    }else{
+      Alert.alert('Sukhtax', 'Something went wrong, Please retry')
     }
   };
 
-  const craMoveToPage = props => {
-    const {cra_letters_status_id, user_id, cra_letters_id} = global.craLattersData
-    if (cra_letters_status_id == 5 || cra_letters_status_id == 6) {
-      navigation.navigate('CRALattersStatus', {user_id:user_id, cra_letters_id:cra_letters_id});
+  const craMoveToPage = () => {
+    if (global?.craLattersData) {
+      const {cra_letters_status_id = 0, user_id = 0, cra_letters_id = 0} = global.craLattersData
+      if (cra_letters_status_id == 5 || cra_letters_status_id == 6) {
+        navigation.navigate('CRALattersStatus', {user_id:user_id, cra_letters_id:cra_letters_id});
+      }else{
+        navigation.navigate('CRALanding');
+      }
     }else{
-      navigation.navigate('CRALanding');
+      Alert.alert('Sukhtax', 'Something went wrong, Please retry')
     }
   };
 
@@ -292,6 +299,13 @@ const Dashboard = props => {
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoadingForDragged}
+            onRefresh={() => loadAllDataOnDragged()}
+            tintColor="red"
+          />
+        }
         contentContainerStyle={{paddingHorizontal: 16, paddingBottom: 16}}>
         <DashCard
           title={'HOME'}
@@ -313,14 +327,14 @@ const Dashboard = props => {
             navigateToScreen({id: 7});
           }}
         />
-        <DashCard
+        {/* <DashCard
           title={'BOOK AN APPOINTMENT'}
           desc={`APPOINTMENTS\nBOOKINGS`}
           marginTop={16}
           onClick={() => {
             navigateToScreen({id: 2});
           }}
-        />
+        /> */}
         <DashCard
           title={'ONLINE TAX RETURN'}
           desc={`STARTING FROM\n$${taxFilingFee}`}
