@@ -21,6 +21,7 @@ import SKModel from '../components/SKModel';
 import SKDatePicker from '../components/SKDatePicker';
 import AppHeader from '../components/AppHeader';
 import Lottie from 'lottie-react-native';
+const loader = require('../../assets/loader.json');
 
 import {
   GENDER_OPTIONS,
@@ -51,6 +52,7 @@ import {
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import DocumentPicker from 'react-native-document-picker';
 import SKGGLAddressModel from '../components/SKGGLAddressModel';
+import {downloadFileFromUrl} from '../helpers/BaseUtility';
 
 const OnlineCompleteReviewProfileV3 = props => {
   const navigation = useNavigation();
@@ -97,9 +99,11 @@ const OnlineCompleteReviewProfileV3 = props => {
   const actionSheetRef = useRef();
   const [identificationImage, setIdentificationImage] = useState();
   const [identificationImageName, setIdentificationImageName] = useState();
+  const [identificationImageURL, setIdentificationImageURL] = useState();
   const [maritalStatuses, setMaritalStatuses] = useState();
   const [isMVisible, setIsMVisible] = useState();
-
+  const [downloadingItem, setDownloadingItem] = useState();
+  const [isLoadingiOS, setIsLoadingiOS] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -166,6 +170,7 @@ const OnlineCompleteReviewProfileV3 = props => {
           residency_id: details.spouse_residency_id,
           residency_name: details.spouse_residency,
         });
+        setIdentificationImageURL(details?.document_file_name)
         setIdentificationImageName(details?.id_file_name)
         setTimeout(() => {
           setIsLoading(false);
@@ -307,6 +312,43 @@ const OnlineCompleteReviewProfileV3 = props => {
     return isValidForm;
   };
 
+  const getFileName = docUrl => {
+    const dateString = `${new Date().valueOf()}`;
+    const loweredCase = docUrl?.toLowerCase();
+    let fileName = 'Sukhtax_' + dateString;
+    if (loweredCase.includes('.pdf')) {
+      fileName = fileName + '.pdf';
+    } else if (loweredCase.includes('.png')) {
+      fileName = fileName + '.png';
+    } else if (loweredCase.includes('.jpeg')) {
+      fileName = fileName + '.jpeg';
+    } else if (loweredCase.includes('.jpg')) {
+      fileName = fileName + '.jpg';
+    }
+    return fileName;
+  };
+
+  const handleFileDownloading = (doc, callback) => {
+    const docUrl = doc?.URL?.replace(/ /g, '');
+    const fileName = getFileName(docUrl);
+    if (Platform.OS == 'android') {
+      setIsLoading(true);
+    } else {
+      setIsLoadingiOS(true);
+      setDownloadingItem(doc);
+    }
+    downloadFileFromUrl(docUrl, fileName, () => {
+      callback();
+      if (Platform.OS == 'android') {
+        setIsLoading(false);
+      } else {
+        setDownloadingItem(undefined);
+        setIsLoadingiOS(false);
+      }
+    });
+  };
+
+
   return (
     <View
       style={{
@@ -400,7 +442,6 @@ const OnlineCompleteReviewProfileV3 = props => {
             value={postalCode}
             placeholder="Enter Postal Code"
             onEndEditing={value => {
-              console.log('value',value)
               setPostalCode(value);
             }}
           />
@@ -632,15 +673,18 @@ const OnlineCompleteReviewProfileV3 = props => {
             color={Colors.APP_RED_SUBHEADING_COLOR}
             value="- PR CARD"
           />
-          {statusDetails?.tax_profile_completed  && <Heading value="UPLOADED IDENTIFICATION DOCUMENT" marginTop={26} fontSize={17} />}
-          {statusDetails?.tax_profile_completed  && 
+          {statusDetails?.tax_profile_completed == 1  && <Heading value="UPLOADED IDENTIFICATION DOCUMENT" marginTop={26} fontSize={15} color ={Colors.APP_BLUE_HEADING_COLOR} />}
+          {statusDetails?.tax_profile_completed == 1  && 
           <FileCard
-          key={statusDetails.document_file_name}
-          item={{}}
-          isLoadingiOS={false}
-          downloadingItem={{}}
+          key={identificationImageName}
+          item={{document_title:identificationImageName, URL:identificationImageURL}}
+          isLoadingiOS={isLoadingiOS}
+          downloadingItem={downloadingItem}
           onClick={() => {
-            
+            if (identificationImageURL) {
+              handleFileDownloading({document_title:identificationImageName,URL:identificationImageURL}, () => {
+              });
+            }
           }}
         />}
           <UploadDocButton
@@ -926,9 +970,9 @@ const OnlineCompleteReviewProfileV3 = props => {
 
 const FileCard = props => {
   const {item, onClick, isLoadingiOS = false, downloadingItem} = props;
-  const {document_title = 'title', cra_letters_document_id = 3} = item;
+  const {document_title = 'title'} = item;
   const isSame =
-    downloadingItem?.cra_letters_document_id == cra_letters_document_id;
+    downloadingItem?.document_title == document_title;
   return (
     <TouchableOpacity
       style={{
@@ -936,7 +980,6 @@ const FileCard = props => {
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 20,
-        height: 40,
       }}
       onPress={() => {
         onClick();
@@ -945,8 +988,8 @@ const FileCard = props => {
         style={{
           textAlign: 'left',
           color: Colors.APP_BLUE_HEADING_COLOR,
-          fontSize: 15,
-          fontWeight: '700',
+          fontSize: 12,
+          fontWeight: '400',
           flex: 1,
         }}>
         {document_title}

@@ -113,6 +113,7 @@ export async function downloadFileFromUrl(url, filename, callback) {
           }
         })
         .catch((errorMessage, statusCode) => {
+          console.log('android',errorMessage,statusCode)
           callback()
           Alert.alert('SukhTax', errorMessage, statusCode);
         });

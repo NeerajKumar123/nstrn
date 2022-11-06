@@ -17,12 +17,16 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getUserDocuments, deleteDocument} from '../apihelper/Api';
 import SKLoader from '../components/SKLoader';
 import {downloadFileFromUrl} from '../helpers/BaseUtility';
+import Lottie from 'lottie-react-native';
+const loader = require('../../assets/loader.json');
 
 const ManageDocuments = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
   const [docs, setDocs] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingiOS, setIsLoadingiOS] = useState(false);
+  const [downloadingItem, setDownloadingItem] = useState();
 
   useEffect(() => {
     getDocs();
@@ -30,7 +34,7 @@ const ManageDocuments = props => {
 
   const getDocs = () => {
     setIsLoading(true);
-    const {tax_file_id,user_id} = global.onlineStatusData
+    const {tax_file_id, user_id} = global.onlineStatusData;
     const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
     getUserDocuments(params, docsRes => {
       setIsLoading(false);
@@ -68,7 +72,6 @@ const ManageDocuments = props => {
       setDownloadingItem(doc);
     }
     downloadFileFromUrl(docUrl, fileName, () => {
-      console.log('docUrl====>',docUrl)
       if (Platform.OS == 'android') {
         setIsLoading(false);
       } else {
@@ -85,12 +88,12 @@ const ManageDocuments = props => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        flex:1
+        flex: 1,
       }}>
       <AppHeader navigation={navigation} />
       {isLoading && <SKLoader />}
       <ScrollView
-        style={{width: '100%',flex:1}}
+        style={{width: '100%', flex: 1}}
         contentContainerStyle={{
           paddingHorizontal: 20,
           paddingBottom: 10,
@@ -117,20 +120,21 @@ const ManageDocuments = props => {
               <ManageDocCard
                 item={item}
                 key={`${item.tax_file_document_id}`}
+                isLoadingiOS={isLoadingiOS}
+                downloadingItem={downloadingItem}
                 onOpen={() => {
-                  handleFileDownloading(item, () => {
-                  });                }}
+                  handleFileDownloading(item, () => {});
+                }}
                 onDelete={() => {
                   const options = [
                     {
                       text: 'Cancel',
-                      onPress: () => {
-                      },
+                      onPress: () => {},
                     },
                     {
                       text: 'Delete',
                       onPress: () => {
-                        const {user_id,tax_file_id} = global.onlineStatusData
+                        const {user_id, tax_file_id} = global.onlineStatusData;
                         const params = {
                           User_Id: user_id,
                           Tax_File_Id: tax_file_id,
@@ -173,7 +177,19 @@ const ManageDocuments = props => {
 };
 
 const ManageDocCard = props => {
-  const {item, height = 44, fontSize = 15, onOpen, onDelete} = props;
+  const {
+    item,
+    height = 44,
+    fontSize = 15,
+    onOpen,
+    onDelete,
+    isLoadingiOS,
+    downloadingItem,
+  } = props;
+  
+  const isSame =
+  downloadingItem?.document_title == item.document_title;
+  
   return (
     <View
       style={{
@@ -212,18 +228,29 @@ const ManageDocCard = props => {
           {item.document_title}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={{ position:'absolute', right:10, width: 40, height: '100%', alignItems: 'flex-end'}}
-        onPress={() => {
-          onDelete && onDelete();
-        }}>
-        <Icon
-          style={{right: 10, position:'absolute'}}
-          name={'close-circle-outline'}
-          size={30}
-          color={Colors.RED}
-        />
-      </TouchableOpacity>
+      {isLoadingiOS && isSame && (
+        <Lottie style={{width: 35, height: 35}} autoPlay loop source={loader} />
+      )}
+      {!(isLoadingiOS && isSame) && (
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            right: 10,
+            width: 40,
+            height: '100%',
+            alignItems: 'flex-end',
+          }}
+          onPress={() => {
+            onDelete && onDelete();
+          }}>
+          <Icon
+            style={{right: 10, position: 'absolute'}}
+            name={'close-circle-outline'}
+            size={30}
+            color={Colors.RED}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

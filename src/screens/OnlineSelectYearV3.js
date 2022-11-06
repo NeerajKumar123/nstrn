@@ -52,7 +52,7 @@ const prepareParams = () =>{
   if(isFTSelected){
     yrs = yrs + ","  + (new Date().getFullYear() - 4)
   }
-  while( yrs.charAt(0) == ',' ) yrs = yrs.substring(1);
+  while(yrs?.length > 1 && yrs.charAt(0) == ',' ) yrs = yrs.substring(1);
 
   const {user_id, tax_file_id} = statusDetails
   const params = {User_id:user_id,Tax_File_Id:tax_file_id,Years_Selected:yrs}
@@ -141,6 +141,8 @@ const prepareParams = () =>{
                     Alert.alert("Sukhtax", "Something went wrong!")
                   }
                 })
+              }else{
+                Alert.alert("Sukhtax", "Please select an year to proceed.")
               }
             }}
           />
