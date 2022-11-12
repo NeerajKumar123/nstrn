@@ -42,7 +42,9 @@ const OnlineReturnLandingV3 = props => {
       setIsLoading(true);
       const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
       onlineGetTaxFileStatus(params, res => {
-        setIsLoading(false);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
         if (res?.status == 1) {
           const stsDetails = res.data[0]
           setStatusDetails(stsDetails);
@@ -168,8 +170,9 @@ const OnlineReturnLandingV3 = props => {
                 };
                 setIsLoading(true);
                 finalizeOnlineProcess(params, finalizeRes => {
-                  console.log('finalizeRes====>', finalizeRes);
-                  setIsLoading(false);
+                  setTimeout(() => {
+                    setIsLoading(false);
+                  }, 500);
                   navigation.popToTop();
                 });
               }

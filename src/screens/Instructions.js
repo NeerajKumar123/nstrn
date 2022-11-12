@@ -40,7 +40,7 @@ const Instructions = props => {
           fontSize={22.31}
           textWidth = '100%'
           textAlign = 'left'
-          value="DON'T WORRY WE HAVE GOT YOU COVERED."
+          value="DON'T WORRY WE HAVE GOT YOU COVERED"
         />
         <Heading
           marginTop={38}

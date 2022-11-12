@@ -126,7 +126,9 @@ const OnlineCompleteReviewProfileV3 = props => {
     setIsLoading(true)
     getMaritalStatusList({}, maritalRes => {
       setMaritalStatuses(maritalRes?.data);
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     });
   }, []);
 
@@ -440,7 +442,8 @@ const OnlineCompleteReviewProfileV3 = props => {
             maxLength={7}
             borderColor={Colors.CLR_0065FF}
             value={postalCode}
-            placeholder="Enter Postal Code"
+            autoCapitalize ='characters'
+            placeholder="Enter Postal Code (A1A1A1)"
             onEndEditing={value => {
               setPostalCode(value);
             }}
@@ -721,9 +724,9 @@ const OnlineCompleteReviewProfileV3 = props => {
                   onlineUpdateMyprofile(paramsForUpdate, res => {
                     setTimeout(() => {
                       setIsLoading(false);
-                    }, Platform.OS == 'ios' ? 200 : 0);
+                    }, Platform.OS == 'ios' ? 500 : 0);
                     if (res.status == 1) {
-                      Alert.alert('Sukhtax', res.message ? res.message : '');
+                      // Alert.alert('Sukhtax', res.message ? res.message : '');
                       pageParams?.onDataFormUpdates(res?.data?.[0])
                       navigation.goBack();
                     } else {
@@ -734,9 +737,9 @@ const OnlineCompleteReviewProfileV3 = props => {
                   onlineSaveMyprofile(params, res => {
                     setTimeout(() => {
                       setIsLoading(false);
-                    }, Platform.OS == 'ios' ? 200 : 0);
+                    }, Platform.OS == 'ios' ? 500 : 0);
                     if (res.status == 1) {
-                      Alert.alert('Sukhtax', res.message ? res.message : '');
+                      // Alert.alert('Sukhtax', res.message ? res.message : '');
                       pageParams?.onDataFormUpdates(res?.data?.[0])
                       navigation.goBack();
                     } else {
@@ -950,7 +953,6 @@ const OnlineCompleteReviewProfileV3 = props => {
                       const imgObj = fileRes?.assets?.[0];
                       if (!imgObj.base64)
                         Alert.alert('SukhTax', 'Something went wrong!');
-                      console.log('imgObj.3333', imgObj.base64);
                       setIdentificationImage(imgObj.base64);
                       setIdentificationImageName(imgObj?.fileName)
                     })

@@ -63,7 +63,7 @@ const ForgotPasswordNew = props => {
               fontWeight="700"
               color={Colors.BLACK}
               value={
-                'WE WILL SEND A CODE TO YOUR EMAIL. PLEASE PROVIDE US YOUR EMAIL'
+                'WE WILL SEND A CODE TO YOUR EMAIL AND PHONE NUMBER. PLEASE PROVIDE US YOUR EMAIL ADDRESS'
               }
             />
           </View>

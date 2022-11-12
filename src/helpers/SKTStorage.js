@@ -55,10 +55,8 @@ const setKeyValue = async (key, value, callback) => {
 
   const storeUserData = async (userData, callback) => {
     try {
-      console.log('userData',userData)
       const savedData = await AsyncStorage.getItem('USER_DATA');
       const finalUserData = Object.assign({}, savedData, userData);
-      console.log('finalUserData',finalUserData)
       if (finalUserData) {
         global.userInfo = finalUserData
       }

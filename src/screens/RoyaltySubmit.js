@@ -179,7 +179,6 @@ const RoyaltySignup = props => {
           />
           <SKInput
             marginTop={10}
-            maxLength={30}
             leftAccImage={CustomFonts.Number}
             borderColor={Colors.CLR_0065FF}
             value={accountNo}

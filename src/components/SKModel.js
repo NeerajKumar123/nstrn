@@ -20,7 +20,6 @@ const SKModel = props => {
     title = 'Select',
     keyLabel,
   } = props;
-  console.log('data',data)
   return (
     <Modal animationType="fade" transparent={false} visible={true}>
       <View

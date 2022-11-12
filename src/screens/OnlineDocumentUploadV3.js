@@ -72,7 +72,9 @@ const OnlineDocumentUploadV3 = props => {
     const {tax_file_id, user_id} = statusDetails;
     const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
     getUserDocuments(params, docsRes => {
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 500);
       if (docsRes?.status == 1) {
         setDocs(docsRes.data);
       } else {

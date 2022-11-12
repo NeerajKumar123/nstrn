@@ -309,7 +309,7 @@ const Dashboard = props => {
         contentContainerStyle={{paddingHorizontal: 16, paddingBottom: 16}}>
         <DashCard
           title={'HOME'}
-          desc={`STATUS\nPROFILE\nMY DOCUMENTS`}
+          desc={`PROFILE | STATUS\nMESSAGES | MY DOCUMENTS`}
           marginTop={10}
           onClick={() => {
             navigateToScreen({id: 1});
@@ -355,7 +355,7 @@ const Dashboard = props => {
         />
         <DashCard
           title={'REQUEST TAX DOCS'}
-          desc={`NOA, T1, GENERAL,\netc.`}
+          desc={`NOA, T1 GENERAL,\netc.`}
           status={statusReqTaxDocs}
           marginTop={16}
           onClick={() => {

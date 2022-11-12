@@ -81,6 +81,7 @@ const Login = props => {
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: 20,
+            paddingBottom:100
           }}>
         <Heading value="LET'S LOG IN" marginTop={50} />
         <Heading
@@ -123,7 +124,7 @@ const Login = props => {
         />
         <Link
           marginTop={19}
-          title="Forgot password ?"
+          title="Forgot password?"
           onPress={() => {
             navigation.navigate('ForgotPasswordNew', {pagetitle:'FORGOT PASSWORD?', pagesubs:'WE HAVE SENT A SECURITY CODE TO YOUR PHONE. PLEASE ENTER BELOW:', preScreen:undefined})
           }}
@@ -164,7 +165,7 @@ const Login = props => {
         />
         <Link
           marginTop={69}
-          title="Don't have An Account ? Register Here"
+          title= {"Don't have An Account?" + '\n' + "Register Here"}
           disable={true}
           alignment="center"
         />
@@ -172,8 +173,9 @@ const Login = props => {
           fontSize={16}
           marginTop={13}
           fontWeight={'normal'}
-          backgroundColor={Colors.SECONDARY_FILL}
-          borderColor={Colors.PRIMARY_BORDER}
+          titleColor = {Colors.WHITE}
+          backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+          borderColor={Colors.APP_BLUE_HEADING_COLOR}
           title={'Register'}
           onPress={() => {
             navigation.navigate('Instructions')
