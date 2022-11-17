@@ -6,7 +6,7 @@ import {
   Button,
   StyleSheet,
   ScrollView,
-  Platform
+  Platform,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Heading from '../components/Heading';
@@ -65,77 +65,81 @@ const RoyaltyInstruction = props => {
       }}>
       <AppHeader navigation={navigation} />
       <ScrollView
-        style={{width: '100%', height:'100%'}}
+        style={{width: '100%', height: '100%'}}
         contentContainerStyle={{
           paddingHorizontal: 20,
         }}>
-      <View
-        style={{
-          width: '100%',
-          alignItems: 'center',
-        }}>
-        {isLoading && <SKLoader />}
-        <Heading
-          value="SUKH TAX LOYALTY PROGRAM"
-          fontSize={18}
-          marginTop={26}
-          color={Colors.APP_RED_SUBHEADING_COLOR}
+        <View
+          style={{
+            width: '100%',
+            alignItems: 'center',
+          }}>
+          {isLoading && <SKLoader />}
+          <Heading
+            value="SUKH TAX LOYALTY PROGRAM"
+            fontSize={18}
+            marginTop={26}
+            color={Colors.APP_RED_SUBHEADING_COLOR}
+          />
+          <Text style={styles.howitwork}>How does this work?</Text>
+          {/* <Text style={styles.blueText}>
+            Sukh Tax aims to make your experience as simple as possible.
+          </Text>
+          <Text style={[styles.blueText, {marginTop: 20}]}>
+            Our loyalty program is no different.
+          </Text> */}
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            marginTop: 28,
+            width: '100%',
+          }}>
+          <InstCard padtype={1} text={'Sign up for our Loyalty\nProgram'} />
+          <InstCard
+            padtype={2}
+            text={'Refer a friend and give\nthem your unique referral code'}
+          />
+          <InstCard
+            padtype={3}
+            text={'Your friend enters the code when making\npayment'}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            backgroundColor: 'white',
+            justifyContent: 'space-between',
+            marginTop: 32,
+          }}>
+          <TilesCard
+            marginTop={0}
+            backgroundColor={Colors.PRIMARY_FILL}
+            title={'ONLINE TAX RETURN'}
+            desc={`YOUR FRIEND SAVES $${onlineFriendSave}`}
+            desc1={`YOU GET PAID $${onlineYouSave}`}
+          />
+          <TilesCard
+            marginTop={20}
+            backgroundColor={Colors.APP_BLUE_HEADING_COLOR}
+            title={'COMPANY INCORPORATION'}
+            desc={`YOUR FRIEND SAVES $${incorpFriendSave}`}
+            desc1={`YOU GET PAID $${incorpYouSave}`}
+          />
+        </View>
+        <SKButton
+          fontStyle="italic"
+          marginTop={29}
+          fontSize={16}
+          fontWeight={'600'}
+          backgroundColor={Colors.CLR_EB0000}
+          borderColor={Colors.PRIMARY_BORDER}
+          title={'ENROLL NOW'}
+          onPress={() => {
+            navigation.navigate('RoyaltySubmit');
+          }}
         />
-        <Text style={styles.howitwork}>How does this work?</Text>
-        <Text style={styles.blueText}>
-          Sukh Tax aims to make your experience as simple as possible.
-        </Text>
-        <Text style={[styles.blueText,{marginTop:20}]}>
-          Our loyalty program is no different.
-        </Text>
-      </View>
-      <View
-        style={{
-          flexDirection: 'column',
-          marginTop: 10,
-          width: '100%',
-        }}>
-        <InstCard text={'1) Sign up for our Loyalty\nProgram'} image={ins1} />
-        <InstCard
-          text={'2) Refer a friend and give\nthem your unique referral code'}
-          image={ins2}
-        />
-        <InstCard
-          text={'3) Your friend enters the code when making payment'}
-          image={ins3}
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          backgroundColor: 'white',
-          justifyContent: 'space-between',
-          marginTop: 32,
-        }}>
-        <TilesCard
-          title={'ONLINE TAX RETURN'}
-          desc={`YOUR FRIEND SAVES\n$${onlineFriendSave}`}
-          desc1={`YOU GET PAID\n$${onlineYouSave}`}
-        />
-        <TilesCard
-          title={'COMPANY INCORPORATION'}
-          desc={`YOUR FRIEND SAVES\n$${incorpFriendSave}`}
-          desc1={`YOU GET PAID\n$${incorpYouSave}`}
-        />
-      </View>
-      <SKButton
-        fontStyle="italic"
-        marginTop={29}
-        fontSize={16}
-        fontWeight={'600'}
-        backgroundColor={Colors.CLR_EB0000}
-        borderColor={Colors.PRIMARY_BORDER}
-        title={'ENROLL NOW'}
-        onPress={() => {
-          navigation.navigate('RoyaltySubmit');
-        }}
-      />
-      {Platform.OS == 'android' && <View style = {{height:100, width:'100%'}}/>}
+        <View style={{height: 100, width: '100%'}} />
       </ScrollView>
     </View>
   );
@@ -149,7 +153,7 @@ const styles = StyleSheet.create({
     color: Colors.APP_BLUE_HEADING_COLOR,
     width: '100%',
     fontWeight: '400',
-    marginTop: 20,
+    marginTop: 40,
   },
   blueText: {
     fontSize: 18,

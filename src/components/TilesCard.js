@@ -18,60 +18,61 @@ import React, {useState, useEffect} from 'react';
 const Vector9 = require('../../assets/tab/Vector 9.png');
 const Vector10 = require('../../assets/tab/Vector 10.png');
 const TilesCard = props => {
-  const {title, desc, desc1} = props;
+  const {title, desc, desc1, marginTop = 0, backgroundColor} = props;
   return (
     <View
       style={{
         flexDirection: 'column',
-        width: 144,
-        backgroundColor: Colors.WHITE,
-        paddingVertical: 24,
-        borderRadius: 26,
+        paddingVertical: 15,
+        borderRadius: 5,
         elevation:3,
         borderColor: Colors.GREEN,
         alignItems: 'center',
         paddingHorizontal: 5,
         shadowColor: Colors.CLR_E3BDBE,
         shadowOffset: {
-          width: 2,
-          height: 2,
+          width: 1,
+          height: 1,
         },
-        shadowRadius: 7,
+        shadowRadius: 2,
         shadowOpacity: 0.9,
+        marginTop,
+        backgroundColor:backgroundColor
       }}>
       <Text
         style={{
-          color: Colors.APP_BLUE_HEADING_COLOR,
+          color: Colors.WHITE,
           fontSize: 16,
+          width:'90%',
           fontWeight: '600',
-          textAlign: 'center',
+          textAlign: 'left'
         }}>
         {title}
       </Text>
       <View
         style={{
-          backgroundColor: Colors.CLR_29295F,
-          height: .3,
+          backgroundColor: Colors.WHITE,
+          height: 1,
           width: '100%',
           marginTop: 11,
         }}
       />
       <Text
         style={{
-          color: Colors.APP_RED_SUBHEADING_COLOR,
-          fontSize: 16,
+          color: Colors.WHITE,
+          fontSize: 14,
           fontWeight: '500',
           textAlign: 'center',
-          marginTop: 24,
+          marginTop: 10,
         }}>
         {desc}
       </Text>
       <Text
         style={{
-          color: Colors.APP_RED_SUBHEADING_COLOR,
-          fontSize: 16,
+          color: Colors.WHITE,
+          fontSize: 14,
           fontWeight: '500',
-          marginTop: 24,
+          marginTop: 10,
           textAlign: 'center',
           width: '90%',
           letterSpacing:-.5

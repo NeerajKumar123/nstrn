@@ -1,43 +1,37 @@
 import {
-  TouchableOpacity,
   View,
   Image,
   Text,
-  Button,
-  StyleSheet,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import Heading from '../components/Heading';
-import AppHeader from '../components/AppHeader';
-import SKButton from '../components/SKButton';
-import SKLoader from '../components/SKLoader';
 import * as Colors from '../constants/ColorDefs';
-import * as CustomFonts from '../constants/FontsDefs';
-import {getRefrralPrice} from '../apihelper/Api';
-import React, {useState, useEffect} from 'react';
-const ins1 = require('../../assets/tab/ins1.png');
-const ins2 = require('../../assets/tab/ins2.png');
-const ins3 = require('../../assets/tab/ins3.png');
+import React from 'react';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const InstCard = props => {
-  const {image, text, margin = 0, padding = 0} = props;
+  const {text,padtype = 2} = props;
   return (
     <View
       style={{
         flexDirection: 'row',
         width: '100%',
-        marginTop: 10,
       }}>
-      <Image
-        resizeMode="contain"
-        style={{width: 45, height: 45}}
-        source={image}
-      />
+        <View style = {{justifyContent:'center', alignItems:'center'}}>
+        <View style = {{backgroundColor:(padtype == 2 || padtype == 3) && padtype != 1  ? Colors.PRIMARY_FILL : Colors.WHITE, flex:1, width:1}}/>
+          <Icon
+            name={'check-circle'}
+            size={25}
+            color={Colors.PRIMARY_FILL}
+            style = {{width:25, height:25}}
+          />
+          { <View style = {{backgroundColor:(padtype == 1 || padtype == 2) && padtype != 3 ? Colors.PRIMARY_FILL : Colors.WHITE, flex:1,width:1}}/>}
+        </View>
       <Text
         style={{
           color: Colors.CLR_29295F,
           fontSize: 16,
           fontWeight: '400',
           marginLeft: 20,
+          marginTop : (padtype == 2 || padtype == 3) && padtype != 1 ?  10: 0,
+          marginBottom : (padtype == 1 || padtype == 2) && padtype != 3 ? 10 : 0,
           flex:1,
         }}>
         {text}
