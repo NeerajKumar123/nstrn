@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const RequestPaymentDetails = props => {
   const [payments, setPayments] = useState();
-  const [total, setTotal] = useState(1000);
+  const [total, setTotal] = useState(0);
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
 
