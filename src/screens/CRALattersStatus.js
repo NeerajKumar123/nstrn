@@ -66,6 +66,11 @@ const CRALattersStatus = props => {
         }, 200);
         if (confDocs?.status == 1) {
           setConfirmDocs(confDocs.data);
+        }else{
+          Alert.alert(
+            'Sukhtax',
+            'Something went wrong, Please try again.',
+          );
         }
       });
     }

@@ -114,8 +114,8 @@ const IncorpDetails = props => {
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         enabled={true}
-        style={{flex: 1, width: '100%', paddingBottom: 10}}
-        keyboardVerticalOffset={0}>
+        style={{flex: 1, width: '100%', paddingBottom: 50}}
+        keyboardVerticalOffset={50}>
         {isLoading && <SKLoader />}
         <AppHeader navigation={navigation} />
         <ScrollView

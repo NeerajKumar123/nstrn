@@ -35,7 +35,7 @@ const Messages = props => {
     getMessages(params, msgRes => {
       setIsLoading(false);
       if (msgRes && msgRes.status == 1) {
-        const msgs = msgRes.data;
+        const msgs = msgRes?.data;
         setChats(msgs);
       } else {
         const msg =

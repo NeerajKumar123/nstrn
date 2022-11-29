@@ -516,7 +516,7 @@ const OnlineCompleteReviewProfileV3 = props => {
             fontSize={17}
             marginTop={20}
             isOn={isFilingForSpouse}
-            value="DOES YOUR SPOUSE TO FILE THEIR RETURN WITH YOU?"
+            value="DOES YOUR SPOUSE FILE THEIR RETURN FOR YOU?"
             onToggle={status => {
               const updated = !isFilingForSpouse;
               setIsFilingForSpouse(updated);

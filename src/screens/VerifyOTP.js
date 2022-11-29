@@ -125,7 +125,7 @@ const VerifyOTP = props => {
           fontSize={16}
           marginTop={55}
           color={Colors.BLACK}
-          value="WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:"
+          value="WE’VE SENT A CODE TO YOUR PHONE. PLEASE ENTER BELOW:"
         />
         <View
           style={{

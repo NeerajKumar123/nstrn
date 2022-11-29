@@ -89,13 +89,14 @@ const SignUp = props => {
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         enabled={true}
-        style={{flex: 1, width: '100%', paddingBottom: 10}}
-        keyboardVerticalOffset={0}>
+        style={{flex: 1, width: '100%', paddingBottom: 50}}
+        keyboardVerticalOffset={50}>
         {isLoading && <SKLoader />}
         <AppHeader navigation={navigation} />
         <ScrollView
           contentContainerStyle={{
             paddingHorizontal: 20,
+            paddingBottom:10
           }}>
           <Heading value="LET'S SIGN UP" marginTop={26} />
           <Heading
@@ -236,7 +237,7 @@ const SignUp = props => {
                     navigation.navigate('SecurityCodeNew', {
                       pagetitle: 'Security Code',
                       pagesubs:
-                        'WE’VE SENT A CODE TO YOUR PHONE.PLEASE ENTER BELOW:',
+                        'WE’VE SENT A CODE TO YOUR PHONE. PLEASE ENTER BELOW:',
                       email: email,
                     });
                   } else {
