@@ -272,7 +272,6 @@ const RequestApplyStatus = props => {
             isLoadingiOS={isLoadingiOS}
             downloadingItem={downloadingItem}
             onDocClicked={item => {
-              setSelectedItem(item);
               handleFileDownloading(item, () => {
               });
             }}

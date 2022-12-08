@@ -41,7 +41,7 @@ const HomeDocsListing = props => {
 
     
     if (yr22Docs?.length) {
-      tempArry.push({title: '20222 DOC', data: yr22Docs});
+      tempArry.push({title: '2022 DOC', data: yr22Docs});
     }
     if (yr21Docs?.length) {
       tempArry.push({title: '2021 DOC', data: yr21Docs});
@@ -88,7 +88,6 @@ const HomeDocsListing = props => {
       setDownloadingItem(doc);
     }
     downloadFileFromUrl(docUrl, fileName, () => {
-      console.log('docUrl====>',docUrl)
       if (Platform.OS == 'android') {
         setIsLoading(false);
       } else {

@@ -363,7 +363,7 @@ const OnlineCompleteReviewProfileV3 = props => {
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         enabled={true}
         style={{flex: 1, width: '100%', paddingBottom: 10}}
-        keyboardVerticalOffset={0}>
+        keyboardVerticalOffset={60}>
         {isLoading && <SKLoader />}
         <AppHeader navigation={navigation}/>
         <ScrollView
@@ -516,7 +516,7 @@ const OnlineCompleteReviewProfileV3 = props => {
             fontSize={17}
             marginTop={20}
             isOn={isFilingForSpouse}
-            value="DOES YOUR SPOUSE FILE THEIR RETURN FOR YOU?"
+            value="ARE WE FILING YOUR SPOUSE’S TAX RETURN?"
             onToggle={status => {
               const updated = !isFilingForSpouse;
               setIsFilingForSpouse(updated);
@@ -605,18 +605,6 @@ const OnlineCompleteReviewProfileV3 = props => {
                 }}
               />
               <SKInput
-                marginBottom={0}
-                maxLength={30}
-                borderColor={Colors.CLR_0065FF}
-                leftAccImage={CustomFonts.Number}
-                keyboardType="number-pad"
-                value={saccountNo}
-                placeholder="Enter Account Number"
-                onEndEditing={value => {
-                  setSAccountNo(value);
-                }}
-              />
-              <SKInput
                 marginTop={20}
                 marginBottom={0}
                 maxLength={30}
@@ -627,6 +615,18 @@ const OnlineCompleteReviewProfileV3 = props => {
                 placeholder="Enter Branch Number"
                 onEndEditing={value => {
                   setSBranhcNo(value);
+                }}
+              />
+              <SKInput
+                marginBottom={0}
+                maxLength={30}
+                borderColor={Colors.CLR_0065FF}
+                leftAccImage={CustomFonts.Number}
+                keyboardType="number-pad"
+                value={saccountNo}
+                placeholder="Enter Account Number"
+                onEndEditing={value => {
+                  setSAccountNo(value);
                 }}
               />
             </>
@@ -949,7 +949,6 @@ const OnlineCompleteReviewProfileV3 = props => {
                   })
                     .then(res => {
                       const fileRes = res[0];
-                      console.log(fileRes);
                       const imgObj = fileRes?.assets?.[0];
                       if (!imgObj.base64)
                         Alert.alert('SukhTax', 'Something went wrong!');

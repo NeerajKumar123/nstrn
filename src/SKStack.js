@@ -34,6 +34,7 @@ import DependentDetails from './screens/DependentDetails';
 import OnlineDocuments from './screens/OnlineDocuments';
 import MyTaxYear from './screens/MyTaxYear';
 import ManageDocuments from './screens/ManageDocuments';
+import ManageDocumentsV3 from './screens/ManageDocumentsV3';
 import SignaturePage from './screens/SignaturePage';
 import AuthorizerList from './screens/AuthorizerList';
 import AnyThingElse from './screens/AnyThingElse';
@@ -279,6 +280,11 @@ const SKStack = () => {
             name="ManageDocuments"
             component={ManageDocuments}
             options={{title: 'ManageDocuments', headerShown: false}}
+          />
+          <Stack.Screen
+            name="ManageDocumentsV3"
+            component={ManageDocumentsV3}
+            options={{title: 'ManageDocumentsV3', headerShown: false}}
           />
           <Stack.Screen
             name="SignaturePage"

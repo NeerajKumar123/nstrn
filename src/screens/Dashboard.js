@@ -141,7 +141,7 @@ const Dashboard = props => {
           fee => fee.services_fee_id === 1,
         );
         const feeObj = onlineTaxFees[0];
-        setTaxFilingFee(feeObj?.service_fee);
+        setTaxFilingFee(feeObj?.service_fee || 49.99);
       }
     });
   }, []);

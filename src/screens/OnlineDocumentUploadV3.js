@@ -157,9 +157,10 @@ const OnlineDocumentUploadV3 = props => {
           grads={[Colors.APP_BLUE_HEADING_COLOR, Colors.APP_BLUE_HEADING_COLOR]}
           title={'MANAGE DOCUMENTS'}
           onClicked={() => {
-            navigation.navigate('ManageDocuments', {
+            navigation.navigate('ManageDocumentsV3', {
               isDocAdded: false,
               showFooterBtn: false,
+              ...statusDetails
             });
           }}
         />
