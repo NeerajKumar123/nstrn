@@ -30,6 +30,7 @@ import * as CustomFonts from '../constants/FontsDefs';
 import SignatureCapture from 'react-native-signature-capture';
 import ViewShot from 'react-native-view-shot';
 import * as SKTStorage from '../helpers/SKTStorage';
+import {decrypt} from '../helpers/BaseUtility';
 
 const IncorpSignaturePage = props => {
   const navigation = useNavigation();
@@ -103,7 +104,7 @@ const IncorpSignaturePage = props => {
         setEmail(email);
         setMobile(phone_number);
         setAltMobile(alt_phone_number);
-        setSinNo(SIN_number);
+        setSinNo(decrypt(SIN_number));
       }
     });
   }, []);

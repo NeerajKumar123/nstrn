@@ -20,6 +20,7 @@ import {ST_REGEX} from '../constants/StaticValues';
 import * as Colors from '../constants/ColorDefs';
 import {incorpGetIncorporatorDetails} from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
+import {encrypt, decrypt} from '../helpers/BaseUtility';
 
 const IncorpDetails = props => {
   const navigation = useNavigation();
@@ -63,7 +64,7 @@ const IncorpDetails = props => {
           setEmail(email);
           setMobile(phone_number);
           setAltMobile(alt_phone_number);
-          setSin(SIN_number);
+          setSin(decrypt(SIN_number));
         }
       });
     }
@@ -232,7 +233,7 @@ const IncorpDetails = props => {
                   Email: email,
                   Phone_No: mobile,
                   Alt_Phone_No: altMobile,
-                  SIN: sin,
+                  SIN: encrypt(sin),
                   Incorporator_Id:details?.incorporator_id,
                   Address:details?.address,
                   Ownership_Percentage:details?.percentage_ownership

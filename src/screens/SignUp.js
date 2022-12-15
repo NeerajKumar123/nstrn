@@ -21,6 +21,7 @@ import * as Colors from '../constants/ColorDefs';
 import * as CustomFonts from '../constants/FontsDefs';
 import {register} from '../apihelper/Api';
 import {isValidSIN} from '../helpers/SKTValidator';
+import {encrypt} from '../helpers/BaseUtility';
 
 const SignUp = props => {
   const navigation = useNavigation();
@@ -228,7 +229,7 @@ const SignUp = props => {
                   Device_Token: testDeviceToken,
                   Device_OS: 'iOS',
                   Module_Type_Id: 2,
-                  SIN_Number:sin
+                  SIN_Number:encrypt(sin)
                 };
                 register(params, regisRes => {
                   if (regisRes?.status == 1) {

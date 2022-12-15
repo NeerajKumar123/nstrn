@@ -29,6 +29,7 @@ import * as CustomFonts from '../constants/FontsDefs';
 import {getCanadaProvinceList} from '../apihelper/Api';
 import SignatureCapture from 'react-native-signature-capture';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {encrypt} from '../helpers/BaseUtility';
 
 const RoyaltySignup = props => {
   const navigation = useNavigation();
@@ -117,9 +118,9 @@ const RoyaltySignup = props => {
     const {user_id} = global.onlineStatusData;
     const params = {
       User_Id: user_id,
-      Institiution_Number: insNumber,
-      Account_Number: accountNo,
-      Branch_Number: branchNo,
+      Institiution_Number: encrypt(insNumber),
+      Account_Number: encrypt(accountNo),
+      Branch_Number: encrypt(branchNo),
       Account_Holder_Name: accountHolderName,
       DOB: dob && format(dob, 'yyyy-MM-dd'),
       Address_City: city,

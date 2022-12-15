@@ -42,9 +42,7 @@ import {
 } from '../apihelper/Api';
 import * as CustomFonts from '../constants/FontsDefs';
 import {format} from 'date-fns';
-import * as SKTStorage from '../helpers/SKTStorage';
 import {LocalResidencyListSpouse} from '../constants/StaticValues';
-import {useIsFocused} from '@react-navigation/native';
 import {
   LibImageQualityOptions,
   ImageActionSheetOptions,
@@ -52,7 +50,7 @@ import {
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import DocumentPicker from 'react-native-document-picker';
 import SKGGLAddressModel from '../components/SKGGLAddressModel';
-import {downloadFileFromUrl} from '../helpers/BaseUtility';
+import {downloadFileFromUrl, encrypt, decrypt} from '../helpers/BaseUtility';
 
 const OnlineCompleteReviewProfileV3 = props => {
   const navigation = useNavigation();
@@ -141,7 +139,7 @@ const OnlineCompleteReviewProfileV3 = props => {
         const details = res?.data[0] || {};
         setFName(details?.user_first_name);
         setLName(details?.user_last_name);
-        setSinNo(details?.user_sin_number);
+        setSinNo(decrypt(details?.user_sin_number));
         setDOB(new Date(details?.user_dob));
         setGender(details?.user_gender);
         setMailingAddress(details?.user_mailing_address);
@@ -150,8 +148,8 @@ const OnlineCompleteReviewProfileV3 = props => {
           institution_name: details?.user_institution_name,
           institution_id: details?.user_institution_id,
         });
-        setAccountNo(details?.user_account_no);
-        setBranhcNo(details?.user_branch);
+        setAccountNo(decrypt(details?.user_account_no));
+        setBranhcNo(decrypt(details?.user_branch));
         setMaritalStatus({
           marital_status_id: details.user_marital_status_id,
           marital_status_name: details.user_marital_status_name,
@@ -159,15 +157,15 @@ const OnlineCompleteReviewProfileV3 = props => {
 
         setSFName(details?.spouse_first_name);
         setSLName(details?.spouse_last_name);
-        setSSinNo(details?.user_sin_number);
+        setSSinNo(details?.spouse_sin_number);
         setSDOB(new Date(details?.spouse_dob));
         setSGender(details?.spouse_gender);
         setSBank({
           institution_name: details?.spouse_institution_name,
           institution_id: details?.spouse_institution_id,
         });
-        setSAccountNo(details?.spouse_account_no);
-        setSBranhcNo(details?.spouse_branch);
+        setSAccountNo(decrypt(details?.spouse_account_no));
+        setSBranhcNo(decrypt(details?.spouse_branch));
         setSResidency({
           residency_id: details.spouse_residency_id,
           residency_name: details.spouse_residency,
@@ -189,14 +187,14 @@ const OnlineCompleteReviewProfileV3 = props => {
       User_Id: user_id,
       User_First_Name: fName,
       User_Last_Name: lName,
-      User_SIN_Number: sinNo,
+      User_SIN_Number: encrypt(sinNo),
       User_DOB: dob && format(dob, 'yyyy-MM-dd'),
       User_Gender: gender,
       User_Mailing_Address: mailingAddress,
       User_Postal_Code: postalCode,
       User_Institution_Id: bank?.institution_id,
-      User_Branch: branchNo,
-      User_Account_No: accountNo,
+      User_Branch: encrypt(branchNo),
+      User_Account_No: encrypt(accountNo),
       User_Marital_Status_Id: maritalStatus?.marital_status_id,
       User_Dependents: haveDepdents ? 1 : 0,
       Filing_For_Spouse: isSpouseValidationNeeded ? isFilingForSpouse ? 1 : 0 : 0,
@@ -205,10 +203,10 @@ const OnlineCompleteReviewProfileV3 = props => {
       Spouse_DOB: sdob && format(sdob, 'yyyy-MM-dd'),
       Spouse_Gender: sgender,
       Spouse_Residency: sresidency?.residency_name,
-      Spouse_SIN_Number: ssinNo,
+      Spouse_SIN_Number: encrypt(ssinNo),
       Spouse_Institution_Id: isSpouseValidationNeeded ?  isFilingForSpouse ? sbank?.institution_id : 0 : 0,
-      Spouse_Branch: sbranchNo,
-      Spouse_Account_No: saccountNo,
+      Spouse_Branch: encrypt(sbranchNo),
+      Spouse_Account_No: encrypt(saccountNo),
       Identification_FileNameWithExtension: identificationImageName || `${user_id}_online_new.png`,
       File_Base64String: identificationImage,
     };
@@ -561,7 +559,7 @@ const OnlineCompleteReviewProfileV3 = props => {
             maxLength={9}
             borderColor={Colors.CLR_0065FF}
             value={ssinNo}
-            placeholder="Enter SIN"
+            placeholder="SIN Number"
             keyboardType="number-pad"
             onEndEditing={value => {
               setSSinNo(value);
