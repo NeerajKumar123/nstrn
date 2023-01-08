@@ -51,6 +51,9 @@ const OnlineReturnLandingV3 = props => {
           setisProfileComplete(stsDetails?.tax_file_status_id != 16 ? stsDetails?.tax_profile_completed : false)
           setisYearSelected(stsDetails?.tax_file_status_id != 16 ? stsDetails?.years_selected?.length : false)
           setisDocumentUploaded(stsDetails?.tax_file_status_id != 16 ? stsDetails?.document_uploaded : false)  
+      }else{
+        setStatusDetails(undefined);
+        Alert.alert('Sukhtax', res?.message)
       }
       });
     }
@@ -114,12 +117,16 @@ const OnlineReturnLandingV3 = props => {
           title={'Complete or review profile'}
           isSelected={isProfileComplete}
           onSelected={() => {
-            navigation.navigate('OnlineCompleteReviewProfileV3', {
-              statusDetails: statusDetails,
-              onDataFormUpdates: details => {
-                onDataFormUpdates(details);
-              }
-            });
+            if (statusDetails) {
+              navigation.navigate('OnlineCompleteReviewProfileV3', {
+                statusDetails: statusDetails,
+                onDataFormUpdates: details => {
+                  onDataFormUpdates(details);
+                }
+              });
+            }else{
+              Alert.alert('Sukhtax','Something went wrong, Please try again later.')
+            }
           }}
         />
         <OnlineLandinButton

@@ -24,7 +24,7 @@ import AppHeader from '../components/AppHeader';
 const OnlineSelectYearV3 = props => {
   const navigation = useNavigation();
   const pageParams = props.route.params;
-  const {statusDetails} = pageParams
+  const {statusDetails = {}} = pageParams
   const [isLoading, setIsLoading] = useState(false);  
   const [isFSelected, setIsFSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 1));
   const [isSSelected, setIsSSelected] = useState(statusDetails.years_selected?.includes(new Date().getFullYear() - 2));

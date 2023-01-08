@@ -71,6 +71,7 @@ const OnlineCompleteReviewProfileV3 = props => {
 
   const [sfName, setSFName] = useState('');
   const [slName, setSLName] = useState('');
+  const [sEmail, setSEmail] = useState('');
   const [sdob, setSDOB] = useState();
   const [sgender, setSGender] = useState();
   const [ssinNo, setSSinNo] = useState('');
@@ -157,7 +158,8 @@ const OnlineCompleteReviewProfileV3 = props => {
 
         setSFName(details?.spouse_first_name);
         setSLName(details?.spouse_last_name);
-        setSSinNo(details?.spouse_sin_number);
+        setSEmail(details?.spouse_email);
+        setSSinNo(decrypt(details?.spouse_sin_number));
         setSDOB(new Date(details?.spouse_dob));
         setSGender(details?.spouse_gender);
         setSBank({
@@ -200,6 +202,7 @@ const OnlineCompleteReviewProfileV3 = props => {
       Filing_For_Spouse: isSpouseValidationNeeded ? isFilingForSpouse ? 1 : 0 : 0,
       Spouse_First_Name: sfName,
       Spouse_Last_Name: slName,
+      Spouse_Email: sEmail,
       Spouse_DOB: sdob && format(sdob, 'yyyy-MM-dd'),
       Spouse_Gender: sgender,
       Spouse_Residency: sresidency?.residency_name,
@@ -236,6 +239,7 @@ const OnlineCompleteReviewProfileV3 = props => {
     // Spouse Details validations
     const isSFNameValid = isSpouseValidationNeeded ? Validator.isValidField(sfName, ST_REGEX.FullName) : true;
     const isSLNameValid = isSpouseValidationNeeded ? Validator.isValidField(slName, ST_REGEX.FullName) : true;
+    const isSEmailValid = isSpouseValidationNeeded ? Validator.isValidField(sEmail, ST_REGEX.Email) : true;
     const isSGenderValid =isSpouseValidationNeeded ? sgender : true;
     const isSDOBValid = isSpouseValidationNeeded ? sdob : true;
     const isSResidencyValid = isSpouseValidationNeeded ? setMailingAddress?.length : true;
@@ -284,6 +288,9 @@ const OnlineCompleteReviewProfileV3 = props => {
     } else if (!isSLNameValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter spouse valid last name');
+    }else if (!isSEmailValid) {
+      isValidForm = false;
+      Alert.alert('SukhTax', 'Please enter spouse valid email address');
     } else if (!isSSinValid) {
       isValidForm = false;
       Alert.alert('SukhTax', 'Please enter valid spouse SIN');
@@ -540,6 +547,20 @@ const OnlineCompleteReviewProfileV3 = props => {
               setSLName(value);
             }}
           />
+          <SKInput
+          leftAccImage={CustomFonts.Email}
+          marginBottom={0}
+          maxLength={30}
+          autoCapitalize = 'none'
+          onRightPressed={() => {
+          }}
+          borderColor={Colors.CLR_0065FF}
+          value={sEmail}
+          placeholder="Email Address"
+          onEndEditing={value => {
+            setSEmail(value);
+          }}
+        />
           <TouchableInput
             rightAccImage={CustomFonts.ChevronDown}
             marginBottom={2}
