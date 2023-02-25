@@ -781,8 +781,8 @@ const OnlineCompleteReviewProfileV3 = props => {
             setDOB(date);
           }}
           onDonePressed={date => {
-            setDOB(date);
             setIsDatePickerVisible(false);
+            setDOB(date);
           }}
         />
       )}
@@ -812,8 +812,8 @@ const OnlineCompleteReviewProfileV3 = props => {
             setEnrtyDate(date);
           }}
           onDonePressed={date => {
-            setEnrtyDate(date);
             setIsImmDatePickerVisible(false);
+            setEnrtyDate(date);
           }}
         />
       )}

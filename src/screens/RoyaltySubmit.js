@@ -50,6 +50,7 @@ const RoyaltySignup = props => {
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [isProvinceVisible, setIsProvinceVisible] = useState(false);
   const [dob, setDOB] = useState();
+  const [sinNo, setSinNo] = useState('');
 
   useEffect(() => {
     setIsLoading(true);
@@ -118,9 +119,10 @@ const RoyaltySignup = props => {
     const {user_id} = global.onlineStatusData;
     const params = {
       User_Id: user_id,
-      Institiution_Number: encrypt(insNumber),
-      Account_Number: encrypt(accountNo),
-      Branch_Number: encrypt(branchNo),
+      Institiution_Number: insNumber,
+      Account_Number: accountNo,
+      Branch_Number: branchNo,
+      SIN_Number:sinNo,
       Account_Holder_Name: accountHolderName,
       DOB: dob && format(dob, 'yyyy-MM-dd'),
       Address_City: city,
@@ -213,6 +215,18 @@ const RoyaltySignup = props => {
             placeholder="Enter Account Holder Name"
             onEndEditing={value => {
               setAccountHolderName(value);
+            }}
+          />
+          <SKInput
+            leftAccImage={CustomFonts.Number}
+            marginTop={15}
+            maxLength={9}
+            borderColor={Colors.CLR_0065FF}
+            value={sinNo}
+            placeholder="Enter SIN"
+            keyboardType="number-pad"
+            onEndEditing={value => {
+              setSinNo(value);
             }}
           />
           <TouchableInput
@@ -330,8 +344,8 @@ const RoyaltySignup = props => {
               setDOB(date);
             }}
             onDonePressed={date => {
-              setDOB(date);
               setIsDatePickerVisible(false);
+              setDOB(date);
             }}
           />
         )}

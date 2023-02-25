@@ -78,7 +78,7 @@ import {
       setIsLoading(true);
       // Confirm the payment with the card details
       const {paymentIntent, error} = await confirmPayment(clientSecret, {
-        type: 'Card',
+        paymentMethodType: 'Card',
         billingDetails,
       });
       if (error) {
@@ -160,7 +160,7 @@ import {
             title={'PAY NOW'}
             onPress={() => {
               Keyboard.dismiss();
-              if (card?.complete) {
+              if (card?.complete && clientSecret) {
                 handlePayPress();
               }else{
                 Alert.alert('SukhTax', 'Please fill up the complete card details.')

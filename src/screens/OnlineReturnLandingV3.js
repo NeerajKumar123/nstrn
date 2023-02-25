@@ -37,14 +37,11 @@ const OnlineReturnLandingV3 = props => {
   }, []);
 
   const getTaxFlStatus = (user_id, tax_file_id) => {
-   setTimeout(() => {
     if (user_id) {
       setIsLoading(true);
       const params = {User_Id: user_id, Tax_File_Id: tax_file_id};
       onlineGetTaxFileStatus(params, res => {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
+        setIsLoading(false);
         if (res?.status == 1) {
           const stsDetails = res.data[0]
           setStatusDetails(stsDetails);
@@ -57,7 +54,6 @@ const OnlineReturnLandingV3 = props => {
       }
       });
     }
-   }, 200);
   };
 
   const onDataFormUpdates = res => {
@@ -132,6 +128,7 @@ const OnlineReturnLandingV3 = props => {
         <OnlineLandinButton
           title={'Select which years to file for'}
           isSelected={isYearSelected}
+          isDisabled = {!isProfileComplete}
           onSelected={() => {
             navigation.navigate('OnlineSelectYearV3', {
               statusDetails: statusDetails,
@@ -144,6 +141,7 @@ const OnlineReturnLandingV3 = props => {
         <OnlineLandinButton
           title={'Upload documents'}
           isSelected={isDocumentUploaded}
+          isDisabled = {!isProfileComplete}
           onSelected={() => {
             navigation.navigate('OnlineDocumentUploadV3', {
               statusDetails: statusDetails,
@@ -195,12 +193,12 @@ const OnlineLandinButton = props => {
   const {
     title,
     isSelected = false,
-    isFiled = false,
+    isDisabled = false,
     onSelected = () => {},
   } = props;
   return (
     <TouchableOpacity
-      disabled={isFiled}
+      disabled={isDisabled}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -210,11 +208,11 @@ const OnlineLandinButton = props => {
         justifyContent: 'center',
         width: '100%',
         height: 48,
-        opacity: isFiled ? 0.8 : 1,
+        opacity: isDisabled ? 0.8 : 1,
         borderRadius: 6,
         borderWidth: 1,
-        borderColor: isFiled ? Colors.LIGHTGRAY : Colors.LIGHTGRAY,
-        backgroundColor: isFiled ? Colors.CLR_FFECEC : Colors.CLR_FFECEC,
+        borderColor: isDisabled ? Colors.LIGHTGRAY : Colors.LIGHTGRAY,
+        backgroundColor: isDisabled ? Colors.CLR_FFECEC : Colors.CLR_FFECEC,
       }}
       key={`${Math.random()}`}
       onPress={() => {
@@ -224,7 +222,7 @@ const OnlineLandinButton = props => {
         style={{
           width: '100%',
           textAlign: 'center',
-          color: isFiled ? Colors.CLR_191919 : Colors.CLR_191919,
+          color: isDisabled ? Colors.GRAY : Colors.CLR_191919,
           fontSize: 17,
           fontWeight: '700',
         }}>

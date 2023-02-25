@@ -3,9 +3,9 @@ import {Eversign_Api_Access_Key, Eversign_Bussiness_Id} from '../constants/Stati
 
 // test commit
 
-// export const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
+export const BaseURL = 'http://sukhtax.newunlimitedhosting.21gtech.com/services.asmx'
 // export const BaseURL = 'http://app.sukhtax.com/services.asmx'
-export const BaseURL = 'https://mytaxapp.ca/services.asmx'
+// export const BaseURL = 'https://mytaxapp.ca/services.asmx'
 
 
 export const EversingSuccess  = 'https://mytaxapp.ca/signcompleted.aspx'

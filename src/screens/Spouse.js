@@ -530,8 +530,8 @@ const Spouse = props => {
             setDOB(date);
           }}
           onDonePressed={date => {
-            setDOB(date);
             setIsDatePickerVisible(false);
+            setDOB(date);
           }}
         />
       )}
@@ -546,8 +546,8 @@ const Spouse = props => {
             setEnrtyDate(date);
           }}
           onDonePressed={date => {
-            setEnrtyDate(date);
             setIsImmDatePickerVisible(false);
+            setEnrtyDate(date);
           }}
         />
       )}

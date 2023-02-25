@@ -417,8 +417,8 @@ const RemainedDetailsTaxYrFlow = props => {
               setMStatusChangedDate(date);
             }}
             onDonePressed={date => {
-              setMStatusChangedDate(date);
               setShowDatePicker(false);
+              setMStatusChangedDate(date);
             }}
           />
         )}

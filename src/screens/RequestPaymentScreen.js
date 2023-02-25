@@ -78,7 +78,7 @@ import {
       setIsLoading(true);
       // Confirm the payment with the card details
       const {paymentIntent, error} = await confirmPayment(clientSecret, {
-        type: 'Card',
+        paymentMethodType: 'Card',
         billingDetails,
       });
       if (error) {

@@ -215,13 +215,13 @@ const Dashboard = props => {
   const onlineMoveToPage = () => {
     if (global?.onlineStatusData) {
       const {
-        Online_Button_Enabled,
+        tax_file_status_id = 0
       } = global?.onlineStatusData;
   
-      if (Online_Button_Enabled == 0) {
-        navigation.navigate('OnlineTaxFilingStatus');
-      } else {
+      if (tax_file_status_id == 7 || tax_file_status_id == 0) { // File not submitted
         navigation.navigate('OnlineReturnLandingV3');
+      } else { // For all other status ids , user will be navigated to OnlineTaxFilingStatus
+        navigation.navigate('OnlineTaxFilingStatus');
       }
     }else{
       Alert.alert('Sukhtax', 'Something went wrong, Please retry')
