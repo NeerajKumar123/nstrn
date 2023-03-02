@@ -7,7 +7,8 @@ import {
   KeyboardAvoidingView,
   Text,
   TouchableOpacity,
-  Image
+  Image,
+  PermissionsAndroid
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import TouchableInput from '../components/TouchableInput';
@@ -355,6 +356,38 @@ const OnlineCompleteReviewProfileV3 = props => {
     });
   };
 
+
+  async function askCamPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          'title': 'Sukhtax',
+          'message': 'Please allow us to access camera.',
+          buttonPositive: 'OK',
+  
+        }
+      )
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        launchCamera(LibImageQualityOptions, res => {
+          if (res?.didCancel) {
+            Alert.alert('SukhTax', 'Image uploading cancelled by user.');
+          } else if (res?.error) {
+          } else if (res?.assets) {
+            const imgObj = res?.assets?.[0];
+            if (!imgObj.base64)
+              Alert.alert('SukhTax', 'Something went wrong!');
+            setIdentificationImage(imgObj.base64);
+            setIdentificationImageName(imgObj?.fileName)
+          }
+        });
+      } else if (PermissionsAndroid.RESULTS.DENIED){
+        Alert.alert("Sukhtax", "Camera perimission not granted!")
+      }
+    } catch (err) {
+      Alert.alert("Sukhtax", "Something went wrong!")
+    }
+  }
 
   return (
     <View
@@ -948,18 +981,7 @@ const OnlineCompleteReviewProfileV3 = props => {
                 }
               });
             } else if (index == 1) {
-              launchCamera(LibImageQualityOptions, res => {
-                if (res?.didCancel) {
-                  Alert.alert('SukhTax', 'Image uploading cancelled by user.');
-                } else if (res?.error) {
-                } else if (res?.assets) {
-                  const imgObj = res?.assets?.[0];
-                  if (!imgObj.base64)
-                    Alert.alert('SukhTax', 'Something went wrong!');
-                  setIdentificationImage(imgObj.base64);
-                  setIdentificationImageName(imgObj?.fileName)
-                }
-              });
+              askCamPermission()
             } else if (index == 2) {
               setTimeout(
                 () => {

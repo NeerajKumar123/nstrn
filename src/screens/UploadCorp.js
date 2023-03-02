@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   Alert,
+  PermissionsAndroid
 } from 'react-native';
 import Heading from '../components/Heading';
 import AppHeader from '../components/AppHeader';
@@ -82,6 +83,37 @@ const UploadCorp = props => {
     };
     return params;
   };
+
+  async function askCamPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          'title': 'Sukhtax',
+          'message': 'Please allow us to access camera.',
+          buttonPositive: 'OK',
+  
+        }
+      )
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        launchCamera(LibImageQualityOptions, res => {
+          if (res?.didCancel) {
+            Alert.alert(
+              'SukhTax',
+              'Image uploading cancelled by user.',
+            );
+          } else if (res?.error) {
+          } else if (res?.assets) {
+            intiateImageUploading(res, false);
+          }
+        });
+      } else if (PermissionsAndroid.RESULTS.DENIED){
+        Alert.alert("Sukhtax", "Camera perimission not granted!")
+      }
+    } catch (err) {
+      Alert.alert("Sukhtax", "Something went wrong!")
+    }
+  }
 
   return (
     <View
@@ -192,17 +224,7 @@ const UploadCorp = props => {
                   }
                 });
               } else if (index == 1) {
-                launchCamera(LibImageQualityOptions, res => {
-                  if (res?.didCancel) {
-                    Alert.alert(
-                      'SukhTax',
-                      'Image uploading cancelled by user.',
-                    );
-                  } else if (res?.error) {
-                  } else if (res?.assets) {
-                    intiateImageUploading(res, false);
-                  }
-                });
+                askCamPermission()
               } else if (index == 2) {
                 setTimeout(
                   () => {
